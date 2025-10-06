@@ -81,7 +81,7 @@ npm --version
 
 ```bash
 # Clone the course repository
-git clone https://github.com/yourusername/langchainjs-for-beginners.git
+git clone https://github.com/microsoft/langchainjs-for-beginners
 
 # Navigate to the project
 cd langchainjs-for-beginners
@@ -101,7 +101,7 @@ This will install all required packages:
 
 ## Step 3: Create GitHub Personal Access Token
 
-GitHub Models provides free access to powerful AI models! You just need a Personal Access Token.
+GitHub Models provides free access to powerful AI models—you just need a Personal Access Token.
 
 ### Create Your Token:
 
@@ -237,9 +237,11 @@ npx tsx test-setup.ts
 ### Expected output:
 
 ```
-🚀 Testing GitHub Models connection...
+🚀 Testing AI provider connection...
 
-✅ SUCCESS! GitHub Models is working!
+✅ SUCCESS! Your AI provider is working!
+   Provider: https://models.inference.ai.azure.com
+   Model: gpt-4o-mini
 
 Model response: Setup successful!
 
@@ -335,5 +337,5 @@ You're all set! Time to build your first AI application.
 ## 💬 Need Help?
 
 - Join our [Discord community](https://aka.ms/foundry/discord)
-- Ask in [GitHub Discussions](https://github.com/yourusername/langchainjs-for-beginners/discussions)
+- Ask in [GitHub Discussions](https://github.com/microsoft/langchainjs-for-beginners/discussions)
 - Check the [FAQ](../FAQ.md)

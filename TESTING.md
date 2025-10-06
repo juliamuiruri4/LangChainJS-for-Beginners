@@ -228,6 +228,6 @@ To speed up validation during development:
 
 ## Getting Help
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/langchainjs-for-beginners/issues)
+- **Issues**: [GitHub Issues](https://github.com/microsoft/langchainjs-for-beginners/issues)
 - **Community**: [Discord](https://aka.ms/foundry/discord)
 - **Forum**: [GitHub Forum](https://aka.ms/foundry/forum)

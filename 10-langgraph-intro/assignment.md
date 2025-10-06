@@ -269,8 +269,8 @@ You've completed the **LangChain.js for Beginners** course!
 - Share what you've built!
 
 ### Need Help?
-- **Community**: [Discord](https://aka.ms/foundry/discord)
-- **Issues**: [GitHub Forum](https://aka.ms/foundry/forum)
+- **AI Discord**: [Discord](https://aka.ms/foundry/discord)
+- **GitHub Community**: [GitHub Community](https://aka.ms/foundry/forum)
 - **Docs**: [LangChain.js](https://js.langchain.com/)
 
 ---

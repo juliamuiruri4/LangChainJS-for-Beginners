@@ -405,4 +405,4 @@ The assignment includes:
 
 ---
 
-💬 **Questions or stuck?** Join our [Discord community](https://aka.ms/foundry/discord) or open a [GitHub Discussion](https://github.com/yourusername/langchainjs-for-beginners/discussions)!
+💬 **Questions or stuck?** Join our [Discord community](https://aka.ms/foundry/discord) or open a [GitHub Discussion](https://github.com/microsoft/langchainjs-for-beginners/discussions)!

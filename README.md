@@ -57,7 +57,7 @@ Each chapter is self-contained with:
 
 ```bash
 # Clone this repository
-git clone https://github.com/yourusername/langchainjs-for-beginners.git
+git clone https://github.com/microsoft/langchainjs-for-beginners.git
 
 # Navigate to the project
 cd langchainjs-for-beginners
@@ -140,7 +140,7 @@ The validation script:
 
 ## Support & Community
 
-- 💬 **Issues**: Found a bug or have a question? [Open an issue](https://github.com/yourusername/langchainjs-for-beginners/issues)
+- 💬 **Issues**: Found a bug or have a question? [Open an issue](https://github.com/microsoft/langchainjs-for-beginners/issues)
 - 🌟 **Star this repo** if you find it helpful!
 - 🤝 **Contribute**: Pull requests are welcome
 
