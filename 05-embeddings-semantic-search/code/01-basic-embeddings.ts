@@ -1,8 +1,5 @@
 /**
- * Example 1: Basic Embeddings
- *
- * Learn how to create embeddings and compare their similarity.
- *
+ * Basic Embeddings
  * Run: npx tsx 05-embeddings-semantic-search/code/01-basic-embeddings.ts
  */
 
@@ -23,6 +20,7 @@ async function main() {
     model: "text-embedding-3-small",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

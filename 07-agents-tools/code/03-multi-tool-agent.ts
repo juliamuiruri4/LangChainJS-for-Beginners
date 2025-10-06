@@ -1,58 +1,70 @@
 /**
- * Example 3: Multi-Tool Agent
- *
- * Build an agent that can use multiple tools to solve complex tasks.
- *
  * Run: npx tsx 07-agents-tools/code/03-multi-tool-agent.ts
  */
 
-import { DynamicTool } from "@langchain/core/tools";
+import { tool } from "@langchain/core/tools";
 import { ChatOpenAI } from "@langchain/openai";
-import { AgentExecutor, createReactAgent } from "langchain/agents";
-import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
+import { HumanMessage } from "@langchain/core/messages";
+import { z } from "zod";
 import "dotenv/config";
 
 async function main() {
   console.log("🎯 Multi-Tool Agent Example\n");
 
   // Tool 1: Calculator
-  const calculatorTool = new DynamicTool({
-    name: "calculator",
-    description: "Perform mathematical calculations. Input: math expression",
-    func: async (input: string) => {
+  const calculatorTool = tool(
+    async (input) => {
       try {
-        const result = eval(input);
+        // Simple math parser for basic operations (safer than eval)
+        const sanitized = input.expression.replace(/[^0-9+\-*/().\s]/g, "");
+        const result = Function(`"use strict"; return (${sanitized})`)();
         return `${result}`;
       } catch (error) {
         return "Error in calculation";
       }
     },
-  });
+    {
+      name: "calculator",
+      description: "Perform mathematical calculations. Input: math expression",
+      schema: z.object({
+        expression: z.string().describe("The mathematical expression to evaluate"),
+      }),
+    }
+  );
 
   // Tool 2: String reverser
-  const reverserTool = new DynamicTool({
-    name: "string_reverser",
-    description: "Reverse a string. Input: text to reverse",
-    func: async (input: string) => {
-      return input.split("").reverse().join("");
+  const reverserTool = tool(
+    async (input) => {
+      return input.text.split("").reverse().join("");
     },
-  });
+    {
+      name: "string_reverser",
+      description: "Reverse a string. Input: text to reverse",
+      schema: z.object({
+        text: z.string().describe("The text to reverse"),
+      }),
+    }
+  );
 
   // Tool 3: Word counter
-  const wordCounterTool = new DynamicTool({
-    name: "word_counter",
-    description: "Count words in a text. Input: text to count",
-    func: async (input: string) => {
-      const words = input.trim().split(/\s+/);
+  const wordCounterTool = tool(
+    async (input) => {
+      const words = input.text.trim().split(/\s+/);
       return `${words.length} words`;
     },
-  });
+    {
+      name: "word_counter",
+      description: "Count words in a text. Input: text to count",
+      schema: z.object({
+        text: z.string().describe("The text to count words in"),
+      }),
+    }
+  );
 
   // Tool 4: Search (simulated)
-  const searchTool = new DynamicTool({
-    name: "search",
-    description: "Search for information. Input: search query",
-    func: async (input: string) => {
+  const searchTool = tool(
+    async (input) => {
       // Simulated search results
       const results: Record<string, string> = {
         "capital of France": "Paris",
@@ -61,54 +73,37 @@ async function main() {
         "inventor of telephone": "Alexander Graham Bell",
       };
 
-      const lowerInput = input.toLowerCase();
+      const lowerInput = input.query.toLowerCase();
       for (const [key, value] of Object.entries(results)) {
         if (lowerInput.includes(key)) {
           return `Search result: ${value}`;
         }
       }
 
-      return `No specific information found for: ${input}`;
+      return `No specific information found for: ${input.query}`;
     },
-  });
+    {
+      name: "search",
+      description: "Search for information. Input: search query",
+      schema: z.object({
+        query: z.string().describe("The search query"),
+      }),
+    }
+  );
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL || "gpt-4o-mini",
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
 
-  const tools = [calculatorTool, reverserTool, wordCounterTool, searchTool];
-
-  const prompt = ChatPromptTemplate.fromMessages([
-    [
-      "system",
-      `You are a helpful assistant with access to multiple tools:
-- calculator: for math
-- string_reverser: to reverse text
-- word_counter: to count words
-- search: to find information
-
-Choose the right tool for each task. You can use multiple tools to solve complex problems.`,
-    ],
-    ["human", "{input}"],
-    new MessagesPlaceholder("agent_scratchpad"),
-  ]);
-
-  const agent = await createReactAgent({
+  const agent = createReactAgent({
     llm: model,
-    tools,
-    prompt,
-  });
-
-  const agentExecutor = new AgentExecutor({
-    agent,
-    tools,
-    verbose: true,
-    maxIterations: 10,
+    tools: [calculatorTool, reverserTool, wordCounterTool, searchTool],
   });
 
   // Complex multi-step questions
@@ -123,9 +118,12 @@ Choose the right tool for each task. You can use multiple tools to solve complex
     console.log("\n" + "=".repeat(80));
     console.log(`\n❓ ${question}\n`);
 
-    const response = await agentExecutor.invoke({ input: question });
+    const response = await agent.invoke({
+      messages: [new HumanMessage(question)],
+    });
 
-    console.log(`\n✅ Final Answer: ${response.output}\n`);
+    const lastMessage = response.messages[response.messages.length - 1];
+    console.log(`\n✅ Final Answer: ${lastMessage.content}\n`);
   }
 
   console.log("=".repeat(80));

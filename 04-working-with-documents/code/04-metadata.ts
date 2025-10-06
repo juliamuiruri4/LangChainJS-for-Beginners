@@ -1,8 +1,5 @@
 /**
- * Example 4: Working with Metadata
- *
- * Learn how to add and preserve metadata in documents.
- *
+ * Working with Metadata
  * Run: npx tsx 04-working-with-documents/code/04-metadata.ts
  */
 

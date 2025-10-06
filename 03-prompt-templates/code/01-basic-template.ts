@@ -1,8 +1,5 @@
 /**
- * Example 1: Basic Prompt Template
- *
- * Learn how to create reusable prompt templates with variables.
- *
+ * Basic Prompt Template
  * Run: npx tsx 03-prompt-templates/code/01-basic-template.ts
  */
 
@@ -17,6 +14,7 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

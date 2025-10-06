@@ -1,8 +1,5 @@
 /**
- * Example 4: Prompt Composition
- *
- * Combine multiple template pieces to create complex, reusable prompts.
- *
+ * Prompt Composition
  * Run: npx tsx 03-prompt-templates/code/04-composition.ts
  */
 
@@ -17,6 +14,7 @@ async function educatorExample() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -64,6 +62,7 @@ async function customerServiceExample() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -101,6 +100,7 @@ async function partialTemplateExample() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

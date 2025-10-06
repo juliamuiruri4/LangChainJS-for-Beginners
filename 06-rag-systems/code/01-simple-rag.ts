@@ -1,8 +1,5 @@
 /**
- * Example 1: Simple RAG System
- *
- * Build a basic RAG system that retrieves documents and generates answers.
- *
+ * Simple RAG System
  * Run: npx tsx 06-rag-systems/code/01-simple-rag.ts
  */
 
@@ -22,6 +19,7 @@ async function main() {
     model: "text-embedding-3-small",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -30,6 +28,7 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

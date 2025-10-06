@@ -1,20 +1,25 @@
 /**
- * Example 2: Conditional Graph
- *
- * Build a graph with branching logic based on state.
- *
+ * Conditional Graph
  * Run: npx tsx 10-langgraph-intro/code/02-conditional-graph.ts
  */
 
-import { StateGraph, END } from "@langchain/langgraph";
+import { StateGraph, END, Annotation } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
-
-interface WorkflowState {
-  question: string;
-  category: string;
-  answer: string;
-}
+const WorkflowState = Annotation.Root({
+  question: Annotation<string>({
+    reducer: (_, right) => right,
+    default: () => "",
+  }),
+  category: Annotation<string>({
+    reducer: (_, right) => right,
+    default: () => "",
+  }),
+  answer: Annotation<string>({
+    reducer: (_, right) => right,
+    default: () => "",
+  }),
+});
 
 async function main() {
   console.log("🌿 Conditional Graph Example\n");
@@ -24,20 +29,15 @@ async function main() {
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
 
-  const workflow = new StateGraph<WorkflowState>({
-    channels: {
-      question: { value: (_, right) => right, default: () => "" },
-      category: { value: (_, right) => right, default: () => "" },
-      answer: { value: (_, right) => right, default: () => "" },
-    },
-  });
+  const workflow = new StateGraph(WorkflowState);
 
   // Node: Categorize the question
-  workflow.addNode("categorize", async (state: WorkflowState) => {
+  workflow.addNode("categorize", async (state: typeof WorkflowState.State) => {
     console.log("1️⃣  Categorizing question...");
 
     const prompt = `Categorize this question as either "technical" or "general":
@@ -57,7 +57,7 @@ async function main() {
   });
 
   // Node: Handle technical questions
-  workflow.addNode("handleTechnical", async (state: WorkflowState) => {
+  workflow.addNode("handleTechnical", async (state: typeof WorkflowState.State) => {
     console.log("2️⃣  Handling as technical question...");
 
     const answer = `Technical answer: ${state.question} - This requires specialized knowledge.`;
@@ -67,7 +67,7 @@ async function main() {
   });
 
   // Node: Handle general questions
-  workflow.addNode("handleGeneral", async (state: WorkflowState) => {
+  workflow.addNode("handleGeneral", async (state: typeof WorkflowState.State) => {
     console.log("2️⃣  Handling as general question...");
 
     const response = await model.invoke(state.question);
@@ -78,22 +78,20 @@ async function main() {
   });
 
   // Routing function
-  function route(state: WorkflowState): string {
+  function route(state: typeof WorkflowState.State): string {
     return state.category === "technical" ? "handleTechnical" : "handleGeneral";
   }
 
-  // Build the graph
-  workflow.setEntryPoint("categorize");
-  workflow.addConditionalEdges("categorize", route, {
-    technical: "handleTechnical",
-    general: "handleGeneral",
-  });
-  workflow.addEdge("handleTechnical", END);
-  workflow.addEdge("handleGeneral", END);
+  // Type assertions: LangGraph's edge types don't perfectly match TypeScript's string inference
+  workflow.addEdge("__start__" as any, "categorize" as any);
+  workflow.addConditionalEdges("categorize" as any, route, {
+    handleTechnical: "handleTechnical",
+    handleGeneral: "handleGeneral",
+  } as any);
+  workflow.addEdge("handleTechnical" as any, END);
+  workflow.addEdge("handleGeneral" as any, END);
 
   const app = workflow.compile();
-
-  // Test with different questions
   const questions = [
     "How do I implement binary search in Python?",
     "What's the weather like today?",

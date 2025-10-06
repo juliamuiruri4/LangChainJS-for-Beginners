@@ -1,9 +1,5 @@
 /**
- * Example 3: Model Comparison
- *
- * Compare different AI models to see how they respond differently.
- * GitHub Models gives you access to multiple models for free!
- *
+ * Model Comparison
  * Run: npx tsx 01-introduction/code/03-model-comparison.ts
  */
 
@@ -24,6 +20,7 @@ async function compareModels() {
       model: modelName,
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
       },
       apiKey: process.env.AI_API_KEY,
     });

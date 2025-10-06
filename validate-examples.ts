@@ -23,11 +23,12 @@ interface TestResult {
   error?: string;
 }
 
-// Files that require user input - we'll skip these in automated testing
+// Files that require user input - test with automated input
 const INTERACTIVE_FILES = [
-  "03-human-in-loop.ts",
-  "chatbot.ts", // Solution file that has interactive loop
-  "qa-program.ts", // Q&A solution with readline
+  { file: "chatbot.ts", input: "Hello\n" },
+  { file: "streaming-chat.ts", input: "Hello\n" },
+  { file: "qa-program.ts", input: "What is 2+2?\n" },
+  { file: "03-human-in-loop.ts", input: "yes\nno\nno\n" },
 ];
 
 // Files that are slow or make external API calls - run with longer timeout
@@ -37,12 +38,15 @@ const SLOW_FILES = [
   "personality-test.ts",
   "03-parameters.ts", // Makes 9 API calls
   "temperature-lab.ts",
-  "streaming-chat.ts",
   "04-error-handling.ts",
   "robust-chat.ts",
   "01-multi-turn.ts",
   "02-streaming.ts",
   "03-summary-memory.ts",
+  "chatbot.ts", // Interactive with API calls
+  "streaming-chat.ts", // Interactive with API calls
+  "qa-program.ts", // Interactive with API calls
+  "03-human-in-loop.ts", // Interactive (no API but complex)
 ];
 
 const TIMEOUT_MS = 30000; // 30 seconds default
@@ -75,8 +79,9 @@ async function findCodeFiles(dir: string): Promise<string[]> {
   return files;
 }
 
-function isInteractive(filePath: string): boolean {
-  return INTERACTIVE_FILES.some(interactive => filePath.includes(interactive));
+function getInteractiveInput(filePath: string): string | null {
+  const interactive = INTERACTIVE_FILES.find(item => filePath.includes(item.file));
+  return interactive ? interactive.input : null;
 }
 
 function isSlow(filePath: string): boolean {
@@ -87,6 +92,7 @@ function runExample(filePath: string): Promise<TestResult> {
   return new Promise((resolve) => {
     const startTime = Date.now();
     const timeout = isSlow(filePath) ? SLOW_TIMEOUT_MS : TIMEOUT_MS;
+    const interactiveInput = getInteractiveInput(filePath);
 
     const child = spawn("npx", ["tsx", filePath], {
       stdio: ["pipe", "pipe", "pipe"],
@@ -96,6 +102,12 @@ function runExample(filePath: string): Promise<TestResult> {
     let stdout = "";
     let stderr = "";
     let timeoutHandle: NodeJS.Timeout;
+
+    // Provide automated input for interactive files
+    if (interactiveInput) {
+      child.stdin.write(interactiveInput);
+      child.stdin.end();
+    }
 
     // Set timeout
     timeoutHandle = setTimeout(() => {
@@ -183,20 +195,13 @@ async function main() {
 
   console.log(`📁 Found ${allFiles.length} code files\n`);
 
-  // Filter out interactive files
-  const testableFiles = allFiles.filter(file => !isInteractive(file));
-  const skippedFiles = allFiles.filter(file => isInteractive(file));
-
-  if (skippedFiles.length > 0) {
-    console.log(`⏭️  Skipping ${skippedFiles.length} interactive files:\n`);
-    skippedFiles.forEach(file => {
-      const relativePath = file.replace(__dirname + "/", "");
-      console.log(`   - ${relativePath}`);
-    });
-    console.log();
+  // Identify interactive files (will be tested with automated input)
+  const interactiveCount = allFiles.filter(file => getInteractiveInput(file)).length;
+  if (interactiveCount > 0) {
+    console.log(`🤖 ${interactiveCount} interactive files will be tested with automated input\n`);
   }
 
-  console.log(`🏃 Running ${testableFiles.length} examples...\n`);
+  console.log(`🏃 Running ${allFiles.length} examples...\n`);
   console.log("=" + "=".repeat(79) + "\n");
 
   const results: TestResult[] = [];
@@ -204,11 +209,11 @@ async function main() {
   let failed = 0;
 
   // Run tests sequentially to avoid rate limiting
-  for (let i = 0; i < testableFiles.length; i++) {
-    const file = testableFiles[i];
+  for (let i = 0; i < allFiles.length; i++) {
+    const file = allFiles[i];
     const relativePath = file.replace(__dirname + "/", "");
 
-    process.stdout.write(`[${i + 1}/${testableFiles.length}] ${relativePath}... `);
+    process.stdout.write(`[${i + 1}/${allFiles.length}] ${relativePath}... `);
 
     const result = await runExample(file);
     results.push(result);
@@ -227,12 +232,11 @@ async function main() {
 
   console.log("\n" + "=" + "=".repeat(79) + "\n");
   console.log("📊 Test Results:\n");
-  console.log(`   Total:    ${testableFiles.length}`);
+  console.log(`   Total:    ${allFiles.length}`);
   console.log(`   Passed:   ${passed} ✅`);
   console.log(`   Failed:   ${failed} ❌`);
-  console.log(`   Skipped:  ${skippedFiles.length} ⏭️`);
 
-  const successRate = ((passed / testableFiles.length) * 100).toFixed(1);
+  const successRate = ((passed / allFiles.length) * 100).toFixed(1);
   console.log(`   Success:  ${successRate}%`);
 
   if (failed > 0) {

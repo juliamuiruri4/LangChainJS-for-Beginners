@@ -1,9 +1,5 @@
 /**
- * Example 1: Multi-Turn Conversation
- *
- * Learn how to have back-and-forth conversations by maintaining
- * conversation history in a messages array.
- *
+ * Multi-Turn Conversation
  * Run: npx tsx 02-chat-models/code/01-multi-turn.ts
  */
 
@@ -18,6 +14,7 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -33,9 +30,7 @@ async function main() {
   // First exchange
   const response1 = await model.invoke(messages);
   console.log("\n🤖 AI:", response1.content);
-
-  // Add AI response to conversation history
-  messages.push(new AIMessage(response1.content));
+  messages.push(new AIMessage(String(response1.content)));
 
   // Second exchange - AI remembers the context
   console.log("\n👤 User: Can you show me a simple example?");
@@ -46,7 +41,7 @@ async function main() {
 
   // Third exchange - AI still remembers everything
   console.log("\n👤 User: What are the benefits compared to JavaScript?");
-  messages.push(new AIMessage(response2.content));
+  messages.push(new AIMessage(String(response2.content)));
   messages.push(new HumanMessage("What are the benefits compared to JavaScript?"));
 
   const response3 = await model.invoke(messages);

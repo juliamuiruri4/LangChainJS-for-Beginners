@@ -1,8 +1,5 @@
 /**
- * Example 1: Model Switching
- *
- * Build provider-agnostic code that can switch between AI providers easily.
- *
+ * Model Switching
  * Run: npx tsx 09-production-best-practices/code/01-model-switching.ts
  */
 
@@ -23,6 +20,7 @@ function createModel(config: ModelConfig) {
         model: config.model,
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
         },
         apiKey: config.apiKey || process.env.AI_API_KEY,
       });

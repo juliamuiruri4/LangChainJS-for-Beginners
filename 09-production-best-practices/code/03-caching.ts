@@ -1,8 +1,5 @@
 /**
- * Example 3: Response Caching
- *
- * Cache responses to reduce API calls and costs.
- *
+ * Response Caching
  * Run: npx tsx 09-production-best-practices/code/03-caching.ts
  */
 
@@ -21,6 +18,7 @@ async function main() {
     cache,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -35,7 +33,7 @@ async function main() {
   const response1 = await model.invoke(question);
   console.timeEnd("First call");
 
-  console.log(`\n🤖 Response: ${response1.content.substring(0, 100)}...\n`);
+  console.log(`\n🤖 Response: ${String(response1.content).substring(0, 100)}...\n`);
 
   // Second call - uses cache
   console.log("─".repeat(80));
@@ -46,7 +44,7 @@ async function main() {
   const response2 = await model.invoke(question);
   console.timeEnd("Second call (cached)");
 
-  console.log(`\n🤖 Response: ${response2.content.substring(0, 100)}...\n`);
+  console.log(`\n🤖 Response: ${String(response2.content).substring(0, 100)}...\n`);
 
   // Third call - different question
   console.log("─".repeat(80));
@@ -58,7 +56,7 @@ async function main() {
   const response3 = await model.invoke(newQuestion);
   console.timeEnd("Third call");
 
-  console.log(`\n🤖 Response: ${response3.content.substring(0, 100)}...\n`);
+  console.log(`\n🤖 Response: ${String(response3.content).substring(0, 100)}...\n`);
 
   // Fourth call - same as third
   console.log("─".repeat(80));
@@ -69,7 +67,7 @@ async function main() {
   const response4 = await model.invoke(newQuestion);
   console.timeEnd("Fourth call (cached)");
 
-  console.log(`\n🤖 Response: ${response4.content.substring(0, 100)}...\n`);
+  console.log(`\n🤖 Response: ${String(response4.content).substring(0, 100)}...\n`);
 
   console.log("=".repeat(80));
   console.log("\n💡 Caching Benefits:");

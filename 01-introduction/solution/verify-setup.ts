@@ -21,8 +21,6 @@ async function verifySetup() {
   }
 
   console.log("✅ AI_API_KEY found");
-
-  // Test API call
   try {
     console.log("🧪 Testing API connection...\n");
 
@@ -30,6 +28,7 @@ async function verifySetup() {
       model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
       },
       apiKey: process.env.AI_API_KEY,
     });

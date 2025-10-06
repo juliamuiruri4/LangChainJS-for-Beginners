@@ -14,6 +14,7 @@ const model = new ChatOpenAI({
   temperature: 0, // Use 0 for consistent formatting
   configuration: {
     baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
   },
   apiKey: process.env.AI_API_KEY,
 });
@@ -80,7 +81,7 @@ const finalTemplate = ChatPromptTemplate.fromMessages([
     "system",
     "Convert product descriptions into JSON format. Follow the examples exactly. Output ONLY valid JSON, no additional text.",
   ],
-  fewShotTemplate,
+  fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
   ["human", "{input}"],
 ]);
 
@@ -115,8 +116,6 @@ async function convertProduct(description: string) {
 async function main() {
   console.log("🎓 Few-Shot Format Teacher\n");
   console.log("=".repeat(80));
-
-  // Test with new product descriptions
   const testProducts = [
     "Stainless steel water bottle, keeps drinks cold for 24 hours, $24.99",
     "Leather messenger bag with laptop compartment, handcrafted, $149",

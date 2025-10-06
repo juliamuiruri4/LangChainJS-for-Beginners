@@ -1,15 +1,23 @@
 /**
- * Example 3: Summary Memory
- *
- * Learn how to summarize conversation history to save tokens.
- *
+ * Summary Memory with LangGraph
  * Run: npx tsx 08-memory-conversations/code/03-summary-memory.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { ConversationChain } from "langchain/chains";
-import { ConversationSummaryMemory } from "langchain/memory";
+import { StateGraph, START, END, MemorySaver, Annotation } from "@langchain/langgraph";
+import { HumanMessage, SystemMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import "dotenv/config";
+
+const ConversationState = Annotation.Root({
+  messages: Annotation<BaseMessage[]>({
+    reducer: (left, right) => left.concat(right),
+    default: () => [],
+  }),
+  summary: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+});
 
 async function main() {
   console.log("📝 Summary Memory Example\n");
@@ -18,23 +26,68 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
 
-  // Summary memory summarizes conversation periodically
-  const summaryMemory = new ConversationSummaryMemory({
-    llm: model,
-    maxTokenLimit: 100, // Summarize when exceeding this limit
-  });
+  // Node to summarize old messages
+  const summarizeConversation = async (state: typeof ConversationState.State) => {
+    if (state.messages.length < 6) {
+      // Not enough messages to summarize yet
+      return {};
+    }
 
-  const chain = new ConversationChain({
-    llm: model,
-    memory: summaryMemory,
-  });
+    // Summarize messages except the last 2 exchanges
+    const messagesToSummarize = state.messages.slice(0, -4);
+    const recentMessages = state.messages.slice(-4);
+
+    const summaryPrompt = `Provide a concise summary of the following conversation:
+
+${messagesToSummarize.map(m => `${m._getType()}: ${m.content}`).join('\n')}
+
+Summary:`;
+
+    const summaryResponse = await model.invoke([new HumanMessage(summaryPrompt)]);
+    const summary = String(summaryResponse.content);
+
+    return {
+      summary,
+      messages: recentMessages,
+    };
+  };
+
+  // Node to handle conversation
+  const callModel = async (state: typeof ConversationState.State) => {
+    const contextMessages: BaseMessage[] = [];
+
+    // Add summary as context if exists
+    if (state.summary) {
+      contextMessages.push(new SystemMessage(`Previous conversation summary: ${state.summary}`));
+    }
+
+    // Add recent messages
+    contextMessages.push(...state.messages);
+
+    const response = await model.invoke(contextMessages);
+    return { messages: [response] };
+  };
+
+  // Create workflow with conditional summarization
+  const workflow = new StateGraph(ConversationState)
+    .addNode("summarize", summarizeConversation)
+    .addNode("model", callModel)
+    .addEdge(START, "summarize")
+    .addEdge("summarize", "model")
+    .addEdge("model", END);
+
+  const memory = new MemorySaver();
+  const app = workflow.compile({ checkpointer: memory });
 
   console.log("🗣️  Having a detailed conversation...\n");
   console.log("=".repeat(80));
+
+  const config = { configurable: { thread_id: "conversation-3" } };
 
   // Have a conversation with lots of details
   const exchanges = [
@@ -48,30 +101,30 @@ async function main() {
   for (let i = 0; i < exchanges.length; i++) {
     console.log(`\n${i + 1}️⃣  User: ${exchanges[i]}`);
 
-    const response = await chain.invoke({
-      input: exchanges[i],
-    });
+    const response = await app.invoke(
+      { messages: [new HumanMessage(exchanges[i])] },
+      config
+    );
 
-    console.log(`   🤖 Bot: ${response.response}\n`);
+    console.log(`   🤖 Bot: ${response.messages[response.messages.length - 1].content}\n`);
   }
 
   console.log("=".repeat(80));
 
   // Check the summary
-  console.log("\n📋 Memory Summary:\n");
+  console.log("\n📋 Conversation State:\n");
+  console.log(`Recent messages: ${exchanges.length * 2} messages`);
+  console.log(`Summary: ${exchanges.length >= 3 ? "Generated" : "Not yet"}\n`);
 
-  const summary = await summaryMemory.loadMemoryVariables({});
-  console.log(summary.history);
-
-  // Test if summary retains key information
-  console.log("\n" + "=".repeat(80));
+  console.log("=" .repeat(80));
   console.log("\n🧪 Testing Summary Memory:\n");
 
-  console.log("❓ Where am I traveling to?");
-  const response = await chain.invoke({
-    input: "Based on our conversation, where am I traveling to and what am I interested in?",
-  });
-  console.log(`🤖 ${response.content}\n`);
+  console.log("❓ Based on our conversation, where am I traveling to and what am I interested in?");
+  const response = await app.invoke(
+    { messages: [new HumanMessage("Based on our conversation, where am I traveling to and what am I interested in?")] },
+    config
+  );
+  console.log(`🤖 ${response.messages[response.messages.length - 1].content}\n`);
 
   console.log("=".repeat(80));
   console.log("\n💡 Summary Memory Characteristics:");

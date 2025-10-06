@@ -1,8 +1,5 @@
 /**
- * Example 2: Text Splitting
- *
- * Learn how to split long documents into smaller chunks.
- *
+ * Text Splitting
  * Run: npx tsx 04-working-with-documents/code/02-splitting.ts
  */
 

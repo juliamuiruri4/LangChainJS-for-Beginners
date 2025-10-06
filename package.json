@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch",
     "start": "tsx",
+    "build": "tsx build-check.ts",
     "validate": "tsx validate-examples.ts",
     "test": "npm run validate"
   },
@@ -20,8 +21,11 @@
     "typescript",
     "javascript"
   ],
-  "author": "",
+  "author": "Dan Wahlin",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@langchain/openai": "^0.6.14",
     "@langchain/core": "^0.3.78",

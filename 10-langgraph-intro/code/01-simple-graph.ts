@@ -1,44 +1,33 @@
 /**
- * Example 1: Simple Linear Graph
- *
- * Build a basic LangGraph workflow with sequential steps.
- *
+ * Simple Linear Graph
  * Run: npx tsx 10-langgraph-intro/code/01-simple-graph.ts
  */
 
-import { StateGraph, END } from "@langchain/langgraph";
+import { StateGraph, END, Annotation } from "@langchain/langgraph";
 import { BaseMessage } from "@langchain/core/messages";
-
-// Define the state
-interface AgentState {
-  messages: BaseMessage[];
-  step: string;
-  data?: string;
-}
+const AgentState = Annotation.Root({
+  messages: Annotation<BaseMessage[]>({
+    reducer: (left, right) => left.concat(right),
+    default: () => [],
+  }),
+  step: Annotation<string>({
+    reducer: (left, right) => right ?? left ?? "",
+    default: () => "",
+  }),
+  data: Annotation<string | undefined>({
+    reducer: (left, right) => right ?? left,
+    default: () => undefined,
+  }),
+});
 
 async function main() {
   console.log("📊 Simple Linear Graph Example\n");
 
   // Create the graph
-  const workflow = new StateGraph<AgentState>({
-    channels: {
-      messages: {
-        value: (left: BaseMessage[], right: BaseMessage[]) => left.concat(right),
-        default: () => [],
-      },
-      step: {
-        value: (left?: string, right?: string) => right ?? left ?? "",
-        default: () => "",
-      },
-      data: {
-        value: (left?: string, right?: string) => right ?? left,
-        default: () => undefined,
-      },
-    },
-  });
+  const workflow = new StateGraph(AgentState);
 
   // Node 1: Initialize
-  workflow.addNode("initialize", async (state: AgentState) => {
+  workflow.addNode("initialize", async (state: typeof AgentState.State) => {
     console.log("1️⃣  Initializing...");
     return {
       step: "initialized",
@@ -47,7 +36,7 @@ async function main() {
   });
 
   // Node 2: Process
-  workflow.addNode("process", async (state: AgentState) => {
+  workflow.addNode("process", async (state: typeof AgentState.State) => {
     console.log("2️⃣  Processing data...");
     return {
       step: "processed",
@@ -56,7 +45,7 @@ async function main() {
   });
 
   // Node 3: Finalize
-  workflow.addNode("finalize", async (state: AgentState) => {
+  workflow.addNode("finalize", async (state: typeof AgentState.State) => {
     console.log("3️⃣  Finalizing...");
     return {
       step: "completed",
@@ -64,15 +53,11 @@ async function main() {
     };
   });
 
-  // Add edges (connections)
-  workflow.addEdge("initialize", "process");
-  workflow.addEdge("process", "finalize");
-  workflow.addEdge("finalize", END);
-
-  // Set entry point
-  workflow.setEntryPoint("initialize");
-
-  // Compile and run
+  // Type assertions: LangGraph's edge types don't perfectly match TypeScript's string inference
+  workflow.addEdge("__start__" as any, "initialize" as any);
+  workflow.addEdge("initialize" as any, "process" as any);
+  workflow.addEdge("process" as any, "finalize" as any);
+  workflow.addEdge("finalize" as any, END);
   const app = workflow.compile();
 
   console.log("▶️  Running workflow...\n");

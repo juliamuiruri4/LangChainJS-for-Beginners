@@ -91,7 +91,7 @@ When adding new code examples:
 **Tests failing locally:**
 - Ensure `GITHUB_TOKEN` is set in your `.env` file
 - Run `npm install` to get latest dependencies
-- Check that you're using Node.js 18 or higher
+- Check that you're using Node.js LTS or higher
 
 **Tests failing in CI:**
 - Check that `GITHUB_TOKEN` secret is available

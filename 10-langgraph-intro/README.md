@@ -1,4 +1,4 @@
-# Chapter 10: Introduction to LangGraph
+# Chapter 10: Advanced LangGraph Patterns
 
 ## ⏱️ Lesson Overview
 
@@ -9,11 +9,13 @@
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
-- Understand what LangGraph is and when to use it
-- Build state-based AI workflows
-- Create conditional logic in agent flows
+- Master advanced LangGraph workflow patterns
+- Build complex state-based AI workflows
+- Create sophisticated conditional logic in agent flows
 - Implement human-in-the-loop patterns
-- Build multi-step agent systems
+- Build multi-step agent systems with custom routing
+
+**Note**: You've already used LangGraph in Chapters 7 and 8 for agents and memory. This chapter explores more advanced graph patterns for complex workflows.
 
 ---
 
@@ -47,23 +49,22 @@ Close Ticket
 
 ---
 
-## 🎯 What is LangGraph?
+## 🎯 LangGraph: Beyond Simple Workflows
 
-LangGraph extends LangChain with **graph-based workflows**.
+You've already seen LangGraph's power in Chapters 7 & 8:
+- Chapter 7: ReAct agents with tools
+- Chapter 8: Conversation memory with MemorySaver
 
-### When to Use LangGraph
+Now we'll explore **advanced graph patterns** for complex, multi-step workflows.
 
-**Use Regular Chains When**:
-- Simple, linear flow
-- No branching logic
-- Single-path execution
+### Advanced Patterns Covered
 
-**Use LangGraph When**:
-- Need conditional logic
-- Multi-step decision making
-- Human-in-the-loop
-- Complex agent workflows
-- Cyclical processes
+**Chapter 10 Focus**:
+- Conditional branching and routing
+- Custom state management
+- Human-in-the-loop workflows
+- Multi-path execution graphs
+- Complex decision trees
 
 ---
 

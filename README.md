@@ -32,10 +32,10 @@ This course contains **11 sections** (setup + 10 chapters), each focusing on a s
 4. **[Working with Documents](./04-working-with-documents/README.md)** - Loading, splitting, and processing text data
 5. **[Embeddings & Semantic Search](./05-embeddings-semantic-search/README.md)** - Understanding vector representations and similarity
 6. **[Building RAG Systems](./06-rag-systems/README.md)** - Combining retrieval with generation for accurate answers
-7. **[Agents & Tools](./07-agents-tools/README.md)** - Creating AI that can take actions and use external tools
-8. **[Memory & Conversations](./08-memory-conversations/README.md)** - Building stateful chatbots with context awareness
+7. **[Agents & Tools](./07-agents-tools/README.md)** - Creating AI agents with tools using LangGraph
+8. **[Memory & Conversations](./08-memory-conversations/README.md)** - Building stateful chatbots with LangGraph memory
 9. **[Production Best Practices](./09-production-best-practices/README.md)** - Model switching, Azure AI Foundry, and deployment
-10. **[Introduction to LangGraph](./10-langgraph-intro/README.md)** - Orchestrating AI agent workflows
+10. **[Advanced LangGraph Patterns](./10-langgraph-intro/README.md)** - Complex workflows and decision trees
 
 ## Prerequisites
 
@@ -99,7 +99,26 @@ Each chapter builds on the previous one, but you can also jump to specific topic
 
 ## Testing & Validation
 
-All code examples in this course are automatically tested to ensure they work correctly. You can run the validation yourself:
+All code examples in this course are automatically tested to ensure they work correctly.
+
+### Build Check
+
+Compile all TypeScript files to check for errors and warnings:
+
+```bash
+# Check all files compile without errors
+npm run build
+```
+
+This will:
+- ✅ Compile all 44+ TypeScript files across all chapters
+- ✅ Show type errors and warnings
+- ✅ Validate imports and syntax
+- ✅ Fast - no API calls, just compilation check
+
+### Runtime Validation
+
+Run all code examples with actual API calls:
 
 ```bash
 # Validate all code examples (takes 20-40 minutes)
@@ -115,7 +134,7 @@ The validation script:
 - ✅ Provides detailed error reports if issues are found
 - ✅ Runs automatically on every commit via GitHub Actions
 
-**Note**: You need `AI_API_KEY`, `AI_ENDPOINT`, and `AI_MODEL` environment variables for the examples to run. See [Course Setup](./00-course-setup/README.md) for details.
+**Note**: Runtime validation requires `AI_API_KEY`, `AI_ENDPOINT`, and `AI_MODEL` environment variables. See [Course Setup](./00-course-setup/README.md) for details.
 
 📖 **Full Testing Guide**: See [TESTING.md](./TESTING.md) for detailed testing instructions, troubleshooting, and best practices.
 

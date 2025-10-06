@@ -1,9 +1,5 @@
 /**
- * Example 2: Message Types
- *
- * Learn how to use structured messages for better control over AI behavior.
- * SystemMessage sets the AI's personality, HumanMessage is the user input.
- *
+ * Message Types
  * Run: npx tsx 01-introduction/code/02-message-types.ts
  */
 
@@ -18,6 +14,7 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

@@ -1,8 +1,5 @@
 /**
- * Example 2: RAG with LCEL (LangChain Expression Language)
- *
- * Build RAG using the pipe operator for clean, composable chains.
- *
+ * RAG with LCEL (LangChain Expression Language)
  * Run: npx tsx 06-rag-systems/code/02-rag-lcel.ts
  */
 
@@ -22,6 +19,7 @@ async function main() {
     model: "text-embedding-3-small",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -30,6 +28,7 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -68,8 +67,6 @@ Context:
 Question: {question}
 
 Answer:`);
-
-  // Build RAG chain with LCEL
   const ragChainLCEL = RunnableSequence.from([
     {
       // Retrieve documents and format them
@@ -87,8 +84,6 @@ Answer:`);
 
   console.log("✅ LCEL RAG chain created!\n");
   console.log("=".repeat(80));
-
-  // Test questions
   const questions = [
     "What is TypeScript used for?",
     "How does React work?",

@@ -1,8 +1,5 @@
 /**
- * Example 3: Similarity Search with Scores
- *
- * Learn how to get similarity scores along with search results.
- *
+ * Similarity Search with Scores
  * Run: npx tsx 05-embeddings-semantic-search/code/03-similarity-scores.ts
  */
 
@@ -18,6 +15,7 @@ async function main() {
     model: "text-embedding-3-small",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

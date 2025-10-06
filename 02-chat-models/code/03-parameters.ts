@@ -1,9 +1,5 @@
 /**
- * Example 3: Model Parameters
- *
- * Learn how to control AI behavior using temperature, max tokens,
- * and other parameters.
- *
+ * Model Parameters
  * Run: npx tsx 02-chat-models/code/03-parameters.ts
  */
 
@@ -26,11 +22,10 @@ async function temperatureComparison() {
       temperature: temp,
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
       },
       apiKey: process.env.AI_API_KEY,
     });
-
-    // Run the same prompt 2 times to see variability
     for (let i = 1; i <= 2; i++) {
       const response = await model.invoke(prompt);
       console.log(`  Try ${i}: ${response.content}`);
@@ -60,6 +55,7 @@ async function maxTokensExample() {
       maxTokens: maxTokens,
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
       },
       apiKey: process.env.AI_API_KEY,
     });

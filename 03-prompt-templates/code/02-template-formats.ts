@@ -1,9 +1,5 @@
 /**
- * Example 2: Multiple Template Formats
- *
- * Explore different ways to create templates: ChatPromptTemplate
- * for structured conversations and PromptTemplate for simple strings.
- *
+ * Multiple Template Formats
  * Run: npx tsx 03-prompt-templates/code/02-template-formats.ts
  */
 
@@ -19,6 +15,7 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

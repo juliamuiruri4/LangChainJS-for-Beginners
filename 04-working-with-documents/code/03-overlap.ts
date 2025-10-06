@@ -1,8 +1,5 @@
 /**
- * Example 3: Comparing Chunk Overlap
- *
- * See how overlap preserves context between chunks.
- *
+ * Comparing Chunk Overlap
  * Run: npx tsx 04-working-with-documents/code/03-overlap.ts
  */
 

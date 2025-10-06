@@ -10,6 +10,7 @@ const model = new ChatOpenAI({
   model: process.env.AI_MODEL || "gpt-4o-mini",
   configuration: {
     baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
   },
   apiKey: process.env.AI_API_KEY,
 });
@@ -47,8 +48,9 @@ async function streamingChat() {
           // Clear the "Typing..." line
           process.stdout.write("\r🤖 Chatbot: ");
         }
-        process.stdout.write(chunk.content);
-        fullResponse += chunk.content;
+        const content = String(chunk.content);
+        process.stdout.write(content);
+        fullResponse += content;
       }
 
       const endTime = Date.now();
@@ -56,6 +58,12 @@ async function streamingChat() {
       console.log("\n");
       console.log(`⚡ First chunk: ${firstChunkTime - startTime}ms`);
       console.log(`⏱️  Full response: ${endTime - startTime}ms`);
+
+      // Exit in CI mode after one interaction
+      if (process.env.CI === "true") {
+        rl.close();
+        return;
+      }
 
       streamingChat();
     } catch (error: any) {

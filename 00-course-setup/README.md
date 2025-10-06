@@ -22,9 +22,32 @@ Welcome! Before we dive into building AI applications with LangChain.js, let's g
 
 ---
 
+## 📖 The Workshop Analogy
+
+**Imagine you're about to start building a custom piece of furniture.**
+
+Before you start cutting wood or assembling pieces, you need to:
+- 🔧 **Set up your workbench** (Install Node.js)
+- 🔑 **Get access to the hardware store** (GitHub token for AI models)
+- 📦 **Gather your materials** (Install dependencies)
+- 📋 **Organize your blueprints** (Configure environment variables)
+- 🛠️ **Prepare your tools** (Set up your code editor)
+
+**Would you start building without these?** Of course not!
+
+The same applies to AI development. This setup chapter ensures you have:
+- ✅ A solid foundation to build on
+- ✅ Access to the AI models you need
+- ✅ All tools properly configured
+- ✅ A smooth development experience
+
+**Let's get your workshop ready!** In just 15 minutes, you'll be equipped to build powerful AI applications.
+
+---
+
 ## Step 1: Install Node.js
 
-You'll need **Node.js 18+** to run LangChain.js applications.
+You'll need **Node.js LTS (Long Term Support)** to run LangChain.js applications.
 
 ### Check if Node.js is installed:
 
@@ -32,19 +55,25 @@ You'll need **Node.js 18+** to run LangChain.js applications.
 node --version
 ```
 
-If you see a version number (v18.0.0 or higher), you're good! Skip to Step 2.
+If you see an LTS version number, you're good! Skip to Step 2.
 
 ### Install Node.js:
 
 1. Visit [nodejs.org](https://nodejs.org/)
-2. Download the **LTS (Long Term Support)** version
+2. Download the **LTS (Long Term Support)** version (recommended)
 3. Run the installer
 4. Verify installation:
 
 ```bash
-node --version
+node --version  # Should show an LTS version
 npm --version
 ```
+
+**Why LTS?**
+- ✅ **Stable**: Production-ready and well-tested
+- ✅ **Supported**: Receives security updates and bug fixes
+- ✅ **Reliable**: Recommended for all applications
+- ✅ **Compatible**: Works with all LangChain.js packages
 
 ---
 
@@ -278,7 +307,7 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 
 Before moving to Chapter 1, make sure you have:
 
-- [ ] Node.js 18+ installed
+- [ ] Node.js LTS installed
 - [ ] Project cloned and dependencies installed (`npm install`)
 - [ ] GitHub Personal Access Token created
 - [ ] `.env` file configured with your token

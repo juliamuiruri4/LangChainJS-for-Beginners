@@ -1,9 +1,5 @@
 /**
- * Example 3: Few-Shot Prompting
- *
- * Teach the AI by showing examples. This is more reliable than
- * just giving instructions.
- *
+ * Few-Shot Prompting
  * Run: npx tsx 03-prompt-templates/code/03-few-shot.ts
  */
 
@@ -21,11 +17,10 @@ async function emotionToEmojiExample() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
-
-  // Define teaching examples
   const examples = [
     { input: "happy", output: "😊" },
     { input: "sad", output: "😢" },
@@ -49,13 +44,11 @@ async function emotionToEmojiExample() {
   // Combine with the final question
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Convert emotions to emojis based on these examples:"],
-    fewShotTemplate,
+    fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
     ["human", "{input}"],
   ]);
 
   const chain = finalTemplate.pipe(model);
-
-  // Test with new emotions
   const testEmotions = ["surprised", "confused", "tired", "proud"];
 
   for (const emotion of testEmotions) {
@@ -72,6 +65,7 @@ async function codeCommentExample() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -105,13 +99,11 @@ async function codeCommentExample() {
 
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Generate clear, concise comments for code based on these examples:"],
-    fewShotTemplate,
+    fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
     ["human", "Code: {code}"],
   ]);
 
   const chain = finalTemplate.pipe(model);
-
-  // Test with new code
   const testCode = [
     "const sorted = items.sort((a, b) => a.price - b.price);",
     "if (user.role === 'admin') return true;",

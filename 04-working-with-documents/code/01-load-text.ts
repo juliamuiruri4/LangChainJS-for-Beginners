@@ -1,8 +1,5 @@
 /**
- * Example 1: Loading Text Files
- *
- * Learn how to load documents from text files using TextLoader.
- *
+ * Loading Text Files
  * Run: npx tsx 04-working-with-documents/code/01-load-text.ts
  */
 

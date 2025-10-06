@@ -26,6 +26,7 @@ async function testModel(modelName: string): Promise<ModelResult> {
     model: modelName,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

@@ -1,9 +1,5 @@
 /**
- * Example 4: Error Handling and Retries
- *
- * Learn how to handle errors gracefully and implement retry logic
- * for resilient applications.
- *
+ * Error Handling and Retries
  * Run: npx tsx 02-chat-models/code/04-error-handling.ts
  */
 
@@ -18,6 +14,7 @@ async function robustCall(prompt: string, maxRetries = 3): Promise<string> {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
     timeout: 30000, // 30 second timeout
@@ -63,6 +60,7 @@ async function errorExamples() {
       model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
       },
       apiKey: "invalid_key_12345",
     });
@@ -75,20 +73,28 @@ async function errorExamples() {
 
   // Example 2: Network timeout (simulated with very short timeout)
   console.log("\n2️⃣  Example: Timeout Handling\n");
-  try {
-    const timeoutModel = new ChatOpenAI({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
-      configuration: {
-        baseURL: process.env.AI_ENDPOINT,
-      },
-      apiKey: process.env.AI_API_KEY,
-      timeout: 1, // Unreasonably short timeout
-    });
 
-    await timeoutModel.invoke("Write a long essay");
-  } catch (error: any) {
-    console.log("❌ Caught error: Request timeout");
-    console.log("💡 Solution: Increase timeout or retry\n");
+  // Skip timeout test in CI mode (unreliable with some providers)
+  if (process.env.CI === "true") {
+    console.log("⏭️  Skipped in CI mode (timeout behavior varies by provider)");
+    console.log("💡 Timeout errors happen when requests take too long\n");
+  } else {
+    try {
+      const timeoutModel = new ChatOpenAI({
+        model: process.env.AI_MODEL || "gpt-4o-mini",
+        configuration: {
+          baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+        },
+        apiKey: process.env.AI_API_KEY,
+        timeout: 100, // Very short timeout to trigger timeout error
+      });
+
+      await timeoutModel.invoke("Write a detailed essay about the history of computing");
+    } catch (error: any) {
+      console.log("❌ Caught error:", error.message?.includes("timeout") ? "Request timeout" : error.message);
+      console.log("💡 Solution: Increase timeout or retry\n");
+    }
   }
 
   // Example 3: Successful retry

@@ -10,9 +10,9 @@
 
 By the end of this chapter, you'll be able to:
 - Understand different types of memory in LangChain
-- Implement conversation history management
-- Use buffer, window, and summary memory
-- Build stateful chatbots
+- Implement conversation history with LangGraph
+- Use buffer, window, and summary memory patterns
+- Build stateful chatbots with MemorySaver
 - Manage memory in production
 
 ---
@@ -41,15 +41,15 @@ User: "What's my name?"
 Bot: "I don't have information about your name"
 ```
 
-**Memory fixes this:**
+**Memory fixes this with LangGraph:**
 
 ```typescript
-// With memory
+// With MemorySaver
 User: "My name is Sarah"
 Bot: "Nice to meet you, Sarah!"
 
 User: "What's my name?"
-Bot: "Your name is Sarah!"  // Remembers!
+Bot: "Your name is Sarah!"  // Remembers via checkpointer!
 ```
 
 ---
@@ -62,7 +62,6 @@ Stores **all** messages in the conversation.
 
 **Pros**: Full context, nothing lost
 **Cons**: Can exceed token limits, expensive
-
 **Use when**: Short conversations, need full history
 
 ### 2. Window Memory
@@ -71,7 +70,6 @@ Stores only the **last N** messages.
 
 **Pros**: Fixed memory size, efficient
 **Cons**: Forgets older context
-
 **Use when**: Long conversations, want recent context only
 
 ### 3. Summary Memory
@@ -79,13 +77,14 @@ Stores only the **last N** messages.
 Summarizes old messages, keeps recent ones.
 
 **Pros**: Balance between context and efficiency
-**Cons**: May lose details in summary
-
+**Cons**: May lose details in summarization
 **Use when**: Very long conversations, need efficiency
 
 ---
 
-## 💻 Implementing Memory
+## 💻 Implementing Memory with LangGraph
+
+Modern LangChain.js uses **LangGraph with `MemorySaver`** for conversation memory.
 
 ### Example 1: Buffer Memory
 
@@ -93,8 +92,8 @@ Summarizes old messages, keeps recent ones.
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { ConversationChain } from "langchain/chains";
-import { BufferMemory } from "langchain/memory";
+import { StateGraph, START, END, MemorySaver, MessagesAnnotation } from "@langchain/langgraph";
+import { HumanMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
 const model = new ChatOpenAI({
@@ -103,21 +102,46 @@ const model = new ChatOpenAI({
   apiKey: process.env.AI_API_KEY,
 });
 
-const memory = new BufferMemory();
+// Define chatbot node
+const callModel = async (state: typeof MessagesAnnotation.State) => {
+  const response = await model.invoke(state.messages);
+  return { messages: [response] };
+};
 
-const chain = new ConversationChain({ llm: model, memory });
+// Create workflow with memory
+const workflow = new StateGraph(MessagesAnnotation)
+  .addNode("model", callModel)
+  .addEdge(START, "model")
+  .addEdge("model", END);
+
+// Compile with MemorySaver for automatic persistence
+const memory = new MemorySaver();
+const app = workflow.compile({ checkpointer: memory });
+
+// Use with thread ID for conversation tracking
+const config = { configurable: { thread_id: "conversation-1" } };
 
 // First exchange
-await chain.call({ input: "Hi, my name is Alice and I'm a developer." });
+await app.invoke(
+  { messages: [new HumanMessage("Hi, my name is Alice and I'm a developer.")] },
+  config
+);
 
 // Later exchange - bot remembers!
-const response = await chain.call({ input: "What's my name and occupation?" });
-console.log(response.response);
-// Output: "Your name is Alice and you're a developer."
+const response = await app.invoke(
+  { messages: [new HumanMessage("What's my name and occupation?")] },
+  config
+);
 
-// View memory
-console.log(await memory.loadMemoryVariables({}));
+console.log(response.messages[response.messages.length - 1].content);
+// Output: "Your name is Alice and you're a developer."
 ```
+
+**Key Features**:
+- ✅ `MemorySaver` automatically stores conversation history
+- ✅ Thread-based conversation tracking with `thread_id`
+- ✅ No manual memory management needed
+- ✅ Production-ready pattern
 
 ---
 
@@ -126,22 +150,40 @@ console.log(await memory.loadMemoryVariables({}));
 **Code**: [`code/02-window-memory.ts`](./code/02-window-memory.ts)
 
 ```typescript
-import { BufferWindowMemory } from "langchain/memory";
+import { trimMessages } from "@langchain/core/messages";
 
-// Keep only last 4 messages (2 exchanges)
-const memory = new BufferWindowMemory({ k: 4 });
+// Create message trimmer to keep only last N messages
+const trimmer = trimMessages({
+  maxTokens: 200,
+  strategy: "last",
+  tokenCounter: model,
+});
 
-const chain = new ConversationChain({ llm: model, memory });
+// Define chatbot node with trimming
+const callModel = async (state: typeof MessagesAnnotation.State) => {
+  const trimmedMessages = await trimmer.invoke(state.messages);
+  const response = await model.invoke(trimmedMessages);
+  return { messages: [response] };
+};
 
-await chain.call({ input: "My favorite color is blue." });
-await chain.call({ input: "I have a cat named Whiskers." });
-await chain.call({ input: "I work in Seattle." });
-await chain.call({ input: "I love hiking." });
+const workflow = new StateGraph(MessagesAnnotation)
+  .addNode("model", callModel)
+  .addEdge(START, "model")
+  .addEdge("model", END);
 
-// This will remember recent info but may have forgotten about blue
-const response = await chain.call({ input: "Tell me about myself." });
-console.log(response.response);
+const app = workflow.compile({ checkpointer: new MemorySaver() });
+
+// Full history is stored, but only last ~200 tokens are sent to the model
+await app.invoke({ messages: [new HumanMessage("I love hiking.")] }, config);
+await app.invoke({ messages: [new HumanMessage("I work in Seattle.")] }, config);
+
+// Model only sees recent messages, but full history is preserved
 ```
+
+**Benefits**:
+- ✅ Controls token usage while preserving full history
+- ✅ Prevents hitting model token limits
+- ✅ Flexible token management per call
 
 ---
 
@@ -150,108 +192,104 @@ console.log(response.response);
 **Code**: [`code/03-summary-memory.ts`](./code/03-summary-memory.ts)
 
 ```typescript
-import { ConversationSummaryMemory } from "langchain/memory";
+import { Annotation } from "@langchain/langgraph";
 
-const memory = new ConversationSummaryMemory({
-  llm: model,
-  maxTokenLimit: 100,
+const ConversationState = Annotation.Root({
+  messages: Annotation<BaseMessage[]>({
+    reducer: (left, right) => left.concat(right),
+    default: () => [],
+  }),
+  summary: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
 });
 
-const chain = new ConversationChain({ llm: model, memory });
+// Node to summarize old messages
+const summarizeConversation = async (state: typeof ConversationState.State) => {
+  if (state.messages.length < 6) return {};
 
-// Have a long conversation
-await chain.call({ input: "I'm planning a trip to Japan next month." });
-await chain.call({ input: "I want to visit Tokyo, Kyoto, and Osaka." });
-await chain.call({ input: "I'm interested in temples and traditional food." });
+  const messagesToSummarize = state.messages.slice(0, -4);
+  const recentMessages = state.messages.slice(-4);
 
-// Memory is summarized
-console.log(await memory.loadMemoryVariables({}));
-// Output: "User is planning trip to Japan (Tokyo, Kyoto, Osaka), interested in temples and food."
+  const summaryPrompt = `Summarize: ${messagesToSummarize.map(m => m.content).join('\n')}`;
+  const summaryResponse = await model.invoke([new HumanMessage(summaryPrompt)]);
+
+  return {
+    summary: String(summaryResponse.content),
+    messages: recentMessages,
+  };
+};
+
+// Node to handle conversation with summary as context
+const callModel = async (state: typeof ConversationState.State) => {
+  const contextMessages = [];
+
+  if (state.summary) {
+    contextMessages.push(new SystemMessage(`Summary: ${state.summary}`));
+  }
+
+  contextMessages.push(...state.messages);
+  const response = await model.invoke(contextMessages);
+  return { messages: [response] };
+};
+
+const workflow = new StateGraph(ConversationState)
+  .addNode("summarize", summarizeConversation)
+  .addNode("model", callModel)
+  .addEdge(START, "summarize")
+  .addEdge("summarize", "model")
+  .addEdge("model", END);
+
+const app = workflow.compile({ checkpointer: new MemorySaver() });
 ```
 
----
-
-## 💬 Building a Stateful Chatbot
-
-### Example 4: Full Chatbot
-
-**Code**: [`code/04-stateful-chatbot.ts`](./code/04-stateful-chatbot.ts)
-
-```typescript
-import { ChatOpenAI } from "@langchain/openai";
-import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { RunnableWithMessageHistory } from "@langchain/core/runnables";
-import { ChatMessageHistory } from "langchain/stores/message/in_memory";
-import "dotenv/config";
-
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY,
-});
-
-const prompt = ChatPromptTemplate.fromMessages([
-  ["system", "You are a helpful assistant. Remember user preferences."],
-  new MessagesPlaceholder("history"),
-  ["human", "{input}"],
-]);
-
-const chain = prompt.pipe(model);
-
-// Session-based memory
-const messageHistories: Record<string, ChatMessageHistory> = {};
-
-const withHistory = new RunnableWithMessageHistory({
-  runnable: chain,
-  getMessageHistory: async (sessionId) => {
-    if (!messageHistories[sessionId]) {
-      messageHistories[sessionId] = new ChatMessageHistory();
-    }
-    return messageHistories[sessionId];
-  },
-  inputMessagesKey: "input",
-  historyMessagesKey: "history",
-});
-
-// Use with session ID
-const config = { configurable: { sessionId: "user-123" } };
-
-await withHistory.invoke({ input: "I prefer short answers." }, config);
-await withHistory.invoke({ input: "Explain quantum computing." }, config);
-// Bot will give a short answer because it remembers the preference!
-```
+**Advantages**:
+- ✅ Balances context retention and token usage
+- ✅ Keeps recent messages verbatim
+- ✅ Summarizes older context
+- ✅ Great for very long conversations
 
 ---
 
 ## 🏭 Production Considerations
 
-### 1. Persistent Storage
-
-In production, use a database:
+### 1. Thread-Based Conversations
 
 ```typescript
-import { RedisChatMessageHistory } from "langchain/stores/message/redis";
+// Different conversations for different users
+const user1Config = { configurable: { thread_id: "user-123" } };
+const user2Config = { configurable: { thread_id: "user-456" } };
 
-const messageHistory = new RedisChatMessageHistory({
-  sessionId: "user-123",
-  config: { url: process.env.REDIS_URL },
+await app.invoke({ messages: [new HumanMessage("Hello")] }, user1Config);
+await app.invoke({ messages: [new HumanMessage("Hi")] }, user2Config);
+```
+
+### 2. Persistent Storage
+
+In production, use a database instead of `MemorySaver`:
+
+```typescript
+// PostgreSQL checkpointer (example)
+import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
+
+const checkpointer = new PostgresSaver({
+  connectionString: process.env.DATABASE_URL,
 });
+
+const app = workflow.compile({ checkpointer });
 ```
 
-### 2. Memory Limits
+### 3. Memory Limits
 
-Set token limits to control costs:
-
-```typescript
-const memory = new BufferMemory({ maxTokenLimit: 2000 });
-```
-
-### 3. Clear Memory
-
-Allow users to start fresh:
+Control conversation size:
 
 ```typescript
-await memory.clear();
+const trimmer = trimMessages({
+  maxTokens: 2000,  // Prevent exceeding model limits
+  strategy: "last",
+  includeSystem: true,  // Always keep system message
+});
 ```
 
 ---
@@ -259,11 +297,13 @@ await memory.clear();
 ## 🎓 Key Takeaways
 
 - ✅ **LLMs have no memory by default**: You must implement it
-- ✅ **Buffer memory**: Stores everything (simple but can be expensive)
-- ✅ **Window memory**: Keeps last N messages (efficient)
-- ✅ **Summary memory**: Summarizes old messages (balanced)
-- ✅ **Session-based**: Use session IDs for multi-user apps
-- ✅ **Persistent storage**: Use databases in production
+- ✅ **Modern pattern**: Use LangGraph with `MemorySaver`
+- ✅ **Buffer memory**: Store full conversation with checkpointer
+- ✅ **Window memory**: Use `trimMessages` to limit context
+- ✅ **Summary memory**: Custom summarization in state graph
+- ✅ **Thread-based**: Use `thread_id` for multi-user apps
+- ✅ **Production ready**: Supports database checkpointers
+- ✅ **No deprecated APIs**: Uses latest LangChain.js patterns
 
 ---
 
@@ -281,8 +321,9 @@ The assignment includes:
 
 ## 📚 Additional Resources
 
-- [Memory Documentation](https://js.langchain.com/docs/modules/memory/)
-- [Message History](https://js.langchain.com/docs/modules/memory/chat_messages/)
+- [LangGraph Memory Documentation](https://langchain-ai.github.io/langgraphjs/how-tos/persistence/)
+- [Message Trimming Guide](https://js.langchain.com/docs/how_to/trim_messages/)
+- [Checkpointers](https://langchain-ai.github.io/langgraphjs/concepts/persistence/)
 
 ---
 

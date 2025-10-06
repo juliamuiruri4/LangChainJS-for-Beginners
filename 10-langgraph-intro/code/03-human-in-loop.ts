@@ -1,19 +1,24 @@
 /**
- * Example 3: Human-in-the-Loop
- *
- * Build a workflow that requests human approval before proceeding.
- *
+ * Human-in-the-Loop
  * Run: npx tsx 10-langgraph-intro/code/03-human-in-loop.ts
  */
 
-import { StateGraph, END } from "@langchain/langgraph";
+import { StateGraph, END, Annotation } from "@langchain/langgraph";
 import readline from "readline";
-
-interface ApprovalState {
-  request: string;
-  approved: boolean;
-  result: string;
-}
+const ApprovalState = Annotation.Root({
+  request: Annotation<string>({
+    reducer: (_, right) => right,
+    default: () => "",
+  }),
+  approved: Annotation<boolean>({
+    reducer: (_, right) => right,
+    default: () => false,
+  }),
+  result: Annotation<string>({
+    reducer: (_, right) => right,
+    default: () => "",
+  }),
+});
 
 function askQuestion(query: string): Promise<string> {
   const rl = readline.createInterface({
@@ -32,16 +37,10 @@ function askQuestion(query: string): Promise<string> {
 async function main() {
   console.log("👤 Human-in-the-Loop Example\n");
 
-  const workflow = new StateGraph<ApprovalState>({
-    channels: {
-      request: { value: (_, right) => right, default: () => "" },
-      approved: { value: (_, right) => right, default: () => false },
-      result: { value: (_, right) => right, default: () => "" },
-    },
-  });
+  const workflow = new StateGraph(ApprovalState);
 
   // Node: Display request and ask for approval
-  workflow.addNode("requestApproval", async (state: ApprovalState) => {
+  workflow.addNode("requestApproval", async (state: typeof ApprovalState.State) => {
     console.log("\n📋 Request Details:");
     console.log(`   ${state.request}\n`);
 
@@ -55,7 +54,7 @@ async function main() {
   });
 
   // Node: Execute approved request
-  workflow.addNode("execute", async (state: ApprovalState) => {
+  workflow.addNode("execute", async (state: typeof ApprovalState.State) => {
     console.log("⚙️  Executing request...");
     const result = `✅ Successfully executed: ${state.request}`;
     console.log(`   ${result}\n`);
@@ -63,7 +62,7 @@ async function main() {
   });
 
   // Node: Reject request
-  workflow.addNode("reject", async (state: ApprovalState) => {
+  workflow.addNode("reject", async (state: typeof ApprovalState.State) => {
     console.log("🚫 Rejecting request...");
     const result = `❌ Request rejected: ${state.request}`;
     console.log(`   ${result}\n`);
@@ -71,22 +70,20 @@ async function main() {
   });
 
   // Routing based on approval
-  function checkApproval(state: ApprovalState): string {
+  function checkApproval(state: typeof ApprovalState.State): string {
     return state.approved ? "execute" : "reject";
   }
 
-  // Build graph
-  workflow.setEntryPoint("requestApproval");
-  workflow.addConditionalEdges("requestApproval", checkApproval, {
+  // Type assertions: LangGraph's edge types don't perfectly match TypeScript's string inference
+  workflow.addEdge("__start__" as any, "requestApproval" as any);
+  workflow.addConditionalEdges("requestApproval" as any, checkApproval, {
     execute: "execute",
     reject: "reject",
-  });
-  workflow.addEdge("execute", END);
-  workflow.addEdge("reject", END);
+  } as any);
+  workflow.addEdge("execute" as any, END);
+  workflow.addEdge("reject" as any, END);
 
   const app = workflow.compile();
-
-  // Test scenarios
   const requests = [
     "Deploy new version to production",
     "Delete user data for user ID 12345",

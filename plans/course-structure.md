@@ -145,7 +145,7 @@ LangChainJS-for-Beginners/
    - Estimated time: 15-20 minutes
 
 2. **Prerequisites**
-   - Node.js (v18+)
+   - Node.js LTS
    - npm or pnpm
    - VS Code (recommended)
    - GitHub account

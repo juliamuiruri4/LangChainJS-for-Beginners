@@ -21,6 +21,7 @@ async function robustChat(
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
     timeout,
@@ -71,13 +72,9 @@ async function robustChat(
 async function testRobustChat() {
   console.log("🛡️  Robust Error Handler Test\n");
   console.log("=".repeat(80));
-
-  // Test 1: Normal successful call
   console.log("\n1️⃣  Test: Normal Call (should succeed)\n");
   const response1 = await robustChat("What is 2+2?");
   console.log("Response:", response1);
-
-  // Test 2: Invalid API key (will use fallback)
   console.log("\n" + "=".repeat(80));
   console.log("\n2️⃣  Test: Invalid API Key (will retry then fallback)\n");
 

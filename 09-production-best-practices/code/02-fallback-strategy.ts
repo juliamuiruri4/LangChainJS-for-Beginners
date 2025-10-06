@@ -1,8 +1,5 @@
 /**
- * Example 2: Fallback Strategy
- *
- * Implement fallbacks to handle provider failures gracefully.
- *
+ * Fallback Strategy
  * Run: npx tsx 09-production-best-practices/code/02-fallback-strategy.ts
  */
 
@@ -15,7 +12,6 @@ interface Provider {
 }
 
 async function invokeWithFallback(input: string, maxRetries: number = 2): Promise<string> {
-  // Define providers in priority order
   const providers: Provider[] = [
     {
       name: "GitHub Models (Primary)",
@@ -23,6 +19,7 @@ async function invokeWithFallback(input: string, maxRetries: number = 2): Promis
         model: process.env.AI_MODEL || "gpt-4o-mini",
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
         },
         apiKey: process.env.AI_API_KEY,
         timeout: 5000,
@@ -34,6 +31,7 @@ async function invokeWithFallback(input: string, maxRetries: number = 2): Promis
         model: process.env.AI_MODEL || "gpt-4o",
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
         },
         apiKey: process.env.AI_API_KEY,
         timeout: 10000,

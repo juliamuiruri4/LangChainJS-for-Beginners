@@ -2,9 +2,23 @@
 
 This guide explains how to run and validate all code examples in the course.
 
-## Quick Validation
+## Build Check (Fast)
 
-To validate all code examples:
+Check that all TypeScript files compile without errors:
+
+```bash
+npm run build
+```
+
+**⏱️ Expected Runtime**: 10-30 seconds
+- Type-checks 44+ TypeScript files
+- No API calls - pure compilation check
+- Catches syntax errors, type errors, and import issues
+- Great for quick validation before committing
+
+## Runtime Validation (Comprehensive)
+
+Execute all code examples with actual API calls:
 
 ```bash
 npm test

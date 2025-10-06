@@ -1,8 +1,5 @@
 /**
- * Example 2: Vector Store and Semantic Search
- *
- * Learn how to store embeddings and perform semantic searches.
- *
+ * Vector Store and Semantic Search
  * Run: npx tsx 05-embeddings-semantic-search/code/02-vector-store.ts
  */
 
@@ -18,6 +15,7 @@ async function main() {
     model: "text-embedding-3-small",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });

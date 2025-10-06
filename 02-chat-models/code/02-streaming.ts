@@ -1,9 +1,5 @@
 /**
- * Example 2: Streaming Responses
- *
- * Stream responses word-by-word for better user experience.
- * Perfect for long responses where users want immediate feedback.
- *
+ * Streaming Responses
  * Run: npx tsx 02-chat-models/code/02-streaming.ts
  */
 
@@ -17,6 +13,7 @@ async function nonStreamingExample() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -37,6 +34,7 @@ async function streamingExample() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
     },
     apiKey: process.env.AI_API_KEY,
   });
@@ -52,7 +50,7 @@ async function streamingExample() {
       firstChunkTime = Date.now();
     }
     // Write each chunk as it arrives (no newline)
-    process.stdout.write(chunk.content);
+    process.stdout.write(String(chunk.content));
   }
 
   const endTime = Date.now();
