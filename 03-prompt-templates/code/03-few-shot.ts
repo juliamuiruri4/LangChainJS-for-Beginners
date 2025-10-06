@@ -18,11 +18,11 @@ async function emotionToEmojiExample() {
   console.log("1️⃣  Example: Emotion to Emoji Converter\n");
 
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define teaching examples
@@ -69,11 +69,11 @@ async function codeCommentExample() {
   console.log("\n2️⃣  Example: Code Comment Generator\n");
 
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Examples of code → comment pairs

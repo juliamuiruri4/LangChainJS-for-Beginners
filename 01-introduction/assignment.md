@@ -19,7 +19,7 @@ Now that you've learned the basics of LangChain.js, it's time to practice! These
 **Tasks**:
 1. Create a file called `verify-setup.ts` in the `01-introduction/code/` folder
 2. Write a script that:
-   - Checks if `GITHUB_TOKEN` is set
+   - Checks if `AI_API_KEY` is set
    - Makes a simple call to `gpt-4o-mini`
    - Prints "✅ Setup verified!" if successful
    - Prints helpful error messages if something fails

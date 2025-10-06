@@ -9,11 +9,11 @@ import readline from "readline";
 import "dotenv/config";
 
 const model = new ChatOpenAI({
-  model: "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-4o-mini",
   configuration: {
-    baseURL: "https://models.inference.ai.azure.com",
+    baseURL: process.env.AI_ENDPOINT,
   },
-  apiKey: process.env.GITHUB_TOKEN,
+  apiKey: process.env.AI_API_KEY,
 });
 
 const rl = readline.createInterface({

@@ -83,15 +83,15 @@ import "dotenv/config";
 
 // Setup
 const model = new ChatOpenAI({
-  model: "gpt-4o-mini",
-  configuration: { baseURL: "https://models.inference.ai.azure.com" },
-  apiKey: process.env.GITHUB_TOKEN,
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY,
 });
 
 const embeddings = new OpenAIEmbeddings({
   model: "text-embedding-3-small",
-  configuration: { baseURL: "https://models.inference.ai.azure.com" },
-  apiKey: process.env.GITHUB_TOKEN,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY,
 });
 
 // Create knowledge base

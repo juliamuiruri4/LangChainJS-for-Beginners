@@ -15,11 +15,11 @@ import "dotenv/config";
  */
 async function robustCall(prompt: string, maxRetries = 3): Promise<string> {
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
     timeout: 30000, // 30 second timeout
   });
 
@@ -60,9 +60,9 @@ async function errorExamples() {
   console.log("\n1️⃣  Example: Invalid API Key\n");
   try {
     const badModel = new ChatOpenAI({
-      model: "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
-        baseURL: "https://models.inference.ai.azure.com",
+        baseURL: process.env.AI_ENDPOINT,
       },
       apiKey: "invalid_key_12345",
     });
@@ -77,11 +77,11 @@ async function errorExamples() {
   console.log("\n2️⃣  Example: Timeout Handling\n");
   try {
     const timeoutModel = new ChatOpenAI({
-      model: "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
-        baseURL: "https://models.inference.ai.azure.com",
+        baseURL: process.env.AI_ENDPOINT,
       },
-      apiKey: process.env.GITHUB_TOKEN,
+      apiKey: process.env.AI_API_KEY,
       timeout: 1, // Unreasonably short timeout
     });
 

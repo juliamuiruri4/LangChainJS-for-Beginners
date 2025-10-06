@@ -22,18 +22,18 @@ function createModel(config: ModelConfig) {
       return new ChatOpenAI({
         model: config.model,
         configuration: {
-          baseURL: "https://models.inference.ai.azure.com",
+          baseURL: process.env.AI_ENDPOINT,
         },
-        apiKey: config.apiKey || process.env.GITHUB_TOKEN,
+        apiKey: config.apiKey || process.env.AI_API_KEY,
       });
 
     case "azure":
       return new ChatOpenAI({
         model: config.model,
         configuration: {
-          baseURL: config.baseURL || process.env.AZURE_OPENAI_ENDPOINT,
+          baseURL: config.baseURL || process.env.AI_ENDPOINT,
         },
-        apiKey: config.apiKey || process.env.AZURE_OPENAI_API_KEY,
+        apiKey: config.apiKey || process.env.AI_API_KEY,
       });
 
     case "openai":

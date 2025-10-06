@@ -1,6 +1,6 @@
 # 🦜🔗 LangChain.js for Beginners
 
-Welcome to **LangChain.js for Beginners** - your complete guide to building AI-powered applications with JavaScript and TypeScript!
+Welcome to **LangChain.js for Beginners** - your complete guide to building AI-powered applications with LangChain.js and TypeScript!
 
 ## What You'll Build
 
@@ -68,21 +68,56 @@ npm install
 # Copy the example environment file
 cp .env.example .env
 
-# Edit .env and add your GitHub token
-# Get your token at: https://github.com/settings/tokens
+# Edit .env with your AI provider credentials
+# See .env.example for all options
 ```
 
-### API Keys
+### AI Provider Configuration
 
-This course starts out using **GitHub Models** (free for all GitHub users!) and later transitions to **Azure AI Foundry** for production scenarios.
+**This course is provider-agnostic!** All examples work with:
+- ✅ **GitHub Models** (Free - recommended for learning)
+- ✅ **Azure AI Foundry** (Production deployments)
+- ✅ **OpenAI Direct** (Also production-ready)
 
-👉 **Start with [Course Setup](./00-course-setup/README.md)** to configure your environment!
+Edit `.env` file with three values:
+
+```bash
+AI_API_KEY=your_api_key_here
+AI_ENDPOINT=your_endpoint_url
+AI_MODEL=gpt-4o-mini
+```
+
+**No code changes needed to switch providers** - just update `.env`!
+
+👉 **Start with [Course Setup](./00-course-setup/README.md)** for detailed configuration!
 
 ## Learning Path
 
 Each chapter builds on the previous one, but you can also jump to specific topics of interest. We recommend following the sequence for the best learning experience.
 
 **Estimated Time**: 15-20 hours total (including hands-on exercises)
+
+## Testing & Validation
+
+All code examples in this course are automatically tested to ensure they work correctly. You can run the validation yourself:
+
+```bash
+# Validate all code examples (takes 20-40 minutes)
+npm test
+
+# Or test individual examples
+npx tsx 01-introduction/code/01-hello-world.ts
+```
+
+The validation script:
+- ✅ Tests all TypeScript examples across all chapters
+- ✅ Skips interactive examples that require user input
+- ✅ Provides detailed error reports if issues are found
+- ✅ Runs automatically on every commit via GitHub Actions
+
+**Note**: You need `AI_API_KEY`, `AI_ENDPOINT`, and `AI_MODEL` environment variables for the examples to run. See [Course Setup](./00-course-setup/README.md) for details.
+
+📖 **Full Testing Guide**: See [TESTING.md](./TESTING.md) for detailed testing instructions, troubleshooting, and best practices.
 
 ## Support & Community
 

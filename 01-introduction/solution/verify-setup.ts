@@ -10,28 +10,28 @@ import "dotenv/config";
 async function verifySetup() {
   console.log("🔍 Verifying setup...\n");
 
-  // Check if GITHUB_TOKEN is set
-  if (!process.env.GITHUB_TOKEN) {
-    console.error("❌ ERROR: GITHUB_TOKEN not found in .env file");
+  // Check if AI_API_KEY is set
+  if (!process.env.AI_API_KEY) {
+    console.error("❌ ERROR: AI_API_KEY not found in .env file");
     console.log("\n📝 Next steps:");
     console.log("1. Create a .env file in the project root");
-    console.log("2. Add: GITHUB_TOKEN=your_token_here");
+    console.log("2. Add: AI_API_KEY=your_token_here");
     console.log("3. Get a token at: https://github.com/settings/tokens");
     process.exit(1);
   }
 
-  console.log("✅ GITHUB_TOKEN found");
+  console.log("✅ AI_API_KEY found");
 
   // Test API call
   try {
     console.log("🧪 Testing API connection...\n");
 
     const model = new ChatOpenAI({
-      model: "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
-        baseURL: "https://models.inference.ai.azure.com",
+        baseURL: process.env.AI_ENDPOINT,
       },
-      apiKey: process.env.GITHUB_TOKEN,
+      apiKey: process.env.AI_API_KEY,
     });
 
     const response = await model.invoke("Say 'Hello from LangChain.js!' if you can read this.");
@@ -43,7 +43,7 @@ async function verifySetup() {
     console.error("❌ API connection failed");
     console.error(`Error: ${error.message}\n`);
     console.log("📝 Troubleshooting:");
-    console.log("1. Check that your GITHUB_TOKEN is valid");
+    console.log("1. Check that your AI_API_KEY is valid");
     console.log("2. Verify you have no extra spaces in .env");
     console.log("3. Try creating a new token");
     process.exit(1);

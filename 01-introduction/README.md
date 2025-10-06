@@ -124,13 +124,13 @@ import "dotenv/config";
 async function main() {
   console.log("🚀 Hello LangChain.js!\n");
 
-  // Create a model instance
+  // Create a model instance using environment variables
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Make your first AI call!
@@ -149,10 +149,12 @@ npx tsx 01-introduction/code/01-hello-world.ts
 ```
 
 **What's happening here?**
-1. We import `ChatOpenAI` (works with GitHub Models)
-2. We create a model instance pointing to GitHub Models
+1. We import `ChatOpenAI` from LangChain
+2. We create a model instance using environment variables (`AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`)
 3. We call `invoke()` with a simple string prompt
 4. We get back a response with the AI's answer
+
+**Why environment variables?** This allows you to switch between providers (GitHub Models, Azure AI Foundry, OpenAI) by just changing your `.env` file - no code changes needed!
 
 ---
 
@@ -173,11 +175,11 @@ async function main() {
   console.log("🎭 Understanding Message Types\n");
 
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Using structured messages
@@ -230,9 +232,9 @@ async function compareModels() {
     const model = new ChatOpenAI({
       model: modelName,
       configuration: {
-        baseURL: "https://models.inference.ai.azure.com",
+        baseURL: process.env.AI_ENDPOINT,
       },
-      apiKey: process.env.GITHUB_TOKEN,
+      apiKey: process.env.AI_API_KEY,
     });
 
     const response = await model.invoke(prompt);
@@ -257,6 +259,69 @@ npx tsx 01-introduction/code/03-model-comparison.ts
 
 ---
 
+## 🔄 Switching to Azure AI Foundry (Optional)
+
+**Want to use Azure AI Foundry instead of GitHub Models?** Great news - all the code you just wrote will work with zero changes!
+
+### Why Switch to Azure AI Foundry?
+
+- ✅ **Production-ready**: Enterprise-grade infrastructure and SLAs
+- ✅ **Higher limits**: More requests per minute than free tiers
+- ✅ **Advanced features**: Private endpoints, content filtering, monitoring
+- ✅ **Azure integration**: Works seamlessly with other Azure services
+
+### How to Switch
+
+Simply update your `.env` file with three values:
+
+```bash
+# OLD: GitHub Models (Free)
+AI_API_KEY=ghp_your_github_token
+AI_ENDPOINT=https://models.inference.ai.azure.com
+AI_MODEL=gpt-4o-mini
+
+# NEW: Azure AI Foundry (Production)
+AI_API_KEY=your_azure_openai_api_key
+AI_ENDPOINT=https://your-resource.openai.azure.com
+AI_MODEL=gpt-4o-mini
+```
+
+**That's it!** All examples in this chapter (and the entire course) now use Azure AI Foundry.
+
+### Getting Your Azure AI Foundry Credentials
+
+1. **Create** an Azure AI Foundry project at [ai.azure.com](https://ai.azure.com)
+2. **Deploy** a model (e.g., gpt-4o-mini)
+3. **Copy** your endpoint and API key from the Azure Portal
+
+**Your endpoint** looks like: `https://YOUR-RESOURCE-NAME.openai.azure.com`
+
+**Model name** matches your deployment name (e.g., `gpt-4o-mini`, `gpt-4o`)
+
+### The Magic of Provider Abstraction ✨
+
+Notice that your code uses environment variables:
+
+```typescript
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+```
+
+This pattern means:
+- ✅ **No code changes** to switch providers
+- ✅ **Easy testing** - Use GitHub Models for dev, Azure for production
+- ✅ **Cost optimization** - Switch to cheaper providers when appropriate
+- ✅ **Disaster recovery** - Fallback to alternative providers if one is down
+
+You'll learn more about production deployment strategies in [Chapter 9](../09-production-best-practices/README.md).
+
+---
+
 ## 🎓 Key Takeaways
 
 Let's review what you learned:
@@ -264,8 +329,9 @@ Let's review what you learned:
 - ✅ **LangChain.js is an abstraction layer** - It provides a consistent interface across different LLM providers
 - ✅ **Built on composable components** - Models, prompts, chains, agents, and memory work together
 - ✅ **GitHub Models offers free access** - Perfect for learning and prototyping
+- ✅ **Azure AI Foundry is production-ready** - Switch anytime with just environment variables
 - ✅ **Messages have types** - SystemMessage, HumanMessage, and AIMessage serve different purposes
-- ✅ **Provider flexibility** - Switch between models with minimal code changes
+- ✅ **Provider flexibility** - Switch between models and providers with zero code changes
 
 ---
 

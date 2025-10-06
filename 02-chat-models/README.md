@@ -61,11 +61,11 @@ import "dotenv/config";
 
 async function main() {
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Conversation history
@@ -113,11 +113,11 @@ import "dotenv/config";
 
 async function main() {
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("🤖 AI (streaming): ");
@@ -190,12 +190,12 @@ async function compareTemperatures() {
     console.log("─".repeat(60));
 
     const model = new ChatOpenAI({
-      model: "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-4o-mini",
       temperature: temp,
       configuration: {
-        baseURL: "https://models.inference.ai.azure.com",
+        baseURL: process.env.AI_ENDPOINT,
       },
-      apiKey: process.env.GITHUB_TOKEN,
+      apiKey: process.env.AI_API_KEY,
     });
 
     const response = await model.invoke(prompt);
@@ -229,11 +229,11 @@ import "dotenv/config";
 
 async function robustCall(prompt: string, maxRetries = 3) {
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
   });
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -300,7 +300,7 @@ Tokens are pieces of text that models process:
 import { ChatOpenAI } from "@langchain/openai";
 
 const model = new ChatOpenAI({
-  model: "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-4o-mini",
   // ... config
 });
 

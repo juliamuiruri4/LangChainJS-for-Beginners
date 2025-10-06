@@ -20,22 +20,22 @@ async function invokeWithFallback(input: string, maxRetries: number = 2): Promis
     {
       name: "GitHub Models (Primary)",
       model: new ChatOpenAI({
-        model: "gpt-4o-mini",
+        model: process.env.AI_MODEL || "gpt-4o-mini",
         configuration: {
-          baseURL: "https://models.inference.ai.azure.com",
+          baseURL: process.env.AI_ENDPOINT,
         },
-        apiKey: process.env.GITHUB_TOKEN,
+        apiKey: process.env.AI_API_KEY,
         timeout: 5000,
       }),
     },
     {
       name: "GitHub Models Backup",
       model: new ChatOpenAI({
-        model: "gpt-4o",
+        model: process.env.AI_MODEL || "gpt-4o",
         configuration: {
-          baseURL: "https://models.inference.ai.azure.com",
+          baseURL: process.env.AI_ENDPOINT,
         },
-        apiKey: process.env.GITHUB_TOKEN,
+        apiKey: process.env.AI_API_KEY,
         timeout: 10000,
       }),
     },

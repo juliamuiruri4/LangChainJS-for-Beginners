@@ -23,9 +23,9 @@ async function compareModels() {
     const model = new ChatOpenAI({
       model: modelName,
       configuration: {
-        baseURL: "https://models.inference.ai.azure.com",
+        baseURL: process.env.AI_ENDPOINT,
       },
-      apiKey: process.env.GITHUB_TOKEN,
+      apiKey: process.env.AI_API_KEY,
     });
 
     const startTime = Date.now();

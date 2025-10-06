@@ -47,72 +47,64 @@ Don't hard-code to one provider—build for flexibility from day one.
 
 ## 🔄 Provider-Agnostic Architecture
 
-### Example 1: Model Switching
+### You've Been Using It All Along!
+
+**Good news**: Every example in this course has been provider-agnostic from Chapter 1!
+
+All examples use this pattern:
+
+```typescript
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+```
+
+**Switching providers is as simple as updating `.env`:**
+
+```bash
+# GitHub Models (Free)
+AI_API_KEY=ghp_your_github_token
+AI_ENDPOINT=https://models.inference.ai.azure.com
+AI_MODEL=gpt-4o-mini
+
+# Switch to Azure AI Foundry
+AI_API_KEY=your_azure_key
+AI_ENDPOINT=https://your-resource.openai.azure.com
+AI_MODEL=gpt-4o-mini
+
+# Or use OpenAI directly
+AI_API_KEY=your_openai_key
+AI_ENDPOINT=https://api.openai.com/v1
+AI_MODEL=gpt-4o-mini
+```
+
+**Zero code changes needed!** 🎉
+
+### Example 1: Advanced Provider Patterns
 
 **Code**: [`code/01-model-switching.ts`](./code/01-model-switching.ts)
 
-```typescript
-import { ChatOpenAI } from "@langchain/openai";
-import "dotenv/config";
-
-// Configuration-driven model selection
-interface ModelConfig {
-  provider: "github" | "azure" | "openai";
-  model: string;
-}
-
-function createModel(config: ModelConfig) {
-  switch (config.provider) {
-    case "github":
-      return new ChatOpenAI({
-        model: config.model,
-        configuration: {
-          baseURL: "https://models.inference.ai.azure.com",
-        },
-        apiKey: process.env.GITHUB_TOKEN,
-      });
-
-    case "azure":
-      return new ChatOpenAI({
-        model: config.model,
-        configuration: {
-          baseURL: process.env.AZURE_OPENAI_ENDPOINT,
-        },
-        apiKey: process.env.AZURE_OPENAI_API_KEY,
-      });
-
-    case "openai":
-      return new ChatOpenAI({
-        model: config.model,
-        apiKey: process.env.OPENAI_API_KEY,
-      });
-  }
-}
-
-// Use environment variables for easy switching
-const config: ModelConfig = {
-  provider: (process.env.AI_PROVIDER as any) || "github",
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-};
-
-const model = createModel(config);
-
-// Your code works the same regardless of provider!
-const response = await model.invoke("Hello!");
-console.log(response.content);
-```
+This example shows advanced patterns like:
+- Runtime provider selection
+- Provider-specific configurations
+- Fallback strategies
 
 **Benefits**:
-- Switch providers via environment variables
-- Easy A/B testing
-- Fallback to different providers
-- No code changes needed
+- ✅ Switch providers instantly
+- ✅ Easy A/B testing
+- ✅ No vendor lock-in
+- ✅ Cost optimization
+- ✅ Disaster recovery
 
 ---
 
 ## ☁️ Azure AI Foundry Deployment
 
-Azure AI Foundry is Microsoft's platform for deploying AI applications.
+Azure AI Foundry is Microsoft's platform for deploying production AI applications.
 
 ### Why Azure AI Foundry?
 
@@ -121,38 +113,30 @@ Azure AI Foundry is Microsoft's platform for deploying AI applications.
 - ✅ **Integrated**: Works with Azure services
 - ✅ **Cost-effective**: Pay only for what you use
 - ✅ **Secure**: Enterprise security and compliance
+- ✅ **Monitoring**: Built-in observability
 
 ### Setup Azure AI Foundry
 
-1. Create Azure AI Foundry project
-2. Deploy a model (GPT-4o, GPT-4o-mini, etc.)
-3. Get your endpoint and key
+1. **Create** an Azure AI Foundry project at [ai.azure.com](https://ai.azure.com)
+2. **Deploy** a model (GPT-4o, GPT-4o-mini, etc.)
+3. **Get** your endpoint and API key from the Azure Portal
+
+### Switching to Azure AI Foundry
+
+Update your `.env` file (that's it!):
 
 ```bash
-# .env
-AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-AZURE_OPENAI_API_KEY=your-key
-AZURE_DEPLOYMENT_NAME=gpt-4o
+# Change these three values:
+AI_API_KEY=your_azure_openai_api_key
+AI_ENDPOINT=https://your-resource.openai.azure.com
+AI_MODEL=gpt-4o-mini
+
+# All course examples now use Azure AI Foundry!
 ```
 
-### Example 2: Using Azure AI Foundry
+**Your endpoint** looks like: `https://YOUR-RESOURCE-NAME.openai.azure.com`
 
-**Code**: [`code/02-azure-foundry.ts`](./code/02-azure-foundry.ts)
-
-```typescript
-import { AzureChatOpenAI } from "@langchain/openai";
-import "dotenv/config";
-
-const model = new AzureChatOpenAI({
-  azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
-  azureOpenAIApiInstanceName: "your-instance-name",
-  azureOpenAIApiDeploymentName: process.env.AZURE_DEPLOYMENT_NAME,
-  azureOpenAIApiVersion: "2024-02-01",
-});
-
-const response = await model.invoke("Hello from Azure!");
-console.log(response.content);
-```
+**Model name** matches your deployment name in Azure (e.g., `gpt-4o-mini`, `gpt-4o`)
 
 ---
 
@@ -184,11 +168,11 @@ import "dotenv/config";
 
 // Traces are automatically sent to LangSmith!
 const model = new ChatOpenAI({
-  model: "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-4o-mini",
   configuration: {
-    baseURL: "https://models.inference.ai.azure.com",
+    baseURL: process.env.AI_ENDPOINT,
   },
-  apiKey: process.env.GITHUB_TOKEN,
+  apiKey: process.env.AI_API_KEY,
 });
 
 const response = await model.invoke("Test tracing");
@@ -207,19 +191,19 @@ const response = await model.invoke("Test tracing");
 import { ChatOpenAI } from "@langchain/openai";
 
 const primaryModel = new ChatOpenAI({
-  model: "gpt-4o",
+  model: process.env.AI_MODEL || "gpt-4o",
   configuration: {
-    baseURL: "https://models.inference.ai.azure.com",
+    baseURL: process.env.AI_ENDPOINT,
   },
-  apiKey: process.env.GITHUB_TOKEN,
+  apiKey: process.env.AI_API_KEY,
 });
 
 const fallbackModel = new ChatOpenAI({
-  model: "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-4o-mini",
   configuration: {
-    baseURL: "https://models.inference.ai.azure.com",
+    baseURL: process.env.AI_ENDPOINT,
   },
-  apiKey: process.env.GITHUB_TOKEN,
+  apiKey: process.env.AI_API_KEY,
 });
 
 // Create model with fallback
@@ -247,7 +231,7 @@ const cache = new InMemoryCache();
 
 const model = new ChatOpenAI({
   cache,
-  model: "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-4o-mini",
 });
 
 // First call hits API
@@ -261,10 +245,10 @@ await model.invoke("What is LangChain?");
 
 ```typescript
 // Expensive
-const gpt4o = new ChatOpenAI({ model: "gpt-4o" });
+const gpt4o = new ChatOpenAI({ model: process.env.AI_MODEL || "gpt-4o" });
 
 // 10x cheaper for simple tasks
-const gpt4omini = new ChatOpenAI({ model: "gpt-4o-mini" });
+const gpt4omini = new ChatOpenAI({ model: process.env.AI_MODEL || "gpt-4o-mini" });
 ```
 
 ### 3. Streaming

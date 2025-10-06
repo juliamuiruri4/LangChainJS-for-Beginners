@@ -105,24 +105,39 @@ cp .env.example .env
 
 ### Edit `.env` file:
 
-Open `.env` in your text editor and add your GitHub token:
+Open `.env` in your text editor and configure your AI provider.
+
+**For GitHub Models (Free - Recommended):**
 
 ```bash
-# GitHub Models (Free for all GitHub users)
-GITHUB_TOKEN=ghp_your_token_here_replace_this
-
-# Azure AI Foundry (Optional - for Chapter 9)
-AZURE_OPENAI_API_KEY=
-AZURE_OPENAI_ENDPOINT=
-AZURE_DEPLOYMENT_NAME=
-
-# LangSmith (Optional - for Chapter 9)
-LANGCHAIN_TRACING_V2=false
-LANGCHAIN_API_KEY=
-LANGCHAIN_PROJECT=langchainjs-for-beginners
+AI_API_KEY=ghp_your_github_token_here
+AI_ENDPOINT=https://models.inference.ai.azure.com
+AI_MODEL=gpt-4o-mini
 ```
 
-**Replace `ghp_your_token_here_replace_this` with your actual GitHub token!**
+**Replace `ghp_your_github_token_here` with your actual GitHub token!**
+
+### Alternative: Azure AI Foundry (Optional)
+
+If you have Azure AI Foundry access, you can use it instead:
+
+```bash
+AI_API_KEY=your_azure_openai_api_key
+AI_ENDPOINT=https://your-resource.openai.azure.com
+AI_MODEL=gpt-4o-mini
+```
+
+### Alternative: OpenAI Direct (Optional)
+
+Or use OpenAI directly:
+
+```bash
+AI_API_KEY=your_openai_api_key
+AI_ENDPOINT=https://api.openai.com/v1
+AI_MODEL=gpt-4o-mini
+```
+
+**✨ The Magic**: All course examples work with ANY provider - just change the `.env` values!
 
 ---
 
@@ -136,40 +151,48 @@ Create `test-setup.ts` in the project root:
 
 ```typescript
 /**
- * Setup Test - Verify GitHub Models Access
+ * Setup Test - Verify AI Provider Access
  */
 import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function testSetup() {
-  console.log("🚀 Testing GitHub Models connection...\n");
+  console.log("🚀 Testing AI provider connection...\n");
 
-  // Check if token is set
-  if (!process.env.GITHUB_TOKEN) {
-    console.error("❌ ERROR: GITHUB_TOKEN not found in .env file");
+  // Check if required variables are set
+  if (!process.env.AI_API_KEY) {
+    console.error("❌ ERROR: AI_API_KEY not found in .env file");
+    process.exit(1);
+  }
+
+  if (!process.env.AI_ENDPOINT) {
+    console.error("❌ ERROR: AI_ENDPOINT not found in .env file");
     process.exit(1);
   }
 
   try {
     const model = new ChatOpenAI({
-      model: "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
-        baseURL: "https://models.inference.ai.azure.com",
+        baseURL: process.env.AI_ENDPOINT,
       },
-      apiKey: process.env.GITHUB_TOKEN,
+      apiKey: process.env.AI_API_KEY,
     });
 
     const response = await model.invoke("Say 'Setup successful!' if you can read this.");
 
-    console.log("✅ SUCCESS! GitHub Models is working!");
+    console.log("✅ SUCCESS! Your AI provider is working!");
+    console.log(`   Provider: ${process.env.AI_ENDPOINT}`);
+    console.log(`   Model: ${process.env.AI_MODEL || "gpt-4o-mini"}`);
     console.log("\nModel response:", response.content);
     console.log("\n🎉 You're ready to start the course!");
   } catch (error) {
     console.error("❌ ERROR:", error.message);
     console.log("\nTroubleshooting:");
-    console.log("1. Check your GITHUB_TOKEN in .env file");
-    console.log("2. Verify the token has no extra spaces");
-    console.log("3. Create a new token if this one doesn't work");
+    console.log("1. Check your AI_API_KEY in .env file");
+    console.log("2. Verify the AI_ENDPOINT is correct");
+    console.log("3. Ensure the AI_MODEL is valid for your provider");
+    console.log("4. Verify the token/key has no extra spaces");
   }
 }
 
@@ -223,12 +246,15 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 
 **Solution**: Run `npm install` in the project directory
 
-### Issue: "GITHUB_TOKEN not found"
+### Issue: "AI_API_KEY not found" or "AI_ENDPOINT not found"
 
 **Solutions**:
 1. Make sure `.env` file exists in project root
-2. Check that `.env` contains `GITHUB_TOKEN=your_token`
-3. No quotes needed around the token
+2. Check that `.env` contains all required variables:
+   - `AI_API_KEY=your_key`
+   - `AI_ENDPOINT=your_endpoint_url`
+   - `AI_MODEL=gpt-4o-mini`
+3. No quotes needed around the values
 4. No spaces before or after the `=`
 
 ### Issue: "401 Unauthorized" or "Invalid token"

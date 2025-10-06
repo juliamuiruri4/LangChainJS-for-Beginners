@@ -1,0 +1,76 @@
+name: Validate Code Examples
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  validate:
+    name: Test All Code Examples
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run validation tests
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY || secrets.GITHUB_TOKEN }}
+          AI_ENDPOINT: ${{ secrets.AI_ENDPOINT || 'https://models.inference.ai.azure.com' }}
+          AI_MODEL: ${{ secrets.AI_MODEL || 'gpt-4o-mini' }}
+        run: npm test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-results
+          path: |
+            **/*.log
+          retention-days: 7
+
+  validate-matrix:
+    name: Test on Multiple Node Versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22]
+      fail-fast: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run validation tests
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY || secrets.GITHUB_TOKEN }}
+          AI_ENDPOINT: ${{ secrets.AI_ENDPOINT || 'https://models.inference.ai.azure.com' }}
+          AI_MODEL: ${{ secrets.AI_MODEL || 'gpt-4o-mini' }}
+        run: npm test
+        continue-on-error: ${{ matrix.node-version == 22 }}

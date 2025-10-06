@@ -18,11 +18,11 @@ async function robustChat(
   const { maxRetries = 3, timeout = 30000, fallbackResponse = "I apologize, but I'm having trouble connecting right now. Please try again later." } = options;
 
   const model = new ChatOpenAI({
-    model: "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
-      baseURL: "https://models.inference.ai.azure.com",
+      baseURL: process.env.AI_ENDPOINT,
     },
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: process.env.AI_API_KEY,
     timeout,
   });
 
@@ -82,8 +82,8 @@ async function testRobustChat() {
   console.log("\n2️⃣  Test: Invalid API Key (will retry then fallback)\n");
 
   // Temporarily test with invalid key
-  process.env.GITHUB_TOKEN_BACKUP = process.env.GITHUB_TOKEN;
-  process.env.GITHUB_TOKEN = "invalid_key";
+  process.env.AI_API_KEY_BACKUP = process.env.AI_API_KEY;
+  process.env.AI_API_KEY = "invalid_key";
 
   const response2 = await robustChat("Hello", {
     maxRetries: 2,
@@ -93,7 +93,7 @@ async function testRobustChat() {
   console.log("Final response:", response2);
 
   // Restore valid key
-  process.env.GITHUB_TOKEN = process.env.GITHUB_TOKEN_BACKUP;
+  process.env.AI_API_KEY = process.env.AI_API_KEY_BACKUP;
 
   console.log("\n" + "=".repeat(80));
   console.log("\n✅ Error handling demonstration complete!");

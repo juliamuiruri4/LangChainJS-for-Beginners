@@ -82,9 +82,9 @@ import "dotenv/config";
 const embeddings = new OpenAIEmbeddings({
   model: "text-embedding-3-small",
   configuration: {
-    baseURL: "https://models.inference.ai.azure.com",
+    baseURL: process.env.AI_ENDPOINT,
   },
-  apiKey: process.env.GITHUB_TOKEN,
+  apiKey: process.env.AI_API_KEY,
 });
 
 // Create an embedding for text
@@ -146,9 +146,9 @@ import "dotenv/config";
 const embeddings = new OpenAIEmbeddings({
   model: "text-embedding-3-small",
   configuration: {
-    baseURL: "https://models.inference.ai.azure.com",
+    baseURL: process.env.AI_ENDPOINT,
   },
-  apiKey: process.env.GITHUB_TOKEN,
+  apiKey: process.env.AI_API_KEY,
 });
 
 // Create documents
