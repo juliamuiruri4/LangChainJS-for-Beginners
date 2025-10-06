@@ -11,7 +11,9 @@ async function temperatureComparison() {
   console.log("=".repeat(80));
 
   const prompt = "Write a creative opening line for a sci-fi story about time travel.";
-  const temperatures = [0, 1, 2];
+  const isCI = process.env.CI === "true";
+  const temperatures = isCI ? [0, 1] : [0, 1, 2]; // Reduce temperatures in CI mode
+  const tries = isCI ? 1 : 2; // Reduce tries in CI mode
 
   for (const temp of temperatures) {
     console.log(`\nTemperature: ${temp}`);
@@ -26,7 +28,7 @@ async function temperatureComparison() {
       },
       apiKey: process.env.AI_API_KEY,
     });
-    for (let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= tries; i++) {
       const response = await model.invoke(prompt);
       console.log(`  Try ${i}: ${response.content}`);
     }
@@ -44,7 +46,8 @@ async function maxTokensExample() {
 
   const prompt = "Write a detailed explanation of machine learning in 5 paragraphs.";
 
-  const tokenLimits = [50, 150, 500];
+  const isCI = process.env.CI === "true";
+  const tokenLimits = isCI ? [150] : [50, 150, 500]; // Reduce in CI mode
 
   for (const maxTokens of tokenLimits) {
     console.log(`\nMax Tokens: ${maxTokens}`);

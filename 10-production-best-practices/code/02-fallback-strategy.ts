@@ -70,11 +70,14 @@ async function main() {
   console.log("🛡️  Fallback Strategy Example\n");
   console.log("=".repeat(80));
 
-  const questions = [
-    "What is TypeScript?",
-    "Explain async/await in JavaScript",
-    "What are the benefits of LangChain.js?",
-  ];
+  const isCI = process.env.CI === "true";
+  const questions = isCI
+    ? ["What is TypeScript?"] // Reduce questions in CI mode
+    : [
+        "What is TypeScript?",
+        "Explain async/await in JavaScript",
+        "What are the benefits of LangChain.js?",
+      ];
 
   for (const question of questions) {
     console.log(`\n❓ Question: ${question}\n`);

@@ -89,14 +89,23 @@ Summary:`;
 
   const config = { configurable: { thread_id: "conversation-3" } };
 
+  const isCI = process.env.CI === "true";
+
   // Have a conversation with lots of details
-  const exchanges = [
-    "I'm planning a trip to Japan next month for two weeks.",
-    "I want to visit Tokyo, Kyoto, and Osaka during my trip.",
-    "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine.",
-    "I'm also excited about experiencing both modern technology districts and historical sites.",
-    "My budget is around $3000 for the entire trip, including flights and accommodation.",
-  ];
+  const exchanges = isCI
+    ? [
+        // Reduced for CI mode
+        "I'm planning a trip to Japan next month for two weeks.",
+        "I want to visit Tokyo, Kyoto, and Osaka during my trip.",
+        "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine.",
+      ]
+    : [
+        "I'm planning a trip to Japan next month for two weeks.",
+        "I want to visit Tokyo, Kyoto, and Osaka during my trip.",
+        "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine.",
+        "I'm also excited about experiencing both modern technology districts and historical sites.",
+        "My budget is around $3000 for the entire trip, including flights and accommodation.",
+      ];
 
   for (let i = 0; i < exchanges.length; i++) {
     console.log(`\n${i + 1}️⃣  User: ${exchanges[i]}`);

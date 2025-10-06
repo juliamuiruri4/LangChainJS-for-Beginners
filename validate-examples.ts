@@ -37,7 +37,8 @@ const SLOW_FILES = [
   "model-performance.ts",
   "personality-test.ts",
   "03-parameters.ts", // Makes 9 API calls
-  "temperature-lab.ts",
+  "temperature-lab.ts", // Makes 15 API calls with delays
+  "02-fallback-strategy.ts", // Retry logic with backoff
   "04-error-handling.ts",
   "robust-chat.ts",
   "01-multi-turn.ts",
