@@ -1,0 +1,110 @@
+# 🦜🔗 LangChain.js for Beginners
+
+Welcome to **LangChain.js for Beginners** - your complete guide to building AI-powered applications with JavaScript and TypeScript!
+
+## What You'll Build
+
+By the end of this course, you'll know how to:
+- ✅ Create intelligent chatbots that remember conversation context
+- ✅ Build search engines that understand meaning, not just keywords
+- ✅ Develop AI agents that can use tools and make decisions
+- ✅ Construct Retrieval Augmented Generation (RAG) systems
+- ✅ Build multi-step AI workflows with LangGraph
+
+## Why LangChain.js?
+
+Think of building an AI application like cooking a gourmet meal. You could source ingredients from scratch, create every sauce from base components, and build your own cooking tools—or you could use a well-stocked kitchen with quality ingredients and proven recipes. LangChain.js is that well-stocked kitchen for AI development.
+
+LangChain.js provides:
+- 🔌 **Model Flexibility**: Switch between AI providers (OpenAI, Anthropic, Azure, etc.) with minimal code changes
+- 🧩 **Pre-built Components**: Reusable building blocks for common AI patterns
+- 🔄 **Easy Integration**: Connect LLMs with your data, APIs, and tools
+- 🎯 **Production Ready**: Built-in features for monitoring, debugging, and scaling
+
+## Course Structure
+
+This course contains **11 sections** (setup + 10 chapters), each focusing on a specific aspect of LangChain.js:
+
+0. **[Course Setup](./00-course-setup/README.md)** - Get your development environment ready
+1. **[Introduction to LangChain.js](./01-introduction/README.md)** - Understanding the framework and setting up your environment
+2. **[Chat Models & Basic Interactions](./02-chat-models/README.md)** - Chat models, messages, and making your first API call
+3. **[Prompt Engineering with Templates](./03-prompt-templates/README.md)** - Creating dynamic, reusable prompts
+4. **[Working with Documents](./04-working-with-documents/README.md)** - Loading, splitting, and processing text data
+5. **[Embeddings & Semantic Search](./05-embeddings-semantic-search/README.md)** - Understanding vector representations and similarity
+6. **[Building RAG Systems](./06-rag-systems/README.md)** - Combining retrieval with generation for accurate answers
+7. **[Agents & Tools](./07-agents-tools/README.md)** - Creating AI that can take actions and use external tools
+8. **[Memory & Conversations](./08-memory-conversations/README.md)** - Building stateful chatbots with context awareness
+9. **[Production Best Practices](./09-production-best-practices/README.md)** - Model switching, Azure AI Foundry, and deployment
+10. **[Introduction to LangGraph](./10-langgraph-intro/README.md)** - Orchestrating AI agent workflows
+
+## Prerequisites
+
+Before starting this course, you should be comfortable with:
+- JavaScript/TypeScript fundamentals
+- Node.js and npm
+- Async/await and Promises
+- Basic Generative AI concepts (covered in our "GenAI for JavaScript Developers" course)
+
+## Getting Started
+
+Each chapter is self-contained with:
+- 📖 **Conceptual explanations** with real-world analogies
+- 💻 **Working code examples** you can run immediately
+- 🎯 **Hands-on challenges** to test your understanding
+- 🔑 **Key takeaways** to reinforce learning
+
+### Setup
+
+```bash
+# Clone this repository
+git clone https://github.com/yourusername/langchainjs-for-beginners.git
+
+# Navigate to the project
+cd langchainjs-for-beginners
+
+# Install dependencies
+npm install
+
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env and add your GitHub token
+# Get your token at: https://github.com/settings/tokens
+```
+
+### API Keys
+
+This course starts out using **GitHub Models** (free for all GitHub users!) and later transitions to **Azure AI Foundry** for production scenarios.
+
+👉 **Start with [Course Setup](./00-course-setup/README.md)** to configure your environment!
+
+## Learning Path
+
+Each chapter builds on the previous one, but you can also jump to specific topics of interest. We recommend following the sequence for the best learning experience.
+
+**Estimated Time**: 15-20 hours total (including hands-on exercises)
+
+## Support & Community
+
+- 💬 **Issues**: Found a bug or have a question? [Open an issue](https://github.com/yourusername/langchainjs-for-beginners/issues)
+- 🌟 **Star this repo** if you find it helpful!
+- 🤝 **Contribute**: Pull requests are welcome
+
+If you get stuck or have any questions about building AI apps, join:
+
+[![Azure AI Foundry Discord](https://img.shields.io/badge/Discord-Azure_AI_Foundry_Community_Discord-blue?style=for-the-badge&logo=discord&color=5865f2&logoColor=fff)](https://aka.ms/foundry/discord)
+
+If you have product feedback or errors while building visit:
+
+[![Azure AI Foundry Developer Forum](https://img.shields.io/badge/GitHub-Azure_AI_Foundry_Developer_Forum-blue?style=for-the-badge&logo=github&color=000000&logoColor=fff)](https://aka.ms/foundry/forum)
+
+## Additional Resources
+
+- [LangChain.js Official Documentation](https://js.langchain.com/)
+- [LangGraph Documentation](https://langchain-ai.github.io/langgraphjs/)
+- [GitHub Models](https://github.com/marketplace/models)
+- [Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/)
+
+---
+
+**Ready to build amazing AI applications?** Let's get started with [Course Setup](./00-course-setup/README.md)! 🚀
