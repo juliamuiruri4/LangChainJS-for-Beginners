@@ -1,10 +1,10 @@
 /**
- * Human-in-the-Loop
- * Run: npx tsx 10-langgraph-patterns/code/03-human-in-loop.ts
+ * Human-in-the-Loop with interrupt()
+ * Run: npx tsx 09-langgraph-patterns/code/03-human-in-loop.ts
  */
 
-import { StateGraph, END, Annotation } from "@langchain/langgraph";
-import readline from "readline";
+import { StateGraph, START, END, Annotation, Command, interrupt, MemorySaver } from "@langchain/langgraph";
+
 const ApprovalState = Annotation.Root({
   request: Annotation<string>({
     reducer: (_, right) => right,
@@ -20,37 +20,26 @@ const ApprovalState = Annotation.Root({
   }),
 });
 
-function askQuestion(query: string): Promise<string> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  return new Promise((resolve) => {
-    rl.question(query, (answer) => {
-      rl.close();
-      resolve(answer);
-    });
-  });
-}
-
 async function main() {
-  console.log("👤 Human-in-the-Loop Example\n");
+  console.log("👤 Human-in-the-Loop with interrupt() Example\n");
 
   const workflow = new StateGraph(ApprovalState);
 
-  // Node: Display request and ask for approval
+  // Node: Request approval using interrupt()
   workflow.addNode("requestApproval", async (state: typeof ApprovalState.State) => {
     console.log("\n📋 Request Details:");
     console.log(`   ${state.request}\n`);
 
-    const answer = await askQuestion("❓ Do you approve this request? (yes/no): ");
+    // Use interrupt() to pause execution and wait for human input
+    const decision = interrupt({
+      question: "Do you approve this request?",
+      details: state.request,
+      options: ["approve", "reject"],
+    });
 
-    const approved = answer.toLowerCase() === "yes" || answer.toLowerCase() === "y";
-
-    console.log(approved ? "\n✅ Approved!\n" : "\n❌ Rejected!\n");
-
-    return { approved };
+    // The interrupt() returns the human's decision
+    // We can route to different paths based on this
+    return { approved: decision === "approve" };
   });
 
   // Node: Execute approved request
@@ -74,8 +63,9 @@ async function main() {
     return state.approved ? "execute" : "reject";
   }
 
+  // Build the graph
   // Type assertions: LangGraph's edge types don't perfectly match TypeScript's string inference
-  workflow.addEdge("__start__" as any, "requestApproval" as any);
+  workflow.addEdge(START, "requestApproval" as any);
   workflow.addConditionalEdges("requestApproval" as any, checkApproval, {
     execute: "execute",
     reject: "reject",
@@ -83,32 +73,68 @@ async function main() {
   workflow.addEdge("execute" as any, END);
   workflow.addEdge("reject" as any, END);
 
-  const app = workflow.compile();
+  // Compile with checkpointer for persistence during interrupts
+  const checkpointer = new MemorySaver();
+  const app = workflow.compile({ checkpointer });
+
   const requests = [
     "Deploy new version to production",
     "Delete user data for user ID 12345",
     "Send marketing email to all users",
   ];
 
-  for (const request of requests) {
+  for (let i = 0; i < requests.length; i++) {
+    const request = requests[i];
     console.log("=".repeat(80));
     console.log(`\n🔔 New Request: ${request}`);
 
-    const result = await app.invoke({
-      request,
-      approved: false,
-      result: "",
-    });
+    const config = { configurable: { thread_id: `request-${i}` } };
 
-    console.log(`📊 Final Result: ${result.result}\n`);
+    try {
+      // Start the workflow
+      let result = await app.invoke(
+        {
+          request,
+          approved: false,
+          result: "",
+        },
+        config
+      );
+
+      // Check if interrupted (using type assertion since interrupt API is new)
+      const resultAny = result as any;
+      if (resultAny.__interrupt__) {
+        console.log("\n⏸️  Workflow paused for human approval");
+        console.log(`   Question: ${resultAny.__interrupt__[0].value.question}`);
+        console.log(`   Options: ${resultAny.__interrupt__[0].value.options.join(", ")}\n`);
+
+        // In a real application, you would:
+        // 1. Show this to a user in a UI
+        // 2. Wait for their response
+        // 3. Resume with: await app.invoke(null, { ...config, resumeValue: "approve" })
+
+        // For this example, we'll automatically approve the first request
+        const humanDecision = i === 0 ? "approve" : "reject";
+        console.log(`   Human Decision: ${humanDecision}\n`);
+
+        // Resume the workflow with the human's decision
+        result = await app.invoke(new Command({ resume: humanDecision } as any), config);
+      }
+
+      console.log(`📊 Final Result: ${result.result}\n`);
+    } catch (error: any) {
+      console.error(`❌ Error: ${error.message}\n`);
+    }
   }
 
   console.log("=".repeat(80));
-  console.log("\n💡 Human-in-the-Loop Benefits:");
-  console.log("   - Critical decisions require human approval");
-  console.log("   - Prevents automated errors");
-  console.log("   - Audit trail of approvals");
-  console.log("   - Control over sensitive operations");
+  console.log("\n💡 Human-in-the-Loop with interrupt() Benefits:");
+  console.log("   - Pauses workflow execution at any point");
+  console.log("   - Persists state during human review");
+  console.log("   - Can resume from exactly where it paused");
+  console.log("   - Supports async human input (hours/days later)");
+  console.log("   - Production-ready pattern with checkpointing");
+  console.log("\n📚 Learn more: https://docs.langchain.com/oss/javascript/langgraph/add-human-in-the-loop\n");
 }
 
 main().catch(console.error);

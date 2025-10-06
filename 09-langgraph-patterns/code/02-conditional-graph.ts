@@ -1,6 +1,6 @@
 /**
  * Conditional Graph
- * Run: npx tsx 10-langgraph-patterns/code/02-conditional-graph.ts
+ * Run: npx tsx 09-langgraph-patterns/code/02-conditional-graph.ts
  */
 
 import { StateGraph, END, Annotation } from "@langchain/langgraph";

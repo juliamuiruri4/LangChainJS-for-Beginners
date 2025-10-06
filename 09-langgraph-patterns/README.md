@@ -1,9 +1,9 @@
-# Chapter 10: LangGraph Patterns
+# Chapter 9: LangGraph Patterns
 
 ## ⏱️ Lesson Overview
 
 - **Estimated Time**: 90 minutes
-- **Prerequisites**: Completed [Chapter 9](../09-production-best-practices/README.md)
+- **Prerequisites**: Completed [Chapter 8](../08-langgraph-memory-conversations/README.md)
 - **Difficulty**: Beginner-Intermediate
 
 ## 🎯 Learning Objectives
@@ -59,7 +59,7 @@ Now we'll explore **graph patterns** for multi-step workflows.
 
 ### Patterns Covered
 
-**Chapter 10 Focus**:
+**Chapter 9 Focus**:
 - Conditional branching and routing
 - Custom state management
 - Human-in-the-loop workflows
@@ -221,55 +221,69 @@ console.log(result.answer);
 
 ## 👤 Human-in-the-Loop
 
-### Example 3: Approval Workflow
+LangGraph's `interrupt()` function allows you to pause workflow execution and wait for human input. This is essential for:
+- Approval workflows (deployments, data deletion)
+- Review processes (content moderation)
+- Quality control (reviewing AI outputs)
+- Multi-stage workflows requiring human judgment
+
+### Example 3: Approval Workflow with interrupt()
 
 **Code**: [`code/03-human-in-loop.ts`](./code/03-human-in-loop.ts)
 
 ```typescript
-import { StateGraph, END } from "@langchain/langgraph";
-import readline from "readline";
+import { StateGraph, START, END, interrupt, Command, MemorySaver } from "@langchain/langgraph";
 
-interface State {
-  draft: string;
-  approved: boolean;
-  final: string;
-}
+// Node that requests human approval
+workflow.addNode("requestApproval", async (state) => {
+  console.log("Request:", state.request);
 
-async function createDraft(state: State): Promise<State> {
-  return { ...state, draft: "Draft email: Dear customer..." };
-}
-
-async function requestApproval(state: State): Promise<State> {
-  // In production, this would be a UI/notification
-  console.log("\nDraft:", state.draft);
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
+  // Pause execution and wait for human decision
+  const decision = interrupt({
+    question: "Do you approve this request?",
+    details: state.request,
+    options: ["approve", "reject"],
   });
 
-  return new Promise((resolve) => {
-    rl.question("\nApprove? (yes/no): ", (answer) => {
-      rl.close();
-      resolve({
-        ...state,
-        approved: answer.toLowerCase() === "yes",
-      });
-    });
-  });
-}
+  return { approved: decision === "approve" };
+});
 
-async function finalize(state: State): Promise<State> {
-  return { ...state, final: state.approved ? state.draft : "Rejected" };
-}
+// Compile with checkpointer (required for interrupts)
+const checkpointer = new MemorySaver();
+const app = workflow.compile({ checkpointer });
 
-function checkApproval(state: State): string {
-  return state.approved ? "finalize" : "createDraft";
-}
+// Run the workflow
+const config = { configurable: { thread_id: "request-1" } };
+let result = await app.invoke({ request: "Deploy to production" }, config);
 
-// Build graph...
-// (Similar pattern to above)
+// Check if interrupted
+if (result.__interrupt__) {
+  console.log("Workflow paused for approval");
+
+  // In production: show this to user in UI, wait for response
+  const humanDecision = "approve"; // From user input
+
+  // Resume workflow with human's decision
+  result = await app.invoke(new Command({ resume: humanDecision }), config);
+}
 ```
+
+**Key Features**:
+- ✅ **`interrupt()`** - Pauses execution at any point
+- ✅ **Checkpointer required** - Persists state during pause
+- ✅ **Resume with `Command`** - Continue from where it stopped
+- ✅ **Async human input** - Can wait hours/days for approval
+- ✅ **Production-ready** - Built for real-world approval flows
+
+**How it works**:
+1. Workflow runs until it hits `interrupt()`
+2. Execution pauses, state is saved via checkpointer
+3. System returns interrupt details to your application
+4. Show interrupt to human (UI, notification, etc.)
+5. When human responds, resume with `Command({ resume: value })`
+6. Workflow continues from exact same point
+
+📚 **Learn more**: [Human-in-the-Loop Documentation](https://docs.langchain.com/oss/javascript/langgraph/add-human-in-the-loop)
 
 ---
 
@@ -338,13 +352,93 @@ const app = workflow.compile();
 
 ---
 
+## ⚡ Streaming Graph Outputs
+
+LangGraph supports multiple streaming modes for real-time feedback during workflow execution:
+
+### Streaming Modes
+
+```typescript
+// Stream state updates after each node
+for await (const chunk of await graph.stream(inputs, {
+  streamMode: "updates"
+})) {
+  console.log("Node update:", chunk);
+}
+
+// Stream full state after each step
+for await (const chunk of await graph.stream(inputs, {
+  streamMode: "values"
+})) {
+  console.log("Current state:", chunk);
+}
+
+// Stream LLM tokens in real-time
+for await (const chunk of await graph.stream(inputs, {
+  streamMode: "messages"
+})) {
+  console.log("Token:", chunk);
+}
+```
+
+**Available Modes**:
+- **`values`**: Full graph state after each step
+- **`updates`**: State changes after each node (most common)
+- **`messages`**: LLM tokens with metadata
+- **`custom`**: User-defined streaming data
+- **`debug`**: Detailed execution information
+
+**When to use streaming**:
+- ✅ Long-running workflows (show progress)
+- ✅ LLM token streaming (better UX)
+- ✅ Multi-step agents (visibility into reasoning)
+- ✅ Debugging (see graph execution flow)
+
+📚 **Learn more**: [LangGraph Streaming Documentation](https://docs.langchain.com/oss/javascript/langgraph/streaming)
+
+---
+
+## 🕰️ Time Travel for Debugging
+
+LangGraph's checkpointing enables "time travel" - viewing and modifying past states:
+
+```typescript
+// Get execution history
+const states = [];
+for await (const state of graph.getStateHistory(config)) {
+  states.push(state);
+}
+
+// Rewind to a previous checkpoint
+const pastState = states[2];
+const newConfig = await graph.updateState(pastState.config, {
+  // Modify state to try different path
+  topic: "alternative topic"
+});
+
+// Resume from that point
+await graph.invoke(null, newConfig);
+```
+
+**Use cases**:
+- 🐛 Debugging failed workflows
+- 🔄 Testing alternative decisions
+- 📊 Understanding agent reasoning
+- 🔍 Auditing execution paths
+
+📚 **Learn more**: [Time Travel Documentation](https://docs.langchain.com/oss/javascript/langgraph/use-time-travel)
+
+---
+
 ## 🎓 Key Takeaways
 
 - ✅ **LangGraph enables multi-step workflows**: Beyond linear chains
 - ✅ **State management**: Data flows through the graph
 - ✅ **Conditional routing**: Branch based on logic
-- ✅ **Human-in-the-loop**: Wait for human input
-- ✅ **Agent systems**: Build multi-step reasoning
+- ✅ **Human-in-the-loop**: Use `interrupt()` to pause for approvals
+- ✅ **Streaming modes**: Real-time feedback (values, updates, messages)
+- ✅ **Time travel**: Debug by viewing/modifying past states
+- ✅ **Production-ready**: Checkpointing, persistence, error handling
 - ✅ **Cyclical flows**: Loop until conditions met
 
 ---
@@ -363,9 +457,12 @@ The assignment includes:
 
 ## 📚 Additional Resources
 
-- [LangGraph Documentation](https://langchain-ai.github.io/langgraphjs/)
-- [LangGraph Examples](https://github.com/langchain-ai/langgraphjs/tree/main/examples)
-- [State Management Guide](https://langchain-ai.github.io/langgraphjs/concepts/low_level/)
+- [LangGraph JavaScript Overview](https://docs.langchain.com/oss/javascript/langgraph/overview)
+- [Persistence Guide](https://docs.langchain.com/oss/javascript/langgraph/persistence)
+- [Human-in-the-Loop](https://docs.langchain.com/oss/javascript/langgraph/add-human-in-the-loop)
+- [Streaming Documentation](https://docs.langchain.com/oss/javascript/langgraph/streaming)
+- [Time Travel](https://docs.langchain.com/oss/javascript/langgraph/use-time-travel)
+- [Memory Management](https://docs.langchain.com/oss/javascript/langgraph/add-memory)
 
 ---
 

@@ -16,7 +16,7 @@ By the end of this chapter, you'll be able to:
 - Combine multiple tools for complex tasks
 
 ---
-Yes
+
 ## 📖 The Manager with Specialists Analogy
 
 **Imagine you're a project manager with a team of specialists:**

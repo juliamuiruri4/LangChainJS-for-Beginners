@@ -294,6 +294,83 @@ const trimmer = trimMessages({
 
 ---
 
+## 🗄️ Production Checkpointers
+
+For development, `MemorySaver` works great. But for production, you'll want persistent storage that survives restarts.
+
+### Available Checkpointers
+
+| Checkpointer | Use Case | Persistence |
+|--------------|----------|-------------|
+| **MemorySaver** | Development, testing | In-memory only |
+| **SqliteSaver** | Local apps, prototypes | SQLite database |
+| **PostgresSaver** | Production, cloud | PostgreSQL database |
+
+### Using SqliteSaver
+
+```typescript
+import { SqliteSaver } from "@langchain/langgraph-checkpoint-sqlite";
+
+// Create database-backed checkpointer
+const checkpointer = SqliteSaver.fromConnString("./checkpoints.db");
+
+const app = workflow.compile({ checkpointer });
+
+// Conversations are now persisted to disk!
+// Survives app restarts, process crashes, etc.
+```
+
+### Using PostgresSaver
+
+```typescript
+import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
+
+// For production deployments
+const checkpointer = PostgresSaver.fromConnString(
+  process.env.POSTGRES_CONNECTION_STRING
+);
+
+const app = workflow.compile({ checkpointer });
+
+// Scales to millions of conversations
+// Supports distributed deployments
+```
+
+### Cross-Thread Memory with Store
+
+For user-level memory that spans multiple conversations:
+
+```typescript
+import { InMemoryStore } from "@langchain/langgraph";
+import { OpenAIEmbeddings } from "@langchain/openai";
+
+// Create memory store with semantic search
+const store = new InMemoryStore();
+
+// Store user preferences across all conversations
+await store.put(
+  ["user-123", "preferences"],
+  "pref-1",
+  { favoriteColor: "blue", timezone: "PST" }
+);
+
+// Search memories semantically
+const memories = await store.search(
+  ["user-123", "memories"],
+  { query: "What does the user like?", limit: 3 }
+);
+```
+
+**When to use**:
+- ✅ User preferences across sessions
+- ✅ Long-term facts about users
+- ✅ Semantic search across memories
+- ✅ Cross-conversation context
+
+📚 **Learn more**: [LangGraph Persistence Documentation](https://docs.langchain.com/oss/javascript/langgraph/persistence)
+
+---
+
 ## 🎓 Key Takeaways
 
 - ✅ **LLMs have no memory by default**: You must implement it

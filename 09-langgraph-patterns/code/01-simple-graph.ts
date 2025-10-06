@@ -1,6 +1,6 @@
 /**
  * Simple Linear Graph
- * Run: npx tsx 10-langgraph-patterns/code/01-simple-graph.ts
+ * Run: npx tsx 09-langgraph-patterns/code/01-simple-graph.ts
  */
 
 import { StateGraph, END, Annotation } from "@langchain/langgraph";
