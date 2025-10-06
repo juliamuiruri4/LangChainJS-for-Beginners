@@ -1,5 +1,5 @@
 /**
- * Run: npx tsx 07-agents-tools/code/02-structured-tool.ts
+ * Run: npx tsx 07-langgraph-agents-tools/code/02-structured-tool.ts
  */
 
 import { tool } from "@langchain/core/tools";

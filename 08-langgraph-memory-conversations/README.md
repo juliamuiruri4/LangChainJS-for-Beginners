@@ -1,9 +1,9 @@
-# Chapter 8: Memory & Conversations
+# Chapter 8: LangGraph: Memory & Conversations
 
 ## ⏱️ Lesson Overview
 
 - **Estimated Time**: 60 minutes
-- **Prerequisites**: Completed [Chapter 7](../07-agents-tools/README.md)
+- **Prerequisites**: Completed [Chapter 7](../07-langgraph-agents-tools/README.md)
 - **Difficulty**: Beginner
 
 ## 🎯 Learning Objectives
@@ -329,8 +329,8 @@ The assignment includes:
 
 ## 🗺️ Navigation
 
-- **Previous**: [07-agents-tools](../07-agents-tools/README.md)
-- **Next**: [09-production-best-practices](../09-production-best-practices/README.md)
+- **Previous**: [07-langgraph-agents-tools](../07-langgraph-agents-tools/README.md)
+- **Next**: [09-langgraph-patterns](../09-langgraph-patterns/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---

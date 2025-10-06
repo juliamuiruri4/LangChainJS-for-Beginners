@@ -1,4 +1,4 @@
-# Chapter 7: Agents & Tools
+# Chapter 7: LangGraph: Agents & Tools
 
 ## ⏱️ Lesson Overview
 
@@ -16,7 +16,7 @@ By the end of this chapter, you'll be able to:
 - Combine multiple tools for complex tasks
 
 ---
-
+Yes
 ## 📖 The Manager with Specialists Analogy
 
 **Imagine you're a project manager with a team of specialists:**
@@ -288,7 +288,7 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [06-rag-systems](../06-rag-systems/README.md)
-- **Next**: [08-memory-conversations](../08-memory-conversations/README.md)
+- **Next**: [08-langgraph-memory-conversations](../08-langgraph-memory-conversations/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---

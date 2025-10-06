@@ -1,6 +1,6 @@
 /**
  * Summary Memory with LangGraph
- * Run: npx tsx 08-memory-conversations/code/03-summary-memory.ts
+ * Run: npx tsx 08-langgraph-memory-conversations/code/03-summary-memory.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

@@ -200,6 +200,6 @@ Solutions available in [`solution/`](./solution/) folder. Try on your own first!
 
 ## Next Steps
 
-Ready for [Chapter 7: Agents & Tools](../07-agents-tools/README.md)!
+Ready for [Chapter 7: LangGraph: Agents & Tools](../07-langgraph-agents-tools/README.md)!
 
 Excellent work building RAG systems! 🎉

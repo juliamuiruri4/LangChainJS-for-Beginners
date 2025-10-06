@@ -1,6 +1,6 @@
 /**
  * Window Memory with LangGraph
- * Run: npx tsx 08-memory-conversations/code/02-window-memory.ts
+ * Run: npx tsx 08-langgraph-memory-conversations/code/02-window-memory.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

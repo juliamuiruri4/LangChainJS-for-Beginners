@@ -1,6 +1,6 @@
 /**
  * Fallback Strategy
- * Run: npx tsx 09-production-best-practices/code/02-fallback-strategy.ts
+ * Run: npx tsx 10-production-best-practices/code/02-fallback-strategy.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

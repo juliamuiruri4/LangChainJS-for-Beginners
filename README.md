@@ -32,10 +32,10 @@ This course contains **11 sections** (setup + 10 chapters), each focusing on a s
 4. **[Working with Documents](./04-working-with-documents/README.md)** - Loading, splitting, and processing text data
 5. **[Embeddings & Semantic Search](./05-embeddings-semantic-search/README.md)** - Understanding vector representations and similarity
 6. **[Building RAG Systems](./06-rag-systems/README.md)** - Combining retrieval with generation for accurate answers
-7. **[Agents & Tools](./07-agents-tools/README.md)** - Creating AI agents with tools using LangGraph
-8. **[Memory & Conversations](./08-memory-conversations/README.md)** - Building stateful chatbots with LangGraph memory
-9. **[Production Best Practices](./09-production-best-practices/README.md)** - Model switching, Azure AI Foundry, and deployment
-10. **[Advanced LangGraph Patterns](./10-langgraph-intro/README.md)** - Complex workflows and decision trees
+7. **[LangGraph: Agents & Tools](./07-langgraph-agents-tools/README.md)** - Creating AI agents with tools using LangGraph
+8. **[LangGraph: Memory & Conversations](./08-langgraph-memory-conversations/README.md)** - Building stateful chatbots with LangGraph memory
+9. **[LangGraph Patterns](./09-langgraph-patterns/README.md)** - Multi-step workflows and decision trees
+10. **[Production Best Practices](./10-production-best-practices/README.md)** - Model switching, Azure AI Foundry, and deployment
 
 ## Prerequisites
 

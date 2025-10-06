@@ -1,5 +1,5 @@
 /**
- * Run: npx tsx 07-agents-tools/code/03-multi-tool-agent.ts
+ * Run: npx tsx 07-langgraph-agents-tools/code/03-multi-tool-agent.ts
  */
 
 import { tool } from "@langchain/core/tools";

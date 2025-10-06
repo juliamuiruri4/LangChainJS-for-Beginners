@@ -451,7 +451,7 @@ XX-chapter-name/
 
 ---
 
-### 07-agents-tools
+### 07-langgraph-agents-tools
 
 **Code Examples**:
 - `01-simple-tool.ts`: Creating a tool
@@ -472,7 +472,7 @@ XX-chapter-name/
 
 ---
 
-### 08-memory-conversations
+### 08-langgraph-memory-conversations
 
 **Code Examples**:
 - `01-buffer-memory.ts`: Recent messages
@@ -493,7 +493,28 @@ XX-chapter-name/
 
 ---
 
-### 09-production-best-practices
+### 09-langgraph-patterns
+
+**Code Examples**:
+- `01-linear-graph.ts`: Simple workflow
+- `02-conditional-graph.ts`: Branching logic
+- `03-human-in-loop.ts`: Approval workflow
+- `04-react-agent-graph.ts`: Agent with graph
+
+**Images**:
+- `business-process-analogy.png`
+- `graph-visualization.png`
+- `state-transitions.png`
+
+**Assignment**:
+- Customer Support Flow
+- Content Moderation
+- Multi-Agent Research
+- Loop Detection
+
+---
+
+### 10-production-best-practices
 
 **Code Examples**:
 - `01-model-agnostic-config.ts`: Provider abstraction
@@ -512,27 +533,6 @@ XX-chapter-name/
 - Cost Tracker
 - Smart Router
 - Deployment Pipeline
-
----
-
-### 10-langgraph-intro
-
-**Code Examples**:
-- `01-linear-graph.ts`: Simple workflow
-- `02-conditional-graph.ts`: Branching logic
-- `03-human-in-loop.ts`: Approval workflow
-- `04-react-agent-graph.ts`: Agent with graph
-
-**Images**:
-- `business-process-analogy.png`
-- `graph-visualization.png`
-- `state-transitions.png`
-
-**Assignment**:
-- Customer Support Flow
-- Content Moderation
-- Multi-Agent Research
-- Loop Detection
 
 ---
 

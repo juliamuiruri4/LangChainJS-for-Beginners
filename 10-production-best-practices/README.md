@@ -296,9 +296,27 @@ The assignment includes:
 
 ## 🗺️ Navigation
 
-- **Previous**: [08-memory-conversations](../08-memory-conversations/README.md)
-- **Next**: [10-langgraph-intro](../10-langgraph-intro/README.md)
+- **Previous**: [09-langgraph-patterns](../09-langgraph-patterns/README.md)
 - **Home**: [Course Home](../README.md)
+
+---
+
+## 🎉 Congratulations!
+
+You've completed the LangChain.js for Beginners course! You now have the skills to:
+- Build AI applications with LangChain.js
+- Work with documents and embeddings
+- Create RAG systems
+- Build agents with tools using LangGraph
+- Manage conversation memory with LangGraph
+- Create multi-step workflows with LangGraph
+- Deploy to production with Azure AI Foundry
+
+**What's next?**
+- Build your own AI project
+- Join our [Discord community](https://aka.ms/foundry/discord)
+- Explore [LangChain patterns](https://js.langchain.com/docs/use_cases/)
+- Share what you've built!
 
 ---
 

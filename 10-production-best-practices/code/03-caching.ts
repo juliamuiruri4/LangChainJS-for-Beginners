@@ -1,6 +1,6 @@
 /**
  * Response Caching
- * Run: npx tsx 09-production-best-practices/code/03-caching.ts
+ * Run: npx tsx 10-production-best-practices/code/03-caching.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

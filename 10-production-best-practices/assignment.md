@@ -233,8 +233,13 @@ Solutions available in [`solution/`](./solution/) folder. Try on your own first!
 
 ---
 
-## Next Steps
+## 🎉 Course Complete!
 
-Ready for [Chapter 10: Introduction to LangGraph](../10-langgraph-intro/README.md)!
+You've completed all chapters of the LangChain.js for Beginners course!
 
-You're building production-grade AI applications! 🚀
+You're now building production-grade AI applications! 🚀
+
+**What's next?**
+- Build your own AI project
+- Share your work with the community
+- Explore advanced LangChain.js patterns

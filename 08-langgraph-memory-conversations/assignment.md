@@ -223,6 +223,6 @@ Solutions available in [`solution/`](./solution/) folder. Try on your own first!
 
 ## Next Steps
 
-Ready for [Chapter 9: Production Best Practices](../09-production-best-practices/README.md)!
+Ready for [Chapter 9: LangGraph Patterns](../09-langgraph-patterns/README.md)!
 
 Excellent work on conversation memory! 🎉

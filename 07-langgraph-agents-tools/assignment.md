@@ -236,6 +236,6 @@ Solutions available in [`solution/`](./solution/) folder. Try on your own first!
 
 ## Next Steps
 
-Ready for [Chapter 8: Memory & Conversations](../08-memory-conversations/README.md)!
+Ready for [Chapter 8: LangGraph: Memory & Conversations](../08-langgraph-memory-conversations/README.md)!
 
 Amazing work building intelligent agents! 🎉

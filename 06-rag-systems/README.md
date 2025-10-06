@@ -268,7 +268,7 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [05-embeddings-semantic-search](../05-embeddings-semantic-search/README.md)
-- **Next**: [07-agents-tools](../07-agents-tools/README.md)
+- **Next**: [07-langgraph-agents-tools](../07-langgraph-agents-tools/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---

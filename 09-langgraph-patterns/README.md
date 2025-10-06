@@ -1,4 +1,4 @@
-# Chapter 10: Advanced LangGraph Patterns
+# Chapter 10: LangGraph Patterns
 
 ## ⏱️ Lesson Overview
 
@@ -9,13 +9,13 @@
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
-- Master advanced LangGraph workflow patterns
-- Build complex state-based AI workflows
-- Create sophisticated conditional logic in agent flows
+- Learn LangGraph workflow patterns
+- Build state-based AI workflows
+- Create conditional logic in agent flows
 - Implement human-in-the-loop patterns
 - Build multi-step agent systems with custom routing
 
-**Note**: You've already used LangGraph in Chapters 7 and 8 for agents and memory. This chapter explores more advanced graph patterns for complex workflows.
+**Note**: You've already used LangGraph in Chapters 7 and 8 for agents and memory. This chapter explores more graph patterns for multi-step workflows.
 
 ---
 
@@ -41,7 +41,7 @@ Close Ticket
 
 **Regular LangChain**: Linear chains (A → B → C)
 
-**LangGraph**: Complex workflows with:
+**LangGraph**: Workflows with:
 - Branches (if/else)
 - Loops (repeat until done)
 - Human input (wait for approval)
@@ -55,16 +55,16 @@ You've already seen LangGraph's power in Chapters 7 & 8:
 - Chapter 7: ReAct agents with tools
 - Chapter 8: Conversation memory with MemorySaver
 
-Now we'll explore **advanced graph patterns** for complex, multi-step workflows.
+Now we'll explore **graph patterns** for multi-step workflows.
 
-### Advanced Patterns Covered
+### Patterns Covered
 
 **Chapter 10 Focus**:
 - Conditional branching and routing
 - Custom state management
 - Human-in-the-loop workflows
 - Multi-path execution graphs
-- Complex decision trees
+- Decision trees
 
 ---
 
@@ -340,7 +340,7 @@ const app = workflow.compile();
 
 ## 🎓 Key Takeaways
 
-- ✅ **LangGraph enables complex workflows**: Beyond linear chains
+- ✅ **LangGraph enables multi-step workflows**: Beyond linear chains
 - ✅ **State management**: Data flows through the graph
 - ✅ **Conditional routing**: Branch based on logic
 - ✅ **Human-in-the-loop**: Wait for human input
@@ -371,26 +371,10 @@ The assignment includes:
 
 ## 🗺️ Navigation
 
-- **Previous**: [09-production-best-practices](../09-production-best-practices/README.md)
+- **Previous**: [08-langgraph-memory-conversations](../08-langgraph-memory-conversations/README.md)
+- **Next**: [10-production-best-practices](../10-production-best-practices/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---
-
-## 🎉 Congratulations!
-
-You've completed the LangChain.js for Beginners course! You now have the skills to:
-- Build AI applications with LangChain.js
-- Work with documents and embeddings
-- Create RAG systems
-- Build agents with tools
-- Manage conversation memory
-- Deploy to production
-- Create complex workflows with LangGraph
-
-**What's next?**
-- Build your own AI project
-- Join our [Discord community](https://aka.ms/foundry/discord)
-- Explore [advanced LangChain patterns](https://js.langchain.com/docs/use_cases/)
-- Share what you've built!
 
 💬 **Questions or stuck?** Join our [Discord community](https://aka.ms/foundry/discord)!

@@ -1,6 +1,6 @@
 /**
  * Model Switching
- * Run: npx tsx 09-production-best-practices/code/01-model-switching.ts
+ * Run: npx tsx 10-production-best-practices/code/01-model-switching.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

@@ -17,7 +17,7 @@ Practice building stateful AI workflows with LangGraph for complex multi-step ag
 **Goal**: Build a support ticket routing system using LangGraph.
 
 **Tasks**:
-1. Create `support-router.ts` in the `10-langgraph-intro/code/` folder
+1. Create `support-router.ts` in the `10-langgraph-patterns/code/` folder
 2. Implement workflow:
    ```
    New Ticket

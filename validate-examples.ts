@@ -173,10 +173,10 @@ async function main() {
     "04-working-with-documents",
     "05-embeddings-semantic-search",
     "06-rag-systems",
-    "07-agents-tools",
-    "08-memory-conversations",
-    "09-production-best-practices",
-    "10-langgraph-intro",
+    "07-langgraph-agents-tools",
+    "08-langgraph-memory-conversations",
+    "09-langgraph-patterns",
+    "10-production-best-practices",
   ];
 
   const allFiles: string[] = [];

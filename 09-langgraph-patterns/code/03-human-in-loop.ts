@@ -1,6 +1,6 @@
 /**
  * Human-in-the-Loop
- * Run: npx tsx 10-langgraph-intro/code/03-human-in-loop.ts
+ * Run: npx tsx 10-langgraph-patterns/code/03-human-in-loop.ts
  */
 
 import { StateGraph, END, Annotation } from "@langchain/langgraph";

@@ -1,6 +1,6 @@
 /**
  * Buffer Memory with LangGraph
- * Run: npx tsx 08-memory-conversations/code/01-buffer-memory.ts
+ * Run: npx tsx 08-langgraph-memory-conversations/code/01-buffer-memory.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";
