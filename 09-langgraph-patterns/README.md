@@ -72,14 +72,23 @@ Now we'll explore **graph patterns** for multi-step workflows.
 
 ### 1. State
 
-The data that flows through your graph:
+The data that flows through your graph, defined using `Annotation`:
 
 ```typescript
-interface State {
-  messages: Message[];
-  nextStep: string;
-  userInput?: string;
-}
+const WorkflowState = Annotation.Root({
+  messages: Annotation<Message[]>({
+    reducer: (left, right) => left.concat(right),
+    default: () => [],
+  }),
+  nextStep: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  userInput: Annotation<string | undefined>({
+    reducer: (_, right) => right,
+    default: () => undefined,
+  }),
+});
 ```
 
 ### 2. Nodes
@@ -87,9 +96,9 @@ interface State {
 Functions that process state:
 
 ```typescript
-function analyzeQuestion(state: State): State {
-  // Process state
-  return updatedState;
+async function analyzeQuestion(state: typeof WorkflowState.State) {
+  // Process state and return updates
+  return { nextStep: "processed" };
 }
 ```
 
@@ -112,32 +121,32 @@ The workflow combining nodes and edges.
 **Code**: [`code/01-simple-graph.ts`](./code/01-simple-graph.ts)
 
 ```typescript
-import { StateGraph, END } from "@langchain/langgraph";
-import { ChatOpenAI } from "@langchain/openai";
+import { StateGraph, END, Annotation } from "@langchain/langgraph";
 import "dotenv/config";
 
-// Define state
-interface State {
-  input: string;
-  output: string;
-}
+// Define state using Annotation
+const WorkflowState = Annotation.Root({
+  input: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  output: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+});
 
 // Create nodes
-async function processInput(state: State): Promise<State> {
-  return { ...state, output: `Processed: ${state.input}` };
+async function processInput(state: typeof WorkflowState.State) {
+  return { output: `Processed: ${state.input}` };
 }
 
 // Build graph
-const workflow = new StateGraph<State>({
-  channels: {
-    input: null,
-    output: null,
-  },
-});
+const workflow = new StateGraph(WorkflowState);
 
 workflow.addNode("process", processInput);
-workflow.addEdge("__start__", "process");
-workflow.addEdge("process", END);
+workflow.addEdge("__start__" as any, "process" as any);
+workflow.addEdge("process" as any, END);
 
 const app = workflow.compile();
 
@@ -155,58 +164,61 @@ console.log(result.output);
 **Code**: [`code/02-conditional-graph.ts`](./code/02-conditional-graph.ts)
 
 ```typescript
-import { StateGraph, END } from "@langchain/langgraph";
+import { StateGraph, END, Annotation } from "@langchain/langgraph";
 
-interface State {
-  question: string;
-  category: string;
-  answer: string;
-}
+// Define state using Annotation
+const SupportState = Annotation.Root({
+  question: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  category: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  answer: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+});
 
 // Categorize question
-async function categorize(state: State): Promise<State> {
+async function categorize(state: typeof SupportState.State) {
   const isTechnical = state.question.toLowerCase().includes("technical");
   return {
-    ...state,
     category: isTechnical ? "technical" : "general",
   };
 }
 
 // Handle technical questions
-async function handleTechnical(state: State): Promise<State> {
-  return { ...state, answer: "Routing to engineering team..." };
+async function handleTechnical(state: typeof SupportState.State) {
+  return { answer: "Routing to engineering team..." };
 }
 
 // Handle general questions
-async function handleGeneral(state: State): Promise<State> {
-  return { ...state, answer: "Here's a quick answer..." };
+async function handleGeneral(state: typeof SupportState.State) {
+  return { answer: "Here's a quick answer..." };
 }
 
 // Routing function
-function route(state: State): string {
+function route(state: typeof SupportState.State): string {
   return state.category === "technical" ? "technical" : "general";
 }
 
 // Build graph
-const workflow = new StateGraph<State>({
-  channels: {
-    question: null,
-    category: null,
-    answer: null,
-  },
-});
+const workflow = new StateGraph(SupportState);
 
 workflow.addNode("categorize", categorize);
 workflow.addNode("technical", handleTechnical);
 workflow.addNode("general", handleGeneral);
 
-workflow.addEdge("__start__", "categorize");
-workflow.addConditionalEdges("categorize", route, {
+workflow.addEdge("__start__" as any, "categorize" as any);
+workflow.addConditionalEdges("categorize" as any, route, {
   technical: "technical",
   general: "general",
-});
-workflow.addEdge("technical", END);
-workflow.addEdge("general", END);
+} as any);
+workflow.addEdge("technical" as any, END);
+workflow.addEdge("general" as any, END);
 
 const app = workflow.compile();
 
@@ -294,30 +306,52 @@ if (result.__interrupt__) {
 **Code**: [`code/04-react-agent-graph.ts`](./code/04-react-agent-graph.ts)
 
 ```typescript
-import { StateGraph, END } from "@langchain/langgraph";
+import { StateGraph, END, Annotation } from "@langchain/langgraph";
 import { ChatOpenAI } from "@langchain/openai";
 
-interface AgentState {
-  input: string;
-  thought: string;
-  action: string;
-  actionInput: string;
-  observation: string;
-  answer: string;
-  iterations: number;
-}
+// Define ReAct agent state
+const AgentState = Annotation.Root({
+  input: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  thought: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  action: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  actionInput: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  observation: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  answer: Annotation<string>({
+    reducer: (_, right) => right ?? "",
+    default: () => "",
+  }),
+  iterations: Annotation<number>({
+    reducer: (_, right) => right ?? 0,
+    default: () => 0,
+  }),
+});
 
-async function think(state: AgentState): Promise<AgentState> {
+async function think(state: typeof AgentState.State) {
   // Agent decides what to do next
-  return { ...state, thought: "I should use a tool..." };
+  return { thought: "I should use a tool..." };
 }
 
-async function act(state: AgentState): Promise<AgentState> {
+async function act(state: typeof AgentState.State) {
   // Execute the action
-  return { ...state, observation: "Tool result..." };
+  return { observation: "Tool result...", iterations: state.iterations + 1 };
 }
 
-async function shouldContinue(state: AgentState): string {
+function shouldContinue(state: typeof AgentState.State): string {
   if (state.iterations > 5 || state.answer) {
     return "end";
   }
@@ -325,27 +359,17 @@ async function shouldContinue(state: AgentState): string {
 }
 
 // Build ReAct loop
-const workflow = new StateGraph<AgentState>({
-  channels: {
-    input: null,
-    thought: null,
-    action: null,
-    actionInput: null,
-    observation: null,
-    answer: null,
-    iterations: null,
-  },
-});
+const workflow = new StateGraph(AgentState);
 
 workflow.addNode("think", think);
 workflow.addNode("act", act);
 
-workflow.addEdge("__start__", "think");
-workflow.addEdge("think", "act");
-workflow.addConditionalEdges("act", shouldContinue, {
+workflow.addEdge("__start__" as any, "think" as any);
+workflow.addEdge("think" as any, "act" as any);
+workflow.addConditionalEdges("act" as any, shouldContinue, {
   continue: "think",
   end: END,
-});
+} as any);
 
 const app = workflow.compile();
 ```

@@ -318,7 +318,7 @@ This pattern means:
 - ✅ **Cost optimization** - Switch to cheaper providers when appropriate
 - ✅ **Disaster recovery** - Fallback to alternative providers if one is down
 
-You'll learn more about production deployment strategies in [Chapter 9](../09-production-best-practices/README.md).
+You'll learn more about production deployment strategies in [Chapter 10](../10-production-best-practices/README.md).
 
 ---
 
