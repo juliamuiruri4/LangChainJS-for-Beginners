@@ -144,13 +144,81 @@ AI_MODEL=gpt-4o-mini
 
 ### Alternative: Azure AI Foundry (Optional)
 
-If you have Azure AI Foundry access, you can use it instead:
+If you have an Azure subscription, you can use Azure AI Foundry for production-grade AI applications with enterprise features.
+
+#### Step-by-Step Setup:
+
+**1. Create an Azure AI Foundry Project**
+
+1. Visit the [Azure AI Foundry portal](https://ai.azure.com/)
+2. Sign in with your Azure account
+3. Click **+ New project**
+4. Fill in the project details:
+   - **Project name**: `langchain-course` (or your preferred name)
+   - **Subscription**: Select your Azure subscription
+   - **Resource group**: Create new or select existing
+   - **Region**: Choose a region close to you (e.g., East US, West Europe)
+5. Click **Create** (the portal will automatically set up the necessary resources)
+
+**2. Deploy Required Models**
+
+You'll need to deploy two models for this course:
+
+**Deploy GPT-4o-mini (Chat Model):**
+
+1. In your project, go to **Models + endpoints** in the left navigation
+2. Click **+ Deploy model** → **Deploy base model**
+3. Search for and select **gpt-4o-mini**
+4. Click **Confirm**
+5. Configure deployment:
+   - **Deployment name**: `gpt-4o-mini` (keep this name for consistency)
+   - **Model version**: Select the latest available
+   - **Deployment type**: Global Standard
+   - Click **Deploy**
+6. Wait for deployment to complete
+
+**Deploy Text Embedding Model:**
+
+1. Click **+ Deploy model** → **Deploy base model** again
+2. Search for and select **text-embedding-3-small**
+3. Click **Confirm**
+4. Configure deployment:
+   - **Deployment name**: `text-embedding-3-small` (keep this name)
+   - **Model version**: Select the latest available
+   - **Deployment type**: Global Standard
+   - Click **Deploy**
+5. Wait for deployment to complete
+
+**3. Get Your Configuration Values**
+
+After deploying your models, you need two pieces of information:
+
+1. **API Key**:
+   - In your project, go to **Overview** in the left navigation
+   - Find **Endpoints and keys**
+   - Locate your **API Key**
+
+2. **Endpoint URL**:
+   - Locate the **Azure OpenAI** → **Azure OpenAI endpoint** value (looks like: `https://your-resource.openai.azure.com`)
+
+**4. Add the API Key and Endpoint to Your `.env` File:**
 
 ```bash
-AI_API_KEY=your_azure_openai_api_key
+# Azure AI Foundry Configuration
+AI_API_KEY=your_azure_api_key_here
 AI_ENDPOINT=https://your-resource.openai.azure.com
-AI_MODEL=gpt-4o-mini
 ```
+
+**Important Notes:**
+- ✅ **Deployment names must match**: The course uses `gpt-4o-mini` and `text-embedding-3-small` as deployment names
+- ✅ **Keep your API key secure**: Never commit `.env` to version control
+- ✅ **Cost management**: Azure AI Foundry is a paid service. Set up cost alerts in the Azure portal
+- ✅ **Production ready**: Azure AI Foundry provides enterprise features like monitoring, logging, and SLA guarantees
+
+**Additional Resources:**
+- [Azure AI Foundry Quickstart](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=typescript)
+- [Azure OpenAI Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
+- [Model Deployment Guide](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/deploy-models)
 
 ### Alternative: OpenAI Direct (Optional)
 
@@ -200,6 +268,7 @@ async function testSetup() {
       model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
+        defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
       },
       apiKey: process.env.AI_API_KEY,
     });
@@ -212,12 +281,13 @@ async function testSetup() {
     console.log("\nModel response:", response.content);
     console.log("\n🎉 You're ready to start the course!");
   } catch (error) {
-    console.error("❌ ERROR:", error.message);
+    console.error("❌ ERROR:", error instanceof Error ? error.message : String(error));
     console.log("\nTroubleshooting:");
     console.log("1. Check your AI_API_KEY in .env file");
     console.log("2. Verify the AI_ENDPOINT is correct");
     console.log("3. Ensure the AI_MODEL is valid for your provider");
-    console.log("4. Verify the token/key has no extra spaces");
+    console.log("4. For Azure AI Foundry: Verify AI_API_VERSION is set");
+    console.log("5. Verify the token/key has no extra spaces");
   }
 }
 
