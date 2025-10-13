@@ -89,7 +89,10 @@ const template = ChatPromptTemplate.fromMessages([
 
 ### Example 1: Simple Translation Template
 
+Creates a reusable translation template with variables for input language, output language, and text to be translated.
+
 **Code**: [`code/01-basic-template.ts`](./code/01-basic-template.ts)
+**Run**: `tsx 03-prompt-templates/code/01-basic-template.ts`
 
 ```typescript
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -134,10 +137,31 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 03-prompt-templates/code/01-basic-template.ts`, you'll see:
+
+```
+French: Bonjour, comment allez-vous ?
+Spanish: Hola, ¿cómo estás?
+```
+
+### How It Works
+
 **Key Concepts**:
-- `{variable_name}` creates placeholders
-- `template.pipe(model)` creates a chain
-- `invoke()` fills in the variables
+1. `{variable_name}` creates placeholders in the template
+2. `ChatPromptTemplate.fromMessages()` defines the structure with system and human messages
+3. `template.pipe(model)` creates a chain that connects the template to the model
+4. `invoke()` fills in the variables and sends the complete prompt to the AI
+
+**What's happening**:
+- We create ONE template with three variables: `{input_language}`, `{output_language}`, and `{text}`
+- We use the template twice with different values (French and Spanish)
+- Each time, the variables are replaced with actual values
+- The complete prompt is sent to the AI model
+- We get translations without having to write separate prompts
+
+**Benefits**: If you want to change how translations work (e.g., add "Be formal" to the system message), you update ONE place and it affects all translations.
 
 ---
 
@@ -168,7 +192,10 @@ const template = PromptTemplate.fromTemplate(
 
 ### Example 2: Multiple Template Formats
 
+Compares different template formats (ChatPromptTemplate vs PromptTemplate) and shows when to use each approach.
+
 **Code**: [`code/02-template-formats.ts`](./code/02-template-formats.ts)
+**Run**: `tsx 03-prompt-templates/code/02-template-formats.ts`
 
 ```typescript
 import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
@@ -222,6 +249,47 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 03-prompt-templates/code/02-template-formats.ts`, you'll see:
+
+```
+1️⃣  ChatPromptTemplate:
+
+Arr matey! TypeScript be a mighty tool forged by Microsoft, ye see! It be JavaScript with types, helpin' ye catch errors before yer ship sets sail! With TypeScript, ye define the shape of yer data like a treasure map, and the compiler checks if ye be followin' it correctly. No more surprises when yer code runs - it's all verified beforehand! Savvy?
+
+2️⃣  PromptTemplate:
+
+Generated prompt: Write a funny poem about JavaScript.
+
+Response:
+JavaScript, oh JavaScript,
+You're quirky and you're quick,
+With "undefined" and "null" to spare,
+You drive us up the wall sometimes,
+But we still love you, I swear!
+```
+
+### How It Works
+
+**Two Template Types**:
+
+1. **ChatPromptTemplate** (for conversational AI):
+   - Uses message arrays: `["system", "..."], ["human", "..."]`
+   - Supports system messages to set AI personality
+   - Best for chat models and conversations
+   - Pipes directly to the model
+
+2. **PromptTemplate** (for simple text):
+   - Uses plain string templates
+   - No system/human message distinction
+   - Must call `.format()` to get the filled template
+   - Then pass the formatted string to the model
+
+**When to use each**:
+- Use `ChatPromptTemplate` when you need system messages or multi-turn conversations
+- Use `PromptTemplate` for simple, single-shot prompts without roles
+
 ---
 
 ## 💡 Few-Shot Prompting
@@ -232,7 +300,10 @@ Few-shot prompting means teaching the AI by showing examples.
 
 ### Example 3: Few-Shot Prompting
 
+Demonstrates teaching AI by example using few-shot prompting to convert emotions to emojis based on provided examples.
+
 **Code**: [`code/03-few-shot.ts`](./code/03-few-shot.ts)
+**Run**: `tsx 03-prompt-templates/code/03-few-shot.ts`
 
 ```typescript
 import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from "@langchain/core/prompts";
@@ -297,10 +368,34 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 03-prompt-templates/code/03-few-shot.ts`, you'll see:
+
+```
+surprised → 😮
+angry → 😠
+```
+
+### How It Works
+
+**What's happening**:
+1. **We provide examples** showing the pattern: "happy" → 😊, "sad" → 😢, "excited" → 🎉
+2. **The AI learns the pattern** by seeing these input-output pairs
+3. **We ask for new emotions** like "surprised" and "angry"
+4. **The AI follows the learned pattern** and provides appropriate emojis
+
+**Few-Shot Components**:
+- `examples` array: Contains the teaching examples
+- `exampleTemplate`: Defines how each example is formatted (human → AI)
+- `FewShotChatMessagePromptTemplate`: Injects the examples into the conversation
+- Final template: Combines system message + examples + user input
+
 **Benefits of Few-Shot**:
-- Teaches the model your desired format
-- More reliable than just instructions
-- Great for structured outputs
+- Teaches the model your desired format without complex instructions
+- More reliable than just instructions alone
+- Great for structured outputs and consistent formatting
+- Reduces need for fine-tuning for many tasks
 
 ---
 
@@ -310,7 +405,10 @@ You can combine multiple templates to create complex prompts.
 
 ### Example 4: Composing Templates
 
+Shows how to combine multiple template pieces together to create complex, reusable prompts for different educational contexts.
+
 **Code**: [`code/04-composition.ts`](./code/04-composition.ts)
+**Run**: `tsx 03-prompt-templates/code/04-composition.ts`
 
 ```typescript
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -364,6 +462,37 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 03-prompt-templates/code/04-composition.ts`, you'll see:
+
+```
+🎓 Beginner explanation:
+
+Think of a variable as a labeled box where you can store information! Just like you might have a box labeled "toys" or "books," in programming, you create variables with names like "score" or "playerName." You can put different types of information in these boxes - numbers, words, or yes/no answers - and use them whenever you need that information in your program.
+
+
+🎓 Intermediate explanation:
+
+Closures are a fundamental concept where a function retains access to variables from its outer scope, even after the outer function has finished executing. This happens because JavaScript functions create a "closure" over the environment in which they were defined. For example, if an inner function references a variable from its parent function, that variable remains accessible to the inner function even after the parent function returns. This is particularly useful for data privacy, creating factory functions, and maintaining state in functional programming patterns.
+```
+
+### How It Works
+
+**What's happening**:
+1. **We create reusable template pieces**: `systemTemplate`, `contextTemplate`, `taskTemplate`
+2. **We combine them with string concatenation**: `systemTemplate + "\n\n" + contextTemplate`
+3. **We use the same template for different scenarios**: beginner vs intermediate explanations
+4. **Variables customize each piece**: `domain`, `level`, `audience`, `topic`
+
+**Benefits of Composition**:
+- **Reusable pieces**: Write common parts once, mix and match
+- **Consistency**: Same structure across similar prompts
+- **Flexibility**: Different combinations for different needs
+- **Maintainability**: Update shared pieces in one place
+
+**Real-world use**: Build a library of prompt components (tone, context, task) and compose them based on user needs or application state.
+
 ---
 
 ## 📋 Structured Outputs
@@ -402,7 +531,10 @@ City: [____]
 
 ### Example 5: Basic Structured Output
 
+Demonstrates using Zod schemas to get typed, structured data from AI instead of free text, ensuring type safety and validation.
+
 **Code**: [`code/05-structured-output.ts`](./code/05-structured-output.ts)
+**Run**: `tsx 03-prompt-templates/code/05-structured-output.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -448,15 +580,53 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 03-prompt-templates/code/05-structured-output.ts`, you'll see:
+
+```
+📋 Structured Output Example
+
+✅ Structured Output (typed!):
+
+{
+  name: 'Alice Johnson',
+  age: 28,
+  email: 'alice.j@email.com',
+  occupation: 'software engineer'
+}
+
+📝 Accessing fields:
+   Name: Alice Johnson
+   Age: 28
+   Email: alice.j@email.com
+   Occupation: software engineer
+```
+
+### How It Works
+
+**What's happening**:
+1. **Define the schema** with Zod: `PersonSchema` specifies exactly what fields we want
+2. **Use `.describe()`** to tell the AI what each field represents
+3. **Create structured model**: `model.withStructuredOutput(PersonSchema)`
+4. **Get typed data**: The AI extracts information and returns it in the exact format we specified
+5. **Type-safe access**: TypeScript knows the structure, giving us autocomplete and type checking
+
 **Key Points**:
-- `z.object()` defines the structure
-- `.describe()` tells the AI what each field means
+- `z.object()` defines the structure with field names and types
+- `.describe()` tells the AI what each field means (helps extraction accuracy)
 - `withStructuredOutput()` ensures the AI returns data in that format
-- Result is fully typed in TypeScript!
+- Result is fully typed in TypeScript - no manual parsing needed!
+- Zod validates the data automatically - if the AI returns invalid data, you'll get an error
+
+**Why this is powerful**: No more parsing free text with regex or string splitting. The AI does the extraction and formatting for you!
 
 ### Example 6: Complex Structured Data
 
+Extracts complex nested company information from text using Zod schemas with arrays, nested objects, and various data types.
+
 **Code**: [`code/06-zod-schemas.ts`](./code/06-zod-schemas.ts)
+**Run**: `tsx 03-prompt-templates/code/06-zod-schemas.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -521,6 +691,70 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+### Expected Output
+
+When you run this example with `tsx 03-prompt-templates/code/06-zod-schemas.ts`, you'll see:
+
+```
+🏢 Complex Structured Output Example
+
+✅ Extracted Company Data:
+
+{
+  "name": "Microsoft",
+  "founded": 1975,
+  "headquarters": {
+    "city": "Redmond",
+    "country": "United States"
+  },
+  "products": [
+    "Windows",
+    "Office",
+    "Azure",
+    "Xbox"
+  ],
+  "employeeCount": 220000,
+  "isPublic": true
+}
+
+📊 Type-safe access:
+   Microsoft (Public)
+   Founded: 1975
+   Location: Redmond, United States
+   Products: Windows, Office, Azure, Xbox
+   Employees: 220,000
+```
+
+### How It Works
+
+**What's happening**:
+1. **Complex schema with nested objects**: `headquarters` is an object with `city` and `country`
+2. **Arrays**: `products` is an array of strings
+3. **Multiple data types**: string, number, boolean, object, array
+4. **Template integration**: We use `ChatPromptTemplate` with `withStructuredOutput()`
+5. **Smart extraction**: The AI reads unstructured text and extracts data into our schema
+
+**Schema Structure**:
+```typescript
+CompanySchema = {
+  name: string,
+  founded: number,
+  headquarters: {       // Nested object
+    city: string,
+    country: string
+  },
+  products: string[],   // Array
+  employeeCount: number,
+  isPublic: boolean
+}
+```
+
+**Real-world applications**:
+- Extract contact info from emails into structured database records
+- Parse resumes into standardized candidate profiles
+- Convert natural language forms into API payloads
+- Build data pipelines that transform unstructured content into structured databases
 
 **When to Use Structured Outputs**:
 - 📊 **Data extraction** from text

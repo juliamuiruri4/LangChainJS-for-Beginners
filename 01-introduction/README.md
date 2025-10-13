@@ -111,7 +111,10 @@ Let's make your first AI call using LangChain.js and GitHub Models!
 
 ### Example 1: Hello World
 
+Your first LangChain.js program that sends a simple message to an AI model and displays the response.
+
 **Code**: [`code/01-hello-world.ts`](./code/01-hello-world.ts)
+**Run**: `tsx 01-introduction/code/01-hello-world.ts`
 
 This example shows the simplest possible LangChain.js application:
 
@@ -141,10 +144,19 @@ async function main() {
 main().catch(console.error);
 ```
 
-**Try it yourself**:
-```bash
-npx tsx 01-introduction/code/01-hello-world.ts
+### Expected Output
+
+When you run this example with `tsx 01-introduction/code/01-hello-world.ts`, you'll see:
+
 ```
+🚀 Hello LangChain.js!
+
+🤖 AI Response: LangChain is a framework for building applications powered by large language models (LLMs).
+
+✅ Success! You just made your first LangChain.js call!
+```
+
+### How It Works
 
 **What's happening here?**
 1. We import `ChatOpenAI` from LangChain
@@ -162,7 +174,10 @@ LLMs work best with structured conversations. LangChain.js provides message type
 
 ### Example 2: Message Types
 
+Demonstrates how to use structured message types (SystemMessage and HumanMessage) to control AI behavior and maintain conversation context.
+
 **Code**: [`code/02-message-types.ts`](./code/02-message-types.ts)
+**Run**: `tsx 01-introduction/code/02-message-types.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -193,10 +208,28 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 01-introduction/code/02-message-types.ts`, you'll see:
+
+```
+🎭 Understanding Message Types
+
+🤖 AI Response: Quantum computing is like having a super-fast magic box that can try many different solutions to a puzzle at the same time! While regular computers look at one answer at a time, quantum computers can explore lots of possibilities all at once, which helps them solve really hard problems much faster.
+```
+
+### How It Works
+
 **Message Types**:
 - **SystemMessage**: Sets the AI's behavior and personality
 - **HumanMessage**: User input
 - **AIMessage**: The AI's responses (usually added automatically)
+
+**What's happening**:
+1. The SystemMessage tells the AI to explain things simply (like to a beginner)
+2. The HumanMessage contains the user's question about quantum computing
+3. The AI crafts a response that matches the system instruction (simple explanation)
+4. Because we set the personality in the SystemMessage, the response is age-appropriate and clear
 
 **Why use messages instead of strings?**
 - Better control over AI behavior
@@ -211,7 +244,10 @@ GitHub Models gives you access to multiple AI models. Let's compare them!
 
 ### Example 3: Model Comparison
 
+Compares responses from different AI models (gpt-4o vs gpt-4o-mini) to understand their capabilities, speed, and output quality differences.
+
 **Code**: [`code/03-model-comparison.ts`](./code/03-model-comparison.ts)
+**Run**: `tsx 01-introduction/code/03-model-comparison.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -245,15 +281,41 @@ async function compareModels() {
 compareModels().catch(console.error);
 ```
 
-**Try it yourself**:
-```bash
-npx tsx 01-introduction/code/03-model-comparison.ts
+### Expected Output
+
+When you run this example with `tsx 01-introduction/code/03-model-comparison.ts`, you'll see:
+
 ```
+🔬 Comparing AI Models
+
+
+📊 Testing: gpt-4o
+──────────────────────────────────────────────────
+Response: Recursion in programming is a technique where a function calls itself to solve smaller instances of the same problem until it reaches a base case.
+
+
+📊 Testing: gpt-4o-mini
+──────────────────────────────────────────────────
+Response: Recursion is when a function calls itself to solve a problem by breaking it down into smaller, similar sub-problems.
+
+✅ Comparison complete!
+```
+
+### How It Works
+
+**What's happening**:
+1. We define a single prompt asking about recursion
+2. We loop through two different models: `gpt-4o` and `gpt-4o-mini`
+3. For each model, we create a new `ChatOpenAI` instance with that model name
+4. We invoke the same prompt on each model
+5. We display the response from each model for comparison
 
 **What you'll notice**:
 - Different models have different response styles
-- Some are more detailed, others more concise
-- `gpt-4o` is more capable, `gpt-4o-mini` is faster and cheaper
+- `gpt-4o` tends to be more detailed and sophisticated
+- `gpt-4o-mini` is more concise but still accurate
+- Both answers are correct, just expressed differently
+- `gpt-4o` is more capable for complex tasks, `gpt-4o-mini` is faster and cheaper for simple tasks
 
 ---
 

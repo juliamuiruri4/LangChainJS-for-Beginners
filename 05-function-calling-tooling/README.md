@@ -77,7 +77,10 @@ In LangChain.js, tools are created using the `tool()` function with Zod schemas 
 
 ### Example 1: Simple Calculator Tool
 
+Creates a basic calculator tool using Zod schema to define parameters and demonstrates tool creation fundamentals.
+
 **Code**: [`code/01-simple-tool.ts`](./code/01-simple-tool.ts)
+**Run**: `tsx 05-function-calling-tooling/code/01-simple-tool.ts`
 
 ```typescript
 import { tool } from "@langchain/core/tools";
@@ -105,11 +108,34 @@ console.log("Tool created:", calculatorTool.name);
 console.log("Schema:", calculatorTool.schema);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 05-function-calling-tooling/code/01-simple-tool.ts`, you'll see:
+
+```
+Tool created: calculator
+Schema: ZodObject {
+  shape: {
+    expression: ZodString { ... }
+  }
+}
+```
+
+### How It Works
+
+**What's happening**:
+1. **Define the tool implementation**: The async function that performs the calculation
+2. **Sanitize input**: Remove potentially dangerous characters
+3. **Execute calculation**: Use `Function()` to evaluate the expression safely
+4. **Return result**: String describing the result
+
 **Key Components**:
-- **Implementation function**: What the tool actually does
-- **Name**: How the LLM refers to the tool
-- **Description**: Helps the LLM decide when to use it
-- **Schema**: Zod object defining parameters
+- **Implementation function**: What the tool actually does (`async (input) => {...}`)
+- **Name**: How the LLM refers to the tool (`"calculator"`)
+- **Description**: Helps the LLM decide when to use it (tells AI this is for math)
+- **Schema**: Zod object defining parameters (`z.object({ expression: z.string() })`)
+
+**Important**: At this stage, we've only *created* the tool. We haven't connected it to an LLM yet - that comes in Example 2!
 
 ---
 
@@ -119,7 +145,10 @@ Use `bindTools()` to make tools available to the LLM.
 
 ### Example 2: Binding and Invoking Tools
 
+Shows how to bind tools to a model and demonstrates how the LLM generates structured tool calls with arguments.
+
 **Code**: [`code/02-tool-calling.ts`](./code/02-tool-calling.ts)
+**Run**: `tsx 05-function-calling-tooling/code/02-tool-calling.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -167,11 +196,35 @@ console.log("\nTool calls:", response.tool_calls);
 // }
 ```
 
+### Expected Output
+
+When you run this example with `tsx 05-function-calling-tooling/code/02-tool-calling.ts`, you'll see:
+
+```
+Response: AIMessage {
+  content: "",
+  tool_calls: [ { name: 'calculator', args: { expression: '25 * 17' }, id: 'call_abc123' } ]
+}
+
+Tool calls: [
+  {
+    name: 'calculator',
+    args: { expression: '25 * 17' },
+    id: 'call_abc123'
+  }
+]
+```
+
+### How It Works
+
 **What Happens**:
-1. LLM sees the tool description
-2. LLM generates a tool call with arguments
-3. You execute the tool with those arguments
-4. Pass results back to LLM for final answer
+1. **LLM sees the tool description**: When we bind the calculator tool, the LLM learns about it
+2. **LLM analyzes the query**: "What is 25 * 17?" → This needs the calculator tool
+3. **LLM generates a tool call**: Returns structured data with tool name, arguments, and ID
+4. **Your code receives the tool call**: `response.tool_calls[0]` contains the structured call
+5. **Next step** (not shown here): You execute the tool with those arguments
+
+**Important**: The LLM doesn't actually calculate anything! It only *describes* which tool to call and with what arguments. Your code must execute the tool (see Example 3).
 
 ---
 
@@ -179,7 +232,10 @@ console.log("\nTool calls:", response.tool_calls);
 
 ### Example 3: Complete Tool Call Loop
 
+Demonstrates the complete flow: LLM generates tool call, your code executes the tool, and results return to LLM for final response.
+
 **Code**: [`code/03-tool-execution.ts`](./code/03-tool-execution.ts)
+**Run**: `tsx 05-function-calling-tooling/code/03-tool-execution.ts`
 
 ```typescript
 const weatherTool = tool(
@@ -220,6 +276,38 @@ const finalResponse = await model.invoke(messages);
 console.log("Final answer:", finalResponse.content);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 05-function-calling-tooling/code/03-tool-execution.ts`, you'll see:
+
+```
+Tool call: {
+  name: 'get_weather',
+  args: { city: 'Seattle' },
+  id: 'call_xyz789'
+}
+
+Tool result: Current temperature in Seattle: 62°F
+
+Final answer: It's currently 62°F in Seattle.
+```
+
+### How It Works
+
+**The Complete Flow**:
+1. **Step 1 - LLM generates tool call**:
+   - User asks "What's the weather in Seattle?"
+   - LLM decides to use `get_weather` tool with `{ city: "Seattle" }`
+2. **Step 2 - Execute the tool**:
+   - Your code calls `weatherTool.invoke(toolCall.args)`
+   - Tool returns: "Current temperature in Seattle: 62°F"
+3. **Step 3 - Send result back to LLM**:
+   - Build conversation history: user message + AI tool call + tool result
+   - LLM receives the weather data
+   - LLM generates natural language response: "It's currently 62°F in Seattle"
+
+**Key insight**: This three-step pattern (generate → execute → respond) is the core of function calling!
+
 ---
 
 ## 🎛️ Multiple Tools
@@ -228,7 +316,10 @@ LLMs can choose from multiple tools based on the query.
 
 ### Example 4: Multi-Tool System
 
+Builds a system with multiple tools (calculator, search, weather) where the LLM automatically selects the appropriate tool for each query.
+
 **Code**: [`code/04-multiple-tools.ts`](./code/04-multiple-tools.ts)
+**Run**: `tsx 05-function-calling-tooling/code/04-multiple-tools.ts`
 
 ```typescript
 const calculatorTool = tool(
@@ -281,6 +372,46 @@ for (const query of queries) {
   console.log("Args:", response.tool_calls[0]?.args);
 }
 ```
+
+### Expected Output
+
+When you run this example with `tsx 05-function-calling-tooling/code/04-multiple-tools.ts`, you'll see:
+
+```
+Query: What is 125 * 8?
+Chosen tool: calculator
+Args: { expression: '125 * 8' }
+
+Query: What's the capital of France?
+Chosen tool: search
+Args: { query: 'capital of France' }
+
+Query: What's the weather in Tokyo?
+Chosen tool: get_weather
+Args: { city: 'Tokyo' }
+```
+
+### How It Works
+
+**What's happening**:
+1. **Bind multiple tools**: All three tools (calculator, search, weather) are available to the LLM
+2. **LLM reads tool descriptions**:
+   - calculator: "Perform mathematical calculations"
+   - search: "Search for factual information"
+   - get_weather: "Get current weather"
+3. **LLM chooses appropriate tool** for each query:
+   - Math question → calculator
+   - Factual question → search
+   - Weather question → get_weather
+4. **LLM generates correct arguments** for each tool
+
+**Key insight**: The LLM automatically selects the right tool based on:
+- Tool name
+- Tool description
+- Parameter schema
+- The user's question
+
+**Best practice**: Write clear, specific tool descriptions so the LLM can make the right choice!
 
 ---
 

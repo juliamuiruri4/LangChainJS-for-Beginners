@@ -52,7 +52,10 @@ Chat models don't actually "remember" previous messages. Instead, you send the e
 
 ### Example 1: Multi-Turn Conversation
 
+Demonstrates how to maintain conversation context across multiple exchanges by storing message history and referencing previous interactions.
+
 **Code**: [`code/01-multi-turn.ts`](./code/01-multi-turn.ts)
+**Run**: `tsx 02-chat-models/code/01-multi-turn.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -90,10 +93,43 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 02-chat-models/code/01-multi-turn.ts`, you'll see:
+
+```
+AI: TypeScript is a superset of JavaScript that adds static typing to the language. It was developed by Microsoft and helps catch errors during development rather than at runtime. TypeScript code compiles down to plain JavaScript that can run in any JavaScript environment.
+
+AI: Sure! Here's a simple TypeScript example:
+
+```typescript
+// Define an interface
+interface Person {
+  name: string;
+  age: number;
+}
+
+// Use the interface
+function greet(person: Person): string {
+  return `Hello, ${person.name}! You are ${person.age} years old.`;
+}
+
+// This works - matches the interface
+const user = { name: "Alice", age: 30 };
+console.log(greet(user));
+```
+
+Notice how the second response references "TypeScript" from the first exchange and provides a relevant example!
+
+### How It Works
+
 **Key Points**:
-- Messages array holds the entire conversation
-- Each response is added to the history
-- The AI can reference earlier messages
+1. **Messages array holds the entire conversation** - We create an array that stores all messages (system, human, and AI)
+2. **Each response is added to the history** - After getting a response, we push it to the messages array
+3. **The AI can reference earlier messages** - When we ask "Can you show me a simple example?", the AI knows we're talking about TypeScript from the first exchange
+4. **Full history is sent each time** - With every `invoke()` call, we send the complete conversation history
+
+**Why this matters**: The AI doesn't actually "remember" anything. It only knows what's in the messages array you send. This is why maintaining conversation history is crucial for multi-turn conversations.
 
 ---
 
@@ -105,7 +141,10 @@ When you ask a complex question, waiting for the entire response can feel slow. 
 
 ### Example 2: Streaming
 
+Shows how to stream AI responses in real-time, displaying words as they're generated instead of waiting for the complete response.
+
 **Code**: [`code/02-streaming.ts`](./code/02-streaming.ts)
+**Run**: `tsx 02-chat-models/code/02-streaming.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -135,15 +174,43 @@ async function main() {
 main().catch(console.error);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 02-chat-models/code/02-streaming.ts`, you'll see the response appear word-by-word:
+
+```
+🤖 AI (streaming):
+The internet is a global network of interconnected computers that communicate using standardized protocols, primarily TCP/IP. When you visit a website, your device sends a request to a server, which responds with the data needed to display the page. This data travels through multiple routers and networks before reaching you.
+
+At its core, the internet works through a system of addresses called IP addresses, which uniquely identify each device. Domain names (like google.com) are translated to IP addresses by DNS servers. When you type a URL, your browser contacts these DNS servers to find the right destination.
+
+Data on the internet is broken into small packets that travel independently and are reassembled at the destination. This packet-switching method makes the internet resilient and efficient, allowing information to take different routes if one path is blocked or congested.
+
+✅ Stream complete!
+```
+
+You'll notice the text appears progressively, word by word, rather than all at once!
+
+### How It Works
+
+**What's happening**:
+1. We call `model.stream()` instead of `model.invoke()`
+2. This returns an async iterable that yields chunks as they're generated
+3. We loop through each chunk with `for await...of`
+4. Each chunk contains a piece of the response (usually a few words)
+5. We use `process.stdout.write()` to display text without newlines, creating the streaming effect
+
 **Benefits of Streaming**:
 - Better user experience (immediate feedback)
-- Feels more responsive
-- Users can start reading while AI generates
+- Feels more responsive - users see progress immediately
+- Users can start reading while AI generates the rest
+- Perceived performance improvement even if total time is the same
 
 **When to Use**:
 - ✅ Long responses (articles, explanations, code)
-- ✅ User-facing chatbots
-- ❌ When you need the full response first (parsing, validation)
+- ✅ User-facing chatbots and interactive applications
+- ✅ When you want to display progress to users
+- ❌ When you need the full response first (parsing, validation, post-processing)
 
 ---
 
@@ -174,7 +241,10 @@ Limits response length:
 
 ### Example 3: Model Parameters
 
+Compares AI responses at different temperature settings (0, 1, 2) to demonstrate how parameters control creativity and randomness.
+
 **Code**: [`code/03-parameters.ts`](./code/03-parameters.ts)
+**Run**: `tsx 02-chat-models/code/03-parameters.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -206,7 +276,45 @@ async function compareTemperatures() {
 compareTemperatures().catch(console.error);
 ```
 
----
+### Expected Output
+
+When you run this example with `tsx 02-chat-models/code/03-parameters.ts`, you'll see how temperature affects creativity:
+
+```
+🌡️ Temperature: 0
+────────────────────────────────────────────────────────────
+"In the year 2157, humanity had finally broken free from the confines of Earth."
+
+🌡️ Temperature: 1
+────────────────────────────────────────────────────────────
+"The stars whispered secrets through the observation deck's reinforced glass, but Captain Reeves had stopped listening years ago."
+
+🌡️ Temperature: 2
+────────────────────────────────────────────────────────────
+"Zyx-9 flickered into existence at precisely the wrong moment—right between the temporal rift and Dr. Kwan's morning coffee."
+```
+
+Notice how temperature 0 is straightforward, temperature 1 is more interesting, and temperature 2 is quite creative and unexpected!
+
+### How It Works
+
+**What's happening**:
+1. We use the same prompt with three different temperature settings (0, 1, 2)
+2. Temperature 0 produces the most predictable, "safe" response
+3. Temperature 1 (default) balances consistency with creativity
+4. Temperature 2 produces more unusual and creative variations
+
+**Temperature Scale Explained**:
+- **0.0**: Almost no randomness - model picks the most likely tokens every time
+  - Same input → nearly identical output
+  - Best for: Code generation, factual Q&A, structured data extraction
+- **1.0**: Balanced - some randomness but still coherent
+  - Good for: General conversation, explanations, most use cases
+- **2.0**: High randomness - model explores less likely options
+  - More creative and unpredictable
+  - Best for: Creative writing, brainstorming, generating unique ideas
+
+**Pro tip**: Run the same prompt multiple times at temperature 2 and you'll get very different results each time!
 
 ## 🛡️ Error Handling
 
@@ -221,7 +329,10 @@ APIs can fail. Networks drop. Rate limits hit. Good error handling is essential.
 
 ### Example 4: Error Handling
 
+Implements robust error handling with retry logic and exponential backoff to handle API failures, rate limits, and network issues.
+
 **Code**: [`code/04-error-handling.ts`](./code/04-error-handling.ts)
+**Run**: `tsx 02-chat-models/code/04-error-handling.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -270,12 +381,60 @@ async function main() {
 main();
 ```
 
+### Expected Output
+
+When you run this example with `tsx 02-chat-models/code/04-error-handling.ts`, you'll see:
+
+**Success case** (API works normally):
+```
+Attempt 1...
+
+✅ Success!
+LangChain.js is a JavaScript framework for building applications powered by large language models (LLMs). It provides tools and abstractions to easily integrate LLMs into your applications.
+```
+
+**Error case** (simulated API failure):
+```
+Attempt 1...
+❌ Attempt 1 failed: Network timeout
+⏳ Waiting 2000ms before retry...
+
+Attempt 2...
+❌ Attempt 2 failed: Network timeout
+⏳ Waiting 4000ms before retry...
+
+Attempt 3...
+
+✅ Success!
+LangChain.js is a JavaScript framework...
+```
+
+### How It Works
+
+**What's happening**:
+1. **Retry loop**: We wrap the API call in a loop that tries up to `maxRetries` times (default 3)
+2. **Try-catch**: Each attempt is wrapped in try-catch to catch any errors
+3. **Exponential backoff**: Wait time doubles after each failure (2s, 4s, 8s, etc.)
+4. **Error logging**: Each failure is logged with details for debugging
+5. **Final failure**: If all retries fail, we throw an error
+
+**Exponential Backoff Formula**:
+```typescript
+waitTime = 2^attempt * 1000ms
+// Attempt 1: 2^1 * 1000 = 2000ms (2 seconds)
+// Attempt 2: 2^2 * 1000 = 4000ms (4 seconds)
+// Attempt 3: 2^3 * 1000 = 8000ms (8 seconds)
+```
+
+**Why exponential backoff?** If the API is overloaded, waiting longer each time gives it more time to recover. Immediate retries can make the problem worse.
+
 **Error Handling Best Practices**:
 1. Always wrap API calls in try-catch
-2. Implement exponential backoff for retries
-3. Log errors for debugging
-4. Provide helpful error messages to users
-5. Have fallback behavior
+2. Implement exponential backoff for retries (don't retry immediately)
+3. Log errors for debugging and monitoring
+4. Provide helpful error messages to users (not raw error objects)
+5. Have fallback behavior (e.g., use cached data, different model, or graceful degradation)
+6. Set reasonable retry limits to avoid infinite loops
 
 ---
 

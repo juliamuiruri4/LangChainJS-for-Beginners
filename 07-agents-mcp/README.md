@@ -121,7 +121,10 @@ Let's build an agent step-by-step to understand how it works under the hood.
 
 ### Example 1: Basic Agent with ReAct Loop
 
+Demonstrates how to build an agent from scratch using a manual ReAct (Reasoning + Acting) loop. Shows the complete iteration cycle: agent reasons, uses a tool, observes results, and repeats until it has an answer.
+
 **Code**: [`code/01-basic-agent.ts`](./code/01-basic-agent.ts)
+**Run**: `tsx 07-agents-mcp/code/01-basic-agent.ts`
 
 This example shows the core agent pattern manually implemented:
 
@@ -199,7 +202,7 @@ while (iteration <= maxIterations) {
 
 ### Expected Output
 
-When you run this example with `npx tsx 07-agents-mcp/code/01-basic-agent.ts`, you'll see:
+When you run this example with `tsx 07-agents-mcp/code/01-basic-agent.ts`, you'll see:
 
 ```
 🤖 Basic Agent Demo
@@ -254,7 +257,10 @@ This conversation history allows the agent to remember what it's already tried a
 
 ### Example 2: Multi-Tool Agent
 
+Shows how agents automatically select the appropriate tool when given multiple options (calculator, weather, search). Demonstrates the agent's ability to match queries to tools based on descriptions.
+
 **Code**: [`code/02-multi-tool-agent.ts`](./code/02-multi-tool-agent.ts)
+**Run**: `tsx 07-agents-mcp/code/02-multi-tool-agent.ts`
 
 When you give an agent multiple tools, it automatically selects the right one for each query.
 
@@ -325,7 +331,7 @@ for (const query of queries) {
 
 ### Expected Output
 
-When you run `npx tsx 07-agents-mcp/code/02-multi-tool-agent.ts`:
+When you run `tsx 07-agents-mcp/code/02-multi-tool-agent.ts`:
 
 ```
 🎛️ Multi-Tool Agent Demo

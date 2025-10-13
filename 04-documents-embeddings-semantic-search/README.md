@@ -71,7 +71,10 @@ LLMs need text input, but your data comes in many formats:
 
 ### Example 1: Loading Text Files
 
+Demonstrates how to load text files using TextLoader and access document content and metadata.
+
 **Code**: [`code/01-load-text.ts`](./code/01-load-text.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/01-load-text.ts`
 
 First, create a sample text file:
 
@@ -105,10 +108,44 @@ console.log("Content:", docs[0].pageContent);
 console.log("Metadata:", docs[0].metadata);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/01-load-text.ts`, you'll see:
+
+```
+Loaded documents: 1
+Content: LangChain.js is a framework for building applications with large language models.
+
+It provides tools for:
+- Working with different AI providers
+- Managing prompts and templates
+- Processing and storing documents
+- Building RAG systems
+- Creating AI agents
+
+The framework is designed to be modular and composable, allowing developers
+to build complex AI applications by combining simple, reusable components.
+
+Metadata: {
+  source: './data/sample.txt'
+}
+```
+
+### How It Works
+
+**What's happening**:
+1. **Create sample data**: We write a text file to `./data/sample.txt`
+2. **Initialize TextLoader**: Pass the file path to the loader
+3. **Load**: Call `loader.load()` to read the file
+4. **Result**: Returns an array of `Document` objects
+
 **Key Points**:
-- `TextLoader` reads text files
-- Returns array of `Document` objects
-- Each document has `pageContent` and `metadata`
+- `TextLoader` reads text files and handles file I/O
+- Returns array of `Document` objects (even for single files, for consistency)
+- Each document has two main properties:
+  - `pageContent`: The actual text content
+  - `metadata`: Information about the document (source, etc.)
+- Metadata automatically includes the source file path
 
 ---
 
@@ -131,7 +168,10 @@ console.log("Metadata:", docs[0].metadata);
 
 ### Example 2: Text Splitting
 
+Shows how to split long documents into manageable chunks using RecursiveCharacterTextSplitter with configurable chunk size and overlap.
+
 **Code**: [`code/02-splitting.ts`](./code/02-splitting.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/02-splitting.ts`
 
 ```typescript
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
@@ -155,6 +195,37 @@ docs.forEach((doc, i) => {
   console.log(`Length: ${doc.pageContent.length} characters`);
 });
 ```
+
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/02-splitting.ts`, you'll see:
+
+```
+Split into 5 chunks
+
+Chunk 1:
+[First 500 characters of the article...]
+Length: 497 characters
+
+Chunk 2:
+[Next 500 characters with 50 character overlap...]
+Length: 503 characters
+
+Chunk 3:
+[...]
+```
+
+### How It Works
+
+**What's happening**:
+1. **Create splitter**: Configure `RecursiveCharacterTextSplitter` with `chunkSize: 500` and `chunkOverlap: 50`
+2. **Split text**: `createDocuments()` splits the text into manageable pieces
+3. **Each chunk**: Has approximately 500 characters, with 50 characters overlapping with adjacent chunks
+4. **Result**: Array of `Document` objects, each with a portion of the original text
+
+**Why these settings?**
+- `chunkSize: 500`: Small enough for focused retrieval, large enough for context
+- `chunkOverlap: 50`: 10% overlap preserves context between chunks
 
 **Splitter Types**:
 
@@ -191,7 +262,10 @@ Chunk 2: "mitochondria is the powerhouse of the cell..."
 
 ### Example 3: Comparing Overlap
 
+Compares document chunks with and without overlap to demonstrate how overlap preserves context between adjacent chunks.
+
 **Code**: [`code/03-overlap.ts`](./code/03-overlap.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/03-overlap.ts`
 
 ```typescript
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
@@ -220,6 +294,32 @@ console.log("\nWith overlap:");
 chunks2.forEach((doc, i) => console.log(`${i}: ${doc.pageContent}`));
 ```
 
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/03-overlap.ts`, you'll see the difference:
+
+```
+Without overlap:
+0: [First 100 chars] ...end of sentence
+1: New sentence starts... [next 100 chars]
+2: [next 100 chars]
+
+With overlap:
+0: [First 100 chars including] ...end of sentence. New
+1: sentence. New sentence starts... [90 more chars]
+2: [last 20 chars of previous] + [80 new chars]
+```
+
+### How It Works
+
+**What's happening**:
+- **Without overlap (chunkOverlap: 0)**: Chunks are cut exactly at 100 characters, potentially splitting mid-sentence
+- **With overlap (chunkOverlap: 20)**: Each chunk includes the last 20 characters from the previous chunk, preserving context
+
+**Why overlap matters**: Imagine splitting "The mitochondria is the powerhouse of the cell" at 25 characters:
+- Without overlap: Chunk 1 ends with "...is the", Chunk 2 starts with "powerhouse..." - context lost!
+- With overlap: Both chunks include "is the powerhouse", preserving meaning
+
 **Recommended overlap**: 10-20% of chunk size
 
 ---
@@ -233,7 +333,10 @@ Metadata helps you:
 
 ### Example 4: Working with Metadata
 
+Demonstrates adding and preserving metadata (source, category, date, author) through document loading and splitting operations.
+
 **Code**: [`code/04-metadata.ts`](./code/04-metadata.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/04-metadata.ts`
 
 ```typescript
 import { Document } from "langchain/document";
@@ -275,6 +378,52 @@ splitDocs.forEach((doc, i) => {
 });
 ```
 
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/04-metadata.ts`, you'll see:
+
+```
+Chunk 1:
+Content: LangChain.js is a framework for building AI apps...
+Metadata: {
+  source: 'langchain-guide.md',
+  category: 'tutorial',
+  date: '2024-01-15',
+  author: 'Tech Team'
+}
+
+Chunk 2:
+Content: ...
+Metadata: {
+  source: 'langchain-guide.md',
+  category: 'tutorial',
+  date: '2024-01-15',
+  author: 'Tech Team'
+}
+
+Chunk 3:
+Content: RAG systems combine retrieval with generation...
+Metadata: {
+  source: 'rag-explained.md',
+  category: 'advanced',
+  date: '2024-02-20'
+}
+```
+
+### How It Works
+
+**What's happening**:
+1. **Create documents with metadata**: Each `Document` has `pageContent` and custom `metadata`
+2. **Split documents**: `splitDocuments()` breaks them into chunks
+3. **Metadata is preserved**: Every chunk retains the metadata from its parent document
+4. **Use metadata for filtering**: Later you can filter by source, category, date, etc.
+
+**Real-world use cases**:
+- Filter search results by document type or date
+- Track which document a chunk came from
+- Implement access control (user permissions)
+- Build faceted search interfaces
+
 ---
 
 ## 🔢 Part 2: Embeddings & Semantic Search
@@ -314,7 +463,10 @@ Finds: "Preparing Italian noodles", "Making spaghetti", etc.
 
 ### Example 5: Basic Embeddings
 
+Creates text embeddings and calculates cosine similarity to show how similar text produces similar vector representations.
+
 **Code**: [`code/05-basic-embeddings.ts`](./code/05-basic-embeddings.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts`
 
 ```typescript
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -352,12 +504,32 @@ console.log("Similarity (LangChain vs LangChain):", cosineSimilarity(embedding, 
 console.log("Similarity (LangChain vs pizza):", cosineSimilarity(embedding, different).toFixed(3));
 ```
 
-**Output**:
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts`, you'll see:
+
 ```
 Embedding dimensions: 1536
+First 10 values: 0.023,-0.041,0.087,...
 Similarity (LangChain vs LangChain): 0.892
 Similarity (LangChain vs pizza): 0.124
 ```
+
+### How It Works
+
+**What's happening**:
+1. **Create embedding model**: Configure `OpenAIEmbeddings` with model name and API settings
+2. **Generate embedding**: Call `embedQuery()` to convert text into a 1536-dimensional vector
+3. **Compare embeddings**: Use cosine similarity to measure how similar two vectors are
+4. **Similarity scores**:
+   - 0.892 (LangChain vs LangChain): Very similar - both about the same topic
+   - 0.124 (LangChain vs pizza): Very different - unrelated topics
+
+**Key insights**:
+- **Similar meaning → Similar vectors**: "LangChain makes building AI apps easier" and "LangChain simplifies AI development" have similar embeddings
+- **Different meaning → Different vectors**: LangChain and pizza have very different embeddings
+- **Cosine similarity**: Measures the angle between vectors (1.0 = identical, 0.0 = orthogonal, -1.0 = opposite)
+- **Dimensions**: 1536 numbers capture the semantic meaning of the text
 
 ---
 
@@ -377,7 +549,10 @@ Vector stores are databases optimized for storing and searching embeddings.
 
 ### Example 6: In-Memory Vector Store
 
+Builds a vector store from documents and performs semantic similarity search to find relevant content based on meaning.
+
 **Code**: [`code/06-vector-store.ts`](./code/06-vector-store.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/06-vector-store.ts`
 
 ```typescript
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
@@ -414,14 +589,36 @@ results.forEach((doc, i) => {
 });
 ```
 
-**Output**:
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/06-vector-store.ts`, you'll see:
+
 ```
 Most similar documents:
 1. Fish are quiet pets that live in aquariums.
 2. Cats are independent pets that love to nap.
 ```
 
-Notice: The search found "indoors" matches even though the word "indoors" doesn't appear!
+Notice: The search found "indoors" matches even though the word "indoors" doesn't appear in any document!
+
+### How It Works
+
+**What's happening**:
+1. **Create documents**: Four documents about different pets
+2. **Create embeddings**: `fromDocuments()` automatically embeds each document
+3. **Store in vector store**: Embeddings are stored in memory (MemoryVectorStore)
+4. **Semantic search**: `similaritySearch("animals that live indoors", 2)` finds the 2 most similar documents
+5. **Results based on meaning**: Fish (aquariums = indoors) and Cats (nap = indoor activity) match best
+
+**Why semantic search wins**:
+- **Keyword search** would find nothing (no document contains "indoors" or "animals")
+- **Semantic search** understands that:
+  - Fish in aquariums → indoors
+  - Cats napping → typically indoors
+  - Birds flying freely → outdoors
+  - Dogs playing fetch → typically outdoors
+
+The AI understands *meaning*, not just words!
 
 ---
 
@@ -429,7 +626,10 @@ Notice: The search found "indoors" matches even though the word "indoors" doesn'
 
 ### Example 7: Search with Similarity Scores
 
+Performs similarity search with numerical scores to quantify how closely documents match the search query.
+
 **Code**: [`code/07-similarity-scores.ts`](./code/07-similarity-scores.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/07-similarity-scores.ts`
 
 ```typescript
 // ... setup code ...
@@ -445,19 +645,37 @@ resultsWithScores.forEach(([doc, score]) => {
 });
 ```
 
-**Output**:
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/07-similarity-scores.ts`, you'll see:
+
 ```
+Search results with similarity scores:
 Score: 0.812 - Fish are quiet pets that live in aquariums.
 Score: 0.794 - Cats are independent pets that love to nap.
 Score: 0.701 - Birds can sing beautiful songs and fly freely.
 Score: 0.623 - Dogs are loyal companions that enjoy playing fetch.
 ```
 
+### How It Works
+
+**What's happening**:
+1. **similaritySearchWithScore()**: Instead of just returning documents, this returns tuples of `[document, score]`
+2. **Scores indicate relevance**: Higher score = more similar to the query
+3. **Query**: "pets that need less attention"
+4. **Results ranked by relevance**:
+   - Fish (0.812): Very low maintenance
+   - Cats (0.794): Independent, less attention needed
+   - Birds (0.701): Moderate attention
+   - Dogs (0.623): High attention needed
+
 **Score interpretation**:
 - 1.0 = Identical
 - 0.8-0.9 = Very similar
 - 0.6-0.8 = Somewhat similar
 - <0.6 = Different topics
+
+**Use scores to**: Set similarity thresholds (e.g., only return results with score > 0.7), implement confidence-based filtering, or rank results for users
 
 ---
 
@@ -467,7 +685,10 @@ Creating embeddings one at a time is slow. Use batch processing!
 
 ### Example 8: Batch Embeddings
 
+Efficiently creates embeddings for multiple texts at once using batch processing, significantly faster than individual calls.
+
 **Code**: [`code/08-batch-embeddings.ts`](./code/08-batch-embeddings.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/08-batch-embeddings.ts`
 
 ```typescript
 const texts = [
@@ -486,10 +707,36 @@ console.log(`Created ${batchEmbeddings.length} embeddings`);
 console.log(`Each with ${batchEmbeddings[0].length} dimensions`);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/08-batch-embeddings.ts`, you'll see:
+
+```
+Batch embeddings: 124ms
+Created 5 embeddings
+Each with 1536 dimensions
+```
+
+### How It Works
+
+**What's happening**:
+1. **Create array of texts**: 5 different AI-related sentences
+2. **Batch embed**: `embedDocuments(texts)` embeds all at once
+3. **Result**: Array of 5 embeddings, each with 1536 dimensions
+4. **Performance**: Much faster than calling `embedQuery()` 5 times individually
+
+**Performance comparison**:
+- **Individual calls**: ~200ms × 5 = 1000ms
+- **Batch call**: ~120ms total
+- **Savings**: 8x faster!
+
 **Benefits**:
 - 5-10x faster than individual calls
-- Lower API costs
+- Lower API costs (fewer round trips)
 - More efficient resource usage
+- Better for processing large document collections
+
+**When to use**: Always prefer batch processing when you have multiple texts to embed at once (e.g., loading a document collection, processing user queries in bulk)
 
 ---
 

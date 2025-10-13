@@ -84,6 +84,9 @@ cd langchainjs-for-beginners
 
 # Install dependencies
 npm install
+
+# Install tsx globally
+npm install -g tsx
 ```
 
 This will install all required packages:
@@ -92,6 +95,31 @@ This will install all required packages:
 - `@langchain/langgraph` - Agent workflow orchestration
 - `langchain` - Main LangChain package
 - `dotenv` - Environment variable management
+
+### Why install tsx globally?
+
+**tsx** is a TypeScript execution engine that lets you run `.ts` files directly without compiling them first.
+
+**Without tsx**:
+```bash
+# You'd need to compile first, then run
+tsc myfile.ts        # Compile TypeScript → JavaScript
+node myfile.js       # Run the JavaScript file
+```
+
+**With tsx** (what we'll use):
+```bash
+# Run TypeScript files directly - no compilation step needed!
+tsx myfile.ts
+```
+
+**Benefits**:
+- ✅ **Faster development** - No compile step needed
+- ✅ **Simpler workflow** - One command instead of two
+- ✅ **Global installation** - Available everywhere on your system
+- ✅ **Perfect for learning** - Focus on code, not build processes
+
+Throughout this course, you'll run examples using `tsx filename.ts` - quick and easy!
 
 ---
 
@@ -231,7 +259,7 @@ Let's verify everything works!
 Run the following command in your terminal from the root of the project:
 
 ```bash
-npx tsx scripts/test-setup.ts
+tsx scripts/test-setup.ts
 ```
 
 ### Expected output:

@@ -71,7 +71,10 @@ Answer with Citations
 
 ### Example 1: Simple RAG
 
+Builds a complete RAG system that retrieves relevant documents from a vector store and uses them to answer questions accurately.
+
 **Code**: [`code/01-simple-rag.ts`](./code/01-simple-rag.ts)
+**Run**: `tsx 06-rag-systems/code/01-simple-rag.ts`
 
 ```typescript
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
@@ -130,6 +133,33 @@ console.log("Answer:", response.answer);
 console.log("Source docs:", response.context.length);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 06-rag-systems/code/01-simple-rag.ts`, you'll see:
+
+```
+Answer: LangChain.js was released in 2022.
+Source docs: 2
+```
+
+### How It Works
+
+**The RAG Flow**:
+1. **Create knowledge base**: Two documents about LangChain.js and RAG
+2. **Embed documents**: Convert documents to vectors and store in MemoryVectorStore
+3. **User asks question**: "When was LangChain.js released?"
+4. **Retrieve**: Retriever finds the 2 most relevant documents
+5. **Generate**: LLM receives context + question and generates answer
+6. **Result**: Accurate answer based on the retrieved documents
+
+**Key components**:
+- `createRetrievalChain`: Combines retrieval + generation
+- `createStuffDocumentsChain`: "Stuffs" retrieved docs into the prompt
+- `response.answer`: The AI's answer
+- `response.context`: The retrieved documents used
+
+**Why it works**: The LLM has access to specific information (2022 release date) that it wouldn't know from training alone!
+
 ---
 
 ## 🔗 LCEL (LangChain Expression Language)
@@ -138,7 +168,10 @@ LCEL lets you chain operations using the pipe operator.
 
 ### Example 2: RAG with LCEL
 
+Demonstrates using LCEL (LangChain Expression Language) to build elegant RAG chains with the pipe operator for cleaner, more maintainable code.
+
 **Code**: [`code/02-rag-lcel.ts`](./code/02-rag-lcel.ts)
+**Run**: `tsx 06-rag-systems/code/02-rag-lcel.ts`
 
 ```typescript
 import { StringOutputParser } from "@langchain/core/output_parsers";
@@ -165,11 +198,31 @@ const answer = await ragChain.invoke("What is RAG?");
 console.log(answer);
 ```
 
+### Expected Output
+
+When you run this example with `tsx 06-rag-systems/code/02-rag-lcel.ts`, you'll see:
+
+```
+RAG (Retrieval Augmented Generation) systems combine document retrieval with AI generation to provide accurate, sourced answers based on your custom knowledge base.
+```
+
+### How It Works
+
+**LCEL Pipeline**:
+1. **Input**: Question flows into the chain
+2. **Parallel operations**:
+   - `context`: Retrieve docs → format them
+   - `question`: Pass through unchanged
+3. **Prompt**: Combine context + question
+4. **Model**: Generate answer
+5. **Parser**: Extract string output
+
 **Benefits of LCEL**:
-- Clean, readable syntax
-- Easy to modify and test
-- Supports streaming
+- Clean, readable syntax with `.pipe()`
+- Easy to modify and test individual components
+- Supports streaming out of the box
 - Built-in error handling
+- Type-safe composition
 
 ---
 
@@ -203,9 +256,12 @@ Raw Material → [Process 1 | Process 2 | Process 3] → Combine → Ship
 
 Run multiple operations at once for better performance:
 
-**Example 4: Parallel RAG Queries**
+### Example 4: Parallel RAG Queries
+
+Demonstrates running multiple operations in parallel (document retrieval, summarization) for better performance and richer context.
 
 **Code**: [`code/04-parallel-lcel.ts`](./code/04-parallel-lcel.ts)
+**Run**: `tsx 06-rag-systems/code/04-parallel-lcel.ts`
 
 ```typescript
 import { RunnableParallel, RunnablePassthrough } from "@langchain/core/runnables";
@@ -233,18 +289,38 @@ const fullChain = parallelChain.pipe(prompt).pipe(model).pipe(new StringOutputPa
 const result = await fullChain.invoke("What is RAG?");
 ```
 
+### Expected Output
+
+When you run this example with `tsx 06-rag-systems/code/04-parallel-lcel.ts`, you'll see the AI's comprehensive answer that incorporates information from all three parallel operations.
+
+### How It Works
+
+**Parallel Execution Flow**:
+1. **Three operations execute simultaneously** (not sequentially):
+   - Operation 1: Retrieve and format full documents
+   - Operation 2: Generate a summary of those documents (first 100 chars)
+   - Operation 3: Pass through the original question
+2. **All results combine** into a single object: `{ docs, summary, question }`
+3. **Send to prompt** which receives all three pieces of context
+4. **LLM generates answer** using comprehensive information from multiple sources
+
 **Why Parallel?**
-- ⚡ **Faster**: Multiple operations run simultaneously
-- 🔄 **Efficient**: Better resource utilization
-- 📊 **Rich Context**: Combine multiple data sources
+- ⚡ **Faster**: Multiple operations run simultaneously (vs sequentially)
+- 🔄 **Efficient**: Better resource utilization and lower latency
+- 📊 **Rich Context**: Combine multiple data sources for more informed answers
+
+**Performance gain**: If each operation takes 100ms, sequential would take 300ms total. Parallel takes ~100ms (the longest operation).
 
 ### 2. Fallback Chains
 
 Handle failures gracefully by trying alternative approaches:
 
-**Example 5: RAG with Fallback**
+### Example 5: RAG with Fallback
+
+Implements fallback chains that gracefully handle failures by trying alternative approaches when the primary chain fails.
 
 **Code**: [`code/05-fallback-lcel.ts`](./code/05-fallback-lcel.ts)
+**Run**: `tsx 06-rag-systems/code/05-fallback-lcel.ts`
 
 ```typescript
 import { RunnableWithFallbacks } from "@langchain/core/runnables";
@@ -281,18 +357,43 @@ const robustChain = primaryChain.withFallbacks({
 const answer = await robustChain.invoke("What is quantum computing?");
 ```
 
+### Expected Output
+
+When you run this example with `tsx 06-rag-systems/code/05-fallback-lcel.ts`, you'll see:
+
+```
+Quantum computing is a type of computing that uses quantum-mechanical phenomena, such as superposition and entanglement, to perform operations on data. Unlike classical computers that use bits (0 or 1), quantum computers use quantum bits or qubits, which can represent both 0 and 1 simultaneously...
+```
+
+Notice: Since "quantum computing" isn't in the knowledge base, the system automatically falls back to the LLM's general knowledge.
+
+### How It Works
+
+**Fallback Flow**:
+1. **Try primary chain**: Attempt to retrieve documents about "quantum computing"
+2. **No relevant docs found**: Vector store has no information about quantum computing
+3. **Primary chain fails**: Can't answer from custom knowledge base
+4. **Automatically switch to fallback**: Use the fallback chain with general knowledge
+5. **LLM answers**: Uses its training data instead of custom documents
+
+**Key insight**: The user gets an answer either way - from your documents if available, or from general knowledge if not.
+
 **Use Cases**:
 - 🛡️ **Error recovery**: Try different models if one fails
 - 🎯 **Quality control**: Fall back to simpler approach if needed
 - 💰 **Cost optimization**: Try cheaper model first, upgrade if needed
+- 📚 **Coverage**: Provide answers even when documents don't cover the topic
 
 ### 3. Conditional Branching
 
 Route inputs to different chains based on conditions:
 
-**Example 6: Smart RAG Router**
+### Example 6: Smart RAG Router
+
+Uses conditional branching to route simple vs complex questions to different chains with appropriate processing depth.
 
 **Code**: [`code/06-branch-lcel.ts`](./code/06-branch-lcel.ts)
+**Run**: `tsx 06-rag-systems/code/06-branch-lcel.ts`
 
 ```typescript
 import { RunnableBranch } from "@langchain/core/runnables";
@@ -332,6 +433,48 @@ const complex = await branchingChain.invoke(
   "Can you explain the differences between RAG, fine-tuning, and prompt engineering, including when to use each?"
 );
 ```
+
+### Expected Output
+
+When you run this example with `tsx 06-rag-systems/code/06-branch-lcel.ts`, you'll see:
+
+**Simple question** ("What is RAG?" - 12 characters):
+```
+RAG is Retrieval Augmented Generation - it combines document retrieval with AI to answer questions.
+```
+(Short response, no document retrieval)
+
+**Complex question** (87 characters):
+```
+Here's a comprehensive comparison:
+
+RAG (Retrieval Augmented Generation):
+- Best for: Providing accurate answers from custom knowledge bases
+- When to use: You have specific documents/data and need sourced answers
+[...detailed explanation with context from retrieved documents...]
+
+Fine-tuning:
+- Best for: Teaching the model new patterns or domain-specific knowledge
+[...continues with detailed comparison...]
+```
+(Long response with full document retrieval and context)
+
+### How It Works
+
+**Branching Logic**:
+1. **Check condition**: Is the question length < 50 characters?
+2. **Route to appropriate chain**:
+   - **Simple (< 50 chars)**: Use fast path without retrieval, max 100 tokens
+   - **Complex (≥ 50 chars)**: Use thorough path with retrieval, max 500 tokens
+3. **Process accordingly**: Different processing depth based on question complexity
+
+**Why branch?**
+- ⚡ **Performance**: Don't waste time retrieving docs for simple questions
+- 💰 **Cost**: Shorter responses for simple queries = lower costs
+- 🎯 **Quality**: Complex questions get more thorough treatment
+- 🧠 **Intelligence**: System adapts to the user's needs
+
+**Real-world use**: Build intelligent routing for customer support (quick FAQs vs detailed troubleshooting).
 
 ### 4. Streaming with LCEL
 
