@@ -13,6 +13,8 @@ By the end of this chapter, you'll be able to:
 - Deploy applications using Azure AI Foundry
 - Implement monitoring with LangSmith
 - Handle errors and fallbacks
+- Evaluate and test LLM outputs
+- Use LLM-as-judge for quality assessment
 - Optimize for cost and performance
 - Cache responses for efficiency
 
@@ -263,11 +265,284 @@ for await (const chunk of await model.stream("Long question...")) {
 
 ---
 
+## 🧪 Evaluation & Testing
+
+Testing AI applications is different from testing traditional software. You need to evaluate quality, not just correctness.
+
+### The Restaurant Quality Control Analogy
+
+**Traditional Software Testing (Binary)**:
+```
+✅ Order total = $25.50? → Pass
+❌ Order total = $25.49? → Fail
+```
+
+**AI Testing (Quality-based)**:
+```
+Question: "Explain photosynthesis"
+
+Output A: "Plants use sunlight..." → How good? (1-5)
+Output B: "Green stuff makes energy..." → How good? (1-5)
+Output C: "Photosynthesis is the process..." → How good? (1-5)
+
+All are "correct" but vary in quality!
+```
+
+**Think of it like restaurant quality control:**
+- ✅ Food safety (must pass) = Traditional tests
+- 📊 Taste, presentation, service = AI evaluation
+
+### Why Evaluate LLM Outputs?
+
+- ✅ **Catch hallucinations**: Ensure factual accuracy
+- ✅ **Maintain quality**: Consistent response quality
+- ✅ **Compare prompts**: A/B test different approaches
+- ✅ **Detect regressions**: Ensure updates don't break things
+- ✅ **Optimize costs**: Find the cheapest model that meets quality standards
+
+### Types of Evaluation
+
+#### 1. Manual Evaluation (Human Review)
+
+Good for initial development, small scale.
+
+```typescript
+// Generate responses and manually review
+const responses = [
+  await model.invoke("Question 1"),
+  await model.invoke("Question 2"),
+  await model.invoke("Question 3"),
+];
+
+// Manually rate each response
+// 1 = Poor, 5 = Excellent
+```
+
+#### 2. Automated Metrics
+
+Check specific criteria programmatically.
+
+**Example 5: Automated Evaluation**
+
+**Code**: [`code/05-evaluation.ts`](./code/05-evaluation.ts)
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import "dotenv/config";
+
+async function evaluateResponse(question: string, answer: string) {
+  // Check response length
+  const hasMinLength = answer.length >= 50;
+
+  // Check for key terms
+  const hasRelevantTerms = question.toLowerCase().split(" ").some(term =>
+    answer.toLowerCase().includes(term)
+  );
+
+  // Check response time
+  const startTime = Date.now();
+  // ... generate response ...
+  const responseTime = Date.now() - startTime;
+  const isFast = responseTime < 5000; // Under 5 seconds
+
+  return {
+    length: hasMinLength ? "✅" : "❌",
+    relevance: hasRelevantTerms ? "✅" : "❌",
+    speed: isFast ? "✅" : "❌",
+    score: [hasMinLength, hasRelevantTerms, isFast].filter(Boolean).length / 3,
+  };
+}
+
+// Test multiple responses
+const testCases = [
+  { question: "What is TypeScript?", expectedKeywords: ["typescript", "type", "javascript"] },
+  { question: "Explain RAG systems", expectedKeywords: ["retrieval", "generation", "documents"] },
+];
+
+for (const test of testCases) {
+  const answer = await model.invoke(test.question);
+  const evaluation = await evaluateResponse(test.question, answer.content);
+
+  console.log(`Question: ${test.question}`);
+  console.log(`Evaluation:`, evaluation);
+  console.log(`Score: ${(evaluation.score * 100).toFixed(0)}%`);
+}
+```
+
+#### 3. LLM-as-Judge Evaluation
+
+Use another LLM to evaluate responses!
+
+**Example 6: LLM-as-Judge**
+
+**Code**: [`code/06-llm-judge.ts`](./code/06-llm-judge.ts)
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { z } from "zod";
+import "dotenv/config";
+
+async function evaluateWithLLM(question: string, answer: string) {
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL || "gpt-4o-mini",
+    configuration: {
+      baseURL: process.env.AI_ENDPOINT,
+    },
+    apiKey: process.env.AI_API_KEY,
+  });
+
+  // Define evaluation schema
+  const EvaluationSchema = z.object({
+    accuracy: z.number().min(1).max(5).describe("Factual accuracy (1-5)"),
+    completeness: z.number().min(1).max(5).describe("How complete is the answer (1-5)"),
+    clarity: z.number().min(1).max(5).describe("How clear and well-written (1-5)"),
+    relevance: z.number().min(1).max(5).describe("How relevant to the question (1-5)"),
+    reasoning: z.string().describe("Brief explanation of the scores"),
+  });
+
+  const evaluator = model.withStructuredOutput(EvaluationSchema);
+
+  const evaluationPrompt = ChatPromptTemplate.fromTemplate(`
+You are an expert evaluator. Rate the following answer on a scale of 1-5 for each criterion.
+
+Question: {question}
+Answer: {answer}
+
+Provide scores and brief reasoning.`);
+
+  const chain = evaluationPrompt.pipe(evaluator);
+
+  const evaluation = await chain.invoke({ question, answer });
+
+  const averageScore = (
+    evaluation.accuracy +
+    evaluation.completeness +
+    evaluation.clarity +
+    evaluation.relevance
+  ) / 4;
+
+  return {
+    ...evaluation,
+    averageScore,
+  };
+}
+
+// Test it
+const question = "What is machine learning?";
+const answer = await model.invoke(question);
+
+const evaluation = await evaluateWithLLM(question, answer.content);
+
+console.log("📊 Evaluation Results:");
+console.log(`   Accuracy: ${evaluation.accuracy}/5`);
+console.log(`   Completeness: ${evaluation.completeness}/5`);
+console.log(`   Clarity: ${evaluation.clarity}/5`);
+console.log(`   Relevance: ${evaluation.relevance}/5`);
+console.log(`   Average: ${evaluation.averageScore.toFixed(2)}/5`);
+console.log(`\n💭 Reasoning: ${evaluation.reasoning}`);
+```
+
+### Testing Strategies
+
+#### 1. Golden Dataset Testing
+
+Create a set of test questions with expected characteristics:
+
+```typescript
+const goldenDataset = [
+  {
+    question: "What is TypeScript?",
+    expectedKeywords: ["javascript", "type", "static"],
+    expectedLength: { min: 100, max: 500 },
+  },
+  {
+    question: "Explain async/await",
+    expectedKeywords: ["promise", "asynchronous", "await"],
+    expectedLength: { min: 150, max: 600 },
+  },
+];
+
+// Test all golden examples
+for (const test of goldenDataset) {
+  const response = await model.invoke(test.question);
+  const passes = validateResponse(response, test);
+  console.log(`${test.question}: ${passes ? "✅" : "❌"}`);
+}
+```
+
+#### 2. Regression Testing
+
+Ensure new changes don't break existing functionality:
+
+```typescript
+// Save baseline responses
+const baseline = {
+  "What is RAG?": "Previous response...",
+  "Explain LCEL": "Previous response...",
+};
+
+// After making changes, compare
+for (const [question, oldAnswer] of Object.entries(baseline)) {
+  const newAnswer = await model.invoke(question);
+  const similarity = calculateSimilarity(oldAnswer, newAnswer.content);
+
+  if (similarity < 0.7) {
+    console.warn(`⚠️ Response changed significantly for: ${question}`);
+  }
+}
+```
+
+#### 3. A/B Testing Prompts
+
+Compare different prompt strategies:
+
+```typescript
+const promptA = "Explain {topic} in simple terms.";
+const promptB = "You are an expert teacher. Explain {topic} clearly with examples.";
+
+const results = {
+  A: await evaluateBatch(promptA, testQuestions),
+  B: await evaluateBatch(promptB, testQuestions),
+};
+
+console.log(`Prompt A average score: ${results.A.avgScore}`);
+console.log(`Prompt B average score: ${results.B.avgScore}`);
+console.log(`Winner: ${results.B.avgScore > results.A.avgScore ? "B" : "A"}`);
+```
+
+### Best Practices
+
+1. **Start with manual evaluation** - Understand what "good" looks like
+2. **Build automated checks** - Scale your evaluation
+3. **Use LLM-as-judge for quality** - Evaluate nuanced aspects
+4. **Track metrics over time** - Monitor for regressions
+5. **Test edge cases** - Unusual inputs, long texts, special characters
+6. **Evaluate costs** - Balance quality vs. expense
+
+### Evaluation Checklist
+
+Before deploying to production:
+
+- [ ] Manual review of diverse examples
+- [ ] Automated tests for critical paths
+- [ ] Quality evaluation (LLM-as-judge)
+- [ ] Performance benchmarks (latency, cost)
+- [ ] Edge case testing
+- [ ] Regression tests
+- [ ] A/B test different approaches
+- [ ] Monitor with LangSmith in staging
+
+---
+
 ## 🎓 Key Takeaways
 
 - ✅ **Provider flexibility**: Don't lock into one vendor
 - ✅ **Azure AI Foundry**: Production-ready deployment
 - ✅ **LangSmith**: Monitor and debug your chains
+- ✅ **Evaluation is critical**: Test quality, not just correctness
+- ✅ **LLM-as-judge**: Use AI to evaluate AI responses
+- ✅ **Automated testing**: Scale evaluation with automated checks
 - ✅ **Fallbacks**: Handle failures gracefully
 - ✅ **Caching**: Save money on duplicate requests
 - ✅ **Optimize models**: Use the right model for each task

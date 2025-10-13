@@ -12,6 +12,7 @@ By the end of this chapter, you'll be able to:
 - Understand the RAG (Retrieval Augmented Generation) architecture
 - Build a question-answering system over custom documents
 - Use LCEL (LangChain Expression Language) to create chains
+- Master advanced LCEL patterns (parallel, fallback, branching)
 - Implement different retrieval strategies
 - Handle context and citations properly
 
@@ -172,6 +173,229 @@ console.log(answer);
 
 ---
 
+## ⚡ Advanced LCEL Patterns
+
+LCEL is more powerful than simple piping. Let's explore advanced patterns that make your chains more robust and flexible.
+
+### The Assembly Line Analogy
+
+**Think of LCEL like a factory assembly line:**
+
+**Simple Line** (what we've seen):
+```
+Raw Material → Process → Package → Ship
+```
+
+**Advanced Line** (what we'll learn):
+```
+Raw Material → [Process A OR Process B] → Package → Ship
+                ↓ (if Process A fails)
+              Fallback Process
+```
+
+Or run multiple processes in parallel:
+```
+Raw Material → [Process 1 | Process 2 | Process 3] → Combine → Ship
+             (all running at same time)
+```
+
+### 1. Parallel Execution
+
+Run multiple operations at once for better performance:
+
+**Example 4: Parallel RAG Queries**
+
+**Code**: [`code/04-parallel-lcel.ts`](./code/04-parallel-lcel.ts)
+
+```typescript
+import { RunnableParallel, RunnablePassthrough } from "@langchain/core/runnables";
+import { StringOutputParser } from "@langchain/core/output_parsers";
+
+// Run multiple retrievers in parallel
+const parallelChain = RunnableParallel.from({
+  // Get relevant documents
+  docs: retriever.pipe(formatDocs),
+
+  // Get summary of documents
+  summary: retriever.pipe(async (docs) => {
+    const content = docs.map(d => d.pageContent).join(" ");
+    return `Summary: ${content.slice(0, 100)}...`;
+  }),
+
+  // Pass through the original question
+  question: new RunnablePassthrough(),
+});
+
+// Then send all to LLM
+const fullChain = parallelChain.pipe(prompt).pipe(model).pipe(new StringOutputParser());
+
+// All three operations run at the same time!
+const result = await fullChain.invoke("What is RAG?");
+```
+
+**Why Parallel?**
+- ⚡ **Faster**: Multiple operations run simultaneously
+- 🔄 **Efficient**: Better resource utilization
+- 📊 **Rich Context**: Combine multiple data sources
+
+### 2. Fallback Chains
+
+Handle failures gracefully by trying alternative approaches:
+
+**Example 5: RAG with Fallback**
+
+**Code**: [`code/05-fallback-lcel.ts`](./code/05-fallback-lcel.ts)
+
+```typescript
+import { RunnableWithFallbacks } from "@langchain/core/runnables";
+
+// Primary chain: Try to answer from documents
+const primaryChain = RunnableSequence.from([
+  {
+    context: retriever.pipe(formatDocs),
+    question: new RunnablePassthrough(),
+  },
+  prompt,
+  model,
+  new StringOutputParser(),
+]);
+
+// Fallback chain: If no docs found, use general knowledge
+const fallbackPrompt = ChatPromptTemplate.fromMessages([
+  ["system", "Answer this question using your general knowledge:"],
+  ["human", "{question}"],
+]);
+
+const fallbackChain = RunnableSequence.from([
+  fallbackPrompt,
+  model,
+  new StringOutputParser(),
+]);
+
+// Combine with fallback
+const robustChain = primaryChain.withFallbacks({
+  fallbacks: [fallbackChain],
+});
+
+// If retriever fails or finds nothing, automatically uses fallback
+const answer = await robustChain.invoke("What is quantum computing?");
+```
+
+**Use Cases**:
+- 🛡️ **Error recovery**: Try different models if one fails
+- 🎯 **Quality control**: Fall back to simpler approach if needed
+- 💰 **Cost optimization**: Try cheaper model first, upgrade if needed
+
+### 3. Conditional Branching
+
+Route inputs to different chains based on conditions:
+
+**Example 6: Smart RAG Router**
+
+**Code**: [`code/06-branch-lcel.ts`](./code/06-branch-lcel.ts)
+
+```typescript
+import { RunnableBranch } from "@langchain/core/runnables";
+
+// Simple questions → fast path
+const simpleChain = RunnableSequence.from([
+  prompt,
+  model.bind({ max_tokens: 100 }), // Shorter response
+  new StringOutputParser(),
+]);
+
+// Complex questions → thorough path
+const complexChain = RunnableSequence.from([
+  {
+    context: retriever.pipe(formatDocs),
+    question: new RunnablePassthrough(),
+  },
+  prompt,
+  model.bind({ max_tokens: 500 }), // Longer response
+  new StringOutputParser(),
+]);
+
+// Branch based on question complexity
+const branchingChain = RunnableBranch.from([
+  [
+    // Condition: is question simple?
+    (input) => input.length < 50,
+    simpleChain,
+  ],
+  // Default: use complex chain
+  complexChain,
+]);
+
+// Automatically picks the right path
+const simple = await branchingChain.invoke("What is RAG?");
+const complex = await branchingChain.invoke(
+  "Can you explain the differences between RAG, fine-tuning, and prompt engineering, including when to use each?"
+);
+```
+
+### 4. Streaming with LCEL
+
+Get responses as they're generated:
+
+```typescript
+// Any LCEL chain can stream!
+const streamingChain = RunnableSequence.from([
+  {
+    context: retriever.pipe(formatDocs),
+    question: new RunnablePassthrough(),
+  },
+  prompt,
+  model,
+  new StringOutputParser(),
+]);
+
+// Stream the response
+const stream = await streamingChain.stream("Explain RAG systems");
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk);
+}
+```
+
+### 5. Custom Functions with RunnableLambda
+
+Add custom logic anywhere in your chain:
+
+```typescript
+import { RunnableLambda } from "@langchain/core/runnables";
+
+// Custom function to clean and format documents
+const cleanDocs = new RunnableLambda({
+  func: async (docs) => {
+    return docs
+      .map(d => d.pageContent)
+      .map(content => content.trim())
+      .filter(content => content.length > 20)
+      .join("\n\n=====\n\n");
+  },
+});
+
+const chain = RunnableSequence.from([
+  retriever,
+  cleanDocs,  // Custom processing
+  prompt,
+  model,
+  new StringOutputParser(),
+]);
+```
+
+### LCEL Power Patterns Summary
+
+| Pattern | Use Case | Example |
+|---------|----------|---------|
+| **Parallel** | Speed + efficiency | Multiple retrievers, multi-source data |
+| **Fallback** | Error handling | Backup models, alternative approaches |
+| **Branch** | Conditional logic | Route by complexity, language, type |
+| **Streaming** | Real-time UX | Chatbots, live responses |
+| **Lambda** | Custom logic | Data transformation, filtering |
+
+---
+
 ## 🎯 Retrieval Strategies
 
 ### 1. Similarity Search (Default)
@@ -239,6 +463,9 @@ const retriever = new ContextualCompressionRetriever({
 
 - ✅ **RAG = Retrieval + Generation**: Find relevant docs, then generate answers
 - ✅ **LCEL makes chains elegant**: Use pipes to connect components
+- ✅ **Advanced LCEL patterns**: Parallel execution, fallbacks, conditional branching
+- ✅ **Streaming for real-time UX**: Get responses as they're generated
+- ✅ **Custom logic with RunnableLambda**: Add your own processing anywhere
 - ✅ **Multiple retrieval strategies**: Similarity, MMR, score threshold
 - ✅ **Source attribution**: Know where answers come from
 - ✅ **No fine-tuning needed**: Works with any documents

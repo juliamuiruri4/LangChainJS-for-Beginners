@@ -13,6 +13,7 @@ By the end of this chapter, you'll be able to:
 - Use variables and dynamic content in prompts
 - Implement few-shot prompting (teaching by example)
 - Combine multiple prompts together
+- Generate structured outputs with Zod schemas
 - Understand when and why to use templates
 
 ---
@@ -365,6 +366,171 @@ main().catch(console.error);
 
 ---
 
+## 📋 Structured Outputs
+
+So far, we've been getting text responses from AI models. But what if you need **structured data** - like JSON objects with specific fields?
+
+### The Form Analogy
+
+**Think about asking someone for their contact information:**
+
+❌ **Without structure**:
+```
+"Tell me about yourself"
+Response: "Well, I'm John, I live somewhere in Seattle,
+my email is... let me think... john@something.com, and my phone
+number is... hmm, I think it's 555-1234"
+```
+
+✅ **With structure** (a form):
+```
+Name: [____]
+Email: [____]
+Phone: [____]
+City: [____]
+```
+
+**Structured outputs work the same way!** Instead of parsing free text, you get data in the exact format you need.
+
+### Why Use Structured Outputs?
+
+- ✅ **Type Safety**: TypeScript types match AI output
+- ✅ **Validation**: Ensure data meets requirements
+- ✅ **Parsing**: No need to parse free text
+- ✅ **Consistency**: Always get the same format
+- ✅ **Integration**: Easy to use with databases, APIs, etc.
+
+### Example 5: Basic Structured Output
+
+**Code**: [`code/05-structured-output.ts`](./code/05-structured-output.ts)
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import { z } from "zod";
+import "dotenv/config";
+
+async function main() {
+  console.log("📋 Structured Output Example\n");
+
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL || "gpt-4o-mini",
+    configuration: {
+      baseURL: process.env.AI_ENDPOINT,
+    },
+    apiKey: process.env.AI_API_KEY,
+  });
+
+  // Define the structure using Zod schema
+  const PersonSchema = z.object({
+    name: z.string().describe("The person's full name"),
+    age: z.number().describe("The person's age in years"),
+    email: z.string().email().describe("The person's email address"),
+    occupation: z.string().describe("The person's job or profession"),
+  });
+
+  // Create a model that returns structured output
+  const structuredModel = model.withStructuredOutput(PersonSchema);
+
+  // Now the AI returns typed data, not just text!
+  const result = await structuredModel.invoke(
+    "My name is Alice Johnson, I'm 28 years old, work as a software engineer, and you can reach me at alice.j@email.com"
+  );
+
+  console.log("✅ Structured Output (typed!):\n");
+  console.log(result);
+  console.log("\n📝 Accessing fields:");
+  console.log(`   Name: ${result.name}`);
+  console.log(`   Age: ${result.age}`);
+  console.log(`   Email: ${result.email}`);
+  console.log(`   Occupation: ${result.occupation}`);
+}
+
+main().catch(console.error);
+```
+
+**Key Points**:
+- `z.object()` defines the structure
+- `.describe()` tells the AI what each field means
+- `withStructuredOutput()` ensures the AI returns data in that format
+- Result is fully typed in TypeScript!
+
+### Example 6: Complex Structured Data
+
+**Code**: [`code/06-zod-schemas.ts`](./code/06-zod-schemas.ts)
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { z } from "zod";
+import "dotenv/config";
+
+async function main() {
+  console.log("🏢 Complex Structured Output Example\n");
+
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL || "gpt-4o-mini",
+    configuration: {
+      baseURL: process.env.AI_ENDPOINT,
+    },
+    apiKey: process.env.AI_API_KEY,
+  });
+
+  // Define a complex nested schema
+  const CompanySchema = z.object({
+    name: z.string().describe("Company name"),
+    founded: z.number().describe("Year the company was founded"),
+    headquarters: z.object({
+      city: z.string(),
+      country: z.string(),
+    }).describe("Company headquarters location"),
+    products: z.array(z.string()).describe("List of main products or services"),
+    employeeCount: z.number().describe("Approximate number of employees"),
+    isPublic: z.boolean().describe("Whether the company is publicly traded"),
+  });
+
+  // Create structured model
+  const structuredModel = model.withStructuredOutput(CompanySchema);
+
+  // Create a prompt template
+  const template = ChatPromptTemplate.fromMessages([
+    ["system", "Extract company information from the text. If information is not available, make reasonable estimates."],
+    ["human", "{text}"],
+  ]);
+
+  // Combine template with structured output
+  const chain = template.pipe(structuredModel);
+
+  const companyInfo = `
+    Microsoft was founded in 1975 and is headquartered in Redmond, Washington.
+    The company is publicly traded and has over 220,000 employees worldwide.
+    Their main products include Windows, Office, Azure, and Xbox.
+  `;
+
+  const result = await chain.invoke({ text: companyInfo });
+
+  console.log("✅ Extracted Company Data:\n");
+  console.log(JSON.stringify(result, null, 2));
+
+  console.log("\n📊 Type-safe access:");
+  console.log(`   ${result.name} (${result.isPublic ? "Public" : "Private"})`);
+  console.log(`   Founded: ${result.founded}`);
+  console.log(`   Location: ${result.headquarters.city}, ${result.headquarters.country}`);
+  console.log(`   Products: ${result.products.join(", ")}`);
+  console.log(`   Employees: ${result.employeeCount.toLocaleString()}`);
+}
+
+main().catch(console.error);
+```
+
+**When to Use Structured Outputs**:
+- 📊 **Data extraction** from text
+- 🗂️ **Database inserts** with validated data
+- 🔄 **API responses** with guaranteed format
+- 🎯 **Form filling** from natural language
+- ✅ **Classification tasks** with predefined categories
+
+---
+
 ## 🎓 Key Takeaways
 
 - ✅ **Templates reduce code duplication** - Write once, use everywhere
@@ -373,6 +539,8 @@ main().catch(console.error);
 - ✅ **PromptTemplate for simple cases** - String-based templates
 - ✅ **Few-shot prompting** - Teach by example for better results
 - ✅ **Composition** - Combine templates for complex prompts
+- ✅ **Structured outputs with Zod** - Get typed data, not just text
+- ✅ **Type safety** - Validate AI responses match your schema
 - ✅ **Maintainability** - Update prompts in one place
 
 ---

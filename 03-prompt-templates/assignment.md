@@ -7,7 +7,7 @@ Practice creating reusable, maintainable prompts using templates, few-shot learn
 ## Prerequisites
 
 - Completed [Chapter 3](./README.md)
-- Run all four code examples
+- Run all code examples (including structured outputs examples)
 - Understand template syntax and composition
 
 ---
@@ -166,6 +166,45 @@ const templates = {
 
 ---
 
+## Bonus Challenge 2: Product Data Extractor with Structured Outputs 🏷️
+
+**Goal**: Build a system that extracts product information into validated, typed data structures.
+
+**Tasks**:
+1. Create `product-extractor.ts`
+2. Define a Zod schema for product information:
+   ```typescript
+   {
+     name: string,
+     price: number,
+     category: string (enum: Electronics, Clothing, Food, Books, Home),
+     inStock: boolean,
+     rating: number (1-5),
+     features: string[]
+   }
+   ```
+3. Use `withStructuredOutput()` to extract product data
+4. Test with product descriptions in various formats:
+   - Formal product listings
+   - Casual marketplace descriptions
+   - Mixed content (reviews + specifications)
+5. Validate that all outputs match your schema
+6. Handle edge cases (missing information)
+
+**Example Inputs**:
+- "MacBook Pro 16-inch with M3 chip, $2,499. Currently in stock. Users rate it 4.8/5. Features: Liquid Retina display, 18-hour battery, 1TB SSD"
+- "Cozy wool sweater, blue color, medium size. $89, available now! Customers love it - 4.5 stars. Hand-washable, made in Ireland"
+- "The Great Gatsby by F. Scott Fitzgerald. Classic novel, paperback edition for $12.99. In stock. Rated 4.9 stars. 180 pages, published 1925"
+
+**Success Criteria**:
+- All outputs are properly typed
+- Schema validation works correctly
+- Handles various input formats
+- Correctly categorizes products
+- Gracefully handles missing data
+
+---
+
 ## Submission Checklist
 
 Before moving to Chapter 4, make sure you've completed:
@@ -174,7 +213,8 @@ Before moving to Chapter 4, make sure you've completed:
 - [ ] Challenge 2: Few-shot format teacher with JSON output
 - [ ] Challenge 3: Multi-language translation system
 - [ ] Challenge 4: Dynamic prompt builder
-- [ ] Bonus: Prompt template library (optional)
+- [ ] Bonus 1: Prompt template library (optional)
+- [ ] Bonus 2: Product data extractor with structured outputs (optional)
 
 ---
 
