@@ -7,7 +7,7 @@ import "dotenv/config";
 
 const prompt = "Write a catchy tagline for a coffee shop.";
 const isCI = process.env.CI === "true";
-const temperatures = isCI ? [0, 1, 2] : [0, 0.5, 1, 1.5, 2]; // Reduce in CI mode
+const temperatures = isCI ? [0, 1] : [0, 0.5, 1, 1.5, 2]; // Reduce in CI mode
 const trialsPerTemp = isCI ? 1 : 3; // Reduce trials in CI mode
 
 async function temperatureExperiment() {
@@ -37,8 +37,10 @@ async function temperatureExperiment() {
       responses.push(content);
       console.log(`Try ${trial}: "${content}"`);
 
-      // Small delay to avoid rate limits
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Small delay to avoid rate limits (skip in CI for faster execution)
+      if (!isCI) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
     }
 
     // Check for uniqueness

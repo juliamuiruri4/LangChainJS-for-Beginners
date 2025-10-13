@@ -48,6 +48,9 @@ const SLOW_FILES = [
   "streaming-chat.ts", // Interactive with API calls
   "qa-program.ts", // Interactive with API calls
   "03-human-in-loop.ts", // Interactive (no API but complex)
+  "multi-agent-system.ts", // Multiple nested agent calls
+  "smart-memory.ts", // Multiple API calls for memory testing
+  "doc-organizer.ts", // Interactive with multiple operations
 ];
 
 const TIMEOUT_MS = 30000; // 30 seconds default
