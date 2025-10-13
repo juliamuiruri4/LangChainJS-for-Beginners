@@ -111,7 +111,7 @@ Let's make your first AI call using LangChain.js and GitHub Models!
 
 ### Example 1: Hello World
 
-Your first LangChain.js program that sends a simple message to an AI model and displays the response.
+In this example, you'll create your first LangChain.js program that sends a simple message to an AI model and displays the response.
 
 **Code**: [`code/01-hello-world.ts`](./code/01-hello-world.ts)
 **Run**: `tsx 01-introduction/code/01-hello-world.ts`
@@ -174,7 +174,7 @@ LLMs work best with structured conversations. LangChain.js provides message type
 
 ### Example 2: Message Types
 
-Demonstrates how to use structured message types (SystemMessage and HumanMessage) to control AI behavior and maintain conversation context.
+This example shows you how to use structured message types (SystemMessage and HumanMessage) to control AI behavior and maintain conversation context.
 
 **Code**: [`code/02-message-types.ts`](./code/02-message-types.ts)
 **Run**: `tsx 01-introduction/code/02-message-types.ts`
@@ -244,7 +244,7 @@ GitHub Models gives you access to multiple AI models. Let's compare them!
 
 ### Example 3: Model Comparison
 
-Compares responses from different AI models (gpt-4o vs gpt-4o-mini) to understand their capabilities, speed, and output quality differences.
+Here you'll compare responses from different AI models (gpt-4o vs gpt-4o-mini) to understand their capabilities, speed, and output quality differences.
 
 **Code**: [`code/03-model-comparison.ts`](./code/03-model-comparison.ts)
 **Run**: `tsx 01-introduction/code/03-model-comparison.ts`

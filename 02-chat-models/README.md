@@ -52,7 +52,7 @@ Chat models don't actually "remember" previous messages. Instead, you send the e
 
 ### Example 1: Multi-Turn Conversation
 
-Demonstrates how to maintain conversation context across multiple exchanges by storing message history and referencing previous interactions.
+The following example shows you how to maintain conversation context across multiple exchanges by storing message history and referencing previous interactions.
 
 **Code**: [`code/01-multi-turn.ts`](./code/01-multi-turn.ts)
 **Run**: `tsx 02-chat-models/code/01-multi-turn.ts`
@@ -141,7 +141,7 @@ When you ask a complex question, waiting for the entire response can feel slow. 
 
 ### Example 2: Streaming
 
-Shows how to stream AI responses in real-time, displaying words as they're generated instead of waiting for the complete response.
+In this example, you'll learn how to stream AI responses in real-time, displaying words as they're generated instead of waiting for the complete response.
 
 **Code**: [`code/02-streaming.ts`](./code/02-streaming.ts)
 **Run**: `tsx 02-chat-models/code/02-streaming.ts`
@@ -241,7 +241,7 @@ Limits response length:
 
 ### Example 3: Model Parameters
 
-Compares AI responses at different temperature settings (0, 1, 2) to demonstrate how parameters control creativity and randomness.
+This sample compares AI responses at different temperature settings (0, 1, 2) to help you understand how parameters control creativity and randomness.
 
 **Code**: [`code/03-parameters.ts`](./code/03-parameters.ts)
 **Run**: `tsx 02-chat-models/code/03-parameters.ts`
@@ -329,7 +329,7 @@ APIs can fail. Networks drop. Rate limits hit. Good error handling is essential.
 
 ### Example 4: Error Handling
 
-Implements robust error handling with retry logic and exponential backoff to handle API failures, rate limits, and network issues.
+Here you'll implement robust error handling with retry logic and exponential backoff to handle API failures, rate limits, and network issues.
 
 **Code**: [`code/04-error-handling.ts`](./code/04-error-handling.ts)
 **Run**: `tsx 02-chat-models/code/04-error-handling.ts`

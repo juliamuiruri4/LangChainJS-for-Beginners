@@ -77,7 +77,7 @@ In LangChain.js, tools are created using the `tool()` function with Zod schemas 
 
 ### Example 1: Simple Calculator Tool
 
-Creates a basic calculator tool using Zod schema to define parameters and demonstrates tool creation fundamentals.
+In this example, you'll create a basic calculator tool using Zod schema to define parameters and learn tool creation fundamentals.
 
 **Code**: [`code/01-simple-tool.ts`](./code/01-simple-tool.ts)
 **Run**: `tsx 05-function-calling-tooling/code/01-simple-tool.ts`
@@ -145,7 +145,7 @@ Use `bindTools()` to make tools available to the LLM.
 
 ### Example 2: Binding and Invoking Tools
 
-Shows how to bind tools to a model and demonstrates how the LLM generates structured tool calls with arguments.
+Here you'll bind tools to a model and see how the LLM generates structured tool calls with arguments.
 
 **Code**: [`code/02-tool-calling.ts`](./code/02-tool-calling.ts)
 **Run**: `tsx 05-function-calling-tooling/code/02-tool-calling.ts`
@@ -232,7 +232,7 @@ Tool calls: [
 
 ### Example 3: Complete Tool Call Loop
 
-Demonstrates the complete flow: LLM generates tool call, your code executes the tool, and results return to LLM for final response.
+In this example, you'll see the complete flow: LLM generates tool call, your code executes the tool, and results return to LLM for the final response.
 
 **Code**: [`code/03-tool-execution.ts`](./code/03-tool-execution.ts)
 **Run**: `tsx 05-function-calling-tooling/code/03-tool-execution.ts`
@@ -316,7 +316,7 @@ LLMs can choose from multiple tools based on the query.
 
 ### Example 4: Multi-Tool System
 
-Builds a system with multiple tools (calculator, search, weather) where the LLM automatically selects the appropriate tool for each query.
+Here you'll build a system with multiple tools (calculator, search, weather) where the LLM automatically selects the appropriate tool for each query.
 
 **Code**: [`code/04-multiple-tools.ts`](./code/04-multiple-tools.ts)
 **Run**: `tsx 05-function-calling-tooling/code/04-multiple-tools.ts`

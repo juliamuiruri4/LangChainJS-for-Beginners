@@ -71,7 +71,7 @@ LLMs need text input, but your data comes in many formats:
 
 ### Example 1: Loading Text Files
 
-Demonstrates how to load text files using TextLoader and access document content and metadata.
+In this example, you'll learn how to load text files using TextLoader and access document content and metadata.
 
 **Code**: [`code/01-load-text.ts`](./code/01-load-text.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/01-load-text.ts`
@@ -168,7 +168,7 @@ Metadata: {
 
 ### Example 2: Text Splitting
 
-Shows how to split long documents into manageable chunks using RecursiveCharacterTextSplitter with configurable chunk size and overlap.
+Here you'll split long documents into manageable chunks using RecursiveCharacterTextSplitter with configurable chunk size and overlap.
 
 **Code**: [`code/02-splitting.ts`](./code/02-splitting.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/02-splitting.ts`
@@ -262,7 +262,7 @@ Chunk 2: "mitochondria is the powerhouse of the cell..."
 
 ### Example 3: Comparing Overlap
 
-Compares document chunks with and without overlap to demonstrate how overlap preserves context between adjacent chunks.
+This example compares document chunks with and without overlap to show you how overlap preserves context between adjacent chunks.
 
 **Code**: [`code/03-overlap.ts`](./code/03-overlap.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/03-overlap.ts`
@@ -333,7 +333,7 @@ Metadata helps you:
 
 ### Example 4: Working with Metadata
 
-Demonstrates adding and preserving metadata (source, category, date, author) through document loading and splitting operations.
+In this example, you'll learn how to add and preserve metadata (source, category, date, author) through document loading and splitting operations.
 
 **Code**: [`code/04-metadata.ts`](./code/04-metadata.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/04-metadata.ts`
@@ -463,7 +463,7 @@ Finds: "Preparing Italian noodles", "Making spaghetti", etc.
 
 ### Example 5: Basic Embeddings
 
-Creates text embeddings and calculates cosine similarity to show how similar text produces similar vector representations.
+Here you'll create text embeddings and calculate cosine similarity to see how similar text produces similar vector representations.
 
 **Code**: [`code/05-basic-embeddings.ts`](./code/05-basic-embeddings.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts`
@@ -549,7 +549,7 @@ Vector stores are databases optimized for storing and searching embeddings.
 
 ### Example 6: In-Memory Vector Store
 
-Builds a vector store from documents and performs semantic similarity search to find relevant content based on meaning.
+In this example, you'll build a vector store from documents and perform semantic similarity search to find relevant content based on meaning.
 
 **Code**: [`code/06-vector-store.ts`](./code/06-vector-store.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/06-vector-store.ts`
@@ -626,7 +626,7 @@ The AI understands *meaning*, not just words!
 
 ### Example 7: Search with Similarity Scores
 
-Performs similarity search with numerical scores to quantify how closely documents match the search query.
+Here you'll perform similarity search with numerical scores to quantify how closely documents match your search query.
 
 **Code**: [`code/07-similarity-scores.ts`](./code/07-similarity-scores.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/07-similarity-scores.ts`
@@ -685,7 +685,7 @@ Creating embeddings one at a time is slow. Use batch processing!
 
 ### Example 8: Batch Embeddings
 
-Efficiently creates embeddings for multiple texts at once using batch processing, significantly faster than individual calls.
+In this example, you'll efficiently create embeddings for multiple texts at once using batch processing, which is significantly faster than individual calls.
 
 **Code**: [`code/08-batch-embeddings.ts`](./code/08-batch-embeddings.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/08-batch-embeddings.ts`

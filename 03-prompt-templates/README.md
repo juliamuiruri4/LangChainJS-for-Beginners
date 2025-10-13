@@ -89,7 +89,7 @@ const template = ChatPromptTemplate.fromMessages([
 
 ### Example 1: Simple Translation Template
 
-Creates a reusable translation template with variables for input language, output language, and text to be translated.
+In this example, you'll create a reusable translation template with variables for input language, output language, and text to be translated.
 
 **Code**: [`code/01-basic-template.ts`](./code/01-basic-template.ts)
 **Run**: `tsx 03-prompt-templates/code/01-basic-template.ts`
@@ -192,7 +192,7 @@ const template = PromptTemplate.fromTemplate(
 
 ### Example 2: Multiple Template Formats
 
-Compares different template formats (ChatPromptTemplate vs PromptTemplate) and shows when to use each approach.
+This example compares different template formats (ChatPromptTemplate vs PromptTemplate) and shows you when to use each approach.
 
 **Code**: [`code/02-template-formats.ts`](./code/02-template-formats.ts)
 **Run**: `tsx 03-prompt-templates/code/02-template-formats.ts`
@@ -300,7 +300,7 @@ Few-shot prompting means teaching the AI by showing examples.
 
 ### Example 3: Few-Shot Prompting
 
-Demonstrates teaching AI by example using few-shot prompting to convert emotions to emojis based on provided examples.
+Here you'll learn how to teach the AI by example using few-shot prompting to convert emotions to emojis based on provided examples.
 
 **Code**: [`code/03-few-shot.ts`](./code/03-few-shot.ts)
 **Run**: `tsx 03-prompt-templates/code/03-few-shot.ts`
@@ -405,7 +405,7 @@ You can combine multiple templates to create complex prompts.
 
 ### Example 4: Composing Templates
 
-Shows how to combine multiple template pieces together to create complex, reusable prompts for different educational contexts.
+In this example, you'll learn how to combine multiple template pieces together to create complex, reusable prompts for different educational contexts.
 
 **Code**: [`code/04-composition.ts`](./code/04-composition.ts)
 **Run**: `tsx 03-prompt-templates/code/04-composition.ts`
@@ -531,7 +531,7 @@ City: [____]
 
 ### Example 5: Basic Structured Output
 
-Demonstrates using Zod schemas to get typed, structured data from AI instead of free text, ensuring type safety and validation.
+Here you'll use Zod schemas to get typed, structured data from AI instead of free text, ensuring type safety and validation.
 
 **Code**: [`code/05-structured-output.ts`](./code/05-structured-output.ts)
 **Run**: `tsx 03-prompt-templates/code/05-structured-output.ts`
@@ -623,7 +623,7 @@ When you run this example with `tsx 03-prompt-templates/code/05-structured-outpu
 
 ### Example 6: Complex Structured Data
 
-Extracts complex nested company information from text using Zod schemas with arrays, nested objects, and various data types.
+In this example, you'll extract complex nested company information from text using Zod schemas with arrays, nested objects, and various data types.
 
 **Code**: [`code/06-zod-schemas.ts`](./code/06-zod-schemas.ts)
 **Run**: `tsx 03-prompt-templates/code/06-zod-schemas.ts`

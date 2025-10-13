@@ -121,7 +121,7 @@ Let's build an agent step-by-step to understand how it works under the hood.
 
 ### Example 1: Basic Agent with ReAct Loop
 
-Demonstrates how to build an agent from scratch using a manual ReAct (Reasoning + Acting) loop. Shows the complete iteration cycle: agent reasons, uses a tool, observes results, and repeats until it has an answer.
+In this example, you'll build an agent from scratch using a manual ReAct (Reasoning + Acting) loop to understand the complete iteration cycle: agent reasons, uses a tool, observes results, and repeats until it has an answer.
 
 **Code**: [`code/01-basic-agent.ts`](./code/01-basic-agent.ts)
 **Run**: `tsx 07-agents-mcp/code/01-basic-agent.ts`
@@ -257,7 +257,7 @@ This conversation history allows the agent to remember what it's already tried a
 
 ### Example 2: Multi-Tool Agent
 
-Shows how agents automatically select the appropriate tool when given multiple options (calculator, weather, search). Demonstrates the agent's ability to match queries to tools based on descriptions.
+Here you'll see how agents automatically select the appropriate tool when given multiple options (calculator, weather, search), demonstrating the agent's ability to match queries to tools based on descriptions.
 
 **Code**: [`code/02-multi-tool-agent.ts`](./code/02-multi-tool-agent.ts)
 **Run**: `tsx 07-agents-mcp/code/02-multi-tool-agent.ts`

@@ -71,7 +71,7 @@ Answer with Citations
 
 ### Example 1: Simple RAG
 
-Builds a complete RAG system that retrieves relevant documents from a vector store and uses them to answer questions accurately.
+In this example, you'll build a complete RAG system that retrieves relevant documents from a vector store and uses them to answer questions accurately.
 
 **Code**: [`code/01-simple-rag.ts`](./code/01-simple-rag.ts)
 **Run**: `tsx 06-rag-systems/code/01-simple-rag.ts`
@@ -168,7 +168,7 @@ LCEL lets you chain operations using the pipe operator.
 
 ### Example 2: RAG with LCEL
 
-Demonstrates using LCEL (LangChain Expression Language) to build elegant RAG chains with the pipe operator for cleaner, more maintainable code.
+Here you'll use LCEL (LangChain Expression Language) to build elegant RAG chains with the pipe operator for cleaner, more maintainable code.
 
 **Code**: [`code/02-rag-lcel.ts`](./code/02-rag-lcel.ts)
 **Run**: `tsx 06-rag-systems/code/02-rag-lcel.ts`
@@ -258,7 +258,7 @@ Run multiple operations at once for better performance:
 
 ### Example 4: Parallel RAG Queries
 
-Demonstrates running multiple operations in parallel (document retrieval, summarization) for better performance and richer context.
+In this example, you'll run multiple operations in parallel (document retrieval, summarization) for better performance and richer context.
 
 **Code**: [`code/04-parallel-lcel.ts`](./code/04-parallel-lcel.ts)
 **Run**: `tsx 06-rag-systems/code/04-parallel-lcel.ts`
@@ -317,7 +317,7 @@ Handle failures gracefully by trying alternative approaches:
 
 ### Example 5: RAG with Fallback
 
-Implements fallback chains that gracefully handle failures by trying alternative approaches when the primary chain fails.
+Here you'll implement fallback chains that gracefully handle failures by trying alternative approaches when the primary chain fails.
 
 **Code**: [`code/05-fallback-lcel.ts`](./code/05-fallback-lcel.ts)
 **Run**: `tsx 06-rag-systems/code/05-fallback-lcel.ts`
@@ -390,7 +390,7 @@ Route inputs to different chains based on conditions:
 
 ### Example 6: Smart RAG Router
 
-Uses conditional branching to route simple vs complex questions to different chains with appropriate processing depth.
+In this example, you'll use conditional branching to route simple vs complex questions to different chains with appropriate processing depth.
 
 **Code**: [`code/06-branch-lcel.ts`](./code/06-branch-lcel.ts)
 **Run**: `tsx 06-rag-systems/code/06-branch-lcel.ts`
