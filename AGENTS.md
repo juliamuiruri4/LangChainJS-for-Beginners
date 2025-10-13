@@ -5,7 +5,7 @@
 This is **LangChain.js for Beginners** - a comprehensive educational course teaching AI application development with LangChain.js and TypeScript. The repository contains 8 sections (00-07) covering everything from basic chat models to autonomous agents, RAG systems, and Model Context Protocol integration.
 
 **Architecture**: Educational course structure with 40+ runnable TypeScript examples organized by topic
-**Key Technologies**: LangChain.js, TypeScript, tsx, Node.js >=20.0.0, LangGraph, OpenAI/Azure AI/Anthropic
+**Key Technologies**: LangChain.js, TypeScript, tsx, Node.js >=22.0.0 (LTS), LangGraph, OpenAI/Azure AI/Anthropic
 **Purpose**: Teaching developers how to build AI-powered applications with LangChain.js
 
 ## Repository Structure
@@ -89,7 +89,7 @@ AI_EMBEDDING_MODEL=text-embedding-3-small
 
 ### Environment Requirements
 
-- Node.js >=20.0.0 (specified in `.nvmrc` and `package.json`)
+- Node.js >=22.0.0 (LTS - specified in `package.json`)
 - npm (package manager)
 - Valid AI provider credentials in `.env` file
 
@@ -265,7 +265,7 @@ npm test
 
 GitHub Actions workflow (`.github/workflows/validate-examples.yml`):
 - Triggers on push/PR to `main` or `develop`
-- Tests on Node.js 20 and 22
+- Tests on Node.js 22 (LTS)
 - Runs full validation suite
 - Uses secrets: `AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`, `AI_EMBEDDING_MODEL`
 - Timeout: 30 minutes

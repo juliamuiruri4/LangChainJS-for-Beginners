@@ -24,7 +24,7 @@
   "author": "Dan Wahlin",
   "license": "MIT",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@langchain/openai": "^0.6.14",
