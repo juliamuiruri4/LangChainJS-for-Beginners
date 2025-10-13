@@ -15,18 +15,20 @@ LangChainJS-for-Beginners/
 ├── 00-course-setup/          # Initial setup and configuration
 ├── 01-introduction/          # LangChain.js basics
 ├── 02-chat-models/           # Chat models and interactions
-├── 03-prompt-templates/      # Dynamic prompts
+├── 03-prompt-templates/      # Dynamic prompts and structured outputs
 ├── 04-working-with-documents/# Document processing
 ├── 05-embeddings-semantic-search/ # Vector embeddings
-├── 06-rag-systems/           # Retrieval Augmented Generation
+├── 06-rag-systems/           # RAG and advanced LCEL patterns
 ├── 07-langgraph-agents-tools/# AI agents with tools
 ├── 08-langgraph-memory-conversations/ # Stateful chatbots
 ├── 09-langgraph-patterns/    # Advanced workflows
-├── 10-production-best-practices/ # Production deployment
+├── 10-production-best-practices/ # Production deployment and evaluation
 ├── data/                     # Sample data files
+├── scripts/                  # Build and validation scripts
+│   ├── build-check.ts        # TypeScript compilation validator
+│   ├── test-setup.ts         # Environment setup tester
+│   └── validate-examples.ts  # Code example test runner
 ├── .env.example              # Environment configuration template
-├── build-check.ts            # TypeScript compilation validator
-├── validate-examples.ts      # Code example test runner
 └── TESTING.md                # Comprehensive testing guide
 ```
 
@@ -49,7 +51,7 @@ npm install
 cp .env.example .env
 
 # Edit .env with your AI provider credentials
-# Required: AI_API_KEY, AI_ENDPOINT, AI_MODEL
+# Required: AI_API_KEY, AI_ENDPOINT, AI_MODEL, AI_EMBEDDING_MODEL
 ```
 
 ### AI Provider Configuration
@@ -61,6 +63,7 @@ The course supports multiple AI providers (no code changes needed - just update 
 AI_API_KEY=your_github_personal_access_token
 AI_ENDPOINT=https://models.inference.ai.azure.com
 AI_MODEL=gpt-4o-mini
+AI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
 **Azure AI Foundry** (Production):
@@ -68,6 +71,7 @@ AI_MODEL=gpt-4o-mini
 AI_API_KEY=your_azure_openai_api_key
 AI_ENDPOINT=https://your-resource.openai.azure.com
 AI_MODEL=gpt-4o-mini
+AI_EMBEDDING_MODEL=text-embedding-3-small
 AI_API_VERSION=2025-01-01-preview
 ```
 
@@ -76,6 +80,7 @@ AI_API_VERSION=2025-01-01-preview
 AI_API_KEY=your_openai_api_key
 AI_ENDPOINT=https://api.openai.com/v1
 AI_MODEL=gpt-4o-mini
+AI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
 ### Environment Requirements
@@ -116,7 +121,7 @@ When working on course content or examples:
 npm run build
 ```
 
-This compiles 44+ TypeScript files to check for:
+This compiles 92 TypeScript files to check for:
 - ✅ Type errors
 - ✅ Syntax errors
 - ✅ Import issues
@@ -133,8 +138,8 @@ npm run validate
 ```
 
 **Important Notes**:
-- Requires valid `AI_API_KEY`, `AI_ENDPOINT`, and `AI_MODEL` in `.env`
-- Tests 42+ examples sequentially to avoid rate limiting
+- Requires valid `AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`, and `AI_EMBEDDING_MODEL` in `.env`
+- Tests 91 examples sequentially to avoid rate limiting
 - Interactive files are tested with automated input
 - Some examples have 60-second timeouts (marked in `SLOW_FILES`)
 
@@ -187,6 +192,7 @@ npx tsx 06-rag-systems/code/*.ts
 - Always use `process.env.AI_API_KEY` (never hardcode)
 - Always use `process.env.AI_ENDPOINT`
 - Always use `process.env.AI_MODEL`
+- Always use `process.env.AI_EMBEDDING_MODEL` (for embeddings)
 - Load from `.env` using dotenv
 
 **Code Examples**:
@@ -224,7 +230,7 @@ import { readFile } from "fs/promises";
 
 ### Build Process
 
-The repository uses TypeScript compilation checking:
+The repository uses TypeScript compilation checking via `scripts/build-check.ts`:
 
 ```bash
 # Build check (validates TypeScript compilation)
@@ -235,6 +241,8 @@ npm run build
 **Purpose**: Ensures all TypeScript files compile correctly before commits
 
 ### Validation Process
+
+The repository uses `scripts/validate-examples.ts` for comprehensive testing:
 
 ```bash
 # Full validation (runs all examples)
@@ -254,7 +262,7 @@ GitHub Actions workflow (`.github/workflows/validate-examples.yml`):
 - Triggers on push/PR to `main` or `develop`
 - Tests on Node.js 20 and 22
 - Runs full validation suite
-- Uses secrets: `AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`
+- Uses secrets: `AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`, `AI_EMBEDDING_MODEL`
 - Timeout: 30 minutes
 
 ## Adding New Examples
@@ -353,6 +361,7 @@ const apiKey = process.env.AI_API_KEY;
 AI_API_KEY=your_key
 AI_ENDPOINT=your_endpoint
 AI_MODEL=gpt-4o-mini
+AI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
 ### "Command timed out"
