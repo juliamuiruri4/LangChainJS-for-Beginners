@@ -51,6 +51,7 @@ const SLOW_FILES = [
   "multi-agent-system.ts", // Multiple nested agent calls
   "smart-memory.ts", // Multiple API calls for memory testing
   "doc-organizer.ts", // Interactive with multiple operations
+  "token-tracker.ts", // Multiple API calls for token tracking
 ];
 
 const TIMEOUT_MS = 30000; // 30 seconds default
