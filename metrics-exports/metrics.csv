@@ -1,8 +1,0 @@
-Timestamp,Query,Success,ResponseTime(ms),Tokens,Cost,Error
-2025-10-13T07:22:49.632Z,"What is TypeScript?",true,3869,467,0.00007005,""
-2025-10-13T07:22:57.817Z,"Explain JavaScript promises",true,8184,1093,0.00016395,""
-2025-10-13T07:23:01.491Z,"What is Docker?",true,3674,588,0.00008819999999999999,""
-2025-10-13T07:23:01.491Z,"Simulated timeout error",false,0,0,0,"Simulated failure"
-2025-10-13T07:23:05.428Z,"What are microservices?",true,3937,698,0.00010470000000000001,""
-2025-10-13T07:23:05.428Z,"Another simulated error",false,0,0,0,"Simulated failure"
-2025-10-13T07:23:11.834Z,"Explain REST APIs",true,6406,1018,0.0001527,""

@@ -1,45 +1,45 @@
 {
-  "generatedAt": "2025-10-13T07:23:11.855Z",
+  "generatedAt": "2025-10-13T07:30:34.652Z",
   "summary": {
     "total": 7,
     "successful": 5,
     "failed": 2,
     "successRate": 71.42857142857143,
-    "avgResponseTime": 3724.285714285714,
-    "totalTokens": 3864,
-    "totalCost": 0.0005796,
+    "avgResponseTime": 3429.8571428571427,
+    "totalTokens": 3496,
+    "totalCost": 0.0005244,
     "errorCounts": {
       "Simulated failure": 2
     },
-    "uptime": 26092
+    "uptime": 24020
   },
   "requests": [
     {
-      "timestamp": "2025-10-13T07:22:49.632Z",
+      "timestamp": "2025-10-13T07:30:14.758Z",
       "query": "What is TypeScript?",
       "success": true,
-      "responseTime": 3869,
-      "tokens": 467,
-      "cost": 0.00007005
+      "responseTime": 4126,
+      "tokens": 485,
+      "cost": 0.00007275
     },
     {
-      "timestamp": "2025-10-13T07:22:57.817Z",
+      "timestamp": "2025-10-13T07:30:21.012Z",
       "query": "Explain JavaScript promises",
       "success": true,
-      "responseTime": 8184,
-      "tokens": 1093,
-      "cost": 0.00016395
+      "responseTime": 6254,
+      "tokens": 907,
+      "cost": 0.00013605
     },
     {
-      "timestamp": "2025-10-13T07:23:01.491Z",
+      "timestamp": "2025-10-13T07:30:23.410Z",
       "query": "What is Docker?",
       "success": true,
-      "responseTime": 3674,
-      "tokens": 588,
-      "cost": 0.00008819999999999999
+      "responseTime": 2398,
+      "tokens": 464,
+      "cost": 0.0000696
     },
     {
-      "timestamp": "2025-10-13T07:23:01.491Z",
+      "timestamp": "2025-10-13T07:30:23.410Z",
       "query": "Simulated timeout error",
       "success": false,
       "responseTime": 0,
@@ -48,15 +48,15 @@
       "error": "Simulated failure"
     },
     {
-      "timestamp": "2025-10-13T07:23:05.428Z",
+      "timestamp": "2025-10-13T07:30:28.284Z",
       "query": "What are microservices?",
       "success": true,
-      "responseTime": 3937,
-      "tokens": 698,
-      "cost": 0.00010470000000000001
+      "responseTime": 4874,
+      "tokens": 843,
+      "cost": 0.00012644999999999998
     },
     {
-      "timestamp": "2025-10-13T07:23:05.428Z",
+      "timestamp": "2025-10-13T07:30:28.284Z",
       "query": "Another simulated error",
       "success": false,
       "responseTime": 0,
@@ -65,12 +65,12 @@
       "error": "Simulated failure"
     },
     {
-      "timestamp": "2025-10-13T07:23:11.834Z",
+      "timestamp": "2025-10-13T07:30:34.641Z",
       "query": "Explain REST APIs",
       "success": true,
-      "responseTime": 6406,
-      "tokens": 1018,
-      "cost": 0.0001527
+      "responseTime": 6357,
+      "tokens": 797,
+      "cost": 0.00011954999999999999
     }
   ]
 }

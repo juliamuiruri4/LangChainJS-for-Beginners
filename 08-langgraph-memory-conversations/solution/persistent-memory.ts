@@ -12,7 +12,7 @@ import * as path from "path";
 import * as readline from "readline";
 import "dotenv/config";
 
-const MEMORY_DIR = path.join(process.cwd(), "memory-data");
+const MEMORY_DIR = path.join(process.cwd(), "data", "memory-data");
 
 interface StoredMessage {
   type: "human" | "ai";

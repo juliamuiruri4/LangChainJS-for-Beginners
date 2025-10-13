@@ -210,7 +210,7 @@ async function main() {
   console.log(JSON.stringify(health.details, null, 2));
 
   // Export metrics
-  const exportDir = path.join(process.cwd(), "metrics-exports");
+  const exportDir = path.join(process.cwd(), "data", "metrics-exports");
   try {
     await fs.mkdir(exportDir, { recursive: true });
 
