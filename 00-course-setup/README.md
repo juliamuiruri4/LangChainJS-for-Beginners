@@ -335,3 +335,14 @@ You're all set! Time to build your first AI application.
 - Join our [Discord community](https://aka.ms/foundry/discord)
 - Ask in [GitHub Discussions](https://github.com/microsoft/langchainjs-for-beginners/discussions)
 - Check the [FAQ](../FAQ.md)
+
+---
+
+## 🗺️ Navigation
+
+- **Next**: [01-introduction](../01-introduction/README.md)
+- **Home**: [Course Home](../README.md)
+
+---
+
+💬 **Questions or stuck?** Join our [Discord community](https://aka.ms/foundry/discord) or open a [GitHub Discussion](https://github.com/microsoft/langchainjs-for-beginners/discussions)!
