@@ -170,19 +170,16 @@ async function main() {
   console.log("🧪 Validating All Code Examples\n");
   console.log("=" + "=".repeat(79) + "\n");
 
-  // Find all chapters
+  // Find all chapters (excluding future/ folder)
   const chapters = [
     "00-course-setup",
     "01-introduction",
     "02-chat-models",
     "03-prompt-templates",
-    "04-working-with-documents",
-    "05-embeddings-semantic-search",
+    "04-documents-embeddings-semantic-search",
+    "05-function-calling-tooling",
     "06-rag-systems",
-    "07-langgraph-agents-tools",
-    "08-langgraph-memory-conversations",
-    "09-langgraph-patterns",
-    "10-production-best-practices",
+    "07-agents-mcp",
   ];
 
   const allFiles: string[] = [];

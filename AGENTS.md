@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is **LangChain.js for Beginners** - a comprehensive educational course teaching AI application development with LangChain.js and TypeScript. The repository contains 11 chapters (00-10) covering everything from basic chat models to production-ready LangGraph patterns and RAG systems.
+This is **LangChain.js for Beginners** - a comprehensive educational course teaching AI application development with LangChain.js and TypeScript. The repository contains 8 sections (00-07) covering everything from basic chat models to autonomous agents, RAG systems, and Model Context Protocol integration.
 
 **Architecture**: Educational course structure with 40+ runnable TypeScript examples organized by topic
 **Key Technologies**: LangChain.js, TypeScript, tsx, Node.js >=20.0.0, LangGraph, OpenAI/Azure AI/Anthropic
@@ -16,14 +16,18 @@ LangChainJS-for-Beginners/
 ├── 01-introduction/          # LangChain.js basics
 ├── 02-chat-models/           # Chat models and interactions
 ├── 03-prompt-templates/      # Dynamic prompts and structured outputs
-├── 04-working-with-documents/# Document processing
-├── 05-embeddings-semantic-search/ # Vector embeddings
+├── 04-documents-embeddings-semantic-search/ # Document processing, embeddings, and semantic search
+├── 05-function-calling-tooling/ # Function calling and tool integration
 ├── 06-rag-systems/           # RAG and advanced LCEL patterns
-├── 07-langgraph-agents-tools/# AI agents with tools
-├── 08-langgraph-memory-conversations/ # Stateful chatbots
-├── 09-langgraph-patterns/    # Advanced workflows
-├── 10-production-best-practices/ # Production deployment and evaluation
+├── 07-agents-mcp/            # Autonomous agents and Model Context Protocol
 ├── data/                     # Sample data files
+│   ├── memory-data/          # Persistent memory data
+│   └── metrics-exports/      # Monitoring metrics
+├── future/                   # Advanced content (LangGraph patterns)
+│   ├── 07-langgraph-agents-tools/
+│   ├── 08-langgraph-memory-conversations/
+│   ├── 09-langgraph-patterns/
+│   └── 10-production-best-practices/
 ├── scripts/                  # Build and validation scripts
 │   ├── build-check.ts        # TypeScript compilation validator
 │   ├── test-setup.ts         # Environment setup tester
@@ -121,7 +125,7 @@ When working on course content or examples:
 npm run build
 ```
 
-This compiles 92 TypeScript files to check for:
+This compiles 98 TypeScript files to check for:
 - ✅ Type errors
 - ✅ Syntax errors
 - ✅ Import issues
@@ -139,9 +143,10 @@ npm run validate
 
 **Important Notes**:
 - Requires valid `AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`, and `AI_EMBEDDING_MODEL` in `.env`
-- Tests 91 examples sequentially to avoid rate limiting
+- Tests all examples sequentially to avoid rate limiting
 - Interactive files are tested with automated input
 - Some examples have 60-second timeouts (marked in `SLOW_FILES`)
+- Examples in `future/` folder are not included in validation
 
 ### Testing Specific Examples
 

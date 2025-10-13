@@ -4,7 +4,7 @@ In this chapter, you'll learn to build RAG (Retrieval Augmented Generation) syst
 
 ## Prerequisites
 
-- Completed [Chapter 5](../05-embeddings-semantic-search/README.md)
+- Completed [Chapter 4](../04-documents-embeddings-semantic-search/README.md)
 
 ## 🎯 Learning Objectives
 
@@ -494,8 +494,8 @@ The assignment includes:
 
 ## 🗺️ Navigation
 
-- **Previous**: [05-embeddings-semantic-search](../05-embeddings-semantic-search/README.md)
-- **Next**: [07-langgraph-agents-tools](../07-langgraph-agents-tools/README.md)
+- **Previous**: [05-function-calling-tooling](../05-function-calling-tooling/README.md)
+- **Next**: [07-agents-mcp](../07-agents-mcp/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---

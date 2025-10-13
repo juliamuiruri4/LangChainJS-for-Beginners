@@ -5,11 +5,12 @@ Welcome to **LangChain.js for Beginners** - your complete guide to building AI-p
 ## What You'll Build
 
 By the end of this course, you'll know how to:
-- ✅ Create intelligent chatbots that remember conversation context
-- ✅ Build search engines that understand meaning, not just keywords
-- ✅ Develop AI agents that can use tools and make decisions
+- ✅ Create intelligent chatbots with context-aware responses
+- ✅ Build semantic search engines that understand meaning
+- ✅ Develop AI agents that can reason and use tools autonomously
 - ✅ Construct Retrieval Augmented Generation (RAG) systems
-- ✅ Build multi-step AI workflows with LangGraph
+- ✅ Integrate function calling and external tools
+- ✅ Connect to Model Context Protocol (MCP) servers
 
 ## Why LangChain.js?
 
@@ -23,19 +24,16 @@ LangChain.js provides:
 
 ## Course Structure
 
-This course contains **11 sections** (setup + 10 chapters), each focusing on a specific aspect of LangChain.js:
+This course contains **8 sections** (setup + 7 chapters), each focusing on a specific aspect of LangChain.js:
 
 0. **[Course Setup](./00-course-setup/README.md)** - Get your development environment ready
-1. **[Introduction to LangChain.js](./01-introduction/README.md)** - Understanding the framework and setting up your environment
+1. **[Introduction to LangChain.js](./01-introduction/README.md)** - Understanding the framework and core concepts
 2. **[Chat Models & Basic Interactions](./02-chat-models/README.md)** - Chat models, messages, and making your first API call
 3. **[Prompt Engineering with Templates](./03-prompt-templates/README.md)** - Creating dynamic, reusable prompts
-4. **[Working with Documents](./04-working-with-documents/README.md)** - Loading, splitting, and processing text data
-5. **[Embeddings & Semantic Search](./05-embeddings-semantic-search/README.md)** - Understanding vector representations and similarity
-6. **[Building RAG Systems](./06-rag-systems/README.md)** - Combining retrieval with generation for accurate answers
-7. **[LangGraph: Agents & Tools](./07-langgraph-agents-tools/README.md)** - Creating AI agents with tools using LangGraph
-8. **[LangGraph: Memory & Conversations](./08-langgraph-memory-conversations/README.md)** - Building stateful chatbots with LangGraph memory
-9. **[LangGraph Patterns](./09-langgraph-patterns/README.md)** - Multi-step workflows and decision trees
-10. **[Production Best Practices](./10-production-best-practices/README.md)** - Model switching, Azure AI Foundry, and deployment
+4. **[Documents, Embeddings & Semantic Search](./04-documents-embeddings-semantic-search/README.md)** - Loading documents, creating embeddings, and building semantic search
+5. **[Function Calling & Tooling](./05-function-calling-tooling/README.md)** - Extending AI capabilities with function calling and tools
+6. **[Building RAG Systems](./06-rag-systems/README.md)** - Combining retrieval with generation using LCEL
+7. **[Agents & MCP](./07-agents-mcp/README.md)** - Building autonomous agents and integrating Model Context Protocol
 
 ## Prerequisites
 
@@ -95,7 +93,7 @@ AI_MODEL=gpt-4o-mini
 
 Each chapter builds on the previous one, but you can also jump to specific topics of interest. We recommend following the sequence for the best learning experience.
 
-**Estimated Time**: 15-20 hours total (including hands-on exercises)
+**Estimated Time**: 12-15 hours total (including hands-on exercises)
 
 ## Testing & Validation
 
@@ -111,7 +109,7 @@ npm run build
 ```
 
 This will:
-- ✅ Compile all 44+ TypeScript files across all chapters
+- ✅ Compile all 98 TypeScript files across all chapters
 - ✅ Show type errors and warnings
 - ✅ Validate imports and syntax
 - ✅ Fast - no API calls, just compilation check
@@ -121,11 +119,12 @@ This will:
 Run all code examples with actual API calls:
 
 ```bash
-# Validate all code examples (takes 20-40 minutes)
+# Validate all code examples
 npm test
 
 # Or test individual examples
 npx tsx 01-introduction/code/01-hello-world.ts
+npx tsx 05-function-calling-tooling/code/01-simple-tool.ts
 ```
 
 The validation script:

@@ -568,7 +568,7 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [02-chat-models](../02-chat-models/README.md)
-- **Next**: [04-working-with-documents](../04-working-with-documents/README.md)
+- **Next**: [04-documents-embeddings-semantic-search](../04-documents-embeddings-semantic-search/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---
