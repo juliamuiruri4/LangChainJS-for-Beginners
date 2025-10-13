@@ -1,12 +1,10 @@
 # Chapter 1: Introduction to LangChain.js
 
-Welcome to your first step in building AI-powered applications with LangChain.js!
+Welcome to your first step in building AI-powered applications with LangChain.js! In this chapter, you'll learn what LangChain.js is and why it exists, explore its core concepts like models, prompts, and chains, and make your first AI call using GitHub Models. By the end, you'll understand how LangChain.js provides a consistent interface across different AI providers, making it easy to switch between them with just environment variables.
 
-## ⏱️ Lesson Overview
+## Prerequisites
 
-- **Estimated Time**: 45 minutes
-- **Prerequisites**: Completed [Course Setup](../00-course-setup/README.md)
-- **Difficulty**: Beginner
+- Completed [Course Setup](../00-course-setup/README.md)
 
 ## 🎯 Learning Objectives
 

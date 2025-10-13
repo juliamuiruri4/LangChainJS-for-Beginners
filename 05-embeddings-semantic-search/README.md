@@ -1,10 +1,10 @@
 # Chapter 5: Embeddings & Semantic Search
 
-## ⏱️ Lesson Overview
+In this chapter, you'll discover how embeddings transform text into numerical vectors that capture meaning, enabling semantic search that finds content based on what it means rather than just matching keywords. You'll learn to create embeddings using AI models, store them in vector databases, and perform similarity searches to find related content. This foundational skill powers advanced AI applications like recommendation systems and RAG (Retrieval Augmented Generation).
 
-- **Estimated Time**: 75 minutes
-- **Prerequisites**: Completed [Chapter 4](../04-working-with-documents/README.md)
-- **Difficulty**: Beginner
+## Prerequisites
+
+- Completed [Chapter 4](../04-working-with-documents/README.md)
 
 ## 🎯 Learning Objectives
 

@@ -1,10 +1,10 @@
 # Chapter 4: Working with Documents
 
-## ⏱️ Lesson Overview
+In this chapter, you'll learn how to prepare documents for AI applications by loading content from various sources (text files, PDFs, web pages) and breaking them into manageable chunks. You'll discover different chunking strategies, understand the importance of chunk overlap for preserving context, and work with document metadata to organize and filter content. These skills are essential for building RAG (Retrieval Augmented Generation) systems in the next chapters.
 
-- **Estimated Time**: 75 minutes
-- **Prerequisites**: Completed [Chapter 3](../03-prompt-templates/README.md)
-- **Difficulty**: Beginner
+## Prerequisites
+
+- Completed [Chapter 3](../03-prompt-templates/README.md)
 
 ## 🎯 Learning Objectives
 

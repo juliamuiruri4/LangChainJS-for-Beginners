@@ -1,10 +1,10 @@
 # Chapter 3: Prompt Engineering with Templates
 
-## ⏱️ Lesson Overview
+In this chapter, you'll learn how to create reusable, maintainable prompts using templates instead of hardcoding prompts throughout your application. You'll discover how to use variables and dynamic content, implement few-shot prompting to teach AI by example, and compose multiple templates together for complex use cases. Templates make your AI applications more consistent, testable, and easy to maintain.
 
-- **Estimated Time**: 60 minutes
-- **Prerequisites**: Completed [Chapter 2](../02-chat-models/README.md)
-- **Difficulty**: Beginner
+## Prerequisites
+
+- Completed [Chapter 2](../02-chat-models/README.md)
 
 ## 🎯 Learning Objectives
 

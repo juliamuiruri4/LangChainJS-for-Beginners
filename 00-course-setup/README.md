@@ -1,10 +1,12 @@
 # Course Setup
 
-Welcome! Before we dive into building AI applications with LangChain.js, let's get your development environment ready.
+Welcome! Before we dive into building AI applications with LangChain.js, let's get your development environment ready. This chapter walks you through installing Node.js, setting up your GitHub token for free AI model access, and configuring your project environment. By the end, you'll have everything you need to start building with LangChain.js.
 
-## ⏱️ Estimated Time
+## Prerequisites
 
-15-20 minutes
+- A GitHub account (free)
+- Basic command line knowledge
+- Text editor or IDE
 
 ## 📋 What You'll Set Up
 
@@ -13,12 +15,6 @@ Welcome! Before we dive into building AI applications with LangChain.js, let's g
 3. Project dependencies
 4. Environment variables
 5. VS Code (recommended IDE)
-
-## 🎯 Prerequisites
-
-- A GitHub account (free)
-- Basic command line knowledge
-- Text editor or IDE
 
 ---
 

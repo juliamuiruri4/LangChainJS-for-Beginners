@@ -1,10 +1,10 @@
 # Chapter 7: LangGraph: Agents & Tools
 
-## ⏱️ Lesson Overview
+In this chapter, you'll learn to build AI agents that can reason about problems and use tools to solve them autonomously. You'll create custom tools with type-safe schemas, build ReAct (Reasoning + Acting) agents using LangGraph, and combine multiple tools for complex tasks. Agents give your AI applications the ability to take actions, making them far more powerful than simple chat interactions.
 
-- **Estimated Time**: 90 minutes
-- **Prerequisites**: Completed [Chapter 6](../06-rag-systems/README.md)
-- **Difficulty**: Beginner
+## Prerequisites
+
+- Completed [Chapter 6](../06-rag-systems/README.md)
 
 ## 🎯 Learning Objectives
 

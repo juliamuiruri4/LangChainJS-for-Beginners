@@ -1,10 +1,10 @@
 # Chapter 2: Chat Models & Basic Interactions
 
-## ⏱️ Lesson Overview
+In this chapter, you'll master the art of having natural conversations with AI models. You'll learn how to maintain conversation context across multiple exchanges, stream responses in real-time for better user experience, and handle errors gracefully with retry logic. You'll also explore key parameters like temperature to control AI creativity and understand token usage for cost optimization.
 
-- **Estimated Time**: 60 minutes
-- **Prerequisites**: Completed [Chapter 1](../01-introduction/README.md)
-- **Difficulty**: Beginner
+## Prerequisites
+
+- Completed [Chapter 1](../01-introduction/README.md)
 
 ## 🎯 Learning Objectives
 

@@ -1,10 +1,10 @@
 # Chapter 9: LangGraph Patterns
 
-## ⏱️ Lesson Overview
+In this chapter, you'll explore advanced LangGraph workflow patterns including conditional routing, human-in-the-loop approvals, and multi-step agent systems. You'll learn to build state machines with custom logic, implement interrupt-based approval workflows, and use streaming modes for real-time feedback. These patterns enable you to create sophisticated AI workflows that go beyond simple linear chains.
 
-- **Estimated Time**: 90 minutes
-- **Prerequisites**: Completed [Chapter 8](../08-langgraph-memory-conversations/README.md)
-- **Difficulty**: Beginner-Intermediate
+## Prerequisites
+
+- Completed [Chapter 8](../08-langgraph-memory-conversations/README.md)
 
 ## 🎯 Learning Objectives
 

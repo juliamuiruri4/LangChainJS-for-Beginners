@@ -1,10 +1,10 @@
 # Chapter 8: LangGraph: Memory & Conversations
 
-## ⏱️ Lesson Overview
+In this chapter, you'll learn to build stateful chatbots that remember conversation history using LangGraph's MemorySaver. You'll explore different memory patterns (buffer, window, and summary), implement thread-based conversations for multi-user applications, and learn production-ready persistence strategies using database checkpointers. Memory transforms simple one-off AI interactions into natural, context-aware conversations.
 
-- **Estimated Time**: 60 minutes
-- **Prerequisites**: Completed [Chapter 7](../07-langgraph-agents-tools/README.md)
-- **Difficulty**: Beginner
+## Prerequisites
+
+- Completed [Chapter 7](../07-langgraph-agents-tools/README.md)
 
 ## 🎯 Learning Objectives
 

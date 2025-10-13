@@ -1,10 +1,10 @@
 # Chapter 6: Building RAG Systems
 
-## ⏱️ Lesson Overview
+In this chapter, you'll learn to build RAG (Retrieval Augmented Generation) systems that combine document retrieval with AI generation to answer questions accurately using your own data. You'll master the RAG architecture, use LCEL (LangChain Expression Language) to create elegant chains, and explore different retrieval strategies like MMR and similarity thresholds. RAG systems are essential for building AI assistants that provide accurate, sourced answers from custom knowledge bases.
 
-- **Estimated Time**: 90 minutes
-- **Prerequisites**: Completed [Chapter 5](../05-embeddings-semantic-search/README.md)
-- **Difficulty**: Beginner
+## Prerequisites
+
+- Completed [Chapter 5](../05-embeddings-semantic-search/README.md)
 
 ## 🎯 Learning Objectives
 

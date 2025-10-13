@@ -1,4 +1,4 @@
-# Chapter 10 Assignment: Introduction to LangGraph
+# Chapter 9 Assignment: LangGraph Patterns
 
 ## Overview
 
@@ -6,7 +6,7 @@ Practice building stateful AI workflows with LangGraph for complex multi-step ag
 
 ## Prerequisites
 
-- Completed [Chapter 10](./README.md)
+- Completed [Chapter 9](./README.md)
 - Run all code examples
 - Understand state graphs and conditional logic
 
@@ -17,7 +17,7 @@ Practice building stateful AI workflows with LangGraph for complex multi-step ag
 **Goal**: Build a support ticket routing system using LangGraph.
 
 **Tasks**:
-1. Create `support-router.ts` in the `10-langgraph-patterns/code/` folder
+1. Create `support-router.ts` in the `09-langgraph-patterns/code/` folder
 2. Implement workflow:
    ```
    New Ticket
