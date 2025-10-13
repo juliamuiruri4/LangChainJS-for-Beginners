@@ -53,6 +53,8 @@ const SLOW_FILES = [
   "doc-organizer.ts", // Interactive with multiple operations
   "token-tracker.ts", // Multiple API calls for token tracking
   "cost-optimizer.ts", // Multiple API calls for cost comparison
+  "translator.ts", // Makes 2 API calls in CI mode
+  "template-library.ts", // Makes multiple API calls for templates
 ];
 
 const TIMEOUT_MS = 30000; // 30 seconds default

@@ -50,7 +50,13 @@ async function main() {
     if (error instanceof Error) {
       console.error(`\n❌ Error: ${error.message}\n`);
 
-      if (error.message.includes("401") || error.message.includes("authentication")) {
+      if (error.message.includes("404")) {
+        console.log("💡 This looks like a 404 Resource not found error:");
+        console.log("   - For Azure: Verify the model deployment name matches AI_MODEL");
+        console.log("   - For Azure: Ensure AI_API_VERSION is set (e.g., 2024-02-15-preview)");
+        console.log("   - Check that AI_ENDPOINT points to the correct resource");
+        console.log("   - Verify the model is deployed at that endpoint");
+      } else if (error.message.includes("401") || error.message.includes("authentication")) {
         console.log("💡 This looks like an authentication error:");
         console.log("   - Check that your API key is correct");
         console.log("   - Make sure it has not expired");
