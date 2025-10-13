@@ -213,91 +213,25 @@ AI_ENDPOINT=https://your-resource.openai.azure.com
 - ✅ **Deployment names must match**: The course uses `gpt-4o-mini` and `text-embedding-3-small` as deployment names
 - ✅ **Keep your API key secure**: Never commit `.env` to version control
 - ✅ **Cost management**: Azure AI Foundry is a paid service. Set up cost alerts in the Azure portal
-- ✅ **Production ready**: Azure AI Foundry provides enterprise features like monitoring, logging, and SLA guarantees
+- ✅ **Production ready**: Azure AI Foundry provides enterprise features like Responsible AI, monitoring, logging, and SLA guarantees
 
 **Additional Resources:**
 - [Azure AI Foundry Quickstart](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=typescript)
 - [Azure OpenAI Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
 - [Model Deployment Guide](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/deploy-models)
 
-### Alternative: OpenAI Direct (Optional)
 
-Or use OpenAI directly:
-
-```bash
-AI_API_KEY=your_openai_api_key
-AI_ENDPOINT=https://api.openai.com/v1
-AI_MODEL=gpt-4o-mini
-```
-
-**✨ The Magic**: All course examples work with ANY provider - just change the `.env` values!
-
----
 
 ## Step 5: Test Your Setup
 
 Let's verify everything works!
 
-### Create a test file:
-
-Create `test-setup.ts` in the project root:
-
-```typescript
-/**
- * Setup Test - Verify AI Provider Access
- */
-import { ChatOpenAI } from "@langchain/openai";
-import "dotenv/config";
-
-async function testSetup() {
-  console.log("🚀 Testing AI provider connection...\n");
-
-  // Check if required variables are set
-  if (!process.env.AI_API_KEY) {
-    console.error("❌ ERROR: AI_API_KEY not found in .env file");
-    process.exit(1);
-  }
-
-  if (!process.env.AI_ENDPOINT) {
-    console.error("❌ ERROR: AI_ENDPOINT not found in .env file");
-    process.exit(1);
-  }
-
-  try {
-    const model = new ChatOpenAI({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
-      configuration: {
-        baseURL: process.env.AI_ENDPOINT,
-        defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-      },
-      apiKey: process.env.AI_API_KEY,
-    });
-
-    const response = await model.invoke("Say 'Setup successful!' if you can read this.");
-
-    console.log("✅ SUCCESS! Your AI provider is working!");
-    console.log(`   Provider: ${process.env.AI_ENDPOINT}`);
-    console.log(`   Model: ${process.env.AI_MODEL || "gpt-4o-mini"}`);
-    console.log("\nModel response:", response.content);
-    console.log("\n🎉 You're ready to start the course!");
-  } catch (error) {
-    console.error("❌ ERROR:", error instanceof Error ? error.message : String(error));
-    console.log("\nTroubleshooting:");
-    console.log("1. Check your AI_API_KEY in .env file");
-    console.log("2. Verify the AI_ENDPOINT is correct");
-    console.log("3. Ensure the AI_MODEL is valid for your provider");
-    console.log("4. For Azure AI Foundry: Verify AI_API_VERSION is set");
-    console.log("5. Verify the token/key has no extra spaces");
-  }
-}
-
-testSetup();
-```
-
 ### Run the test:
 
+Run the following command in your terminal from the root of the project:
+
 ```bash
-npx tsx test-setup.ts
+npx tsx scripts/test-setup.ts
 ```
 
 ### Expected output:

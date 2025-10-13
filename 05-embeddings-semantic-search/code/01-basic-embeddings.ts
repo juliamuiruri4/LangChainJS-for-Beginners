@@ -17,7 +17,7 @@ async function main() {
   console.log("🔢 Basic Embeddings Example\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: "text-embedding-3-small",
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,

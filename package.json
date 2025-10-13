@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "tsx watch",
     "start": "tsx",
-    "build": "tsx build-check.ts",
-    "validate": "tsx validate-examples.ts",
+    "build": "tsx scripts/build-check.ts",
+    "validate": "tsx scripts/validate-examples.ts",
     "test": "npm run validate"
   },
   "keywords": [

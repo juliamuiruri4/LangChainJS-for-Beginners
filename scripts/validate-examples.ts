@@ -186,14 +186,17 @@ async function main() {
 
   const allFiles: string[] = [];
 
+  // Get project root (parent directory of scripts folder)
+  const projectRoot = join(__dirname, "..");
+
   // Collect all code files
   for (const chapter of chapters) {
-    const chapterPath = join(__dirname, chapter, "code");
+    const chapterPath = join(projectRoot, chapter, "code");
     const files = await findCodeFiles(chapterPath);
     allFiles.push(...files);
 
     // Also check solution folders
-    const solutionPath = join(__dirname, chapter, "solution");
+    const solutionPath = join(projectRoot, chapter, "solution");
     const solutionFiles = await findCodeFiles(solutionPath);
     allFiles.push(...solutionFiles);
   }
@@ -216,7 +219,7 @@ async function main() {
   // Run tests sequentially to avoid rate limiting
   for (let i = 0; i < allFiles.length; i++) {
     const file = allFiles[i];
-    const relativePath = file.replace(__dirname + "/", "");
+    const relativePath = file.replace(projectRoot + "/", "");
 
     process.stdout.write(`[${i + 1}/${allFiles.length}] ${relativePath}... `);
 
@@ -251,7 +254,7 @@ async function main() {
     results
       .filter(r => !r.success)
       .forEach(result => {
-        const relativePath = result.file.replace(__dirname + "/", "");
+        const relativePath = result.file.replace(projectRoot + "/", "");
         console.log(`   ${relativePath}`);
         if (result.error) {
           console.log(`   → ${result.error.split('\n').slice(0, 3).join('\n   ')}`);
