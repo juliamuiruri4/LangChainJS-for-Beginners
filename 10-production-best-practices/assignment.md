@@ -1,4 +1,4 @@
-# Chapter 9 Assignment: Production Best Practices
+# Chapter 10 Assignment: Production Best Practices
 
 ## Overview
 
@@ -6,7 +6,7 @@ Practice building production-ready LangChain.js applications with proper error h
 
 ## Prerequisites
 
-- Completed [Chapter 9](./README.md)
+- Completed [Chapter 10](./README.md)
 - Run all code examples
 - Understand provider abstraction and best practices
 
@@ -17,7 +17,7 @@ Practice building production-ready LangChain.js applications with proper error h
 **Goal**: Build an app that easily switches between AI providers.
 
 **Tasks**:
-1. Create `multi-provider-app.ts` in the `09-production-best-practices/code/` folder
+1. Create `multi-provider-app.ts` in the `10-production-best-practices/code/` folder
 2. Support at least 3 providers:
    - GitHub Models
    - Azure OpenAI (if available)
@@ -208,7 +208,7 @@ Last 5 Errors:
 
 ## Submission Checklist
 
-Before moving to Chapter 10:
+Course complete! Final checklist:
 
 - [ ] Challenge 1: Multi-provider app with easy switching
 - [ ] Challenge 2: Cost optimizer with routing logic
