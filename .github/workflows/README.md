@@ -9,12 +9,11 @@ This directory contains CI/CD workflows for the LangChain.js for Beginners cours
 Validates all code examples in the course when explicitly requested. **Does not run automatically** on every commit to save CI time and API costs.
 
 **What it does:**
-- Runs all 63 TypeScript code examples across all chapters
+- Runs all TypeScript code examples across all chapters
 - Verifies they execute without errors
 - Tests on Node.js 22 (LTS)
 - Automatically provides input for interactive examples
-- Takes 20-40 minutes to complete
-- Makes 60+ API calls (costs ~$0.10-0.50 per run)
+- Makes 60+ API calls
 
 **How to trigger:**
 

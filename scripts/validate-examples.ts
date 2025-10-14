@@ -55,7 +55,7 @@ async function findCodeFiles(dir: string): Promise<string[]> {
     }
   } catch (error) {
     // Directory doesn't exist or can't be read
-    console.warn(`Warning: Could not read directory ${dir}`);
+    // console.warn(`Warning: Could not read directory ${dir}`);
   }
 
   return files;
