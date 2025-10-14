@@ -1,14 +1,14 @@
 # 🦜🔗 LangChain.js for Beginners
 
-[![GitHub license](https://img.shields.io/github/license/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/blob/main/LICENSE)
-[![GitHub contributors](https://img.shields.io/github/contributors/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/graphs/contributors/)
-[![GitHub issues](https://img.shields.io/github/issues/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/issues/)
-[![GitHub pull-requests](https://img.shields.io/github/issues-pr/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/pulls/)
+[![GitHub license](https://img.shields.io/github/license/danwahlin/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/blob/main/LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/danwahlin/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/graphs/contributors/)
+[![GitHub issues](https://img.shields.io/github/issues/danwahlin/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/issues/)
+[![GitHub pull-requests](https://img.shields.io/github/issues-pr/danwahlin/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/pulls/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-[![GitHub watchers](https://img.shields.io/github/watchers/microsoft/langchainjs-for-beginners.svg?style=social&label=Watch)](https://github.com/danwahlin/langchainjs-for-beginners/)
-[![GitHub forks](https://img.shields.io/github/forks/microsoft/langchainjs-for-beginners.svg?style=social&label=Fork)](https://github.com/danwahlin/langchainjs-for-beginners/)
-[![GitHub stars](https://img.shields.io/github/stars/microsoft/langchainjs-for-beginners.svg?style=social&label=Star)](https://github.com/danwahlin/langchainjs-for-beginners/)
+[![GitHub watchers](https://img.shields.io/github/watchers/danwahlin/langchainjs-for-beginners.svg?style=social&label=Watch)](https://github.com/danwahlin/langchainjs-for-beginners/)
+[![GitHub forks](https://img.shields.io/github/forks/danwahlin/langchainjs-for-beginners.svg?style=social&label=Fork)](https://github.com/danwahlin/langchainjs-for-beginners/)
+[![GitHub stars](https://img.shields.io/github/stars/danwahlin/langchainjs-for-beginners.svg?style=social&label=Star)](https://github.com/danwahlin/langchainjs-for-beginners/)
 
 [![Azure AI Foundry Discord](https://img.shields.io/badge/Discord-Azure_AI_Foundry_Community_Discord-blue?style=for-the-badge&logo=discord&color=5865f2&logoColor=fff)](https://aka.ms/foundry/discord)
 
