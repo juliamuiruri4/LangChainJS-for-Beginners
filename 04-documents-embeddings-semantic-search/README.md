@@ -69,6 +69,8 @@ LLMs need text input, but your data comes in many formats:
 
 **Document loaders handle the complexity of reading different formats.**
 
+> **📦 Import Path Note**: LangChain.js document loader imports have evolved over time. This course uses the current recommended import paths like `langchain/document_loaders/fs/text` and `langchain/document`. If you see older tutorials using different paths (e.g., `@langchain/community`), the imports shown here are the modern, correct approach.
+
 ### Example 1: Loading Text Files
 
 In this example, you'll learn how to load text files using TextLoader and access document content and metadata.

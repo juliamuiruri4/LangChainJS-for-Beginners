@@ -378,6 +378,8 @@ This pattern means:
 - ✅ **Cost optimization** - Switch to cheaper providers when appropriate
 - ✅ **Disaster recovery** - Fallback to alternative providers if one is down
 
+> **💡 Note**: LangChain.js also provides `initChatModel()` for even more flexible, provider-agnostic initialization. You'll learn about this alternative pattern in [Chapter 2](../02-chat-models/README.md#-provider-agnostic-initialization-with-initchatmodel).
+
 You'll learn more about production deployment strategies in [Chapter 10](../10-production-best-practices/README.md).
 
 ---

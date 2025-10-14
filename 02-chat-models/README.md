@@ -316,6 +316,122 @@ Notice how temperature 0 is straightforward, temperature 1 is more interesting, 
 
 **Pro tip**: Run the same prompt multiple times at temperature 2 and you'll get very different results each time!
 
+## 🔌 Provider-Agnostic Initialization with initChatModel()
+
+Throughout this course, we've been initializing models directly with `ChatOpenAI`. This is the recommended approach for learning and for working with GitHub Models or Azure OpenAI. However, LangChain.js also provides `initChatModel()` - a provider-agnostic pattern for advanced use cases.
+
+### Why Learn About initChatModel()?
+
+**Think of it like universal power adapters**: Instead of carrying different chargers for each device (OpenAI, Anthropic, Google), you have one adapter that works with all of them.
+
+**When `initChatModel()` Shines**:
+- 🔄 **Multiple Provider Types**: Switching between OpenAI, Anthropic, Google, etc.
+- 🏗️ **Framework Building**: Creating libraries that support many providers
+- 🎯 **Provider-Agnostic Code**: Write once, work with any standard provider
+
+**When to Use `ChatOpenAI` (This Course)**:
+- ✅ **GitHub Models**: Custom endpoints require specific configuration
+- ✅ **Azure OpenAI**: Non-standard API paths work better with ChatOpenAI
+- ✅ **Learning**: More explicit and easier to understand
+- ✅ **Single Provider**: When you're primarily using one provider
+
+> **💡 Important**: `initChatModel()` works best with standard provider APIs (native OpenAI, Anthropic, Google). For GitHub Models and Azure OpenAI used in this course, `ChatOpenAI` is the recommended and most reliable approach.
+
+### Example 6: Understanding Provider-Agnostic Patterns
+
+This example demonstrates the concept of provider-agnostic initialization and why `ChatOpenAI` is recommended for this course.
+
+**Code**: [`code/06-init-chat-model.ts`](./code/06-init-chat-model.ts)
+**Run**: `tsx 02-chat-models/code/06-init-chat-model.ts`
+
+```typescript
+import { initChatModel } from "langchain/chat_models/universal";
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage } from "@langchain/core/messages";
+import "dotenv/config";
+
+// Switching between different provider types (conceptual example)
+async function switchingProviders() {
+  // OpenAI with standard API
+  const openaiModel = await initChatModel("gpt-4o-mini", {
+    modelProvider: "openai",
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  // Anthropic
+  const anthropicModel = await initChatModel("claude-3-5-sonnet-20241022", {
+    modelProvider: "anthropic",
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  });
+
+  // Google
+  const googleModel = await initChatModel("gemini-pro", {
+    modelProvider: "google",
+    apiKey: process.env.GOOGLE_API_KEY,
+  });
+}
+
+// Recommended approach for this course (GitHub Models/Azure)
+async function courseRecommendation() {
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL || "gpt-4o-mini",
+    configuration: {
+      baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+    },
+    apiKey: process.env.AI_API_KEY,
+    temperature: 0.7,
+  });
+
+  const response = await model.invoke([
+    new HumanMessage("What is LangChain.js in one sentence?")
+  ]);
+
+  console.log("Response:", response.content);
+}
+```
+
+### Comparison: ChatOpenAI vs initChatModel()
+
+| Feature | `ChatOpenAI` | `initChatModel()` |
+|---------|-------------|-------------------|
+| **Import** | `import { ChatOpenAI } from "@langchain/openai"` | `import { initChatModel } from "langchain/chat_models/universal"` |
+| **Initialization** | `new ChatOpenAI({ ... })` | `await initChatModel(...)` |
+| **Custom Endpoints** | ✅ Excellent (GitHub Models, Azure) | ⚠️ Limited (standard APIs only) |
+| **Type Safety** | ✅ Excellent (provider-specific types) | ✅ Good (generic types) |
+| **Learning Curve** | ✅ Easier (explicit) | 🔄 Moderate (abstraction) |
+| **Use Case** | Single provider or custom endpoints | Multiple standard provider types |
+
+### When to Use Each Approach
+
+**Use `ChatOpenAI` (Recommended for this course)**:
+```typescript
+// ✅ Works perfectly with GitHub Models and Azure OpenAI
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+```
+
+**Use `initChatModel()` (Advanced multi-provider apps)**:
+```typescript
+// Best when switching between different provider types
+const model = await initChatModel("gpt-4o-mini", {
+  modelProvider: "openai",  // or "anthropic", "google", etc.
+  apiKey: process.env.OPENAI_API_KEY,
+});
+```
+
+### Key Takeaway
+
+**For this course**: Stick with `ChatOpenAI` - it works reliably with GitHub Models and Azure OpenAI, provides excellent type safety, and is more explicit for learning.
+
+**For future projects**: Consider `initChatModel()` if you're building applications that need to support multiple provider types (OpenAI + Anthropic + Google, etc.) with standard APIs.
+
 ## 🛡️ Error Handling
 
 APIs can fail. Networks drop. Rate limits hit. Good error handling is essential.
