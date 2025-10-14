@@ -77,7 +77,7 @@ npm --version
 
 ```bash
 # Clone the course repository
-git clone https://github.com/microsoft/langchainjs-for-beginners
+git clone https://github.com/danwahlin/langchainjs-for-beginners
 
 # Navigate to the project
 cd langchainjs-for-beginners
@@ -365,7 +365,7 @@ You're all set! Time to build your first AI application.
 ## 💬 Need Help?
 
 - Join our [Discord community](https://aka.ms/foundry/discord)
-- Ask in [GitHub Discussions](https://github.com/microsoft/langchainjs-for-beginners/discussions)
+- Ask in [GitHub Discussions](https://github.com/danwahlin/langchainjs-for-beginners/discussions)
 - Check the [FAQ](../FAQ.md)
 
 ---
@@ -377,4 +377,12 @@ You're all set! Time to build your first AI application.
 
 ---
 
-💬 **Questions or stuck?** Join our [Discord community](https://aka.ms/foundry/discord) or open a [GitHub Discussion](https://github.com/microsoft/langchainjs-for-beginners/discussions)!
+## 💬 Questions or stuck?
+
+If you get stuck or have any questions about building AI apps, join:
+
+[![Azure AI Foundry Discord](https://img.shields.io/badge/Discord-Azure_AI_Foundry_Community_Discord-blue?style=for-the-badge&logo=discord&color=5865f2&logoColor=fff)](https://aka.ms/foundry/discord)
+
+If you have product feedback or errors while building visit:
+
+[![Azure AI Foundry Developer Forum](https://img.shields.io/badge/GitHub-Azure_AI_Foundry_Developer_Forum-blue?style=for-the-badge&logo=github&color=000000&logoColor=fff)](https://aka.ms/foundry/forum)

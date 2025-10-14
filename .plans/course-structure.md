@@ -736,7 +736,7 @@ Ready to practice? Head over to [assignment.md](./assignment.md) for hands-on ch
 
 ---
 
-💬 **Questions or stuck?** Join our [Discord community](link) or open a [GitHub Discussion](link)!
+## 💬 Questions or stuck? Join our [Discord community](link) or open a [GitHub Discussion](link)!
 ```
 
 ---

@@ -595,4 +595,4 @@ You've completed the LangChain.js for Beginners course! You now have the skills 
 
 ---
 
-💬 **Questions or stuck?** Join our [Discord community](https://aka.ms/foundry/discord)!
+## 💬 Questions or stuck? Join our [Discord community](https://aka.ms/foundry/discord)!

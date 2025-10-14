@@ -498,4 +498,4 @@ The assignment includes:
 
 ---
 
-💬 **Questions or stuck?** Join our [Discord community](https://aka.ms/foundry/discord)!
+## 💬 Questions or stuck? Join our [Discord community](https://aka.ms/foundry/discord)!

@@ -1,155 +1,119 @@
 # 🦜🔗 LangChain.js for Beginners
 
-Welcome to **LangChain.js for Beginners** - your complete guide to building AI-powered applications with LangChain.js and TypeScript!
+[![GitHub license](https://img.shields.io/github/license/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/blob/main/LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/graphs/contributors/)
+[![GitHub issues](https://img.shields.io/github/issues/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/issues/)
+[![GitHub pull-requests](https://img.shields.io/github/issues-pr/microsoft/langchainjs-for-beginners.svg)](https://github.com/danwahlin/langchainjs-for-beginners/pulls/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-## What You'll Build
+[![GitHub watchers](https://img.shields.io/github/watchers/microsoft/langchainjs-for-beginners.svg?style=social&label=Watch)](https://github.com/danwahlin/langchainjs-for-beginners/)
+[![GitHub forks](https://img.shields.io/github/forks/microsoft/langchainjs-for-beginners.svg?style=social&label=Fork)](https://github.com/danwahlin/langchainjs-for-beginners/)
+[![GitHub stars](https://img.shields.io/github/stars/microsoft/langchainjs-for-beginners.svg?style=social&label=Star)](https://github.com/danwahlin/langchainjs-for-beginners/)
+
+[![Azure AI Foundry Discord](https://img.shields.io/badge/Discord-Azure_AI_Foundry_Community_Discord-blue?style=for-the-badge&logo=discord&color=5865f2&logoColor=fff)](https://aka.ms/foundry/discord)
+
+## 🚀 Getting Started
+
+Welcome to **LangChain.js for Beginners** - your complete, hands-on guide to building AI-powered applications with LangChain.js and TypeScript!
+
+Think of building an AI application like cooking a gourmet meal. You could source ingredients from scratch, create every sauce from base components, and build your own cooking tools—or you could use a well-stocked kitchen with quality ingredients and proven recipes. **LangChain.js is that well-stocked kitchen for AI development.**
+
+### What You'll Build
 
 By the end of this course, you'll know how to:
-- ✅ Create intelligent chatbots with context-aware responses
-- ✅ Build semantic search engines that understand meaning
-- ✅ Develop AI agents that can reason and use tools autonomously
-- ✅ Construct Retrieval Augmented Generation (RAG) systems
-- ✅ Integrate function calling and external tools
-- ✅ Connect to Model Context Protocol (MCP) servers
 
-## Why LangChain.js?
+- ✅ Create intelligent chatbots with streaming responses and conversation memory
+- ✅ Engineer effective prompts with templates and few-shot examples
+- ✅ Build semantic search engines using embeddings and vector stores
+- ✅ Extract structured data from AI responses using Zod schemas
+- ✅ Extend AI capabilities with function calling and custom tools
+- ✅ Construct Retrieval Augmented Generation (RAG) systems with LCEL
+- ✅ Develop autonomous AI agents that reason and use tools
+- ✅ Understand Model Context Protocol (MCP) for AI integrations
 
-Think of building an AI application like cooking a gourmet meal. You could source ingredients from scratch, create every sauce from base components, and build your own cooking tools—or you could use a well-stocked kitchen with quality ingredients and proven recipes. LangChain.js is that well-stocked kitchen for AI development.
+### Why LangChain.js?
 
 LangChain.js provides:
+
 - 🔌 **Model Flexibility**: Switch between AI providers (OpenAI, Anthropic, Azure, etc.) with minimal code changes
 - 🧩 **Pre-built Components**: Reusable building blocks for common AI patterns
 - 🔄 **Easy Integration**: Connect LLMs with your data, APIs, and tools
 - 🎯 **Production Ready**: Built-in features for monitoring, debugging, and scaling
 
-## Course Structure
+> **New to AI development?** Check out our companion course [**Generative AI with JavaScript**](https://github.com/microsoft/generative-ai-with-javascript) to learn AI fundamentals first!
 
-This course contains **8 sections** (setup + 7 chapters), each focusing on a specific aspect of LangChain.js:
+---
 
-0. **[Course Setup](./00-course-setup/README.md)** - Get your development environment ready
-1. **[Introduction to LangChain.js](./01-introduction/README.md)** - Understanding the framework and core concepts
-2. **[Chat Models & Basic Interactions](./02-chat-models/README.md)** - Chat models, messages, and making your first API call
-3. **[Prompt Engineering with Templates](./03-prompt-templates/README.md)** - Creating dynamic, reusable prompts
-4. **[Documents, Embeddings & Semantic Search](./04-documents-embeddings-semantic-search/README.md)** - Loading documents, creating embeddings, and building semantic search
-5. **[Function Calling & Tooling](./05-function-calling-tooling/README.md)** - Extending AI capabilities with function calling and tools
-6. **[Building RAG Systems](./06-rag-systems/README.md)** - Combining retrieval with generation using LCEL
-7. **[Agents & MCP](./07-agents-mcp/README.md)** - Building autonomous agents and integrating Model Context Protocol
+## 📚 Course Structure
 
-## Prerequisites
+This course contains **8 sections** (setup + 7 chapters), each building on the previous to teach you LangChain.js from the ground up. Each chapter includes conceptual explanations, working code examples, and hands-on challenges.
 
-Before starting this course, you should be comfortable with:
-- JavaScript/TypeScript fundamentals
-- Node.js >=22.0.0 (LTS) and npm
-- Async/await and Promises
-- Basic Generative AI concepts (covered in our "GenAI for JavaScript Developers" course)
+| # | Chapter | Description | Key Concepts |
+|---|---------|-------------|--------------|
+| 0 | [Course Setup](./00-course-setup/README.md) | Get your development environment ready | Environment setup, AI provider configuration |
+| 1 | [Introduction to LangChain.js](./01-introduction/README.md) | Understanding the framework and core concepts | LangChain fundamentals, first LLM call |
+| 2 | [Chat Models & Basic Interactions](./02-chat-models/README.md) | Chat models, messages, and conversations | Message types, streaming, callbacks |
+| 3 | [Prompt Engineering with Templates](./03-prompt-templates/README.md) | Creating dynamic, reusable prompts | Prompt templates, few-shot prompting |
+| 4 | [Documents, Embeddings & Semantic Search](./04-documents-embeddings-semantic-search/README.md) | Loading documents, creating embeddings, and building semantic search | Vector embeddings, similarity search |
+| 5 | [Function Calling & Tooling](./05-function-calling-tooling/README.md) | Extending AI capabilities with function calling and tools | Zod schemas, tool binding, type safety |
+| 6 | [Building RAG Systems](./06-rag-systems/README.md) | Combining retrieval with generation using LCEL | RAG pattern, LCEL chains, retrieval |
+| 7 | [Agents & MCP](./07-agents-mcp/README.md) | Building autonomous agents and integrating Model Context Protocol | ReAct pattern, agent loops, MCP |
 
-## Getting Started
-
-Each chapter is self-contained with:
+Each chapter includes:
 - 📖 **Conceptual explanations** with real-world analogies
 - 💻 **Working code examples** you can run immediately
 - 🎯 **Hands-on challenges** to test your understanding
 - 🔑 **Key takeaways** to reinforce learning
 
-### Setup
+---
 
-```bash
-# Clone this repository
-git clone https://github.com/microsoft/langchainjs-for-beginners.git
+## 📋 Prerequisites
 
-# Navigate to the project
-cd langchainjs-for-beginners
+Before starting this course, you should be comfortable with:
 
-# Install dependencies
-npm install
+- **JavaScript/TypeScript fundamentals** - Variables, functions, objects, async/await
+- **Node.js (LTS)** and npm - Package management and CLI tools
+- **Basic Generative AI concepts** - Basic understanding of LLMs, prompts, tokens which are covered in our [GenAI with JavaScript](https://github.com/microsoft/generative-ai-with-javascript) course
 
-# Copy the example environment file
-cp .env.example .env
+### Required Tools
 
-# Edit .env with your AI provider credentials
-# See .env.example for all options
-```
+- [Node.js (LTS)](https://nodejs.org/)
+- Code editor ([VS Code recommended](https://code.visualstudio.com/))
+- Terminal/Command line
+- [Git](https://git-scm.com/)
 
-### AI Provider Configuration
+### AI Provider Account
 
-**This course is provider-agnostic!** All examples work with:
-- ✅ **GitHub Models** (Free - recommended for learning)
-- ✅ **Azure AI Foundry** (Production deployments)
-- ✅ **OpenAI Direct** (Also production-ready)
+You'll need access to an AI provider. We recommend:
 
-Edit `.env` file with three values:
+- ✅ **GitHub Models** - Free for learning and experimentation
+- ✅ **Azure AI Foundry** - For production deployments
 
-```bash
-AI_API_KEY=your_api_key_here
-AI_ENDPOINT=your_endpoint_url
-AI_MODEL=gpt-4o-mini
-```
+---
 
-**No code changes needed to switch providers** - just update `.env`!
+## 📚 Related Courses
 
-👉 **Start with [Course Setup](./00-course-setup/README.md)** for detailed configuration!
+Expand your AI development skills with these Microsoft courses:
 
-## Learning Path
+- [Generative AI with JavaScript](https://github.com/microsoft/generative-ai-with-javascript)
+- [Generative AI for Beginners](https://aka.ms/genai-beginners)
+- [Generative AI for Beginners .NET](https://github.com/microsoft/Generative-AI-for-beginners-dotnet)
+- [Generative AI with Java](https://github.com/microsoft/Generative-AI-for-beginners-java)
+- [AI for Beginners](https://aka.ms/ai-beginners)
+- [AI Agents for Beginners - A Course](https://github.com/microsoft/ai-agents-for-beginners)
+- [Data Science for Beginners](https://aka.ms/datascience-beginners)
+- [ML for Beginners](https://aka.ms/ml-beginners)
+- [Cybersecurity for Beginners](https://github.com/microsoft/Security-101) 
+- [Web Dev for Beginners](https://aka.ms/webdev-beginners)
+- [IoT for Beginners](https://aka.ms/iot-beginners)
+- [XR Development for Beginners](https://github.com/microsoft/xr-development-for-beginners)
+- [Mastering GitHub Copilot for Paired Programming](https://github.com/microsoft/Mastering-GitHub-Copilot-for-Paired-Programming)
+- [Mastering GitHub Copilot for C#/.NET Developers](https://github.com/microsoft/mastering-github-copilot-for-dotnet-csharp-developers)
+- [Choose Your Own Copilot Adventure](https://github.com/microsoft/CopilotAdventures)
 
-Each chapter builds on the previous one, but you can also jump to specific topics of interest. We recommend following the sequence for the best learning experience.
+---
 
-**Estimated Time**: 12-15 hours total (including hands-on exercises)
-
-## Testing & Validation
-
-All code examples in this course are automatically tested to ensure they work correctly.
-
-### Build Check
-
-Compile all TypeScript files to check for errors and warnings:
-
-```bash
-# Check all files compile without errors
-npm run build
-```
-
-This will:
-- ✅ Compile all 98 TypeScript files across all chapters
-- ✅ Show type errors and warnings
-- ✅ Validate imports and syntax
-- ✅ Fast - no API calls, just compilation check
-
-### Runtime Validation
-
-Run all code examples with actual API calls:
-
-```bash
-# Validate all code examples
-npm test
-
-# Or test individual examples
-npx tsx 01-introduction/code/01-hello-world.ts
-npx tsx 05-function-calling-tooling/code/01-simple-tool.ts
-```
-
-The validation script:
-- ✅ Tests all TypeScript examples across all chapters
-- ✅ Automatically handles interactive examples with simulated input
-- ✅ Provides detailed error reports if issues are found
-- ✅ Runs in GitHub Actions when triggered (see below)
-
-**GitHub Actions Validation**: To save CI time and API costs, validation only runs when you include `validate-examples` in your commit message:
-
-```bash
-git commit -m "Update RAG examples validate-examples"
-```
-
-Or trigger manually via the GitHub Actions UI.
-
-**Note**: Runtime validation requires `AI_API_KEY`, `AI_ENDPOINT`, and `AI_MODEL` environment variables. See [Course Setup](./00-course-setup/README.md) for details.
-
-📖 **Full Testing Guide**: See [TESTING.md](./TESTING.md) for detailed testing instructions, troubleshooting, and best practices.
-
-## Support & Community
-
-- 💬 **Issues**: Found a bug or have a question? [Open an issue](https://github.com/microsoft/langchainjs-for-beginners/issues)
-- 🌟 **Star this repo** if you find it helpful!
-- 🤝 **Contribute**: Pull requests are welcome
+## Getting Help
 
 If you get stuck or have any questions about building AI apps, join:
 
@@ -159,13 +123,17 @@ If you have product feedback or errors while building visit:
 
 [![Azure AI Foundry Developer Forum](https://img.shields.io/badge/GitHub-Azure_AI_Foundry_Developer_Forum-blue?style=for-the-badge&logo=github&color=000000&logoColor=fff)](https://aka.ms/foundry/forum)
 
-## Additional Resources
-
-- [LangChain.js Official Documentation](https://js.langchain.com/)
-- [LangGraph Documentation](https://langchain-ai.github.io/langgraphjs/)
-- [GitHub Models](https://github.com/marketplace/models)
-- [Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/)
-
 ---
 
-**Ready to build amazing AI applications?** Let's get started with [Course Setup](./00-course-setup/README.md)! 🚀
+## Contributing
+
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit <https://cla.opensource.microsoft.com>.
+
+When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Trademarks
+
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general). Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos is subject to those third-parties' policies.
+

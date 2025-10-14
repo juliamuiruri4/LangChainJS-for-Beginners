@@ -91,7 +91,7 @@ Each chapter is self-contained with:
 
 ```bash
 # Clone this repository
-git clone https://github.com/microsoft/langchainjs-for-beginners
+git clone https://github.com/danwahlin/langchainjs-for-beginners
 
 # Navigate to the project
 cd langchainjs-for-beginners
@@ -110,7 +110,7 @@ Each chapter builds on the previous one, but you can also jump to specific topic
 
 ## Support & Community
 
-- 💬 **Issues**: Found a bug or have a question? [Open an issue](https://github.com/microsoft/langchainjs-for-beginners/issues)
+- 💬 **Issues**: Found a bug or have a question? [Open an issue](https://github.com/danwahlin/langchainjs-for-beginners/issues)
 - 🌟 **Star this repo** if you find it helpful!
 - 🤝 **Contribute**: Pull requests are welcome
 
