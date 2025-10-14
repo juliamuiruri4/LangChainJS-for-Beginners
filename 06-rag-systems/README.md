@@ -61,11 +61,229 @@ Answer with Citations
 
 ### Why RAG?
 
-- **Up-to-date information**: Add new docs without retraining
-- **Source attribution**: Know where answers come from
-- **Domain-specific**: Works with your proprietary data
-- **Cost-effective**: No model fine-tuning needed
-- **Accurate**: Reduces hallucinations
+RAG solves a fundamental problem: **How do you give an LLM access to information it wasn't trained on?**
+
+You have three main approaches, and understanding when to use each is critical:
+
+### When to Use RAG vs Fine-Tuning vs Prompt Engineering
+
+#### Approach 1: Prompt Engineering (Simplest)
+
+**What it is**: Include all context directly in your prompts
+
+```typescript
+const context = "Product X costs $99. Product Y costs $199.";
+const prompt = `${context}\n\nQuestion: How much is Product X?`;
+```
+
+**When to use**:
+- ✅ Small amount of information (fits in prompt)
+- ✅ Information changes rarely
+- ✅ Same context used for every request
+- ✅ No need for search/retrieval
+
+**When NOT to use**:
+- ❌ Thousands of documents (exceeds context window)
+- ❌ Need to search through information
+- ❌ Information updates frequently
+- ❌ Different context needed per request
+
+**Example use cases**:
+- System instructions
+- API documentation that fits in prompt
+- Small static knowledge bases
+- Few-shot examples
+
+---
+
+#### Approach 2: RAG (Retrieval Augmented Generation)
+
+**What it is**: Search a knowledge base for relevant information, then include it in prompts
+
+```typescript
+// 1. Search vector store for relevant docs
+const relevantDocs = await vectorStore.search(userQuestion);
+
+// 2. Include found docs in prompt
+const prompt = `Context: ${relevantDocs}\n\nQuestion: ${userQuestion}`;
+```
+
+**When to use**:
+- ✅ Large knowledge base (hundreds to millions of documents)
+- ✅ Information updates frequently (add/remove docs anytime)
+- ✅ Need source attribution (cite where answers come from)
+- ✅ Domain-specific or proprietary data
+- ✅ Want to reduce hallucinations
+- ✅ Cost-effective solution (no model training)
+
+**When NOT to use**:
+- ❌ Teaching the model new patterns or styles
+- ❌ Changing model behavior or personality
+- ❌ Learning new formats or languages
+- ❌ Information fits easily in a prompt
+
+**Benefits**:
+- **Up-to-date information**: Add new documents without retraining the model
+- **Source attribution**: Track which documents produced each answer
+- **Domain-specific**: Works with your proprietary data, trade secrets, internal docs
+- **Cost-effective**: No expensive fine-tuning or retraining required
+- **Accurate**: Grounds answers in actual documents, reducing hallucinations
+- **Scalable**: Handle millions of documents efficiently
+- **Flexible**: Update knowledge base in real-time
+
+**Limitations**:
+- **Retrieval quality matters**: If search doesn't find relevant docs, answers will be poor
+- **Context window limits**: Can only include top K documents in prompt
+- **No behavior change**: Doesn't change how the model writes or reasons
+- **Latency**: Additional retrieval step adds processing time
+
+**Example use cases**:
+- Customer support with knowledge base
+- Legal document analysis
+- Medical records Q&A
+- Company policy assistant
+- Product documentation chatbot
+- Research paper search
+- Code repository Q&A
+
+---
+
+#### Approach 3: Fine-Tuning
+
+**What it is**: Retrain the model on custom data to change its behavior
+
+```typescript
+// Create training dataset
+const trainingData = [
+  { prompt: "...", completion: "..." },
+  // Thousands of examples
+];
+
+// Fine-tune model (can be expensive & time-consuming)
+const fineTunedModel = await trainModel(baseModel, trainingData);
+```
+
+**When to use**:
+- ✅ Need to change model behavior, style, or personality
+- ✅ Teach new patterns (code style, writing format)
+- ✅ Improve performance on specific task types
+- ✅ Reduce need for lengthy prompts
+- ✅ Domain-specific language or jargon
+
+**When NOT to use**:
+- ❌ Just need to add factual information (use RAG instead)
+- ❌ Information updates frequently (retraining is expensive)
+- ❌ Limited training data (need hundreds/thousands of examples)
+- ❌ Budget constraints (fine-tuning costs money and compute)
+
+**Benefits**:
+- Changes model behavior fundamentally
+- Can improve quality on specific tasks
+- Reduces need for complex prompts
+- Can teach new formats/styles
+
+**Limitations**:
+- **Expensive**: Requires compute resources and API credits
+- **Time-consuming**: Training can take hours or days
+- **Static knowledge**: Model's knowledge frozen at training time
+- **Hard to update**: Must retrain to add new information
+- **Requires expertise**: Need ML knowledge to do effectively
+- **Data requirements**: Need large, high-quality training dataset
+
+**Example use cases**:
+- Teaching code style (e.g., company-specific patterns)
+- Custom writing style or tone
+- Domain-specific language (medical, legal)
+- Improved performance on repetitive tasks
+- Reducing bias or unwanted behaviors
+
+---
+
+### Decision Framework: Choosing the Right Approach
+
+Here's a simple decision tree to help you choose:
+
+**Step 1**: Does your information fit in a prompt (< 8,000 tokens)?
+- **YES** → Use **Prompt Engineering** (simplest)
+- **NO** → Continue to Step 2
+
+**Step 2**: Do you need to *add factual information* or *change model behavior*?
+- **Add information** → Use **RAG**
+- **Change behavior** → Use **Fine-Tuning**
+
+**Step 3**: Does your information update frequently?
+- **YES** → Definitely use **RAG** (easy to update)
+- **NO** → Either works, but RAG is cheaper
+
+**Step 4**: Do you need to cite sources?
+- **YES** → Use **RAG** (tracks source documents)
+- **NO** → Either approach works
+
+### Real-World Scenarios
+
+**Scenario 1: Customer Support Chatbot**
+- **Problem**: Answer questions about 10,000 product manuals
+- **Solution**: **RAG** ✅
+- **Why**: Too much content for prompts, updates frequently, need citations
+
+**Scenario 2: Code Style Enforcer**
+- **Problem**: Generate code in company-specific style
+- **Solution**: **Fine-Tuning** ✅
+- **Why**: Teaching patterns/style, not adding facts
+
+**Scenario 3: Simple FAQ Bot**
+- **Problem**: Answer 20 common questions
+- **Solution**: **Prompt Engineering** ✅
+- **Why**: Small dataset fits in prompt, no search needed
+
+**Scenario 4: Legal Document Analyzer**
+- **Problem**: Analyze case law (millions of documents)
+- **Solution**: **RAG** ✅
+- **Why**: Huge dataset, need citations, updates with new rulings
+
+**Scenario 5: Medical Diagnosis Assistant**
+- **Problem**: Suggest diagnoses based on symptoms + medical research
+- **Solution**: **RAG + Fine-Tuning** ✅
+- **Why**: RAG for research papers, fine-tuning for medical reasoning patterns
+
+### Combining Approaches
+
+Often the best solution uses **multiple approaches together**:
+
+```typescript
+// Fine-tuned model with medical knowledge patterns
+const medicalModel = await loadFineTunedModel("medical-v1");
+
+// RAG for current research papers
+const relevantPapers = await vectorStore.search(symptoms);
+
+// Prompt engineering for instructions
+const prompt = `
+You are a medical assistant. Use these research papers:
+${relevantPapers}
+
+Patient symptoms: ${symptoms}
+Suggest possible diagnoses with citations.
+`;
+
+const response = await medicalModel.invoke(prompt);
+```
+
+This combines:
+1. **Fine-tuning**: Medical reasoning patterns
+2. **RAG**: Current research papers
+3. **Prompt engineering**: Instructions and format
+
+### Summary: Why Choose RAG?
+
+Choose RAG when you need to:
+- 📚 Work with large knowledge bases (documents, databases, etc.)
+- 🔄 Update information frequently without retraining
+- 📝 Provide source citations and attribution
+- 💰 Keep costs down (no expensive fine-tuning)
+- ✅ Reduce hallucinations with grounded answers
+- 🏢 Use proprietary or private data
+- ⚡ Get started quickly (faster than fine-tuning)
 
 ---
 
