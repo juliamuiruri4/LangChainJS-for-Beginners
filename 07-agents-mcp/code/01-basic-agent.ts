@@ -69,7 +69,7 @@ async function main() {
     console.log(`  Action: ${toolCall.name}(${JSON.stringify(toolCall.args)})`);
 
     // Execute tool
-    const toolResult = await calculatorTool.invoke(toolCall.args);
+    const toolResult = await calculatorTool.invoke(calculatorTool.schema.parse(toolCall.args));
     console.log(`  Observation: ${toolResult}\n`);
 
     // Add to conversation history

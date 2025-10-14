@@ -269,7 +269,7 @@ console.log("Tool call:", response1.tool_calls[0]);
 
 // Step 2: Execute the tool
 const toolCall = response1.tool_calls[0];
-const toolResult = await weatherTool.invoke(toolCall.args);
+const toolResult = await weatherTool.invoke(weatherTool.schema.parse(toolCall.args));
 console.log("Tool result:", toolResult);
 
 // Step 3: Send result back to LLM
@@ -310,7 +310,7 @@ Final answer: The current temperature in Seattle is 62°F and it's partly cloudy
    - User asks "What's the weather in Seattle?"
    - LLM decides to use `getWeather` tool with `{ city: "Seattle" }`
 2. **Step 2 - Execute the tool**:
-   - Your code calls `weatherTool.invoke(toolCall.args)`
+   - Your code calls `weatherTool.invoke(weatherTool.schema.parse(toolCall.args))`
    - Tool returns: "Current temperature in Seattle: 62°F"
 3. **Step 3 - Send result back to LLM**:
    - Build conversation history: user message + AI tool call + tool result

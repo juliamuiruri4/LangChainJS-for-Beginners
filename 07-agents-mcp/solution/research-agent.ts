@@ -123,9 +123,9 @@ async function main() {
       // Execute the appropriate tool
       let toolResult;
       if (toolCall.name === "search") {
-        toolResult = await searchTool.invoke(toolCall.args);
+        toolResult = await searchTool.invoke(searchTool.schema.parse(toolCall.args));
       } else if (toolCall.name === "calculator") {
-        toolResult = await calculatorTool.invoke(toolCall.args);
+        toolResult = await calculatorTool.invoke(calculatorTool.schema.parse(toolCall.args));
       } else {
         toolResult = `Unknown tool: ${toolCall.name}`;
       }

@@ -183,7 +183,7 @@ while (iteration <= maxIterations) {
   console.log(`Thought: I should use the ${toolCall.name} tool`);
   console.log(`Action: ${toolCall.name}(${JSON.stringify(toolCall.args)})`);
 
-  const toolResult = await calculatorTool.invoke(toolCall.args);
+  const toolResult = await calculatorTool.invoke(calculatorTool.schema.parse(toolCall.args));
   console.log(`Observation: ${toolResult}`);
 
   // 4. Add results to conversation history

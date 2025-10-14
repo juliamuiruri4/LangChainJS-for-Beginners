@@ -204,16 +204,16 @@ async function main() {
     let toolResult;
     switch (toolCall.name) {
       case "search":
-        toolResult = await searchTool.invoke(toolCall.args);
+        toolResult = await searchTool.invoke(searchTool.schema.parse(toolCall.args));
         break;
       case "calculator":
-        toolResult = await calculatorTool.invoke(toolCall.args);
+        toolResult = await calculatorTool.invoke(calculatorTool.schema.parse(toolCall.args));
         break;
       case "unitConverter":
-        toolResult = await unitConverter.invoke(toolCall.args);
+        toolResult = await unitConverter.invoke(unitConverter.schema.parse(toolCall.args));
         break;
       case "comparisonTool":
-        toolResult = await comparisonTool.invoke(toolCall.args);
+        toolResult = await comparisonTool.invoke(comparisonTool.schema.parse(toolCall.args));
         break;
       default:
         toolResult = `Unknown tool: ${toolCall.name}`;
