@@ -1,5 +1,5 @@
 /**
- * Challenge 2 Solution: Simple Q&A Program
+ * Simple Q&A Program
  *
  * A simple interactive Q&A program that lets users ask questions.
  */
