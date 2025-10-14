@@ -192,13 +192,13 @@ async function main() {
       let toolResult;
       switch (toolCall.name) {
         case "currencyConverter":
-          toolResult = await currencyConverter.invoke(toolCall);
+          toolResult = await currencyConverter.invoke(toolCall.args);
           break;
         case "distanceCalculator":
-          toolResult = await distanceCalculator.invoke(toolCall);
+          toolResult = await distanceCalculator.invoke(toolCall.args);
           break;
         case "timeZoneTool":
-          toolResult = await timeZoneTool.invoke(toolCall);
+          toolResult = await timeZoneTool.invoke(toolCall.args);
           break;
         default:
           toolResult = "Unknown tool";

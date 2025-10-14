@@ -103,7 +103,7 @@ while (iteration <= maxIterations) {
 
   // Execute tool
   const toolCall = response.tool_calls[0];
-  const toolResult = await searchTool.invoke(toolCall);
+  const toolResult = await searchTool.invoke(toolCall.args);
 
   // Add to conversation history
   messages.push(

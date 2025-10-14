@@ -400,10 +400,8 @@ Let's review what you learned:
 Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
 
 The assignment includes:
-1. **Setup Challenge** - Verify your environment
-2. **First Interaction** - Build a simple Q&A program
-3. **Message Types Exploration** - Experiment with system prompts
-4. **Model Comparison** - Compare different models' outputs
+1. **System Prompts Experiment** - Learn how SystemMessage affects AI behavior
+2. **Model Performance Comparison** (Bonus) - Compare multiple models on the same task
 
 ---
 

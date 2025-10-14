@@ -68,12 +68,7 @@ const weatherTool = tool(
     return `Current weather in ${input.city}: ...`;
   },
   {
-    name: "getWeather",
-    description: "Get current weather information for a city.",
-    schema: z.object({
-      city: z.string().describe("City name, e.g., 'Tokyo' or 'Paris'"),
-      units: z.enum(["celsius", "fahrenheit"]).optional().describe("Temperature unit")
-    }),
+    // Tool metadata
   }
 );
 
@@ -82,17 +77,12 @@ const modelWithTools = model.bindTools([weatherTool]);
 
 // 5. Execute 3-step pattern
 // Step 1: Get tool call from LLM
-const response1 = await modelWithTools.invoke([new HumanMessage(query)]);
-const toolCall = response1.tool_calls[0];
 
 // Step 2: Execute the tool
-const toolResult = await weatherTool.invoke(toolCall);
 
 // Step 3: Send result back to LLM
 const messages = [
-  new HumanMessage(query),
-  new AIMessage({ content: response1.content, tool_calls: response1.tool_calls }),
-  new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
+  // Add messages here
 ];
 const finalResponse = await model.invoke(messages);
 ```
@@ -150,17 +140,7 @@ const model = new ChatOpenAI({
 // 3. Define multiple tools
 const currencyConverter = tool(
   async (input) => {
-    // Conversion logic
-    return `${input.amount} ${input.from} equals approximately ${result} ${input.to}`;
-  },
-  {
-    name: "currencyConverter",
-    description: "Convert amounts between currencies. Use when user asks about exchange rates.",
-    schema: z.object({
-      amount: z.number().describe("Amount to convert"),
-      from: z.string().describe("Source currency code"),
-      to: z.string().describe("Target currency code")
-    })
+    // Tool implementation
   }
 );
 

@@ -620,10 +620,8 @@ const retriever = new ContextualCompressionRetriever({
 Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
 
 The assignment includes:
-1. **Document Q&A System** - Build RAG for your own documents
-2. **Citation Generator** - Add source attribution
-3. **Multi-Doc RAG** - Handle multiple document types
-4. **Conversational RAG** - Add chat history
+1. **Personal Knowledge Base Q&A** - Build a RAG system over your own documents
+2. **Conversational RAG** (Bonus) - Build a RAG system that maintains conversation history
 
 ---
 

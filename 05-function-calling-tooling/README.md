@@ -192,9 +192,12 @@ console.log("\nTool calls:", response.tool_calls);
 
 // The LLM returns structured tool calls:
 // {
-//   name: "calculator",
-//   args: { expression: "25 * 17" },
-//   id: "call_abc123"
+//   "name": "calculator",
+//   "args": { 
+//       "expression": "25 * 17" 
+//   },
+//   "type": "tool_call",
+//   "id": "call_abc123"
 // }
 ```
 
@@ -203,16 +206,18 @@ console.log("\nTool calls:", response.tool_calls);
 When you run this example with `tsx 05-function-calling-tooling/code/02-tool-calling.ts`, you'll see:
 
 ```
-Response: AIMessage {
-  content: "",
-  tool_calls: [ { name: 'calculator', args: { expression: '25 * 17' }, id: 'call_abc123' } ]
-}
+🤖 Asking: What is 25 * 17?
+
+Response content: 
 
 Tool calls: [
   {
-    name: 'calculator',
-    args: { expression: '25 * 17' },
-    id: 'call_abc123'
+    "name": "calculator",
+    "args": {
+      "expression": "25 * 17"
+    },
+    "type": "tool_call",
+    "id": "call_6lyhZzefMJnbOXvplEFsuSsY"
   }
 ]
 ```
@@ -283,15 +288,19 @@ console.log("Final answer:", finalResponse.content);
 When you run this example with `tsx 05-function-calling-tooling/code/03-tool-execution.ts`, you'll see:
 
 ```
-Tool call: {
-  name: 'getWeather',
-  args: { city: 'Seattle' },
-  id: 'call_xyz789'
-}
+User: What's the weather in Seattle?
 
-Tool result: Current temperature in Seattle: 62°F
+Step 1: LLM generates tool call...
+  Tool: getWeather
+  Args: { city: 'Seattle' }
+  ID: call_fuStirimy94aGqS9KM0arXcU
 
-Final answer: It's currently 62°F in Seattle.
+Step 2: Executing tool...
+  Result: Current temperature in Seattle: 62°F, partly cloudy
+
+Step 3: Sending result back to LLM...
+
+Final answer: The current temperature in Seattle is 62°F and it's partly cloudy.
 ```
 
 ### How It Works
@@ -306,7 +315,7 @@ Final answer: It's currently 62°F in Seattle.
 3. **Step 3 - Send result back to LLM**:
    - Build conversation history: user message + AI tool call + tool result
    - LLM receives the weather data
-   - LLM generates natural language response: "It's currently 62°F in Seattle"
+   - LLM generates natural language response: "The current temperature in Seattle is 62°F and it's partly cloudy."
 
 **Key insight**: This three-step pattern (generate → execute → respond) is the core of function calling!
 
@@ -381,15 +390,15 @@ When you run this example with `tsx 05-function-calling-tooling/code/04-multiple
 
 ```
 Query: What is 125 * 8?
-Chosen tool: calculator
+Chose tool: calculator
 Args: { expression: '125 * 8' }
 
 Query: What's the capital of France?
-Chosen tool: search
+Chose tool: search
 Args: { query: 'capital of France' }
 
 Query: What's the weather in Tokyo?
-Chosen tool: getWeather
+Chose tool: getWeather
 Args: { city: 'Tokyo' }
 ```
 
@@ -508,10 +517,8 @@ const emailTool = tool(
 Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
 
 The assignment includes:
-1. **Weather API Tool** - Create a weather tool with multiple parameters
-2. **Database Query Tool** - Build a tool for data retrieval
-3. **Multi-Tool System** - Combine calculation, search, and conversion tools
-4. **Error Handling** - Build robust tools with validation
+1. **Weather Tool with Complete Execution Loop** - Build a weather tool and implement the complete 3-step execution pattern
+2. **Multi-Tool Travel Assistant** (Bonus) - Build a system with multiple tools where the LLM automatically selects the appropriate tool
 
 ---
 

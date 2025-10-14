@@ -183,7 +183,7 @@ while (iteration <= maxIterations) {
   console.log(`Thought: I should use the ${toolCall.name} tool`);
   console.log(`Action: ${toolCall.name}(${JSON.stringify(toolCall.args)})`);
 
-  const toolResult = await calculatorTool.invoke(toolCall);
+  const toolResult = await calculatorTool.invoke(toolCall.args);
   console.log(`Observation: ${toolResult}`);
 
   // 4. Add results to conversation history
@@ -733,10 +733,8 @@ return "The calculation result is 42. This is the answer to 6 * 7.";
 Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
 
 The assignment includes:
-1. **Research Assistant** - Build an agent with search and summarization
-2. **Data Analysis Agent** - Create an agent for data queries
-3. **MCP Integration** - Connect to external MCP servers
-4. **Multi-Step Reasoning** - Build complex problem-solving agents
+1. **Research Agent with ReAct Loop** - Build an agent from scratch that uses the ReAct pattern to answer questions
+2. **Multi-Step Planning Agent** (Bonus) - Build an agent with multiple specialized tools that requires multi-step reasoning
 
 ---
 

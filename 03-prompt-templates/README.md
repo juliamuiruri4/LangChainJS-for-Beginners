@@ -784,10 +784,8 @@ CompanySchema = {
 Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
 
 The assignment includes:
-1. **Email Generator** - Create templated email responses
-2. **Few-Shot Formatter** - Teach the AI a custom format
-3. **Multi-Language Support** - Build a translation system
-4. **Dynamic Prompt Builder** - Compose prompts based on user preferences
+1. **Few-Shot Format Teacher** - Use few-shot prompting to teach the AI a custom output format
+2. **Product Data Extractor** (Bonus) - Build a system that extracts product information with structured outputs
 
 ---
 

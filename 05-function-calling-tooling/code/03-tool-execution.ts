@@ -62,7 +62,7 @@ async function main() {
 
   // Step 2: Execute the tool
   console.log("\nStep 2: Executing tool...");
-  const toolResult = await weatherTool.invoke(toolCall);
+  const toolResult = await weatherTool.invoke(toolCall.args);
   console.log("  Result:", toolResult);
 
   // Step 3: Send result back to LLM

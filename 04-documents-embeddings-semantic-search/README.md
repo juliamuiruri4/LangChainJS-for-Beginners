@@ -787,13 +787,8 @@ Each with 1536 dimensions
 Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
 
 The assignment includes:
-1. **Multi-Format Loader** - Load and process different file types
-2. **Optimal Chunking** - Experiment with chunk sizes
-3. **Metadata Manager** - Build a document organization system
-4. **Similarity Explorer** - Find similar sentences
-5. **Semantic Book Search** - Build a book recommendation system
-6. **Keyword vs. Semantic** - Compare search approaches
-7. **Multi-lingual Search** - Cross-language semantic search
+1. **Similarity Explorer** - Discover how embeddings capture semantic similarity
+2. **Semantic Book Search** (Bonus) - Build a book recommendation system using semantic search
 
 ---
 
