@@ -13,7 +13,7 @@ By the end of this chapter, you'll be able to:
 - Stream responses for better user experience
 - Handle errors gracefully
 - Control model behavior with parameters
-- Understand token usage and costs
+- Understand token usage
 
 ---
 
@@ -438,37 +438,154 @@ waitTime = 2^attempt * 1000ms
 
 ---
 
-## 📊 Understanding Tokens and Costs
+## 📊 Token Tracking and Costs
 
-### What are Tokens?
+Tokens power AI models, and they directly impact cost and performance. Let's track them!
 
-Tokens are pieces of text that models process:
-- A token is roughly 4 characters
-- "Hello world" ≈ 2 tokens
-- Both input (prompt) and output (response) count as tokens
+### Example 5: Tracking Token Usage
 
-### Why Tokens Matter
+This example shows you how to track token usage for cost estimation and monitoring, helping you optimize your AI application expenses.
 
-- **Cost**: Most AI providers charge per token
-- **Limits**: Models have maximum token limits
-- **Speed**: More tokens = longer processing time
-
-### Calculating Token Usage
+**Code**: [`code/05-token-tracking.ts`](./code/05-token-tracking.ts)
+**Run**: `tsx 02-chat-models/code/05-token-tracking.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
+import "dotenv/config";
 
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  // ... config
-});
+async function trackTokenUsage() {
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL || "gpt-4o-mini",
+    configuration: {
+      baseURL: process.env.AI_ENDPOINT,
+    },
+    apiKey: process.env.AI_API_KEY,
+  });
 
-const response = await model.invoke("Hello!");
+  console.log("📊 Token Usage Tracking Example\n");
 
-// Token information is in response metadata
-console.log(response.response_metadata?.tokenUsage);
-// Output: { promptTokens: 8, completionTokens: 12, totalTokens: 20 }
+  // Make a request
+  const response = await model.invoke(
+    "Explain what TypeScript is in 2 sentences."
+  );
+
+  // Extract token usage from metadata
+  const usage = response.response_metadata?.tokenUsage;
+
+  if (usage) {
+    console.log("Token Breakdown:");
+    console.log(`  Prompt tokens:     ${usage.promptTokens}`);
+    console.log(`  Completion tokens: ${usage.completionTokens}`);
+    console.log(`  Total tokens:      ${usage.totalTokens}`);
+
+    // Estimate cost (gpt-4o-mini pricing as of 2024)
+    const inputCostPer1M = 0.15;  // $0.15 per 1M input tokens
+    const outputCostPer1M = 0.60; // $0.60 per 1M output tokens
+
+    const inputCost = (usage.promptTokens / 1_000_000) * inputCostPer1M;
+    const outputCost = (usage.completionTokens / 1_000_000) * outputCostPer1M;
+    const totalCost = inputCost + outputCost;
+
+    console.log("\nEstimated Cost:");
+    console.log(`  Input:  $${inputCost.toFixed(6)}`);
+    console.log(`  Output: $${outputCost.toFixed(6)}`);
+    console.log(`  Total:  $${totalCost.toFixed(6)}`);
+  }
+
+  console.log("\n📝 Response:");
+  console.log(response.content);
+}
+
+trackTokenUsage().catch(console.error);
 ```
+
+### Expected Output
+
+When you run this example with `tsx 02-chat-models/code/05-token-tracking.ts`, you'll see:
+
+```
+📊 Token Usage Tracking Example
+
+Token Breakdown:
+  Prompt tokens:     12
+  Completion tokens: 45
+  Total tokens:      57
+
+📝 Response:
+TypeScript is a superset of JavaScript that adds static typing to help catch errors during development. It compiles to plain JavaScript and runs in any JavaScript environment.
+```
+
+### How It Works
+
+**What's happening**:
+1. **Make API call**: Send a prompt to the model
+2. **Extract metadata**: Get `response.response_metadata.tokenUsage`
+3. **Calculate costs**: Multiply tokens by provider rates
+4. **Track spending**: Monitor costs per request
+
+**Key insights**:
+- **Prompt tokens**: Your input (question + conversation history)
+- **Completion tokens**: AI's output (the response)
+- **Total tokens**: Sum of both (what you pay for)
+
+**Why track tokens?**
+- 💰 **Cost monitoring**: Understand your API spending
+- ⚡ **Performance**: More tokens = slower responses
+- 📊 **Optimization**: Identify expensive queries
+- 🎯 **Budgeting**: Predict costs for production
+
+---
+
+### Cost Optimization Strategies
+
+✅ **Use the right model for the task**
+✅ **Limit response length**
+```typescript
+const model = new ChatOpenAI({
+  model: "gpt-4o-mini",
+  maxTokens: 100, // Cap the response length
+});
+```
+
+✅ **Trim conversation history**
+```typescript
+// Keep only the last 10 messages
+const recentMessages = messages.slice(-10);
+const response = await model.invoke(recentMessages);
+```
+
+✅ **Cache responses for common queries**
+```typescript
+const cache = new Map();
+
+async function getCachedResponse(prompt: string) {
+  if (cache.has(prompt)) {
+    return cache.get(prompt); // Free!
+  }
+
+  const response = await model.invoke(prompt);
+  cache.set(prompt, response);
+  return response;
+}
+```
+
+✅ **Batch process when possible**
+```typescript
+// Process multiple items in one call instead of separate calls
+const prompt = `Summarize each of these articles:
+1. ${article1}
+2. ${article2}
+3. ${article3}`;
+
+// One API call vs. three separate calls
+```
+
+### Why Costs Matter
+
+- **Models have limits**: Most models have token limits (4K-128K tokens)
+- **Speed impact**: More tokens = longer processing time
+- **Budget planning**: Understand costs before going to production
+- **Efficiency**: Optimize prompts to reduce unnecessary tokens
 
 ---
 
@@ -478,6 +595,8 @@ console.log(response.response_metadata?.tokenUsage);
 - ✅ **Streaming**: Display responses as they generate for better UX
 - ✅ **Temperature**: Controls randomness (0 = consistent, 2 = creative)
 - ✅ **Error handling**: Always use try-catch and implement retries
+- ✅ **Token tracking**: Monitor usage and estimate costs for budgeting
+- ✅ **Cost optimization**: Choose right models, limit responses, cache results
 - ✅ **Tokens**: Impact cost and limits (1 token ≈ 4 characters)
 - ✅ **Context window**: Models can only process limited conversation history
 
@@ -488,10 +607,8 @@ console.log(response.response_metadata?.tokenUsage);
 Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
 
 The assignment includes:
-1. **Multi-Turn Chatbot** - Build a conversational bot
-2. **Streaming Interface** - Create a streaming chat interface
-3. **Temperature Experiment** - Compare different temperature settings
-4. **Error Recovery** - Implement robust error handling
+1. **Multi-Turn Chatbot** - Build a conversational bot with history
+2. **Temperature Experiment** (Bonus) - Compare creativity at different settings
 
 ---
 
