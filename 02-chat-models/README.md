@@ -9,11 +9,11 @@ In this chapter, you'll master the art of having natural conversations with AI m
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
-- Have multi-turn conversations with AI
-- Stream responses for better user experience
-- Handle errors gracefully
-- Control model behavior with parameters
-- Understand token usage
+✅ Have multi-turn conversations with AI
+✅ Stream responses for better user experience
+✅ Handle errors gracefully
+✅ Control model behavior with parameters
+✅ Understand token usage
 
 ---
 
@@ -207,9 +207,9 @@ You'll notice the text appears progressively, word by word, rather than all at o
 - Perceived performance improvement even if total time is the same
 
 **When to Use**:
-- ✅ Long responses (articles, explanations, code)
-- ✅ User-facing chatbots and interactive applications
-- ✅ When you want to display progress to users
+✅ Long responses (articles, explanations, code)
+✅ User-facing chatbots and interactive applications
+✅ When you want to display progress to users
 - ❌ When you need the full response first (parsing, validation, post-processing)
 
 ---
@@ -330,10 +330,10 @@ Throughout this course, we've been initializing models directly with `ChatOpenAI
 - 🎯 **Provider-Agnostic Code**: Write once, work with any standard provider
 
 **When to Use `ChatOpenAI` (This Course)**:
-- ✅ **GitHub Models**: Custom endpoints require specific configuration
-- ✅ **Azure OpenAI**: Non-standard API paths work better with ChatOpenAI
-- ✅ **Learning**: More explicit and easier to understand
-- ✅ **Single Provider**: When you're primarily using one provider
+✅ **GitHub Models**: Custom endpoints require specific configuration
+✅ **Azure OpenAI**: Non-standard API paths work better with ChatOpenAI
+✅ **Learning**: More explicit and easier to understand
+✅ **Single Provider**: When you're primarily using one provider
 
 > **💡 Important**: `initChatModel()` works best with standard provider APIs (native OpenAI, Anthropic, Google). For GitHub Models and Azure OpenAI used in this course, `ChatOpenAI` is the recommended and most reliable approach.
 
@@ -707,14 +707,14 @@ const prompt = `Summarize each of these articles:
 
 ## 🎓 Key Takeaways
 
-- ✅ **Multi-turn conversations**: Send entire message history with each call
-- ✅ **Streaming**: Display responses as they generate for better UX
-- ✅ **Temperature**: Controls randomness (0 = consistent, 2 = creative)
-- ✅ **Error handling**: Always use try-catch and implement retries
-- ✅ **Token tracking**: Monitor usage and estimate costs for budgeting
-- ✅ **Cost optimization**: Choose right models, limit responses, cache results
-- ✅ **Tokens**: Impact cost and limits (1 token ≈ 4 characters)
-- ✅ **Context window**: Models can only process limited conversation history
+✅ **Multi-turn conversations**: Send entire message history with each call
+✅ **Streaming**: Display responses as they generate for better UX
+✅ **Temperature**: Controls randomness (0 = consistent, 2 = creative)
+✅ **Error handling**: Always use try-catch and implement retries
+✅ **Token tracking**: Monitor usage and estimate costs for budgeting
+✅ **Cost optimization**: Choose right models, limit responses, cache results
+✅ **Tokens**: Impact cost and limits (1 token ≈ 4 characters)
+✅ **Context window**: Models can only process limited conversation history
 
 ---
 

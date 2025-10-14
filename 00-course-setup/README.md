@@ -32,10 +32,10 @@ Before you start cutting wood or assembling pieces, you need to:
 **Would you start building without these?** Of course not!
 
 The same applies to AI development. This setup chapter ensures you have:
-- ✅ A solid foundation to build on
-- ✅ Access to the AI models you need
-- ✅ All tools properly configured
-- ✅ A smooth development experience
+✅ A solid foundation to build on
+✅ Access to the AI models you need
+✅ All tools properly configured
+✅ A smooth development experience
 
 **Let's get your workshop ready!** In just 15 minutes, you'll be equipped to build powerful AI applications.
 
@@ -66,10 +66,10 @@ npm --version
 ```
 
 **Why LTS?**
-- ✅ **Stable**: Production-ready and well-tested
-- ✅ **Supported**: Receives security updates and bug fixes
-- ✅ **Reliable**: Recommended for all applications
-- ✅ **Compatible**: Works with all LangChain.js packages
+✅ **Stable**: Production-ready and well-tested
+✅ **Supported**: Receives security updates and bug fixes
+✅ **Reliable**: Recommended for all applications
+✅ **Compatible**: Works with all LangChain.js packages
 
 ---
 
@@ -114,10 +114,10 @@ tsx myfile.ts
 ```
 
 **Benefits**:
-- ✅ **Faster development** - No compile step needed
-- ✅ **Simpler workflow** - One command instead of two
-- ✅ **Global installation** - Available everywhere on your system
-- ✅ **Perfect for learning** - Focus on code, not build processes
+✅ **Faster development** - No compile step needed
+✅ **Simpler workflow** - One command instead of two
+✅ **Global installation** - Available everywhere on your system
+✅ **Perfect for learning** - Focus on code, not build processes
 
 Throughout this course, you'll run examples using `tsx filename.ts` - quick and easy!
 
@@ -140,10 +140,10 @@ GitHub Models provides free access to powerful AI models—you just need a Perso
 
 ### Why GitHub Models?
 
-- ✅ **Free**: No credit card required
-- ✅ **Powerful**: Access to GPT-4o, GPT-4o-mini, and other models
-- ✅ **Easy**: Use your existing GitHub account
-- ✅ **Learning**: Perfect for this course!
+✅ **Free**: No credit card required
+✅ **Powerful**: Access to GPT-4o, GPT-4o-mini, and other models
+✅ **Easy**: Use your existing GitHub account
+✅ **Learning**: Perfect for this course!
 
 ---
 
@@ -238,10 +238,10 @@ AI_ENDPOINT=https://your-resource.openai.azure.com
 ```
 
 **Important Notes:**
-- ✅ **Deployment names must match**: The course uses `gpt-4o-mini` and `text-embedding-3-small` as deployment names
-- ✅ **Keep your API key secure**: Never commit `.env` to version control
-- ✅ **Cost management**: Azure AI Foundry is a paid service. Set up cost alerts in the Azure portal
-- ✅ **Production ready**: Azure AI Foundry provides enterprise features like Responsible AI, monitoring, logging, and SLA guarantees
+✅ **Deployment names must match**: The course uses `gpt-4o-mini` and `text-embedding-3-small` as deployment names
+✅ **Keep your API key secure**: Never commit `.env` to version control
+✅ **Cost management**: Azure AI Foundry is a paid service. Set up cost alerts in the Azure portal
+✅ **Production ready**: Azure AI Foundry provides enterprise features like Responsible AI, monitoring, logging, and SLA guarantees
 
 **Additional Resources:**
 - [Azure AI Foundry Quickstart](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=typescript)

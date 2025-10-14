@@ -9,12 +9,12 @@ In this chapter, you'll learn to build AI agents that can reason about problems,
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
-- Understand what AI agents are and how they differ from chains
-- Implement the ReAct (Reasoning + Acting) pattern
-- Build agent loops that iterate until solving a problem
-- Give agents multiple tools and let them choose the right one
-- Understand Model Context Protocol (MCP) and its benefits
-- Build multi-step, autonomous AI systems
+✅ Understand what AI agents are and how they differ from chains
+✅ Implement the ReAct (Reasoning + Acting) pattern
+✅ Build agent loops that iterate until solving a problem
+✅ Give agents multiple tools and let them choose the right one
+✅ Understand Model Context Protocol (MCP) and its benefits
+✅ Build multi-step, autonomous AI systems
 
 ---
 
@@ -616,13 +616,13 @@ Now that you've learned both chains (Chapter 6) and agents (Chapter 7), here's h
 
 ## 🎓 Key Takeaways
 
-- ✅ **Agents make autonomous decisions** - They choose which tools to use and when
-- ✅ **ReAct pattern is the core**: Reason → Act → Observe → Repeat until solved
-- ✅ **Manual agent loops teach fundamentals** - Understanding the pattern helps you use higher-level abstractions
-- ✅ **Tool descriptions matter** - Clear descriptions help agents pick the right tool
-- ✅ **MCP is the future of AI tool integration** - Like USB-C for AI applications
-- ✅ **MCP provides standardization** - One protocol, many services
-- ✅ **Start simple, scale up** - Learn with manual loops, graduate to production frameworks
+✅ **Agents make autonomous decisions** - They choose which tools to use and when
+✅ **ReAct pattern is the core**: Reason → Act → Observe → Repeat until solved
+✅ **Manual agent loops teach fundamentals** - Understanding the pattern helps you use higher-level abstractions
+✅ **Tool descriptions matter** - Clear descriptions help agents pick the right tool
+✅ **MCP is the future of AI tool integration** - Like USB-C for AI applications
+✅ **MCP provides standardization** - One protocol, many services
+✅ **Start simple, scale up** - Learn with manual loops, graduate to production frameworks
 
 ---
 
@@ -750,12 +750,12 @@ The assignment includes:
 ## 🚀 What's Next?
 
 Congratulations! You've completed the core LangChain.js course. You've learned:
-- ✅ Chat models and conversations (Chapters 1-2)
-- ✅ Prompt engineering and templates (Chapter 3)
-- ✅ Documents, embeddings, and semantic search (Chapter 4)
-- ✅ Function calling and tool integration (Chapter 5)
-- ✅ RAG systems with LCEL (Chapter 6)
-- ✅ Autonomous agents and MCP (Chapter 7)
+✅ Chat models and conversations (Chapters 1-2)
+✅ Prompt engineering and templates (Chapter 3)
+✅ Documents, embeddings, and semantic search (Chapter 4)
+✅ Function calling and tool integration (Chapter 5)
+✅ RAG systems with LCEL (Chapter 6)
+✅ Autonomous agents and MCP (Chapter 7)
 
 ### Applying What You've Learned
 

@@ -9,12 +9,12 @@ In this chapter, you'll learn how to extend AI capabilities beyond text generati
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
-- Understand what function calling is and why it matters
-- Create tools with Zod schemas for type safety
-- Bind tools to chat models
-- Invoke tools and handle responses
-- Build systems with multiple tools
-- Apply best practices for tool design
+✅ Understand what function calling is and why it matters
+✅ Create tools with Zod schemas for type safety
+✅ Bind tools to chat models
+✅ Invoke tools and handle responses
+✅ Build systems with multiple tools
+✅ Apply best practices for tool design
 
 ---
 
@@ -501,14 +501,14 @@ const emailTool = tool(
 
 ## 🎓 Key Takeaways
 
-- ✅ **Function calling** lets LLMs trigger real-world actions
-- ✅ **LLMs generate** function calls, but don't execute them
-- ✅ **Tools** are created with `tool()` and Zod schemas
-- ✅ **bindTools()** makes tools available to the model
-- ✅ **Type safety** with Zod prevents errors
-- ✅ **Clear descriptions** help LLMs choose the right tool
-- ✅ **Error handling** makes tools robust
-- ✅ **Multiple tools** enable complex capabilities
+✅ **Function calling** lets LLMs trigger real-world actions
+✅ **LLMs generate** function calls, but don't execute them
+✅ **Tools** are created with `tool()` and Zod schemas
+✅ **bindTools()** makes tools available to the model
+✅ **Type safety** with Zod prevents errors
+✅ **Clear descriptions** help LLMs choose the right tool
+✅ **Error handling** makes tools robust
+✅ **Multiple tools** enable complex capabilities
 
 ---
 
