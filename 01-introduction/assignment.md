@@ -12,62 +12,7 @@ Now that you've learned the basics of LangChain.js, it's time to practice! These
 
 ---
 
-## Challenge 1: Verify Your Setup ⚙️
-
-**Goal**: Ensure your environment is correctly configured.
-
-**Tasks**:
-1. Create a file called `verify-setup.ts` in the `01-introduction/code/` folder
-2. Write a script that:
-   - Checks if `AI_API_KEY` is set
-   - Makes a simple call to `gpt-4o-mini`
-   - Prints "✅ Setup verified!" if successful
-   - Prints helpful error messages if something fails
-
-**Success Criteria**:
-- Script runs without errors
-- You see a response from the AI model
-
----
-
-## Challenge 2: Build a Simple Q&A Program 💬
-
-**Goal**: Create a program that asks the user for a question and gets an AI response.
-
-**Tasks**:
-1. Create a file called `qa-program.ts`
-2. Use Node.js `readline` or prompts to get user input
-3. Send the user's question to the AI
-4. Display the response in a friendly format
-
-**Example Interaction**:
-```
-❓ Ask me anything: What is TypeScript?
-🤖 AI: TypeScript is a programming language...
-```
-
-**Bonus**:
-- Add a loop so users can ask multiple questions
-- Add a "quit" or "exit" command
-
-**Hints**:
-```typescript
-import readline from 'readline';
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-rl.question('Your question: ', (answer) => {
-  // Your code here
-  rl.close();
-});
-```
-
----
-
-## Challenge 3: Experiment with System Prompts 🎭
+## Challenge: Experiment with System Prompts 🎭
 
 **Goal**: Learn how SystemMessage affects AI behavior.
 
@@ -92,7 +37,7 @@ rl.question('Your question: ', (answer) => {
 
 ---
 
-## Challenge 4: Model Performance Comparison 🔬
+## Bonus Challenge: Model Performance Comparison 🔬
 
 **Goal**: Compare multiple models on the same task.
 
@@ -127,43 +72,20 @@ gpt-4o-mini    | 567ms   | 234ch  | ⭐⭐⭐⭐
 
 ---
 
-## Bonus Challenge: Create Your Own Example 🎯
-
-**Goal**: Apply what you've learned to solve a real problem.
-
-**Task**:
-Think of a simple use case where an LLM could help you, then build it!
-
-**Ideas**:
-- Code comment generator
-- Email subject line suggester
-- Recipe idea generator based on ingredients
-- Study guide creator from topics
-- Simple chatbot for a specific domain
-
-**Requirements**:
-- Use LangChain.js
-- Include at least one SystemMessage
-- Add error handling
-- Document your code with comments
-
----
-
 ## Submission Checklist
 
 Before moving to Chapter 2, make sure you've completed:
 
-- [ ] Challenge 1: Setup verification script works
-- [ ] Challenge 2: Q&A program accepts user input
-- [ ] Challenge 3: System prompt experiment shows personality differences
-- [ ] Challenge 4: Model comparison displays results
-- [ ] Bonus: Created your own useful example (optional)
+- [ ] Challenge: System prompt experiment shows personality differences
+- [ ] Bonus: Model comparison displays results (optional)
 
 ---
 
 ## Solutions
 
 Solutions for all challenges are available in the [`solution/`](./solution/) folder. Try to complete the challenges on your own first before looking at the solutions!
+
+**Additional Examples**: Check out the [`samples/`](./samples/) folder for more example solutions that demonstrate other useful concepts!
 
 ---
 

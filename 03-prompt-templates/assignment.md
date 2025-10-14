@@ -2,7 +2,7 @@
 
 ## Overview
 
-Practice creating reusable, maintainable prompts using templates, few-shot learning, and composition techniques.
+Practice creating reusable, maintainable prompts using templates, few-shot learning, and structured output techniques.
 
 ## Prerequisites
 
@@ -12,33 +12,7 @@ Practice creating reusable, maintainable prompts using templates, few-shot learn
 
 ---
 
-## Challenge 1: Email Response Generator 📧
-
-**Goal**: Create a template system for generating customer service email responses.
-
-**Tasks**:
-1. Create `email-generator.ts` in the `03-prompt-templates/code/` folder
-2. Build a template that generates emails with:
-   - Company name variable
-   - Customer name variable
-   - Issue type variable (refund, exchange, technical support)
-   - Tone variable (formal, friendly, apologetic)
-3. Test with at least 3 different scenarios
-4. Print both the filled template and the AI response
-
-**Example Scenarios**:
-- Refund request - apologetic tone
-- Technical support - friendly and helpful tone
-- Exchange request - formal and professional tone
-
-**Success Criteria**:
-- Template is reusable for different scenarios
-- Generated emails match the requested tone
-- All variables are properly substituted
-
----
-
-## Challenge 2: Few-Shot Format Teacher 🎓
+## Challenge: Few-Shot Format Teacher 🎓
 
 **Goal**: Use few-shot prompting to teach the AI a custom output format.
 
@@ -69,104 +43,7 @@ Practice creating reusable, maintainable prompts using templates, few-shot learn
 
 ---
 
-## Challenge 3: Multi-Language Translation System 🌍
-
-**Goal**: Build a translation system that supports multiple language pairs.
-
-**Tasks**:
-1. Create `translator.ts`
-2. Build a template system that:
-   - Supports at least 5 target languages
-   - Includes context about formality level (casual/formal)
-   - Handles both single sentences and paragraphs
-   - Shows the source language and target language clearly
-3. Create a menu-driven interface (using readline) where users can:
-   - Select target language
-   - Choose formality level
-   - Enter text to translate
-4. Display formatted results
-
-**Languages to Support**:
-- Spanish
-- French
-- German
-- Japanese
-- Italian
-
-**Success Criteria**:
-- Users can select language and formality
-- Translations reflect formality level
-- Clear, formatted output
-- Template is reusable across all language pairs
-
----
-
-## Challenge 4: Dynamic Prompt Builder 🏗️
-
-**Goal**: Create a system that composes prompts dynamically based on user preferences.
-
-**Tasks**:
-1. Create `prompt-builder.ts`
-2. Build a modular prompt system with these composable pieces:
-   - **Role options**: Teacher, Expert, Friend, Professional
-   - **Style options**: Concise, Detailed, Creative, Technical
-   - **Format options**: Bullet points, Paragraph, Step-by-step, Q&A
-3. Let users select their preferences
-4. Compose a final template from their choices
-5. Test with the same question using different combinations
-
-**Example Question**: "How does photosynthesis work?"
-
-**Test Combinations**:
-- Teacher + Detailed + Step-by-step
-- Expert + Technical + Bullet points
-- Friend + Concise + Paragraph
-
-**Success Criteria**:
-- All combinations work correctly
-- Responses clearly reflect chosen options
-- System is easily extensible (can add new options)
-- Display which combination was used for each response
-
----
-
-## Bonus Challenge: Prompt Template Library 📚
-
-**Goal**: Create a reusable library of prompt templates for common tasks.
-
-**Tasks**:
-1. Create `template-library.ts`
-2. Build a collection of at least 5 reusable templates for:
-   - Code explanation
-   - Text summarization
-   - Creative writing prompts
-   - Data formatting
-   - Question answering
-3. Create a CLI that:
-   - Lists available templates
-   - Lets users select a template
-   - Prompts for required variables
-   - Executes and displays result
-4. Make it easy to add new templates
-
-**Example Templates**:
-```typescript
-const templates = {
-  codeExplainer: ChatPromptTemplate.fromMessages([...]),
-  summarizer: ChatPromptTemplate.fromMessages([...]),
-  // ... more templates
-};
-```
-
-**Success Criteria**:
-- At least 5 working templates
-- Clean CLI interface
-- Easy to add new templates
-- All templates properly handle variables
-
----
-
-## Bonus Challenge 2: Product Data Extractor with Structured Outputs 🏷️
+## Bonus Challenge: Product Data Extractor with Structured Outputs 🏷️
 
 **Goal**: Build a system that extracts product information into validated, typed data structures.
 
@@ -209,18 +86,16 @@ const templates = {
 
 Before moving to Chapter 4, make sure you've completed:
 
-- [ ] Challenge 1: Email response generator
-- [ ] Challenge 2: Few-shot format teacher with JSON output
-- [ ] Challenge 3: Multi-language translation system
-- [ ] Challenge 4: Dynamic prompt builder
-- [ ] Bonus 1: Prompt template library (optional)
-- [ ] Bonus 2: Product data extractor with structured outputs (optional)
+- [ ] Challenge: Few-shot format teacher with JSON output
+- [ ] Bonus: Product data extractor with structured outputs (optional)
 
 ---
 
 ## Solutions
 
 Solutions for all challenges are available in the [`solution/`](./solution/) folder. Try to complete the challenges on your own first!
+
+**Additional Examples**: Check out the [`samples/`](./samples/) folder for more examples including email generation, translation systems, dynamic prompt builders, and template libraries!
 
 ---
 
@@ -237,6 +112,6 @@ Solutions for all challenges are available in the [`solution/`](./solution/) fol
 
 Once you've completed these challenges, you're ready for:
 
-**[Chapter 4: Working with Documents](../04-working-with-documents/README.md)**
+**[Chapter 4: Documents, Embeddings & Semantic Search](../04-documents-embeddings-semantic-search/README.md)**
 
 Excellent progress! You're mastering prompt engineering! 🚀

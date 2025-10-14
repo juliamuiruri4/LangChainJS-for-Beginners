@@ -12,7 +12,7 @@ Practice multi-turn conversations, streaming, parameters, and error handling to 
 
 ---
 
-## Challenge 1: Interactive Chatbot 🤖
+## Challenge: Interactive Chatbot 🤖
 
 **Goal**: Build a chatbot that maintains conversation history across multiple exchanges.
 
@@ -46,31 +46,7 @@ You: quit
 
 ---
 
-## Challenge 2: Streaming Chat Interface ⚡
-
-**Goal**: Create a better user experience with streaming responses.
-
-**Tasks**:
-1. Create `streaming-chat.ts`
-2. Build a chat interface that:
-   - Accepts user questions
-   - Streams the AI response word-by-word
-   - Shows "🤖 Typing..." before the response starts
-   - Displays how long the first chunk took vs. the full response
-3. Compare streaming vs. non-streaming for a long question
-
-**Test Questions**:
-- "Explain quantum physics in 3 paragraphs"
-- "Write a story about a robot learning to paint"
-
-**Success Criteria**:
-- Responses stream in real-time
-- First chunk arrives quickly (showing immediate feedback)
-- User sees time measurements
-
----
-
-## Challenge 3: Temperature Experiment 🌡️
+## Bonus Challenge: Temperature Experiment 🌡️
 
 **Goal**: Understand how temperature affects AI creativity and consistency.
 
@@ -112,108 +88,20 @@ Try 3: "Where Magic Meets Mocha"
 
 ---
 
-## Challenge 4: Robust Error Handler 🛡️
-
-**Goal**: Build a production-ready error handling system.
-
-**Tasks**:
-1. Create `robust-chat.ts`
-2. Implement a chat function with:
-   - Automatic retry with exponential backoff
-   - Maximum of 3 retry attempts
-   - Detailed error logging
-   - User-friendly error messages
-   - Timeout handling
-   - Graceful degradation (e.g., fallback responses)
-3. Test with intentionally failing scenarios
-
-**Error Scenarios to Handle**:
-- Invalid API key
-- Network timeout
-- Rate limiting (simulate by making many rapid calls)
-- Invalid model name
-
-**Example Error Handling**:
-```
-🔄 Attempt 1/3...
-❌ Failed: Network timeout
-⏳ Waiting 2000ms before retry...
-
-🔄 Attempt 2/3...
-❌ Failed: Network timeout
-⏳ Waiting 4000ms before retry...
-
-🔄 Attempt 3/3...
-✅ Success!
-```
-
-**Success Criteria**:
-- Implements exponential backoff
-- Provides clear error messages
-- Gracefully handles all error types
-- Never crashes without a helpful message
-
----
-
-## Bonus Challenge: Token Usage Tracker 📊
-
-**Goal**: Build a tool to track and analyze token usage.
-
-**Tasks**:
-1. Create `token-tracker.ts`
-2. Build a system that:
-   - Tracks tokens for each API call
-   - Calculates estimated costs (research current pricing)
-   - Shows cumulative usage across multiple calls
-   - Warns when approaching limits
-   - Displays a summary at the end
-
-**Features to Include**:
-- Input tokens (prompt)
-- Output tokens (response)
-- Total tokens
-- Estimated cost
-- Running total
-
-**Example Output**:
-```
-📊 Token Usage Report
-─────────────────────────────────────────
-Call #1
-  Input: 15 tokens
-  Output: 87 tokens
-  Total: 102 tokens
-  Cost: $0.00015
-
-Call #2
-  Input: 23 tokens
-  Output: 134 tokens
-  Total: 157 tokens
-  Cost: $0.00024
-
-═════════════════════════════════════════
-Session Total
-  Total Tokens: 259
-  Total Cost: $0.00039
-```
-
----
-
 ## Submission Checklist
 
 Before moving to Chapter 3, make sure you've completed:
 
-- [ ] Challenge 1: Interactive chatbot with history
-- [ ] Challenge 2: Streaming chat interface
-- [ ] Challenge 3: Temperature comparison experiment
-- [ ] Challenge 4: Robust error handling system
-- [ ] Bonus: Token usage tracker (optional)
+- [ ] Challenge: Interactive chatbot with history
+- [ ] Bonus: Temperature comparison experiment (optional)
 
 ---
 
 ## Solutions
 
 Solutions for all challenges are available in the [`solution/`](./solution/) folder. Try to complete the challenges on your own first!
+
+**Additional Examples**: Check out the [`samples/`](./samples/) folder for more example solutions covering streaming, error handling, and token tracking!
 
 ---
 
