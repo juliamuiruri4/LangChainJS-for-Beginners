@@ -208,9 +208,10 @@ You'll notice the text appears progressively, word by word, rather than all at o
 - Perceived performance improvement even if total time is the same
 
 **When to Use**:
-✅ Long responses (articles, explanations, code)
-✅ User-facing chatbots and interactive applications
-✅ When you want to display progress to users
+
+- ✅ Long responses (articles, explanations, code)
+- ✅ User-facing chatbots and interactive applications
+- ✅ When you want to display progress to users
 - ❌ When you need the full response first (parsing, validation, post-processing)
 
 ---
@@ -331,10 +332,11 @@ Throughout this course, we've been initializing models directly with `ChatOpenAI
 - 🎯 **Provider-Agnostic Code**: Write once, work with any standard provider
 
 **When to Use `ChatOpenAI` (This Course)**:
-✅ **GitHub Models**: Custom endpoints require specific configuration
-✅ **Azure OpenAI**: Non-standard API paths work better with ChatOpenAI
-✅ **Learning**: More explicit and easier to understand
-✅ **Single Provider**: When you're primarily using one provider
+
+- ✅ **GitHub Models**: Custom endpoints require specific configuration
+- ✅ **Azure OpenAI**: Non-standard API paths work better with ChatOpenAI
+- ✅ **Learning**: More explicit and easier to understand
+- ✅ **Single Provider**: When you're primarily using one provider
 
 > **💡 Important**: `initChatModel()` works best with standard provider APIs (native OpenAI, Anthropic, Google). For GitHub Models and Azure OpenAI used in this course, `ChatOpenAI` is the recommended and most reliable approach.
 
@@ -655,8 +657,8 @@ TypeScript is a superset of JavaScript that adds static typing to help catch err
 
 ### Cost Optimization Strategies
 
-✅ **Use the right model for the task**
-✅ **Limit response length**
+- ✅ **Use the right model for the task**
+- ✅ **Limit response length**
 ```typescript
 const model = new ChatOpenAI({
   model: "gpt-4o-mini",
@@ -664,14 +666,14 @@ const model = new ChatOpenAI({
 });
 ```
 
-✅ **Trim conversation history**
+- ✅ **Trim conversation history**
 ```typescript
 // Keep only the last 10 messages
 const recentMessages = messages.slice(-10);
 const response = await model.invoke(recentMessages);
 ```
 
-✅ **Cache responses for common queries**
+- ✅ **Cache responses for common queries**
 ```typescript
 const cache = new Map();
 
@@ -686,7 +688,7 @@ async function getCachedResponse(prompt: string) {
 }
 ```
 
-✅ **Batch process when possible**
+- ✅ **Batch process when possible**
 ```typescript
 // Process multiple items in one call instead of separate calls
 const prompt = `Summarize each of these articles:

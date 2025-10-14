@@ -41,10 +41,11 @@ Your order #{orderId} is ready for pickup...
 **Prompt templates work exactly the same way!**
 
 Instead of writing similar prompts over and over, you:
-✅ Create a template once with placeholders
-✅ Fill in the specifics each time you use it
-✅ Ensure consistency across your application
-✅ Make testing and updates easier
+
+- ✅ Create a template once with placeholders
+- ✅ Fill in the specifics each time you use it
+- ✅ Ensure consistency across your application
+- ✅ Make testing and updates easier
 
 This chapter teaches you how to create reusable, maintainable prompts.
 
@@ -78,11 +79,12 @@ const template = ChatPromptTemplate.fromMessages([
 ```
 
 **Benefits**:
-✅ **Consistency**: Same prompt structure everywhere
-✅ **Maintainability**: Update once, changes everywhere
-✅ **Testability**: Easy to test with different inputs
-✅ **Version control**: Track prompt changes over time
-✅ **Separation of concerns**: Logic separate from prompts
+
+- ✅ **Consistency**: Same prompt structure everywhere
+- ✅ **Maintainability**: Update once, changes everywhere
+- ✅ **Testability**: Easy to test with different inputs
+- ✅ **Version control**: Track prompt changes over time
+- ✅ **Separation of concerns**: Logic separate from prompts
 
 ---
 
@@ -524,11 +526,11 @@ City: [____]
 
 ### Why Use Structured Outputs?
 
-✅ **Type Safety**: TypeScript types match AI output
-✅ **Validation**: Ensure data meets requirements
-✅ **Parsing**: No need to parse free text
-✅ **Consistency**: Always get the same format
-✅ **Integration**: Easy to use with databases, APIs, etc.
+- ✅ **Type Safety**: TypeScript types match AI output
+- ✅ **Validation**: Ensure data meets requirements
+- ✅ **Parsing**: No need to parse free text
+- ✅ **Consistency**: Always get the same format
+- ✅ **Integration**: Easy to use with databases, APIs, etc.
 
 ### Example 5: Basic Structured Output
 
@@ -758,25 +760,26 @@ CompanySchema = {
 - Build data pipelines that transform unstructured content into structured databases
 
 **When to Use Structured Outputs**:
+
 - 📊 **Data extraction** from text
 - 🗂️ **Database inserts** with validated data
 - 🔄 **API responses** with guaranteed format
 - 🎯 **Form filling** from natural language
-✅ **Classification tasks** with predefined categories
+- ✅ **Classification tasks** with predefined categories
 
 ---
 
 ## 🎓 Key Takeaways
 
-✅ **Templates reduce code duplication** - Write once, use everywhere
-✅ **Variables with `{name}` syntax** - Create dynamic prompts
-✅ **ChatPromptTemplate for chat models** - Works with message arrays
-✅ **PromptTemplate for simple cases** - String-based templates
-✅ **Few-shot prompting** - Teach by example for better results
-✅ **Composition** - Combine templates for complex prompts
-✅ **Structured outputs with Zod** - Get typed data, not just text
-✅ **Type safety** - Validate AI responses match your schema
-✅ **Maintainability** - Update prompts in one place
+- ✅ **Templates reduce code duplication** - Write once, use everywhere
+- ✅ **Variables with `{name}` syntax** - Create dynamic prompts
+- ✅ **ChatPromptTemplate for chat models** - Works with message arrays
+- ✅ **PromptTemplate for simple cases** - String-based templates
+- ✅ **Few-shot prompting** - Teach by example for better results
+- ✅ **Composition** - Combine templates for complex prompts
+- ✅ **Structured outputs with Zod** - Get typed data, not just text
+- ✅ **Type safety** - Validate AI responses match your schema
+- ✅ **Maintainability** - Update prompts in one place
 
 ---
 

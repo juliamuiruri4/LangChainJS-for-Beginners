@@ -55,11 +55,12 @@ Without LangChain.js, you'd need to:
 ### The LangChain.js Solution
 
 With LangChain.js, you get:
-✅ **Provider abstraction** - Switch between OpenAI, Azure, Anthropic with minimal code changes
-✅ **Prompt templates** - Reusable, testable prompts
-✅ **Chains** - Combine multiple operations seamlessly
-✅ **Memory** - Built-in conversation history
-✅ **Agents** - Decision-making AI that can use tools
+
+- ✅ **Provider abstraction** - Switch between OpenAI, Azure, Anthropic with minimal code changes
+- ✅ **Prompt templates** - Reusable, testable prompts
+- ✅ **Chains** - Combine multiple operations seamlessly
+- ✅ **Memory** - Built-in conversation history
+- ✅ **Agents** - Decision-making AI that can use tools
 
 ---
 
@@ -326,10 +327,10 @@ Response: Recursion is when a function calls itself to solve a problem by breaki
 
 ### Why Switch to Azure AI Foundry?
 
-✅ **Production-ready**: Enterprise-grade infrastructure and SLAs
-✅ **Higher limits**: More requests per minute than free tiers
-✅ **Advanced features**: Private endpoints, content filtering, monitoring
-✅ **Azure integration**: Works seamlessly with other Azure services
+- ✅ **Production-ready**: Enterprise-grade infrastructure and SLAs
+- ✅ **Higher limits**: More requests per minute than free tiers
+- ✅ **Advanced features**: Private endpoints, content filtering, monitoring
+- ✅ **Azure integration**: Works seamlessly with other Azure services
 
 ### How to Switch
 
@@ -374,10 +375,11 @@ const model = new ChatOpenAI({
 ```
 
 This pattern means:
-✅ **No code changes** to switch providers
-✅ **Easy testing** - Use GitHub Models for dev, Azure for production
-✅ **Cost optimization** - Switch to cheaper providers when appropriate
-✅ **Disaster recovery** - Fallback to alternative providers if one is down
+
+- ✅ **No code changes** to switch providers
+- ✅ **Easy testing** - Use GitHub Models for dev, Azure for production
+- ✅ **Cost optimization** - Switch to cheaper providers when appropriate
+- ✅ **Disaster recovery** - Fallback to alternative providers if one is down
 
 > **💡 Note**: LangChain.js also provides `initChatModel()` for even more flexible, provider-agnostic initialization. You'll learn about this alternative pattern in [Chapter 2](../02-chat-models/README.md#-provider-agnostic-initialization-with-initchatmodel).
 
@@ -389,12 +391,12 @@ You'll learn more about production deployment strategies in [Chapter 10](../10-p
 
 Let's review what you learned:
 
-✅ **LangChain.js is an abstraction layer** - It provides a consistent interface across different LLM providers
-✅ **Built on composable components** - Models, prompts, chains, agents, and memory work together
-✅ **GitHub Models offers free access** - Perfect for learning and prototyping
-✅ **Azure AI Foundry is production-ready** - Switch anytime with just environment variables
-✅ **Messages have types** - SystemMessage, HumanMessage, and AIMessage serve different purposes
-✅ **Provider flexibility** - Switch between models and providers with zero code changes
+- ✅ **LangChain.js is an abstraction layer** - It provides a consistent interface across different LLM providers
+- ✅ **Built on composable components** - Models, prompts, chains, agents, and memory work together
+- ✅ **GitHub Models offers free access** - Perfect for learning and prototyping
+- ✅ **Azure AI Foundry is production-ready** - Switch anytime with just environment variables
+- ✅ **Messages have types** - SystemMessage, HumanMessage, and AIMessage serve different purposes
+- ✅ **Provider flexibility** - Switch between models and providers with zero code changes
 
 ---
 

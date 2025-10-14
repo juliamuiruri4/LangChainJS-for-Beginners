@@ -561,10 +561,10 @@ const response = await modelWithTools.invoke(
 
 ### Benefits for Your AI Applications
 
-✅ **Plug-and-play tools**: Connect to new services in minutes
-✅ **Consistent interface**: Same pattern for all tools
-✅ **Community ecosystem**: Use tools others have built
-✅ **Future-proof**: As MCP adoption grows, more tools become available
+- ✅ **Plug-and-play tools**: Connect to new services in minutes
+- ✅ **Consistent interface**: Same pattern for all tools
+- ✅ **Community ecosystem**: Use tools others have built
+- ✅ **Future-proof**: As MCP adoption grows, more tools become available
 
 ### Getting Started with MCP
 
@@ -617,13 +617,13 @@ Now that you've learned both chains (Chapter 6) and agents (Chapter 7), here's h
 
 ## 🎓 Key Takeaways
 
-✅ **Agents make autonomous decisions** - They choose which tools to use and when
-✅ **ReAct pattern is the core**: Reason → Act → Observe → Repeat until solved
-✅ **Manual agent loops teach fundamentals** - Understanding the pattern helps you use higher-level abstractions
-✅ **Tool descriptions matter** - Clear descriptions help agents pick the right tool
-✅ **MCP is the future of AI tool integration** - Like USB-C for AI applications
-✅ **MCP provides standardization** - One protocol, many services
-✅ **Start simple, scale up** - Learn with manual loops, graduate to production frameworks
+- ✅ **Agents make autonomous decisions** - They choose which tools to use and when
+- ✅ **ReAct pattern is the core**: Reason → Act → Observe → Repeat until solved
+- ✅ **Manual agent loops teach fundamentals** - Understanding the pattern helps you use higher-level abstractions
+- ✅ **Tool descriptions matter** - Clear descriptions help agents pick the right tool
+- ✅ **MCP is the future of AI tool integration** - Like USB-C for AI applications
+- ✅ **MCP provides standardization** - One protocol, many services
+- ✅ **Start simple, scale up** - Learn with manual loops, graduate to production frameworks
 
 ---
 
@@ -751,12 +751,13 @@ The assignment includes:
 ## 🚀 What's Next?
 
 Congratulations! You've completed the core LangChain.js course. You've learned:
-✅ Chat models and conversations (Chapters 1-2)
-✅ Prompt engineering and templates (Chapter 3)
-✅ Documents, embeddings, and semantic search (Chapter 4)
-✅ Function calling and tool integration (Chapter 5)
-✅ RAG systems with LCEL (Chapter 6)
-✅ Autonomous agents and MCP (Chapter 7)
+
+- ✅ Chat models and conversations (Chapters 1-2)
+- ✅ Prompt engineering and templates (Chapter 3)
+- ✅ Documents, embeddings, and semantic search (Chapter 4)
+- ✅ Function calling and tool integration (Chapter 5)
+- ✅ RAG systems with LCEL (Chapter 6)
+- ✅ Autonomous agents and MCP (Chapter 7)
 
 ### Applying What You've Learned
 
