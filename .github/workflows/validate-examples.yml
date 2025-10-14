@@ -1,5 +1,12 @@
 name: Validate Code Examples
 
+# This workflow only runs when:
+# 1. Commit message contains "validate-examples"
+# 2. PR title contains "validate-examples"
+# 3. Manually triggered via GitHub Actions UI
+#
+# Example commit: "Update RAG examples validate-examples"
+
 on:
   push:
     branches:
@@ -9,13 +16,18 @@ on:
     branches:
       - main
       - develop
-  workflow_dispatch: # Allows manual triggering
+  workflow_dispatch: # Allows manual triggering via Actions UI
 
 jobs:
   validate:
     name: Test All Code Examples (Node 22 LTS)
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Only run if commit message contains "validate-examples" or manually triggered
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.head_commit.message, 'validate-examples') ||
+      contains(github.event.pull_request.title, 'validate-examples')
 
     steps:
       - name: Checkout repository

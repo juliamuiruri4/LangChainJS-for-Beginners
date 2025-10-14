@@ -51,7 +51,7 @@ You'll need **Node.js LTS (Long Term Support)** to run LangChain.js applications
 node --version
 ```
 
-If you see an LTS version number, you're good! Skip to Step 2.
+If you see an LTS version number (visit [nodejs.org](https://nodejs.org/) to check), you're good! Skip to Step 2.
 
 ### Install Node.js:
 

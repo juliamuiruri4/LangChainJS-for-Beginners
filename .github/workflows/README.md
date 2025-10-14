@@ -6,18 +6,39 @@ This directory contains CI/CD workflows for the LangChain.js for Beginners cours
 
 ### `validate-examples.yml`
 
-Automatically validates all code examples in the course on every push and pull request.
+Validates all code examples in the course when explicitly requested. **Does not run automatically** on every commit to save CI time and API costs.
 
 **What it does:**
-- Runs all TypeScript code examples across all chapters
+- Runs all 63 TypeScript code examples across all chapters
 - Verifies they execute without errors
-- Tests on multiple Node.js versions (18, 20, 22)
-- Skips interactive examples that require user input
+- Tests on Node.js 22 (LTS)
+- Automatically provides input for interactive examples
+- Takes 20-40 minutes to complete
+- Makes 60+ API calls (costs ~$0.10-0.50 per run)
 
-**When it runs:**
-- On push to `main` or `develop` branches
-- On pull requests to `main` or `develop`
-- Manually via workflow dispatch
+**How to trigger:**
+
+1. **Include keyword in commit message:**
+   ```bash
+   git commit -m "Fix RAG examples validate-examples"
+   git push
+   ```
+
+2. **Include keyword in PR title:**
+   ```
+   "Update embeddings validate-examples"
+   ```
+
+3. **Manual trigger via GitHub UI:**
+   - Go to Actions tab → Select "Validate Code Examples" → Click "Run workflow"
+
+**When to trigger:**
+- ✅ Adding/modifying code examples
+- ✅ Updating dependencies that affect examples
+- ✅ Testing before merging to main/develop
+- ❌ Documentation-only changes
+- ❌ Fixing typos or comments
+- ❌ Minor formatting changes
 
 **Requirements:**
 - Uses `AI_API_KEY`, `AI_ENDPOINT`, and `AI_MODEL` secrets
@@ -60,15 +81,17 @@ By default, GitHub Actions will use:
 The validation script:
 - ✅ Finds all `.ts` files in `code/` and `solution/` directories
 - ✅ Executes each file with a 30-second timeout (60s for slow examples)
-- ✅ Skips interactive files that require user input
+- ✅ Automatically provides input for interactive examples
 - ✅ Reports success/failure rates
 - ✅ Exits with error code if any examples fail
 
-### Skipped Files
+### Interactive Files
 
-These files require user interaction and are skipped during automated testing:
-- `03-human-in-loop.ts` - Requires approval prompts
-- `chatbot.ts` - Interactive chat loop
+These files require user interaction and receive automated input during testing:
+- `chatbot.ts` - Receives "Hello\n" as input
+- `streaming-chat.ts` - Receives "Hello\n" as input
+- `qa-program.ts` - Receives "What is 2+2?\n" as input
+- `03-human-in-loop.ts` - Receives "yes\nno\nno\n" as input
 
 ### Test Results
 
@@ -89,14 +112,15 @@ When adding new code examples:
 ## Troubleshooting
 
 **Tests failing locally:**
-- Ensure `GITHUB_TOKEN` is set in your `.env` file
+- Ensure `AI_API_KEY` and other required variables are set in your `.env` file
 - Run `npm install` to get latest dependencies
-- Check that you're using Node.js LTS or higher
+- Check that you're using Node.js 22 or higher (run `node --version`)
 
 **Tests failing in CI:**
-- Check that `GITHUB_TOKEN` secret is available
+- Verify the workflow was triggered (commit message must contain "validate-examples")
+- Check that required secrets are configured in repository settings
 - Review GitHub Actions logs for specific errors
-- Verify package versions are compatible
+- Ensure Node.js 22 is specified in the workflow file
 
 ## Best Practices
 

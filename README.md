@@ -39,7 +39,7 @@ This course contains **8 sections** (setup + 7 chapters), each focusing on a spe
 
 Before starting this course, you should be comfortable with:
 - JavaScript/TypeScript fundamentals
-- Node.js and npm
+- Node.js >=22.0.0 (LTS) and npm
 - Async/await and Promises
 - Basic Generative AI concepts (covered in our "GenAI for JavaScript Developers" course)
 
@@ -129,9 +129,17 @@ npx tsx 05-function-calling-tooling/code/01-simple-tool.ts
 
 The validation script:
 - ✅ Tests all TypeScript examples across all chapters
-- ✅ Skips interactive examples that require user input
+- ✅ Automatically handles interactive examples with simulated input
 - ✅ Provides detailed error reports if issues are found
-- ✅ Runs automatically on every commit via GitHub Actions
+- ✅ Runs in GitHub Actions when triggered (see below)
+
+**GitHub Actions Validation**: To save CI time and API costs, validation only runs when you include `validate-examples` in your commit message:
+
+```bash
+git commit -m "Update RAG examples validate-examples"
+```
+
+Or trigger manually via the GitHub Actions UI.
 
 **Note**: Runtime validation requires `AI_API_KEY`, `AI_ENDPOINT`, and `AI_MODEL` environment variables. See [Course Setup](./00-course-setup/README.md) for details.
 

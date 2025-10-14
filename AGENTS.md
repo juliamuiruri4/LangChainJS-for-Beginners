@@ -264,11 +264,21 @@ npm test
 ### CI/CD Pipeline
 
 GitHub Actions workflow (`.github/workflows/validate-examples.yml`):
-- Triggers on push/PR to `main` or `develop`
+- **Triggers**: Only runs when commit message or PR title contains "validate-examples", or manually triggered
 - Tests on Node.js 22 (LTS)
 - Runs full validation suite
 - Uses secrets: `AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`, `AI_EMBEDDING_MODEL`
 - Timeout: 30 minutes
+
+**To trigger validation in your commit:**
+```bash
+git commit -m "Update RAG examples validate-examples"
+```
+
+**To trigger validation manually:**
+1. Go to GitHub Actions tab
+2. Select "Validate Code Examples" workflow
+3. Click "Run workflow"
 
 ## Adding New Examples
 
@@ -322,7 +332,10 @@ npm test
 
 - Use clear, descriptive commit messages
 - Reference issue numbers if applicable
-- Example: "Add vector store example to chapter 5"
+- Include "validate-examples" to trigger CI/CD validation when needed
+- Examples:
+  - "Add vector store example to chapter 5" (no validation)
+  - "Add vector store example to chapter 5 validate-examples" (triggers validation)
 
 ### PR Requirements
 
@@ -423,7 +436,8 @@ The course is provider-agnostic:
 - Run `npm run build` frequently (fast feedback)
 - Test individual examples during development
 - Run `npm test` before major commits
-- CI/CD handles validation on PRs automatically
+- Include "validate-examples" in commit message to trigger CI/CD validation
+- Use manual trigger in GitHub Actions UI when needed
 
 ## Quick Reference
 
@@ -443,6 +457,9 @@ npx tsx <file>                # Run individual file
 
 # Validation
 npm run validate              # Same as npm test
+
+# Trigger CI/CD validation
+git commit -m "Your message validate-examples"  # Triggers GitHub Actions
 ```
 
 ## Resources
