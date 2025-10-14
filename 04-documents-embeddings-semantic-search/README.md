@@ -35,10 +35,10 @@ When someone donates a massive encyclopedia to your library, you can't:
 
 Instead, you need to:
 
-- ✅ Find the right sections (loading)
-- ✅ Break it into manageable chapters (chunking)
-- ✅ Label each piece with metadata (organization)
-- ✅ Keep some overlap between sections so context isn't lost
+- Find the right sections (loading)
+- Break it into manageable chapters (chunking)
+- Label each piece with metadata (organization)
+- Keep some overlap between sections so context isn't lost
 
 ### Part 2: The Smart Search System (Embeddings & Semantic Search)
 
@@ -773,16 +773,16 @@ Each with 1536 dimensions
 
 ## 🎓 Key Takeaways
 
-- ✅ **Document loaders** handle different file formats
-- ✅ **Text splitters** break documents into manageable chunks
-- ✅ **Chunk size matters**: Balance context vs. precision
-- ✅ **Overlap preserves context** between chunks
-- ✅ **Metadata** tracks source and enables filtering
-- ✅ **Embeddings** convert text to numerical vectors
-- ✅ **Semantic search** finds meaning, not just keywords
-- ✅ **Vector stores** enable fast similarity search at scale
-- ✅ **Batch processing** is more efficient than one-by-one
-- ✅ **Cosine similarity** is best for text comparisons
+- **Document loaders** handle different file formats
+- **Text splitters** break documents into manageable chunks
+- **Chunk size matters**: Balance context vs. precision
+- **Overlap preserves context** between chunks
+- **Metadata** tracks source and enables filtering
+- **Embeddings** convert text to numerical vectors
+- **Semantic search** finds meaning, not just keywords
+- **Vector stores** enable fast similarity search at scale
+- **Batch processing** is more efficient than one-by-one
+- **Cosine similarity** is best for text comparisons
 
 ---
 

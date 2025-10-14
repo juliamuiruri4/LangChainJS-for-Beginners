@@ -710,14 +710,14 @@ const prompt = `Summarize each of these articles:
 
 ## 🎓 Key Takeaways
 
-✅ **Multi-turn conversations**: Send entire message history with each call
-✅ **Streaming**: Display responses as they generate for better UX
-✅ **Temperature**: Controls randomness (0 = consistent, 2 = creative)
-✅ **Error handling**: Always use try-catch and implement retries
-✅ **Token tracking**: Monitor usage and estimate costs for budgeting
-✅ **Cost optimization**: Choose right models, limit responses, cache results
-✅ **Tokens**: Impact cost and limits (1 token ≈ 4 characters)
-✅ **Context window**: Models can only process limited conversation history
+- **Multi-turn conversations**: Send entire message history with each call
+- **Streaming**: Display responses as they generate for better UX
+- **Temperature**: Controls randomness (0 = consistent, 2 = creative)
+- **Error handling**: Always use try-catch and implement retries
+- **Token tracking**: Monitor usage and estimate costs for budgeting
+- **Cost optimization**: Choose right models, limit responses, cache results
+- **Tokens**: Impact cost and limits (1 token ≈ 4 characters)
+- **Context window**: Models can only process limited conversation history
 
 ---
 

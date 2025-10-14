@@ -510,10 +510,10 @@ MCP supports two ways to connect to servers:
 **Important**: MCP integration in LangChain.js is actively evolving. The code below is conceptual to teach you how MCP works and how it will integrate with agents.
 
 **What you CAN do now**:
-1. ✅ **Build agents with manual tools** - Use the patterns from Examples 1 & 2 above
-2. ✅ **Explore MCP servers** - Visit [modelcontextprotocol.io](https://modelcontextprotocol.io) to see available servers
-3. ✅ **Try MCP with Claude Desktop** - MCP is production-ready with Claude Desktop app (see MCP docs for setup)
-4. ✅ **Prepare for integration** - Understand the concepts so you're ready when LangChain.js support is complete
+1. **Build agents with manual tools** - Use the patterns from Examples 1 & 2 above
+2. **Explore MCP servers** - Visit [modelcontextprotocol.io](https://modelcontextprotocol.io) to see available servers
+3. **Try MCP with Claude Desktop** - MCP is production-ready with Claude Desktop app (see MCP docs for setup)
+4. **Prepare for integration** - Understand the concepts so you're ready when LangChain.js support is complete
 
 **What's coming**:
 - Direct MCP support in LangChain.js (currently in development)
@@ -617,13 +617,13 @@ Now that you've learned both chains (Chapter 6) and agents (Chapter 7), here's h
 
 ## 🎓 Key Takeaways
 
-- ✅ **Agents make autonomous decisions** - They choose which tools to use and when
-- ✅ **ReAct pattern is the core**: Reason → Act → Observe → Repeat until solved
-- ✅ **Manual agent loops teach fundamentals** - Understanding the pattern helps you use higher-level abstractions
-- ✅ **Tool descriptions matter** - Clear descriptions help agents pick the right tool
-- ✅ **MCP is the future of AI tool integration** - Like USB-C for AI applications
-- ✅ **MCP provides standardization** - One protocol, many services
-- ✅ **Start simple, scale up** - Learn with manual loops, graduate to production frameworks
+- **Agents make autonomous decisions** - They choose which tools to use and when
+- **ReAct pattern is the core**: Reason → Act → Observe → Repeat until solved
+- **Manual agent loops teach fundamentals** - Understanding the pattern helps you use higher-level abstractions
+- **Tool descriptions matter** - Clear descriptions help agents pick the right tool
+- **MCP is the future of AI tool integration** - Like USB-C for AI applications
+- **MCP provides standardization** - One protocol, many services
+- **Start simple, scale up** - Learn with manual loops, graduate to production frameworks
 
 ---
 

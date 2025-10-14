@@ -42,10 +42,10 @@ Your order #{orderId} is ready for pickup...
 
 Instead of writing similar prompts over and over, you:
 
-- ✅ Create a template once with placeholders
-- ✅ Fill in the specifics each time you use it
-- ✅ Ensure consistency across your application
-- ✅ Make testing and updates easier
+- Create a template once with placeholders
+- Fill in the specifics each time you use it
+- Ensure consistency across your application
+- Make testing and updates easier
 
 This chapter teaches you how to create reusable, maintainable prompts.
 
@@ -526,11 +526,11 @@ City: [____]
 
 ### Why Use Structured Outputs?
 
-- ✅ **Type Safety**: TypeScript types match AI output
-- ✅ **Validation**: Ensure data meets requirements
-- ✅ **Parsing**: No need to parse free text
-- ✅ **Consistency**: Always get the same format
-- ✅ **Integration**: Easy to use with databases, APIs, etc.
+- **Type Safety**: TypeScript types match AI output
+- **Validation**: Ensure data meets requirements
+- **Parsing**: No need to parse free text
+- **Consistency**: Always get the same format
+- **Integration**: Easy to use with databases, APIs, etc.
 
 ### Example 5: Basic Structured Output
 
@@ -771,15 +771,15 @@ CompanySchema = {
 
 ## 🎓 Key Takeaways
 
-- ✅ **Templates reduce code duplication** - Write once, use everywhere
-- ✅ **Variables with `{name}` syntax** - Create dynamic prompts
-- ✅ **ChatPromptTemplate for chat models** - Works with message arrays
-- ✅ **PromptTemplate for simple cases** - String-based templates
-- ✅ **Few-shot prompting** - Teach by example for better results
-- ✅ **Composition** - Combine templates for complex prompts
-- ✅ **Structured outputs with Zod** - Get typed data, not just text
-- ✅ **Type safety** - Validate AI responses match your schema
-- ✅ **Maintainability** - Update prompts in one place
+- **Templates reduce code duplication** - Write once, use everywhere
+- **Variables with `{name}` syntax** - Create dynamic prompts
+- **ChatPromptTemplate for chat models** - Works with message arrays
+- **PromptTemplate for simple cases** - String-based templates
+- **Few-shot prompting** - Teach by example for better results
+- **Composition** - Combine templates for complex prompts
+- **Structured outputs with Zod** - Get typed data, not just text
+- **Type safety** - Validate AI responses match your schema
+- **Maintainability** - Update prompts in one place
 
 ---
 

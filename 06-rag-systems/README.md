@@ -31,10 +31,10 @@ By the end of this chapter, you'll be able to:
 
 **Open-Book Exam (RAG System)**:
 
-- ✅ Student can reference textbook during exam
-- ✅ Looks up exact information as needed
-- ✅ Combines knowledge with current resources
-- ✅ More accurate, can cite sources
+- Student can reference textbook during exam
+- Looks up exact information as needed
+- Combines knowledge with current resources
+- More accurate, can cite sources
 
 **RAG = Retrieval Augmented Generation**
 
@@ -61,11 +61,11 @@ Answer with Citations
 
 ### Why RAG?
 
-- ✅ **Up-to-date information**: Add new docs without retraining
-- ✅ **Source attribution**: Know where answers come from
-- ✅ **Domain-specific**: Works with your proprietary data
-- ✅ **Cost-effective**: No model fine-tuning needed
-- ✅ **Accurate**: Reduces hallucinations
+- **Up-to-date information**: Add new docs without retraining
+- **Source attribution**: Know where answers come from
+- **Domain-specific**: Works with your proprietary data
+- **Cost-effective**: No model fine-tuning needed
+- **Accurate**: Reduces hallucinations
 
 ---
 

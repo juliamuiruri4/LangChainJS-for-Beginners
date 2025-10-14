@@ -502,14 +502,14 @@ const emailTool = tool(
 
 ## 🎓 Key Takeaways
 
-- ✅ **Function calling** lets LLMs trigger real-world actions
-- ✅ **LLMs generate** function calls, but don't execute them
-- ✅ **Tools** are created with `tool()` and Zod schemas
-- ✅ **bindTools()** makes tools available to the model
-- ✅ **Type safety** with Zod prevents errors
-- ✅ **Clear descriptions** help LLMs choose the right tool
-- ✅ **Error handling** makes tools robust
-- ✅ **Multiple tools** enable complex capabilities
+- **Function calling** lets LLMs trigger real-world actions
+- **LLMs generate** function calls, but don't execute them
+- **Tools** are created with `tool()` and Zod schemas
+- **bindTools()** makes tools available to the model
+- **Type safety** with Zod prevents errors
+- **Clear descriptions** help LLMs choose the right tool
+- **Error handling** makes tools robust
+- **Multiple tools** enable complex capabilities
 
 ---
 
