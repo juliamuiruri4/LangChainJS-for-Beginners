@@ -18,7 +18,7 @@ const weatherTool = tool(
     return `Current temperature in ${input.city}: ${temp}°F, partly cloudy`;
   },
   {
-    name: "get_weather",
+    name: "getWeather",
     description: "Get current weather for a city",
     schema: z.object({
       city: z.string().describe("City name"),

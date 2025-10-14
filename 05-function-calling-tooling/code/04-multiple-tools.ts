@@ -41,7 +41,7 @@ const searchTool = tool(
 const weatherTool = tool(
   async (input) => `Weather in ${input.city}: 72°F, sunny`,
   {
-    name: "get_weather",
+    name: "getWeather",
     description: "Get current weather for a city",
     schema: z.object({ city: z.string() }),
   }

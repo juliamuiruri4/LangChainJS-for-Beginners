@@ -26,9 +26,9 @@ When a customer orders "I'd like the daily special with no onions, a side salad,
 
 1. **You understand the request** (what they want)
 2. **You delegate to specialists**:
-   - 👨‍🍳 Chef: "Make the daily special, no onions" (function: prepare_meal)
-   - 🥗 Salad station: "Prepare a side salad" (function: make_salad)
-   - 🍷 Bar: "Serve sparkling water" (function: serve_beverage)
+   - 👨‍🍳 Chef: "Make the daily special, no onions" (function: prepareMeal)
+   - 🥗 Salad station: "Prepare a side salad" (function: makeSalad)
+   - 🍷 Bar: "Serve sparkling water" (function: serveBeverage)
 3. **Each specialist confirms** what they're doing
 4. **You coordinate the response** back to the customer
 
@@ -57,7 +57,7 @@ LLM: "I cannot access real-time weather data..."
 **With Function Calling**:
 ```
 User: "What's the weather in Seattle?"
-LLM: [Generates] { function: "get_weather", args: { city: "Seattle" } }
+LLM: [Generates] { function: "getWeather", args: { city: "Seattle" } }
 Your Code: [Executes] Weather API call → 62°F, cloudy
 LLM: [Responds] "It's currently 62°F and cloudy in Seattle."
 ```
@@ -74,6 +74,8 @@ LLM: [Responds] "It's currently 62°F and cloudy in Seattle."
 ## 🛠️ Creating Tools with Zod
 
 In LangChain.js, tools are created using the `tool()` function with Zod schemas for type safety.
+
+If you're new to Zod, it's a TypeScript-first schema validation library that lets you define the shape and constraints of your data. Think of it as a way to describe what valid input looks like—for example, "this parameter must be a string" or "this number must be between 1 and 100." Zod validates data at runtime and provides excellent TypeScript type inference, making your code both safer and more maintainable. [Learn more about Zod](https://zod.dev/).
 
 ### Example 1: Simple Calculator Tool
 
@@ -246,7 +248,7 @@ const weatherTool = tool(
     return `Current temperature in ${input.city}: ${temp}°F`;
   },
   {
-    name: "get_weather",
+    name: "getWeather",
     description: "Get current weather for a city",
     schema: z.object({
       city: z.string().describe("City name"),
@@ -282,7 +284,7 @@ When you run this example with `tsx 05-function-calling-tooling/code/03-tool-exe
 
 ```
 Tool call: {
-  name: 'get_weather',
+  name: 'getWeather',
   args: { city: 'Seattle' },
   id: 'call_xyz789'
 }
@@ -297,7 +299,7 @@ Final answer: It's currently 62°F in Seattle.
 **The Complete Flow**:
 1. **Step 1 - LLM generates tool call**:
    - User asks "What's the weather in Seattle?"
-   - LLM decides to use `get_weather` tool with `{ city: "Seattle" }`
+   - LLM decides to use `getWeather` tool with `{ city: "Seattle" }`
 2. **Step 2 - Execute the tool**:
    - Your code calls `weatherTool.invoke(toolCall.args)`
    - Tool returns: "Current temperature in Seattle: 62°F"
@@ -350,7 +352,7 @@ const searchTool = tool(
 const weatherTool = tool(
   async (input) => `Weather in ${input.city}: 72°F, sunny`,
   {
-    name: "get_weather",
+    name: "getWeather",
     description: "Get current weather",
     schema: z.object({ city: z.string() }),
   }
@@ -387,7 +389,7 @@ Chosen tool: search
 Args: { query: 'capital of France' }
 
 Query: What's the weather in Tokyo?
-Chosen tool: get_weather
+Chosen tool: getWeather
 Args: { city: 'Tokyo' }
 ```
 
@@ -398,11 +400,11 @@ Args: { city: 'Tokyo' }
 2. **LLM reads tool descriptions**:
    - calculator: "Perform mathematical calculations"
    - search: "Search for factual information"
-   - get_weather: "Get current weather"
+   - getWeather: "Get current weather"
 3. **LLM chooses appropriate tool** for each query:
    - Math question → calculator
    - Factual question → search
-   - Weather question → get_weather
+   - Weather question → getWeather
 4. **LLM generates correct arguments** for each tool
 
 **Key insight**: The LLM automatically selects the right tool based on:
@@ -456,7 +458,7 @@ const safeTool = tool(
     }
   },
   {
-    name: "safe_tool",
+    name: "safeTool",
     description: "Performs operation with error handling",
     schema: z.object({ param: z.string() }),
   }
@@ -475,7 +477,7 @@ const emailTool = tool(
     return `Email sent to ${input.email}`;
   },
   {
-    name: "send_email",
+    name: "sendEmail",
     description: "Send an email",
     schema: z.object({
       email: z.string().email().describe("Valid email address"),
