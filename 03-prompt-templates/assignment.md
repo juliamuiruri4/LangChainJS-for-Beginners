@@ -41,6 +41,50 @@ Practice creating reusable, maintainable prompts using templates, few-shot learn
 - Format matches your examples
 - Works with various product descriptions
 
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from "@langchain/core/prompts";
+import { ChatOpenAI } from "@langchain/openai";
+import "dotenv/config";
+
+// 2. Create model with temperature 0 for consistent formatting
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  temperature: 0,
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Define teaching examples
+const examples = [
+  {
+    input: "Product description",
+    output: JSON.stringify({ name: "...", price: "...", category: "...", highlight: "..." }, null, 2)
+  }
+];
+
+// 4. Create few-shot template
+const exampleTemplate = ChatPromptTemplate.fromMessages([
+  ["human", "{input}"],
+  ["ai", "{output}"]
+]);
+
+const fewShotTemplate = new FewShotChatMessagePromptTemplate({
+  examplePrompt: exampleTemplate,
+  examples: examples,
+  inputVariables: [],
+});
+
+// 5. Validate JSON output
+const parsed = JSON.parse(result.content.toString());
+```
+
 ---
 
 ## Bonus Challenge: Product Data Extractor with Structured Outputs 🏷️
@@ -79,6 +123,52 @@ Practice creating reusable, maintainable prompts using templates, few-shot learn
 - Handles various input formats
 - Correctly categorizes products
 - Gracefully handles missing data
+
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { z } from "zod";
+import "dotenv/config";
+
+// 2. Create model
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Define Zod schema for validation
+const ProductSchema = z.object({
+  name: z.string().describe("Product name"),
+  price: z.number().describe("Price in USD"),
+  category: z.enum(["Electronics", "Clothing", "Food", "Books", "Home"]),
+  inStock: z.boolean(),
+  rating: z.number().min(1).max(5),
+  features: z.array(z.string())
+});
+
+// 4. Create structured output model
+const structuredModel = model.withStructuredOutput(ProductSchema);
+
+// 5. Create prompt template and chain
+const template = ChatPromptTemplate.fromMessages([
+  ["system", "Extract product information from the description."],
+  ["human", "{description}"]
+]);
+
+const chain = template.pipe(structuredModel);
+
+// 6. Invoke with description
+const result = await chain.invoke({ description: "Your product description" });
+// Result is now fully typed!
+```
 
 ---
 

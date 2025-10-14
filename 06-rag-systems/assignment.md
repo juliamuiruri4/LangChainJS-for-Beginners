@@ -35,6 +35,69 @@ Practice building Retrieval Augmented Generation systems that combine document r
 - Includes source citations
 - Handles questions not in the knowledge base gracefully
 
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { Document } from "@langchain/core/documents";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
+import { createRetrievalChain } from "langchain/chains/retrieval";
+import "dotenv/config";
+
+// 2. Create embeddings and model
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Create documents with metadata
+const docs = [
+  new Document({
+    pageContent: "Your content here",
+    metadata: { title: "Doc Title", source: "my-notes" }
+  })
+];
+
+// 4. Create vector store and retriever
+const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
+const retriever = vectorStore.asRetriever({ k: 2 });
+
+// 5. Create prompt template
+const prompt = ChatPromptTemplate.fromTemplate(`
+Answer based on context: {context}
+Question: {input}
+Answer with source attribution.
+`);
+
+// 6. Create RAG chain
+const combineDocsChain = await createStuffDocumentsChain({ llm: model, prompt });
+const ragChain = await createRetrievalChain({ retriever, combineDocsChain });
+
+// 7. Query the chain
+const response = await ragChain.invoke({ input: "Your question" });
+console.log(response.answer);
+console.log(response.context); // Retrieved documents
+```
+
 ---
 
 ## Bonus Challenge: Conversational RAG 💬
@@ -53,21 +116,59 @@ Practice building Retrieval Augmented Generation systems that combine document r
 4. Implement conversation history management
 5. Add option to start new conversation
 
-**Technical Hints**:
-```typescript
-// Combine with ConversationChain or use MessagesPlaceholder in prompt
-const prompt = ChatPromptTemplate.fromMessages([
-  ["system", "Answer based on context: {context}"],
-  new MessagesPlaceholder("history"),
-  ["human", "{input}"],
-]);
-```
-
 **Success Criteria**:
 - Maintains conversation context
 - Handles follow-up questions correctly
 - Clear indication of conversation state
 - Option to reset conversation
+
+**Hints**:
+```typescript
+// 1. Import required modules (in addition to basic RAG imports)
+import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
+import { HumanMessage, AIMessage } from "@langchain/core/messages";
+
+// 2. Create history-aware retriever
+const historyAwarePrompt = ChatPromptTemplate.fromMessages([
+  new MessagesPlaceholder("chat_history"),
+  ["user", "{input}"],
+  ["user", "Generate a search query based on the conversation above"]
+]);
+
+const historyAwareRetriever = await createHistoryAwareRetriever({
+  llm: model,
+  retriever,
+  rephrasePrompt: historyAwarePrompt,
+});
+
+// 3. Create answer prompt with history placeholder
+const answerPrompt = ChatPromptTemplate.fromMessages([
+  ["system", "Answer based on context: {context}"],
+  new MessagesPlaceholder("chat_history"),
+  ["user", "{input}"]
+]);
+
+// 4. Create conversational RAG chain
+const combineDocsChain = await createStuffDocumentsChain({ llm: model, prompt: answerPrompt });
+const conversationalRagChain = await createRetrievalChain({
+  retriever: historyAwareRetriever,
+  combineDocsChain,
+});
+
+// 5. Maintain chat history array
+const chatHistory: (HumanMessage | AIMessage)[] = [];
+
+// 6. Invoke with history
+const response = await conversationalRagChain.invoke({
+  input: userQuestion,
+  chat_history: chatHistory
+});
+
+// 7. Update history after each exchange
+chatHistory.push(new HumanMessage(userQuestion));
+chatHistory.push(new AIMessage(response.answer));
+```
 
 ---
 

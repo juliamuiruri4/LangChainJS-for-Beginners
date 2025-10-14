@@ -35,6 +35,46 @@ Now that you've learned the basics of LangChain.js, it's time to practice! These
 - Same question gets three very different response styles
 - You understand how SystemMessage shapes the AI's personality
 
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import "dotenv/config";
+
+// 2. Create the model (outside the loop, reuse for all personalities)
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Define personalities array
+const personalities = [
+  { name: "Pirate", system: "You are a pirate..." },
+  { name: "Analyst", system: "You are a business analyst..." },
+  // ... more personalities
+];
+
+const question = "What is artificial intelligence?";
+
+// 4. Loop through personalities
+for (const personality of personalities) {
+  const messages = [
+    new SystemMessage(personality.system),
+    new HumanMessage(question)
+  ];
+
+  const response = await model.invoke(messages);
+  console.log(response.content);
+}
+```
+
 ---
 
 ## Bonus Challenge: Model Performance Comparison 🔬
@@ -69,6 +109,53 @@ gpt-4o-mini    | 567ms   | 234ch  | ⭐⭐⭐⭐
 - Script compares at least 3 models
 - Results are displayed in a clear format
 - You can explain which model you'd choose for different use cases
+
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import "dotenv/config";
+
+// 2. Define question and models array
+const question = "Explain the difference between machine learning and deep learning.";
+
+const models = [
+  { name: "gpt-4o", description: "Most capable" },
+  { name: "gpt-4o-mini", description: "Fast and efficient" },
+];
+
+// 3. Create a function to test each model
+async function testModel(modelName: string) {
+  const model = new ChatOpenAI({
+    model: modelName,
+    configuration: {
+      baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined,
+    },
+    apiKey: process.env.AI_API_KEY,
+  });
+
+  const startTime = Date.now();
+  const response = await model.invoke(question);
+  const endTime = Date.now();
+
+  return {
+    name: modelName,
+    time: endTime - startTime,
+    length: response.content.toString().length,
+    response: response.content.toString(),
+  };
+}
+
+// 4. Loop through models and collect results
+for (const modelInfo of models) {
+  const result = await testModel(modelInfo.name);
+  // Display results with padEnd for table formatting
+  console.log(`${result.name.padEnd(15)} | ${result.time}ms`.padEnd(8));
+}
+```
 
 ---
 

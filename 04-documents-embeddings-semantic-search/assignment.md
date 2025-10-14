@@ -42,6 +42,45 @@ Practice creating embeddings, building vector stores, and performing semantic se
 - Identifies semantic relationships (e.g., programming pairs cluster)
 - Clear formatted output with scores
 
+**Hints**:
+```typescript
+// 1. Import required modules
+import { OpenAIEmbeddings } from "@langchain/openai";
+import "dotenv/config";
+
+// 2. Create embeddings instance
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Generate embeddings for all sentences
+const sentences = ["sentence 1", "sentence 2", ...];
+const allEmbeddings = await embeddings.embedDocuments(sentences);
+
+// 4. Calculate cosine similarity between two vectors
+function cosineSimilarity(a: number[], b: number[]): number {
+  const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
+  const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+  const magB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  return dotProduct / (magA * magB);
+}
+
+// 5. Compare all pairs using nested loops
+for (let i = 0; i < sentences.length; i++) {
+  for (let j = i + 1; j < sentences.length; j++) {
+    const score = cosineSimilarity(allEmbeddings[i], allEmbeddings[j]);
+    // Store results...
+  }
+}
+```
+
 ---
 
 ## Bonus Challenge: Semantic Book Search 📚
@@ -75,6 +114,47 @@ Practice creating embeddings, building vector stores, and performing semantic se
 - Returns appropriate number of results
 - Shows similarity scores
 - Works for varied query types
+
+**Hints**:
+```typescript
+// 1. Import required modules
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { Document } from "@langchain/core/documents";
+import "dotenv/config";
+
+// 2. Create embeddings instance
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Create documents from your books
+const documents = books.map(book =>
+  new Document({
+    pageContent: book.summary,
+    metadata: { title: book.title }
+  })
+);
+
+// 4. Create vector store from documents
+const vectorStore = await MemoryVectorStore.fromDocuments(documents, embeddings);
+
+// 5. Perform similarity search with scores
+const results = await vectorStore.similaritySearchWithScore("your query", 3);
+
+// 6. Access results (each result is [document, score])
+results.forEach(([doc, score], index) => {
+  console.log(`${index + 1}. ${doc.metadata.title}`);
+  console.log(`   Score: ${score}`);
+});
+```
 
 ---
 

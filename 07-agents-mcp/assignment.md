@@ -50,6 +50,71 @@ Practice building autonomous AI agents using the ReAct pattern, implementing age
 - Correctly handles multi-step queries
 - Maintains conversation history properly
 
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import { tool } from "@langchain/core/tools";
+import { z } from "zod";
+import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import "dotenv/config";
+
+// 2. Create model
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Define tools
+const searchTool = tool(
+  async (input) => {
+    // Simulated search
+    return "Tokyo has a population of approximately 14 million";
+  },
+  {
+    name: "search",
+    description: "Find factual information.",
+    schema: z.object({ query: z.string() })
+  }
+);
+
+// 4. Bind tools to model
+const modelWithTools = model.bindTools([searchTool, calculatorTool]);
+
+// 5. Implement agent loop
+let messages: any[] = [new HumanMessage(query)];
+let iteration = 1;
+const maxIterations = 5;
+
+while (iteration <= maxIterations) {
+  const response = await modelWithTools.invoke(messages);
+
+  // Check if done (no more tool calls)
+  if (!response.tool_calls || response.tool_calls.length === 0) {
+    console.log(`Final Answer: ${response.content}`);
+    break;
+  }
+
+  // Execute tool
+  const toolCall = response.tool_calls[0];
+  const toolResult = await searchTool.invoke(toolCall);
+
+  // Add to conversation history
+  messages.push(
+    new AIMessage({ content: response.content, tool_calls: response.tool_calls }),
+    new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
+  );
+
+  iteration++;
+}
+```
+
 **Expected Console Output**:
 ```
 User: What is the population of Tokyo multiplied by 2?
@@ -113,6 +178,72 @@ Iteration 3:
 - Clear output showing the reasoning chain
 - Handles queries requiring 3+ tool calls
 - Summary shows agent's "thought process"
+
+**Hints**:
+```typescript
+// 1. Import required modules (same as challenge)
+import { ChatOpenAI } from "@langchain/openai";
+import { tool } from "@langchain/core/tools";
+import { z } from "zod";
+import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import "dotenv/config";
+
+// 2. Create model (same as challenge)
+
+// 3. Define four specialized tools
+const searchTool = tool(/* ... */);
+const calculatorTool = tool(/* ... */);
+const unitConverter = tool(
+  async (input) => {
+    // Convert between units
+    const result = input.value * conversionRate;
+    return `${input.value} ${input.from} equals ${result} ${input.to}`;
+  },
+  {
+    name: "unitConverter",
+    description: "Convert between units (km/miles, USD/EUR).",
+    schema: z.object({
+      value: z.number(),
+      from: z.string(),
+      to: z.string()
+    })
+  }
+);
+
+const comparisonTool = tool(
+  async (input) => {
+    if (input.operation === "less") {
+      return input.value1 < input.value2
+        ? `${input.value1} is less than ${input.value2}`
+        : `${input.value1} is not less than ${input.value2}`;
+    }
+    // Handle other operations...
+  },
+  {
+    name: "comparisonTool",
+    description: "Compare two values.",
+    schema: z.object({
+      value1: z.number(),
+      value2: z.number(),
+      operation: z.enum(["less", "greater", "equal", "difference"])
+    })
+  }
+);
+
+// 4. Bind all tools
+const modelWithTools = model.bindTools([
+  searchTool, calculatorTool, unitConverter, comparisonTool
+]);
+
+// 5. Track tools used
+const toolsUsed: string[] = [];
+toolsUsed.push(toolCall.name);
+
+// 6. Display summary at end
+console.log("📊 Agent Summary:");
+console.log(`   • Total iterations: ${iteration - 1}`);
+console.log(`   • Tools used: ${[...new Set(toolsUsed)].join(", ")}`);
+```
 
 **Advanced Features** (Optional):
 - Add a `maxIterations` check that provides a helpful message if exceeded

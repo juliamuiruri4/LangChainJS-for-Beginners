@@ -44,6 +44,43 @@ You: quit
 - Conversation history is maintained correctly
 - User can exit gracefully
 
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
+import readline from "readline";
+import "dotenv/config";
+
+// 2. Create the model
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Initialize conversation history with a system message
+const messages: (SystemMessage | HumanMessage | AIMessage)[] = [
+  new SystemMessage("Your bot personality here"),
+];
+
+// 4. Set up readline for user input
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+// 5. Add messages to history as conversation progresses
+messages.push(new HumanMessage(userInput));
+const response = await model.invoke(messages);
+messages.push(new AIMessage(String(response.content)));
+```
+
 ---
 
 ## Bonus Challenge: Temperature Experiment 🌡️
@@ -85,6 +122,41 @@ Try 3: "Where Magic Meets Mocha"
 - Tests at least 5 temperature values
 - Shows variability clearly
 - Includes your analysis of results
+
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import "dotenv/config";
+
+// 2. Define temperatures to test
+const temperatures = [0, 0.5, 1, 1.5, 2];
+const prompt = "Write a catchy tagline for a coffee shop.";
+
+// 3. Loop through temperatures
+for (const temp of temperatures) {
+  console.log(`\n🌡️ Temperature: ${temp}`);
+
+  // Create model with current temperature (inside loop!)
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL || "gpt-4o-mini",
+    temperature: temp, // Use loop variable
+    configuration: {
+      baseURL: process.env.AI_ENDPOINT,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined,
+    },
+    apiKey: process.env.AI_API_KEY,
+  });
+
+  // 4. Run multiple trials for this temperature
+  for (let trial = 1; trial <= 3; trial++) {
+    const response = await model.invoke(prompt);
+    console.log(`Try ${trial}: "${response.content}"`);
+  }
+}
+```
 
 ---
 

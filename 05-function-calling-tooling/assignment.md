@@ -42,10 +42,59 @@ Practice creating type-safe tools with Zod schemas, implementing the complete to
 
 **Hints**:
 ```typescript
-schema: z.object({
-  city: z.string().describe("City name, e.g., 'Tokyo' or 'Paris'"),
-  units: z.enum(["celsius", "fahrenheit"]).optional().describe("Temperature unit")
-})
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import { tool } from "@langchain/core/tools";
+import { ToolMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
+import { z } from "zod";
+import "dotenv/config";
+
+// 2. Create the model
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Define tool with Zod schema
+const weatherTool = tool(
+  async (input) => {
+    // Your tool implementation
+    return `Current weather in ${input.city}: ...`;
+  },
+  {
+    name: "getWeather",
+    description: "Get current weather information for a city.",
+    schema: z.object({
+      city: z.string().describe("City name, e.g., 'Tokyo' or 'Paris'"),
+      units: z.enum(["celsius", "fahrenheit"]).optional().describe("Temperature unit")
+    }),
+  }
+);
+
+// 4. Bind tool to model
+const modelWithTools = model.bindTools([weatherTool]);
+
+// 5. Execute 3-step pattern
+// Step 1: Get tool call from LLM
+const response1 = await modelWithTools.invoke([new HumanMessage(query)]);
+const toolCall = response1.tool_calls[0];
+
+// Step 2: Execute the tool
+const toolResult = await weatherTool.invoke(toolCall);
+
+// Step 3: Send result back to LLM
+const messages = [
+  new HumanMessage(query),
+  new AIMessage({ content: response1.content, tool_calls: response1.tool_calls }),
+  new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
+];
+const finalResponse = await model.invoke(messages);
 ```
 
 ---
@@ -77,6 +126,58 @@ schema: z.object({
 - Tool descriptions are clear enough to guide LLM selection
 - Returns accurate simulated results
 - Handles edge cases (invalid currencies, unknown cities)
+
+**Hints**:
+```typescript
+// 1. Import required modules
+import { ChatOpenAI } from "@langchain/openai";
+import { tool } from "@langchain/core/tools";
+import { z } from "zod";
+import "dotenv/config";
+
+// 2. Create model
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL || "gpt-4o-mini",
+  configuration: {
+    baseURL: process.env.AI_ENDPOINT,
+    defaultQuery: process.env.AI_API_VERSION
+      ? { "api-version": process.env.AI_API_VERSION }
+      : undefined,
+  },
+  apiKey: process.env.AI_API_KEY,
+});
+
+// 3. Define multiple tools
+const currencyConverter = tool(
+  async (input) => {
+    // Conversion logic
+    return `${input.amount} ${input.from} equals approximately ${result} ${input.to}`;
+  },
+  {
+    name: "currencyConverter",
+    description: "Convert amounts between currencies. Use when user asks about exchange rates.",
+    schema: z.object({
+      amount: z.number().describe("Amount to convert"),
+      from: z.string().describe("Source currency code"),
+      to: z.string().describe("Target currency code")
+    })
+  }
+);
+
+// Define other tools (distanceCalculator, timeZoneTool) similarly...
+
+// 4. Bind all tools to model
+const modelWithTools = model.bindTools([
+  currencyConverter,
+  distanceCalculator,
+  timeZoneTool
+]);
+
+// 5. LLM automatically selects the right tool
+const response = await modelWithTools.invoke(query);
+const toolCall = response.tool_calls[0];
+console.log(`LLM chose: ${toolCall.name}`);
+```
 
 **Advanced Feature** (Optional):
 Add error handling that returns helpful error messages when:
