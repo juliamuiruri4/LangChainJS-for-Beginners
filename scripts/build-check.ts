@@ -11,15 +11,22 @@ import { join } from "path";
 async function findTypeScriptFiles(dir: string): Promise<string[]> {
   const files: string[] = [];
 
+  // Directories and files to skip during build check
+  const skipItems = [
+    "node_modules",
+    "dist",
+    "future",
+    "scripts",
+  ];
+
   try {
     const entries = await readdir(dir, { withFileTypes: true });
 
     for (const entry of entries) {
       const fullPath = join(dir, entry.name);
 
-      // Skip node_modules and validation scripts
-      if (entry.name === "node_modules" || entry.name === "dist" ||
-          entry.name === "validate-examples.ts" || entry.name === "build-check.ts") {
+      // Skip excluded directories/files and anything starting with "." (hidden files/dirs)
+      if (skipItems.includes(entry.name) || entry.name.startsWith(".")) {
         continue;
       }
 

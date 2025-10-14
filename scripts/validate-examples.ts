@@ -31,34 +31,8 @@ const INTERACTIVE_FILES = [
   { file: "03-human-in-loop.ts", input: "yes\nno\nno\n" },
 ];
 
-// Files that are slow or make external API calls - run with longer timeout
-const SLOW_FILES = [
-  "03-model-comparison.ts",
-  "model-performance.ts",
-  "personality-test.ts",
-  "03-parameters.ts", // Makes 9 API calls
-  "temperature-lab.ts", // Makes 15 API calls with delays
-  "02-fallback-strategy.ts", // Retry logic with backoff
-  "04-error-handling.ts",
-  "robust-chat.ts",
-  "01-multi-turn.ts",
-  "02-streaming.ts",
-  "03-summary-memory.ts",
-  "chatbot.ts", // Interactive with API calls
-  "streaming-chat.ts", // Interactive with API calls
-  "qa-program.ts", // Interactive with API calls
-  "03-human-in-loop.ts", // Interactive (no API but complex)
-  "multi-agent-system.ts", // Multiple nested agent calls
-  "smart-memory.ts", // Multiple API calls for memory testing
-  "doc-organizer.ts", // Interactive with multiple operations
-  "token-tracker.ts", // Multiple API calls for token tracking
-  "cost-optimizer.ts", // Multiple API calls for cost comparison
-  "translator.ts", // Makes 2 API calls in CI mode
-  "template-library.ts", // Makes multiple API calls for templates
-];
-
-const TIMEOUT_MS = 30000; // 30 seconds default
-const SLOW_TIMEOUT_MS = 60000; // 60 seconds for slow files
+// Timeout for all examples (generous to handle API calls and complex examples)
+const TIMEOUT_MS = 60000; // 60 seconds
 
 async function findCodeFiles(dir: string): Promise<string[]> {
   const files: string[] = [];
@@ -92,14 +66,9 @@ function getInteractiveInput(filePath: string): string | null {
   return interactive ? interactive.input : null;
 }
 
-function isSlow(filePath: string): boolean {
-  return SLOW_FILES.some(slow => filePath.includes(slow));
-}
-
 function runExample(filePath: string): Promise<TestResult> {
   return new Promise((resolve) => {
     const startTime = Date.now();
-    const timeout = isSlow(filePath) ? SLOW_TIMEOUT_MS : TIMEOUT_MS;
     const interactiveInput = getInteractiveInput(filePath);
 
     const child = spawn("npx", ["tsx", filePath], {
@@ -124,9 +93,9 @@ function runExample(filePath: string): Promise<TestResult> {
         file: filePath,
         success: false,
         duration: Date.now() - startTime,
-        error: `Timeout after ${timeout}ms`,
+        error: `Timeout after ${TIMEOUT_MS}ms`,
       });
-    }, timeout);
+    }, TIMEOUT_MS);
 
     child.stdout.on("data", (data) => {
       stdout += data.toString();
@@ -168,26 +137,29 @@ function runExample(filePath: string): Promise<TestResult> {
   });
 }
 
+async function findChapters(projectRoot: string): Promise<string[]> {
+  const entries = await readdir(projectRoot, { withFileTypes: true });
+  // Match directories starting with 2 digits followed by "-", for example "00-", "01-", etc.
+  const chapterPattern = /^\d{2}-/; 
+
+  return entries
+    .filter(entry => entry.isDirectory() && chapterPattern.test(entry.name))
+    .map(entry => entry.name)
+    .sort(); // Ensure chapters are in numerical order
+}
+
 async function main() {
   console.log("🧪 Validating All Code Examples\n");
   console.log("=" + "=".repeat(79) + "\n");
 
-  // Find all chapters (excluding future/ folder)
-  const chapters = [
-    "00-course-setup",
-    "01-introduction",
-    "02-chat-models",
-    "03-prompt-templates",
-    "04-documents-embeddings-semantic-search",
-    "05-function-calling-tooling",
-    "06-rag-systems",
-    "07-agents-mcp",
-  ];
-
-  const allFiles: string[] = [];
-
   // Get project root (parent directory of scripts folder)
   const projectRoot = join(__dirname, "..");
+
+  // Dynamically find all chapter directories (e.g., 00-*, 01-*, etc.)
+  const chapters = await findChapters(projectRoot);
+  console.log(`📂 Found ${chapters.length} chapters: ${chapters.join(", ")}\n`);
+
+  const allFiles: string[] = [];
 
   // Collect all code files
   for (const chapter of chapters) {
@@ -199,6 +171,11 @@ async function main() {
     const solutionPath = join(projectRoot, chapter, "solution");
     const solutionFiles = await findCodeFiles(solutionPath);
     allFiles.push(...solutionFiles);
+
+    // Also check solution folders
+    const samplesPath = join(projectRoot, chapter, "samples");
+    const samplesFiles = await findCodeFiles(samplesPath);
+    allFiles.push(...samplesFiles);
   }
 
   console.log(`📁 Found ${allFiles.length} code files\n`);
