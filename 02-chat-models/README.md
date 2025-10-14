@@ -10,12 +10,11 @@ In this chapter, you'll master the art of having natural conversations with AI m
 
 By the end of this chapter, you'll be able to:
 
-
-✅ Have multi-turn conversations with AI
-✅ Stream responses for better user experience
-✅ Handle errors gracefully
-✅ Control model behavior with parameters
-✅ Understand token usage
+- ✅ Have multi-turn conversations with AI
+- ✅ Stream responses for better user experience
+- ✅ Handle errors gracefully
+- ✅ Control model behavior with parameters
+- ✅ Understand token usage
 
 ---
 

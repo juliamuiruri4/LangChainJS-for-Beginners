@@ -10,13 +10,12 @@ In this chapter, you'll learn to build AI agents that can reason about problems,
 
 By the end of this chapter, you'll be able to:
 
-
-✅ Understand what AI agents are and how they differ from chains
-✅ Implement the ReAct (Reasoning + Acting) pattern
-✅ Build agent loops that iterate until solving a problem
-✅ Give agents multiple tools and let them choose the right one
-✅ Understand Model Context Protocol (MCP) and its benefits
-✅ Build multi-step, autonomous AI systems
+- ✅ Understand what AI agents are and how they differ from chains
+- ✅ Implement the ReAct (Reasoning + Acting) pattern
+- ✅ Build agent loops that iterate until solving a problem
+- ✅ Give agents multiple tools and let them choose the right one
+- ✅ Understand Model Context Protocol (MCP) and its benefits
+- ✅ Build multi-step, autonomous AI systems
 
 ---
 

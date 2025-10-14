@@ -10,16 +10,15 @@ In this chapter, you'll learn the complete pipeline for working with documents i
 
 By the end of this chapter, you'll be able to:
 
-
-✅ Load documents from various sources (text, PDF, web)
-✅ Split long documents into manageable chunks
-✅ Understand chunking strategies and their trade-offs
-✅ Work with document metadata
-✅ Understand what embeddings are and how they work
-✅ Create embeddings for text using AI models
-✅ Store embeddings in vector databases
-✅ Perform semantic similarity searches
-✅ Build the foundation for RAG systems
+- ✅ Load documents from various sources (text, PDF, web)
+- ✅ Split long documents into manageable chunks
+- ✅ Understand chunking strategies and their trade-offs
+- ✅ Work with document metadata
+- ✅ Understand what embeddings are and how they work
+- ✅ Create embeddings for text using AI models
+- ✅ Store embeddings in vector databases
+- ✅ Perform semantic similarity searches
+- ✅ Build the foundation for RAG systems
 
 ---
 

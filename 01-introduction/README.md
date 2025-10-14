@@ -10,11 +10,10 @@ Welcome to your first step in building AI-powered applications with LangChain.js
 
 By the end of this chapter, you'll be able to:
 
-
-✅ Understand what LangChain.js is and why it exists
-✅ Recognize common AI application patterns
-✅ Set up a development environment
-✅ Make your first LLM call using GitHub Models
+- ✅ Understand what LangChain.js is and why it exists
+- ✅ Recognize common AI application patterns
+- ✅ Set up a development environment
+- ✅ Make your first LLM call using GitHub Models
 
 ---
 

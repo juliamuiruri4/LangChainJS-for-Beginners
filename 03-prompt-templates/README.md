@@ -10,12 +10,12 @@ In this chapter, you'll learn how to create reusable, maintainable prompts using
 
 By the end of this chapter, you'll be able to:
 
-✅ Create reusable prompt templates
-✅ Use variables and dynamic content in prompts
-✅ Implement few-shot prompting (teaching by example)
-✅ Combine multiple prompts together
-✅ Generate structured outputs with Zod schemas
-✅ Understand when and why to use templates
+- ✅ Create reusable prompt templates
+- ✅ Use variables and dynamic content in prompts
+- ✅ Implement few-shot prompting (teaching by example)
+- ✅ Combine multiple prompts together
+- ✅ Generate structured outputs with Zod schemas
+- ✅ Understand when and why to use templates
 
 ---
 
