@@ -9,6 +9,8 @@ In this chapter, you'll master the art of having natural conversations with AI m
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
+
+
 ✅ Have multi-turn conversations with AI
 ✅ Stream responses for better user experience
 ✅ Handle errors gracefully

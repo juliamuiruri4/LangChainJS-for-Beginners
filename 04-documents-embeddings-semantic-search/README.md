@@ -9,6 +9,8 @@ In this chapter, you'll learn the complete pipeline for working with documents i
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
+
+
 ✅ Load documents from various sources (text, PDF, web)
 ✅ Split long documents into manageable chunks
 ✅ Understand chunking strategies and their trade-offs

@@ -9,6 +9,8 @@ In this chapter, you'll learn to build AI agents that can reason about problems,
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
+
+
 ✅ Understand what AI agents are and how they differ from chains
 ✅ Implement the ReAct (Reasoning + Acting) pattern
 ✅ Build agent loops that iterate until solving a problem

@@ -9,6 +9,7 @@ In this chapter, you'll learn how to create reusable, maintainable prompts using
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
+
 ✅ Create reusable prompt templates
 ✅ Use variables and dynamic content in prompts
 ✅ Implement few-shot prompting (teaching by example)

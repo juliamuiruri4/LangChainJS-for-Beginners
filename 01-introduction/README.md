@@ -9,6 +9,8 @@ Welcome to your first step in building AI-powered applications with LangChain.js
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
+
+
 ✅ Understand what LangChain.js is and why it exists
 ✅ Recognize common AI application patterns
 ✅ Set up a development environment

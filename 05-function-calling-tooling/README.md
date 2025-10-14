@@ -9,6 +9,8 @@ In this chapter, you'll learn how to extend AI capabilities beyond text generati
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
+
+
 ✅ Understand what function calling is and why it matters
 ✅ Create tools with Zod schemas for type safety
 ✅ Bind tools to chat models

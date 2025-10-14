@@ -9,6 +9,8 @@ In this chapter, you'll learn to build RAG (Retrieval Augmented Generation) syst
 ## 🎯 Learning Objectives
 
 By the end of this chapter, you'll be able to:
+
+
 ✅ Understand the RAG (Retrieval Augmented Generation) architecture
 ✅ Build a question-answering system over custom documents
 ✅ Use LCEL (LangChain Expression Language) to create chains
