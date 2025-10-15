@@ -495,15 +495,15 @@ You can't visualize 1536+ dimensions, but the math works the same way!
 
 ### Why Embeddings Are Powerful
 
-**Example 1**: Geography Relationships
+**Example 1**: Animal Life Stages
 
 ```typescript
-Embedding("Paris") - Embedding("France") + Embedding("Italy") ≈ Embedding("Rome")
+Embedding("Puppy") - Embedding("Dog") + Embedding("Cat") ≈ Embedding("Kitten")
 ```
 
 This works because embeddings capture **semantic relationships**:
-- "Paris" is to "France" as "Rome" is to "Italy"
-- The vectors encode geography and capital cities as separate dimensions
+- "Puppy" is to "Dog" as "Kitten" is to "Cat"
+- The vectors encode species and life stage as separate dimensions
 - Vector math preserves these relationships!
 
 **Example 2**: Cultural Relationships
@@ -530,7 +530,7 @@ Embedding models (like `text-embedding-3-small`) are trained on **massive amount
 
 1. **Co-occurrence**: Words that appear near each other often get similar embeddings
 2. **Context**: "bank" (river) vs "bank" (money) get different embeddings based on surrounding words
-3. **Relationships**: The model learns that "Paris" is to "France" as "London" is to "England"
+3. **Relationships**: The model learns that "Puppy" is to "Dog" as "Kitten" is to "Cat"
 
 **Training Data Scale**:
 - Billions of sentences from books, websites, articles
@@ -899,18 +899,18 @@ Each with 1536 dimensions
 
 ## 🧮 Embedding Relationships
 
-Remember the enhanced conceptual content about embedding relationships (Paris-France+Italy=Rome)? Let's see it in action!
+Remember the enhanced conceptual content about embedding relationships? Let's see vector arithmetic in action!
 
 ### Example 9: Embedding Vector Math
 
-In this example, you'll demonstrate how embeddings capture semantic relationships through vector arithmetic—proving that "Paris" is to "France" as "Rome" is to "Italy".
+In this example, you'll demonstrate how embeddings capture semantic relationships through vector arithmetic—proving that "Puppy" is to "Dog" as "Kitten" is to "Cat".
 
 **Code**: [`code/09-embedding-relationships.ts`](./code/09-embedding-relationships.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts`
 
 This example demonstrates three powerful embedding capabilities:
 
-1. **Geography Relationships**: `Embedding("Paris") - Embedding("France") + Embedding("Italy") ≈ Embedding("Rome")`
+1. **Animal Life Stages**: `Embedding("Puppy") - Embedding("Dog") + Embedding("Cat") ≈ Embedding("Kitten")`
 2. **Cultural Relationships**: `Embedding("pizza") - Embedding("Italy") + Embedding("Japan") ≈ Embedding("sushi")`
 3. **Synonym Clustering**: Similar words have similar embeddings
 
@@ -921,39 +921,39 @@ When you run this example with `tsx 04-documents-embeddings-semantic-search/code
 ```
 🔬 Embedding Relationships: Vector Math Demo
 
-📍 Example 1: Geography Relationships
+🐶 Example 1: Animal Life Stages
 ──────────────────────────────────────────────────────────────────────
 
-Testing: Embedding('Paris') - Embedding('France') + Embedding('Italy')
-Expected result: Should be similar to Embedding('Rome')
+Testing: Embedding('Puppy') - Embedding('Dog') + Embedding('Cat')
+Expected result: Should be similar to Embedding('Kitten')
 
-✅ Similarity to 'Rome': 87.34%
+✅ Similarity to 'Kitten': 64.38%
 
 What this means:
-  • Paris is to France as Rome is to Italy
-  • The vectors encode 'capital city' and 'country' as separate dimensions
-  • Vector math preserves these relationships!
+  • Puppy is to Dog as Kitten is to Cat
+  • The vectors encode 'species' and 'life stage' as separate dimensions
+  • Subtracting 'Dog' removes the adult dog, adding 'Cat' finds the young cat
 
-📊 Comparison: Similarity to 'London': 72.18%
-   (Lower than Rome, as expected - London is capital of UK, not Italy)
+📊 Comparison: Similarity to 'Bird': 34.35%
+   (Lower than Kitten - Bird is a different species, not a young cat)
 ```
 
 ### How It Works
 
 **What's happening**:
-1. **Generate embeddings** for Paris, France, Italy, and Rome
-2. **Perform vector math**: Subtract France from Paris, then add Italy
-3. **Compare result** to Rome embedding using cosine similarity
-4. **High similarity**: The result is very close to "Rome" (typically 85-90%)
-5. **Validate relationship**: Compare with unrelated cities (London, etc.) to confirm
+1. **Generate embeddings** for Puppy, Dog, Cat, and Kitten
+2. **Perform vector math**: Subtract Dog from Puppy, then add Cat
+3. **Compare result** to Kitten embedding using cosine similarity
+4. **High similarity**: The result is very close to "Kitten"
+5. **Validate relationship**: Compare with unrelated animals (Bird) to confirm
 
 **Why this works**:
 - Embeddings encode semantic relationships as vectors
 - Vector arithmetic preserves these relationships
-- "Capital city of" is encoded as a direction in vector space
-- Paris - France + Italy moves from "France's capital" to "Italy's capital"
+- "Young version of" is encoded as a direction in vector space
+- Puppy - Dog + Cat moves from "young dog" to "young cat"
 
-This demonstrates that embeddings don't just capture word meanings—they capture the **relationships between concepts**.
+This demonstrates that embeddings don't just capture word meanings, they capture the **relationships between concepts**.
 
 ---
 

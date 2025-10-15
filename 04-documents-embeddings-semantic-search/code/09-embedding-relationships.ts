@@ -38,42 +38,42 @@ async function main() {
   const embeddings = createEmbeddingsModel();
 
   // ============================================================================
-  // Example 1: Geography Relationships
-  // Demonstrating: Paris - France + Italy ≈ Rome
+  // Example 1: Animal Life Stages
+  // Demonstrating: Puppy - Dog + Cat ≈ Kitten
   // ============================================================================
 
-  console.log("📍 Example 1: Geography Relationships");
+  console.log("🐶 Example 1: Animal Life Stages");
   console.log("─".repeat(70));
-  console.log("\nTesting: Embedding('Paris') - Embedding('France') + Embedding('Italy')");
-  console.log("Expected result: Should be similar to Embedding('Rome')\n");
+  console.log("\nTesting: Embedding('Puppy') - Embedding('Dog') + Embedding('Cat')");
+  console.log("Expected result: Should be similar to Embedding('Kitten')\n");
 
-  // Generate embeddings for geographic terms
-  const [parisEmbed, franceEmbed, italyEmbed, romeEmbed] = await Promise.all([
-    embeddings.embedQuery("Paris"),
-    embeddings.embedQuery("France"),
-    embeddings.embedQuery("Italy"),
-    embeddings.embedQuery("Rome"),
+  // Generate embeddings for animals and their young
+  const [puppyEmbed, dogEmbed, catEmbed, kittenEmbed] = await Promise.all([
+    embeddings.embedQuery("Puppy"),
+    embeddings.embedQuery("Dog"),
+    embeddings.embedQuery("Cat"),
+    embeddings.embedQuery("Kitten"),
   ]);
 
-  // Perform vector arithmetic: Paris - France + Italy
-  const parisMinusFrance = subtractVectors(parisEmbed, franceEmbed);
-  const result1 = addVectors(parisMinusFrance, italyEmbed);
+  // Perform vector arithmetic: Puppy - Dog + Cat
+  const puppyMinusDog = subtractVectors(puppyEmbed, dogEmbed);
+  const result1 = addVectors(puppyMinusDog, catEmbed);
 
-  // Calculate similarity with Rome
-  const similarityToRome = cosineSimilarity(result1, romeEmbed);
+  // Calculate similarity with Kitten
+  const similarityToKitten = cosineSimilarity(result1, kittenEmbed);
 
-  console.log(`✅ Similarity to 'Rome': ${(similarityToRome * 100).toFixed(2)}%`);
+  console.log(`✅ Similarity to 'Kitten': ${(similarityToKitten * 100).toFixed(2)}%`);
   console.log("\nWhat this means:");
-  console.log("  • Paris is to France as Rome is to Italy");
-  console.log("  • The vectors encode 'capital city' and 'country' as separate dimensions");
-  console.log("  • Vector math preserves these relationships!");
+  console.log("  • Puppy is to Dog as Kitten is to Cat");
+  console.log("  • The vectors encode 'species' and 'life stage' as separate dimensions");
+  console.log("  • Subtracting 'Dog' removes the adult dog, adding 'Cat' finds the young cat");
 
-  // Show comparison with unrelated terms
-  const londonEmbed = await embeddings.embedQuery("London");
-  const similarityToLondon = cosineSimilarity(result1, londonEmbed);
+  // Show comparison with unrelated animal
+  const birdEmbed = await embeddings.embedQuery("Bird");
+  const similarityToBird = cosineSimilarity(result1, birdEmbed);
 
-  console.log(`\n📊 Comparison: Similarity to 'London': ${(similarityToLondon * 100).toFixed(2)}%`);
-  console.log(`   (Lower than Rome, as expected - London is capital of UK, not Italy)\n`);
+  console.log(`\n📊 Comparison: Similarity to 'Bird': ${(similarityToBird * 100).toFixed(2)}%`);
+  console.log(`   (Lower than Kitten - Bird is a different species, not a young cat)\n`);
 
   console.log("=".repeat(70) + "\n");
 
@@ -156,12 +156,12 @@ async function main() {
   console.log("🎓 Key Takeaways:");
   console.log("─".repeat(70));
   console.log("\n1. Embeddings capture semantic relationships:");
-  console.log("   • Paris:France :: Rome:Italy (capital cities)");
+  console.log("   • Puppy:Dog :: Kitten:Cat (animal life stages)");
   console.log("   • pizza:Italy :: sushi:Japan (cultural foods)");
   console.log("");
   console.log("2. Vector arithmetic works on meanings:");
   console.log("   • Adding/subtracting embeddings preserves relationships");
-  console.log("   • The math 'understands' concepts like country, capital, food");
+  console.log("   • The math 'understands' concepts like species, life stage, country, food");
   console.log("");
   console.log("3. Synonyms cluster together:");
   console.log("   • Similar meanings = nearby in vector space");
