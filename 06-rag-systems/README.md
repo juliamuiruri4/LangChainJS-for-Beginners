@@ -289,6 +289,101 @@ Choose RAG when you need to:
 
 ## 💻 Building Your First RAG System
 
+Before we build a RAG system, let's make sure RAG is the right choice! Let's see the decision framework in action.
+
+### Example 0: Choosing the Right Approach (RAG vs Alternatives)
+
+This example demonstrates the decision framework we just learned—comparing Prompt Engineering, RAG, and Fine-Tuning side by side to understand when each approach makes sense.
+
+**Code**: [`code/00-when-to-use-rag.ts`](./code/00-when-to-use-rag.ts)
+**Run**: `tsx 06-rag-systems/code/00-when-to-use-rag.ts`
+
+This demo shows three real-world scenarios:
+
+1. **Scenario 1: Small FAQ Bot** → Uses **Prompt Engineering** (5 Q&As fit in prompt)
+2. **Scenario 2: Large Documentation Bot** → Uses **RAG** (1000s of docs, needs search)
+3. **Scenario 3: Code Style Enforcer** → Uses **Fine-Tuning** (teaching patterns, not facts)
+
+### Expected Output
+
+When you run this example with `tsx 06-rag-systems/code/00-when-to-use-rag.ts`, you'll see:
+
+```
+🎯 When to Use RAG: Decision Framework Demo
+==================================================================================
+
+📋 SCENARIO 1: Small FAQ Bot
+────────────────────────────────────────────────────────────────────────────────
+
+Problem: Answer 5 common questions about a product
+Data size: 5 questions/answers (fits easily in prompt)
+Update frequency: Rarely changes
+
+✅ BEST APPROACH: Prompt Engineering
+
+Question: "What's your return policy?"
+
+Answer: We offer a 30-day money-back guarantee with no questions asked.
+
+💡 Why Prompt Engineering works here:
+   • Small dataset (5 Q&As) fits easily in prompt
+   • No search needed - all context is relevant
+   • Simple to maintain - just update the string
+   • Fast and cost-effective
+
+==================================================================================
+
+📚 SCENARIO 2: Company Documentation Bot
+────────────────────────────────────────────────────────────────────────────────
+
+Problem: Answer questions from 1,000+ documentation pages
+Data size: Too large to fit in prompt (exceeds context window)
+Update frequency: Documentation changes frequently
+
+✅ BEST APPROACH: RAG (Retrieval Augmented Generation)
+
+Creating vector store from documents...
+
+Question: "How does API authentication work?"
+
+Answer: The API uses OAuth 2.0 authentication with bearer tokens. These tokens expire
+after 24 hours and are subject to rate limiting of 100 requests per minute per user.
+
+Retrieved documents:
+  1. [api-auth.md] The API authentication uses OAuth 2.0 with bearer tokens...
+  2. [api-limits.md] API rate limiting is 100 requests per minute per user...
+
+💡 Why RAG works here:
+   • Large dataset (1000s of docs) - can't fit in prompt
+   • Search capability - finds relevant 2 docs out of thousands
+   • Easy to update - just add/remove documents from vector store
+   • Source attribution - know which docs were used
+   • Scalable - works with millions of documents
+```
+
+### How It Works
+
+This example demonstrates the **decision framework** from our enhanced conceptual content:
+
+1. **Step 1: Data Size Check**
+   - Scenario 1: < 8K tokens → Prompt Engineering
+   - Scenario 2: > 8K tokens → RAG or Fine-Tuning
+
+2. **Step 2: Goal Check**
+   - Scenario 1 & 2: Add information → RAG or Prompt Engineering
+   - Scenario 3: Change behavior → Fine-Tuning
+
+3. **Step 3: Update Frequency**
+   - Scenario 1: Rarely → Prompt Engineering works
+   - Scenario 2: Frequently → Definitely RAG
+
+4. **Step 4: Source Attribution**
+   - Scenario 2: Need citations → RAG
+
+**Key Insight**: The same code demonstrates why RAG is powerful—it scales to millions of documents while providing source attribution, something prompt engineering and fine-tuning can't do.
+
+---
+
 ### Example 1: Simple RAG
 
 In this example, you'll build a complete RAG system that retrieves relevant documents from a vector store and uses them to answer questions accurately.
@@ -297,7 +392,7 @@ In this example, you'll build a complete RAG system that retrieves relevant docu
 **Run**: `tsx 06-rag-systems/code/01-simple-rag.ts`
 
 ```typescript
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "langchain/document";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -306,22 +401,14 @@ import { createRetrievalChain } from "langchain/chains/retrieval";
 import "dotenv/config";
 
 // Setup
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
-const embeddings = new OpenAIEmbeddings({
-  model: "text-embedding-3-small",
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY,
-});
+const embeddings = createEmbeddingsModel();
 
 // Create knowledge base
 const docs = [
   new Document({
-    pageContent: "LangChain.js was released in 2022 and is a JavaScript port of the Python LangChain library.",
+    pageContent: "LangChain.js was released in 2023 and is a JavaScript port of the Python LangChain library.",
   }),
   new Document({
     pageContent: "RAG systems combine retrieval with generation to provide accurate, sourced answers.",

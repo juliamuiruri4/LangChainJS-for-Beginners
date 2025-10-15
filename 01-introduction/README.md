@@ -144,7 +144,7 @@ Each component in the chain:
 - Error handling: Built-in retry and fallback logic
 - Testable: Test each component independently
 
-You'll master chains in [Chapter 6](../06-rag-systems/README.md) where you'll build RAG systems.
+You'll learn more about chains in [Chapter 6](../06-rag-systems/README.md) where you'll build RAG systems.
 
 ### 4. Agents
 
@@ -309,20 +309,14 @@ In this example, you'll create your first LangChain.js program that sends a simp
 This example shows the simplest possible LangChain.js application:
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function main() {
   console.log("🚀 Hello LangChain.js!\n");
 
-  // Create a model instance using environment variables
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  // Create a model instance using our helper function
+  const model = createChatModel();
 
   // Make your first AI call!
   const response = await model.invoke("What is LangChain in one sentence?");
@@ -349,12 +343,24 @@ When you run this example with `tsx 01-introduction/code/01-hello-world.ts`, you
 ### How It Works
 
 **What's happening here?**
-1. We import `ChatOpenAI` from LangChain
-2. We create a model instance using environment variables (`AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`)
+1. We import `createChatModel` from our helper module (`@/scripts/create-model.js`)
+2. We create a model instance by calling `createChatModel()` - this handles all the configuration
 3. We call `invoke()` with a simple string prompt
 4. We get back a response with the AI's answer
 
-**Why environment variables?** This allows you to switch between providers (GitHub Models, Azure AI Foundry, OpenAI) by just changing your `.env` file - no code changes needed!
+**What is `createChatModel()`?**
+
+Instead of directly instantiating `ChatOpenAI` with complex configuration in every file, we've created a centralized helper function that:
+
+- Reads configuration from environment variables (`AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`)
+- Works seamlessly with both GitHub Models and Azure AI Foundry
+- Auto-detects if you're using Azure AI Foundry or GitHub Models based on the endpoint URL
+- Formats the endpoint correctly for Azure (adds `/openai/deployments/{model}`)
+- Keeps all AI provider configuration in **one place** (`scripts/create-model.ts`)
+
+This means you can switch between providers (GitHub Models ↔ Azure AI Foundry) by just changing your `.env` file - no code changes needed in any of the project's sample files!
+
+**Path alias**: The `@/scripts/` import uses a TypeScript path mapping (defined in `tsconfig.json`) so you can import from any file without complex relative paths like `../../../scripts`.
 
 ---
 
@@ -370,20 +376,14 @@ This example shows you how to use structured message types (SystemMessage and Hu
 **Run**: `tsx 01-introduction/code/02-message-types.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { HumanMessage, SystemMessage, AIMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
 async function main() {
   console.log("🎭 Understanding Message Types\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Using structured messages
   const messages = [
@@ -440,7 +440,7 @@ Here you'll compare responses from different AI models (gpt-4o vs gpt-4o-mini) t
 **Run**: `tsx 01-introduction/code/03-model-comparison.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function compareModels() {
@@ -453,13 +453,8 @@ async function compareModels() {
     console.log(`\n📊 Testing: ${modelName}`);
     console.log("─".repeat(50));
 
-    const model = new ChatOpenAI({
-      model: modelName,
-      configuration: {
-        baseURL: process.env.AI_ENDPOINT,
-      },
-      apiKey: process.env.AI_API_KEY,
-    });
+    // You can override specific options when needed
+    const model = createChatModel({ model: modelName });
 
     const response = await model.invoke(prompt);
     console.log(`Response: ${response.content}`);
@@ -550,24 +545,27 @@ AI_MODEL=gpt-4o-mini
 
 ### The Magic of Provider Abstraction ✨
 
-Notice that your code uses environment variables:
+Notice that our `createChatModel()` function reads from environment variables and automatically configures everything based on which provider you're using:
 
 ```typescript
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();  // That's it!
 ```
+
+Behind the scenes (in `/scripts/create-model.ts`), this function:
+
+1. **Reads your `.env` configuration** (`AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`)
+2. **Detects if you're using Azure AI Foundry** (checks if endpoint contains 'azure.com')
+3. **Automatically formats the URL correctly** for Azure (adds `/openai/deployments/{model}`)
+4. **Works with GitHub Models** too (no special formatting needed)
+5. **Passes through any custom options** you provide (like `{ model: "gpt-4o" }`)
 
 This pattern means:
 
-- **No code changes** to switch providers
-- **Easy testing** - Use GitHub Models for learning, Azure for learning or real-world production scenarios
+- **No code changes** to switch providers - just update `.env`
+- **Easy testing** - Use GitHub Models for quick tests, Azure for production
 - **Cost optimization** - Switch to cheaper providers when appropriate
-- **Disaster recovery** - Fallback to alternative providers if one is down
+- **Azure compatibility** - Handles Azure's special URL requirements automatically
+- **Single source of truth** - All 60+ sample files use the same configuration logic
 
 > **💡 Note**: LangChain.js also provides `initChatModel()` for even more flexible, provider-agnostic initialization. You'll learn about this alternative pattern in [Chapter 2](../02-chat-models/README.md#-provider-agnostic-initialization-with-initchatmodel).
 

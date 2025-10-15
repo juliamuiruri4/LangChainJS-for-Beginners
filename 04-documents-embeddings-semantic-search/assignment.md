@@ -45,20 +45,11 @@ Practice creating embeddings, building vector stores, and performing semantic se
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { createEmbeddingsModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 // 2. Create embeddings instance
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const embeddings = createEmbeddingsModel();
 
 // 3. Generate embeddings for all sentences
 const sentences = ["sentence 1", "sentence 2", ...];
@@ -118,22 +109,13 @@ for (let i = 0; i < sentences.length; i++) {
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { createEmbeddingsModel } from "@/scripts/create-model.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
 // 2. Create embeddings instance
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const embeddings = createEmbeddingsModel();
 
 // 3. Create documents from your books
 const documents = books.map(book =>

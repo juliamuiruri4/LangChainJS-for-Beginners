@@ -99,7 +99,7 @@ In this example, you'll create a reusable translation template with variables fo
 
 ```typescript
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function main() {
@@ -109,13 +109,7 @@ async function main() {
     ["human", "{text}"],
   ]);
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Use the template multiple times with different values
   const chain = template.pipe(model);
@@ -202,17 +196,11 @@ This example compares different template formats (ChatPromptTemplate vs PromptTe
 
 ```typescript
 import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function main() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Format 1: ChatPromptTemplate (for chat models)
   console.log("1️⃣  ChatPromptTemplate:\n");
@@ -310,17 +298,11 @@ Here you'll learn how to teach the AI by example using few-shot prompting to con
 
 ```typescript
 import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function main() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Define examples to teach the model
   const examples = [
@@ -415,17 +397,11 @@ In this example, you'll learn how to combine multiple template pieces together t
 
 ```typescript
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function main() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Create reusable prompt pieces
   const systemTemplate = "You are an expert {domain} educator.";
@@ -540,20 +516,14 @@ Here you'll use Zod schemas to get typed, structured data from AI instead of fre
 **Run**: `tsx 03-prompt-templates/code/05-structured-output.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { z } from "zod";
 import "dotenv/config";
 
 async function main() {
   console.log("📋 Structured Output Example\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Define the structure using Zod schema
   const PersonSchema = z.object({
@@ -632,7 +602,7 @@ In this example, you'll extract complex nested company information from text usi
 **Run**: `tsx 03-prompt-templates/code/06-zod-schemas.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
 import "dotenv/config";
@@ -640,13 +610,7 @@ import "dotenv/config";
 async function main() {
   console.log("🏢 Complex Structured Output Example\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Define a complex nested schema
   const CompanySchema = z.object({

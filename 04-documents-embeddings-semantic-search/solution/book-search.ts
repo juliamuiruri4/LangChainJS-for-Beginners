@@ -5,7 +5,7 @@
  * Run: npx tsx 05-embeddings-semantic-search/solution/book-search.ts
  */
 
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { createEmbeddingsModel } from "@/scripts/create-model.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
@@ -25,14 +25,7 @@ async function main() {
   console.log("📚 Semantic Book Search\n");
   console.log("=".repeat(80) + "\n");
 
-  const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const embeddings = createEmbeddingsModel();
 
   console.log("📖 Loading books into vector store...\n");
 

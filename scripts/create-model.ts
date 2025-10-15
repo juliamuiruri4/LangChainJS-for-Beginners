@@ -1,0 +1,75 @@
+/**
+ * Shared Model Configuration Utilities
+ *
+ * This module provides helper functions to create LangChain model instances
+ * with proper configuration for both GitHub Models and Azure AI Foundry.
+ *
+ * Usage:
+ *   import { createChatModel, createEmbeddings } from "@/scripts/create-model.js";
+ *   const model = createChatModel();
+ *   const embeddings = createEmbeddings();
+ */
+
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+
+/**
+ * Creates a ChatOpenAI instance configured for GitHub Models or Azure AI Foundry
+ *
+ * Automatically detects Azure endpoints and adds the required deployment path.
+ * Works seamlessly with GitHub Models endpoints as well.
+ *
+ * @param options - Optional ChatOpenAI configuration overrides
+ * @returns Configured ChatOpenAI instance
+ */
+export function createChatModel(options?: ConstructorParameters<typeof ChatOpenAI>[0]) {
+  const model = process.env.AI_MODEL || "gpt-4o-mini";
+  const endpoint = process.env.AI_ENDPOINT;
+
+  // Azure AI Foundry requires full deployment path in baseURL
+  const baseURL = endpoint?.includes('azure.com')
+    ? `${endpoint}/openai/deployments/${model}`
+    : endpoint;
+
+  return new ChatOpenAI({
+    model,
+    configuration: {
+      baseURL,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined,
+    },
+    apiKey: process.env.AI_API_KEY,
+    ...options, // Allow overriding any defaults
+  });
+}
+
+/**
+ * Creates an OpenAIEmbeddings instance configured for GitHub Models or Azure AI Foundry
+ *
+ * Automatically detects Azure endpoints and adds the required deployment path.
+ * Works seamlessly with GitHub Models endpoints as well.
+ *
+ * @param options - Optional OpenAIEmbeddings configuration overrides
+ * @returns Configured OpenAIEmbeddings instance
+ */
+export function createEmbeddingsModel(options?: ConstructorParameters<typeof OpenAIEmbeddings>[0]) {
+  const model = process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small";
+  const endpoint = process.env.AI_ENDPOINT;
+
+  // Azure AI Foundry requires full deployment path in baseURL
+  const baseURL = endpoint?.includes('azure.com')
+    ? `${endpoint}/openai/deployments/${model}`
+    : endpoint;
+
+  return new OpenAIEmbeddings({
+    model,
+    configuration: {
+      baseURL,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined,
+    },
+    apiKey: process.env.AI_API_KEY,
+    ...options, // Allow overriding any defaults
+  });
+}

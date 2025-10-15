@@ -6,18 +6,10 @@ import {
   ChatPromptTemplate,
   FewShotChatMessagePromptTemplate,
 } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  temperature: 0, // Use 0 for consistent formatting
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 // Teaching examples
 const examples = [

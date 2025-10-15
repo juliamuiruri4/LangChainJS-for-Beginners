@@ -303,7 +303,7 @@ Here you'll bind tools to a model and see how the LLM generates structured tool 
 **Run**: `tsx 05-function-calling-tooling/code/02-tool-calling.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import "dotenv/config";
@@ -323,14 +323,7 @@ const calculatorTool = tool(
 );
 
 // Create model and bind tools
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 const modelWithTools = model.bindTools([calculatorTool]);
 

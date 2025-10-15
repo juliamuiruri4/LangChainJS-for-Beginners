@@ -3,7 +3,7 @@
  * Run: npx tsx 06-rag-systems/code/01-simple-rag.ts
  */
 
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "langchain/document";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -15,23 +15,9 @@ async function main() {
   console.log("🔍 Simple RAG System Example\n");
 
   // 1. Setup embeddings and model
-  const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const embeddings = createEmbeddingsModel();
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // 2. Create knowledge base
   const docs = [

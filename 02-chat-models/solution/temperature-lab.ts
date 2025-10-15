@@ -2,7 +2,7 @@
  * Challenge 3 Solution: Temperature Experiment
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 const prompt = "Write a catchy tagline for a coffee shop.";
@@ -19,15 +19,7 @@ async function temperatureExperiment() {
     console.log(`\n🌡️ Temperature: ${temp}`);
     console.log("-".repeat(80));
 
-    const model = new ChatOpenAI({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
-      temperature: temp,
-      configuration: {
-        baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-      },
-      apiKey: process.env.AI_API_KEY,
-    });
+    const model = createChatModel();
 
     const responses: string[] = [];
 

@@ -47,22 +47,13 @@ You: quit
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import readline from "readline";
 import "dotenv/config";
 
 // 2. Create the model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 // 3. Initialize conversation history with a system message
 const messages: (SystemMessage | HumanMessage | AIMessage)[] = [
@@ -126,7 +117,7 @@ Try 3: "Where Magic Meets Mocha"
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 // 2. Define temperatures to test
@@ -138,16 +129,8 @@ for (const temp of temperatures) {
   console.log(`\n🌡️ Temperature: ${temp}`);
 
   // Create model with current temperature (inside loop!)
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+  const model = createChatModel({
     temperature: temp, // Use loop variable
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION
-        ? { "api-version": process.env.AI_API_VERSION }
-        : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
   });
 
   // 4. Run multiple trials for this temperature

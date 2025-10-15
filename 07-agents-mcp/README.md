@@ -130,7 +130,7 @@ In this example, you'll build an agent from scratch using a manual ReAct (Reason
 This example shows the core agent pattern manually implemented:
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
@@ -151,13 +151,7 @@ const calculatorTool = tool(
 );
 
 // Create model with tools
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 const modelWithTools = model.bindTools([calculatorTool]);
 
@@ -308,7 +302,7 @@ const searchTool = tool(
 );
 
 // Bind all tools to the model
-const model = new ChatOpenAI({ /* config */ });
+const model = createChatModel();
 const modelWithTools = model.bindTools([calculatorTool, weatherTool, searchTool]);
 
 // Test with different queries

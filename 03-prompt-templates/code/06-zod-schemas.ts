@@ -3,7 +3,7 @@
  * Run: npx tsx 03-prompt-templates/code/06-zod-schemas.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
 import "dotenv/config";
@@ -11,14 +11,7 @@ import "dotenv/config";
 async function main() {
   console.log("🏢 Complex Structured Output Example\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Define a complex nested schema
   const CompanySchema = z.object({

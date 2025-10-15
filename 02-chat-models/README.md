@@ -59,18 +59,12 @@ The following example shows you how to maintain conversation context across mult
 **Run**: `tsx 02-chat-models/code/01-multi-turn.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
 async function main() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Conversation history
   const messages = [
@@ -148,17 +142,11 @@ In this example, you'll learn how to stream AI responses in real-time, displayin
 **Run**: `tsx 02-chat-models/code/02-streaming.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function main() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   console.log("🤖 AI (streaming): ");
 
@@ -249,7 +237,7 @@ This sample compares AI responses at different temperature settings (0, 1, 2) to
 **Run**: `tsx 02-chat-models/code/03-parameters.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function compareTemperatures() {
@@ -261,14 +249,7 @@ async function compareTemperatures() {
     console.log(`\n🌡️ Temperature: ${temp}`);
     console.log("─".repeat(60));
 
-    const model = new ChatOpenAI({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
-      temperature: temp,
-      configuration: {
-        baseURL: process.env.AI_ENDPOINT,
-      },
-      apiKey: process.env.AI_API_KEY,
-    });
+    const model = createChatModel({ temperature: temp });
 
     const response = await model.invoke(prompt);
     console.log(response.content);
@@ -349,7 +330,7 @@ This example demonstrates the concept of provider-agnostic initialization and wh
 
 ```typescript
 import { initChatModel } from "langchain/chat_models/universal";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { HumanMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
@@ -376,15 +357,7 @@ async function switchingProviders() {
 
 // Recommended approach for this course (GitHub Models/Azure)
 async function courseRecommendation() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-    temperature: 0.7,
-  });
+  const model = createChatModel({ temperature: 0.7 });
 
   const response = await model.invoke([
     new HumanMessage("What is LangChain.js in one sentence?")
@@ -396,10 +369,10 @@ async function courseRecommendation() {
 
 ### Comparison: ChatOpenAI vs initChatModel()
 
-| Feature | `ChatOpenAI` | `initChatModel()` |
+| Feature | `createChatModel()` | `initChatModel()` |
 |---------|-------------|-------------------|
-| **Import** | `import { ChatOpenAI } from "@langchain/openai"` | `import { initChatModel } from "langchain/chat_models/universal"` |
-| **Initialization** | `new ChatOpenAI({ ... })` | `await initChatModel(...)` |
+| **Import** | `import { createChatModel } from "@/scripts/create-model.js"` | `import { initChatModel } from "langchain/chat_models/universal"` |
+| **Initialization** | `createChatModel()` | `await initChatModel(...)` |
 | **Custom Endpoints** | ✅ Excellent (GitHub Models, Azure) | ⚠️ Limited (standard APIs only) |
 | **Type Safety** | ✅ Excellent (provider-specific types) | ✅ Good (generic types) |
 | **Learning Curve** | ✅ Easier (explicit) | 🔄 Moderate (abstraction) |
@@ -407,17 +380,10 @@ async function courseRecommendation() {
 
 ### When to Use Each Approach
 
-**Use `ChatOpenAI` (Recommended for this course)**:
+**Use `createChatModel()` (Recommended for this course)**:
 ```typescript
 // ✅ Works perfectly with GitHub Models and Azure OpenAI
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 ```
 
 **Use `initChatModel()` (Advanced multi-provider apps)**:
@@ -431,7 +397,7 @@ const model = await initChatModel("gpt-4o-mini", {
 
 ### Key Takeaway
 
-**For this course**: Stick with `ChatOpenAI` - it works reliably with GitHub Models and Azure OpenAI, provides excellent type safety, and is more explicit for learning.
+**For this course**: Stick with `createChatModel()` - it works reliably with GitHub Models and Azure OpenAI, provides excellent type safety, and is more explicit for learning.
 
 **For future projects**: Consider `initChatModel()` if you're building applications that need to support multiple provider types (OpenAI + Anthropic + Google, etc.) with standard APIs.
 
@@ -454,17 +420,11 @@ Here you'll implement robust error handling with retry logic and exponential bac
 **Run**: `tsx 02-chat-models/code/04-error-handling.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function robustCall(prompt: string, maxRetries = 3) {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -569,17 +529,11 @@ This example shows you how to track token usage for cost estimation and monitori
 **Run**: `tsx 02-chat-models/code/05-token-tracking.ts`
 
 ```typescript
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function trackTokenUsage() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   console.log("📊 Token Usage Tracking Example\n");
 
@@ -596,19 +550,6 @@ async function trackTokenUsage() {
     console.log(`  Prompt tokens:     ${usage.promptTokens}`);
     console.log(`  Completion tokens: ${usage.completionTokens}`);
     console.log(`  Total tokens:      ${usage.totalTokens}`);
-
-    // Estimate cost (gpt-4o-mini pricing as of 2024)
-    const inputCostPer1M = 0.15;  // $0.15 per 1M input tokens
-    const outputCostPer1M = 0.60; // $0.60 per 1M output tokens
-
-    const inputCost = (usage.promptTokens / 1_000_000) * inputCostPer1M;
-    const outputCost = (usage.completionTokens / 1_000_000) * outputCostPer1M;
-    const totalCost = inputCost + outputCost;
-
-    console.log("\nEstimated Cost:");
-    console.log(`  Input:  $${inputCost.toFixed(6)}`);
-    console.log(`  Output: $${outputCost.toFixed(6)}`);
-    console.log(`  Total:  $${totalCost.toFixed(6)}`);
   }
 
   console.log("\n📝 Response:");
@@ -660,8 +601,7 @@ TypeScript is a superset of JavaScript that adds static typing to help catch err
 - ✅ **Use the right model for the task**
 - ✅ **Limit response length**
 ```typescript
-const model = new ChatOpenAI({
-  model: "gpt-4o-mini",
+const model = createChatModel({
   maxTokens: 100, // Cap the response length
 });
 ```

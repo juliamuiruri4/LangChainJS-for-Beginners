@@ -3,20 +3,13 @@
  * Run: npx tsx 02-chat-models/code/02-streaming.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function nonStreamingExample() {
   console.log("📝 Non-Streaming (traditional way):\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   const startTime = Date.now();
   const response = await model.invoke("Explain how the internet works in 2 paragraphs.");
@@ -30,14 +23,7 @@ async function streamingExample() {
   console.log("\n" + "=".repeat(80));
   console.log("⚡ Streaming (appears immediately):\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   const startTime = Date.now();
   let firstChunkTime = 0;

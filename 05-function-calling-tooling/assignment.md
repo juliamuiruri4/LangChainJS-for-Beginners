@@ -43,23 +43,14 @@ Practice creating type-safe tools with Zod schemas, implementing the complete to
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { tool } from "@langchain/core/tools";
 import { ToolMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import "dotenv/config";
 
 // 2. Create the model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 // 3. Define tool with Zod schema
 const weatherTool = tool(
@@ -120,22 +111,13 @@ const finalResponse = await model.invoke(messages);
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import "dotenv/config";
 
 // 2. Create model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 // 3. Define multiple tools
 const currencyConverter = tool(

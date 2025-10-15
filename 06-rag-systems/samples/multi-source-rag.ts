@@ -5,7 +5,7 @@
  * Run: npx tsx 06-rag-systems/solution/multi-source-rag.ts
  */
 
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -45,23 +45,9 @@ const documents = [
 ];
 
 async function createRAGSystem() {
-  const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const embeddings = createEmbeddingsModel();
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   const vectorStore = await MemoryVectorStore.fromDocuments(documents, embeddings);
 

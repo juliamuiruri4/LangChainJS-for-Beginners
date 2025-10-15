@@ -109,7 +109,15 @@ function runExample(filePath: string): Promise<TestResult> {
       clearTimeout(timeoutHandle);
       const duration = Date.now() - startTime;
 
-      if (code === 0) {
+      // Check for error indicators in stderr even if exit code is 0
+      const hasError = stderr && (
+        stderr.includes("Error:") ||
+        stderr.includes("Error\n") ||
+        stderr.includes("at ") || // Stack trace indicator
+        stderr.toLowerCase().includes("exception")
+      );
+
+      if (code === 0 && !hasError) {
         resolve({
           file: filePath,
           success: true,
@@ -120,7 +128,7 @@ function runExample(filePath: string): Promise<TestResult> {
           file: filePath,
           success: false,
           duration,
-          error: stderr || `Exit code: ${code}`,
+          error: hasError ? stderr : (stderr || `Exit code: ${code}`),
         });
       }
     });

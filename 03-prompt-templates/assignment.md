@@ -45,21 +45,11 @@ Practice creating reusable, maintainable prompts using templates, few-shot learn
 ```typescript
 // 1. Import required modules
 import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 // 2. Create model with temperature 0 for consistent formatting
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  temperature: 0,
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel({ temperature: 0 });
 
 // 3. Define teaching examples
 const examples = [
@@ -127,22 +117,13 @@ const parsed = JSON.parse(result.content.toString());
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
 import "dotenv/config";
 
 // 2. Create model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 // 3. Define Zod schema for validation
 const ProductSchema = z.object({

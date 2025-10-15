@@ -3,7 +3,7 @@
  * Run: npx tsx 01-introduction/code/03-model-comparison.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function compareModels() {
@@ -16,14 +16,8 @@ async function compareModels() {
     console.log(`\n📊 Testing: ${modelName}`);
     console.log("─".repeat(50));
 
-    const model = new ChatOpenAI({
-      model: modelName,
-      configuration: {
-        baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-      },
-      apiKey: process.env.AI_API_KEY,
-    });
+    // Override the model for this test
+    const model = createChatModel({ model: modelName });
 
     const startTime = Date.now();
     const response = await model.invoke(prompt);

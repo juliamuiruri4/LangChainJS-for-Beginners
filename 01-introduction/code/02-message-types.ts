@@ -3,21 +3,14 @@
  * Run: npx tsx 01-introduction/code/02-message-types.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
 async function main() {
   console.log("🎭 Understanding Message Types\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Using structured messages for better control
   const messages = [

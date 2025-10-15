@@ -3,22 +3,14 @@
  * Run: npx tsx 02-chat-models/code/04-error-handling.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 /**
  * Makes an API call with automatic retry logic
  */
 async function robustCall(prompt: string, maxRetries = 3): Promise<string> {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-    timeout: 30000, // 30 second timeout
-  });
+  const model = createChatModel();
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -56,14 +48,7 @@ async function errorExamples() {
   // Example 1: Invalid API key
   console.log("\n1️⃣  Example: Invalid API Key\n");
   try {
-    const badModel = new ChatOpenAI({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
-      configuration: {
-        baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-      },
-      apiKey: "invalid_key_12345",
-    });
+    const badModel = createChatModel();
 
     await badModel.invoke("Hello");
   } catch (error: any) {
@@ -80,15 +65,7 @@ async function errorExamples() {
     console.log("💡 Timeout errors happen when requests take too long\n");
   } else {
     try {
-      const timeoutModel = new ChatOpenAI({
-        model: process.env.AI_MODEL || "gpt-4o-mini",
-        configuration: {
-          baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-        },
-        apiKey: process.env.AI_API_KEY,
-        timeout: 100, // Very short timeout to trigger timeout error
-      });
+      const timeoutModel = createChatModel();
 
       await timeoutModel.invoke("Write a detailed essay about the history of computing");
     } catch (error: any) {
@@ -126,7 +103,7 @@ function showBestPractices() {
    const waitTime = Math.pow(2, attempt) * 1000;
 
 3. ✅ Set reasonable timeouts
-   const model = new ChatOpenAI({ timeout: 30000 });
+   const model = createChatModel();
 
 4. ✅ Log errors for debugging
    console.error("API Error:", error.message, error.stack);

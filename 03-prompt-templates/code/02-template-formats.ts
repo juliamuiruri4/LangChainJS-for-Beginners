@@ -4,21 +4,14 @@
  */
 
 import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function main() {
   console.log("🎨 Template Formats Example\n");
   console.log("=".repeat(80));
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Format 1: ChatPromptTemplate (structured messages)
   console.log("\n1️⃣  ChatPromptTemplate (Recommended for chat models):\n");

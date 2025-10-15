@@ -640,17 +640,10 @@ Here you'll create text embeddings and calculate cosine similarity to see how si
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts`
 
 ```typescript
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { createEmbeddingsModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const embeddings = createEmbeddingsModel();
 
 // Create an embedding for text
 const text = "LangChain makes building AI apps easier";
@@ -727,18 +720,11 @@ In this example, you'll build a vector store from documents and perform semantic
 
 ```typescript
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { createEmbeddingsModel } from "@/scripts/create-model.js";
 import { Document } from "langchain/document";
 import "dotenv/config";
 
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const embeddings = createEmbeddingsModel();
 
 // Create documents
 const docs = [
@@ -908,6 +894,66 @@ Each with 1536 dimensions
 - Better for processing large document collections
 
 **When to use**: Always prefer batch processing when you have multiple texts to embed at once (e.g., loading a document collection, processing user queries in bulk)
+
+---
+
+## 🧮 Embedding Relationships
+
+Remember the enhanced conceptual content about embedding relationships (Paris-France+Italy=Rome)? Let's see it in action!
+
+### Example 9: Embedding Vector Math
+
+In this example, you'll demonstrate how embeddings capture semantic relationships through vector arithmetic—proving that "Paris" is to "France" as "Rome" is to "Italy".
+
+**Code**: [`code/09-embedding-relationships.ts`](./code/09-embedding-relationships.ts)
+**Run**: `tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts`
+
+This example demonstrates three powerful embedding capabilities:
+
+1. **Geography Relationships**: `Embedding("Paris") - Embedding("France") + Embedding("Italy") ≈ Embedding("Rome")`
+2. **Cultural Relationships**: `Embedding("pizza") - Embedding("Italy") + Embedding("Japan") ≈ Embedding("sushi")`
+3. **Synonym Clustering**: Similar words have similar embeddings
+
+### Expected Output
+
+When you run this example with `tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts`, you'll see:
+
+```
+🔬 Embedding Relationships: Vector Math Demo
+
+📍 Example 1: Geography Relationships
+──────────────────────────────────────────────────────────────────────
+
+Testing: Embedding('Paris') - Embedding('France') + Embedding('Italy')
+Expected result: Should be similar to Embedding('Rome')
+
+✅ Similarity to 'Rome': 87.34%
+
+What this means:
+  • Paris is to France as Rome is to Italy
+  • The vectors encode 'capital city' and 'country' as separate dimensions
+  • Vector math preserves these relationships!
+
+📊 Comparison: Similarity to 'London': 72.18%
+   (Lower than Rome, as expected - London is capital of UK, not Italy)
+```
+
+### How It Works
+
+**What's happening**:
+1. **Generate embeddings** for Paris, France, Italy, and Rome
+2. **Perform vector math**: Subtract France from Paris, then add Italy
+3. **Compare result** to Rome embedding using cosine similarity
+4. **High similarity**: The result is very close to "Rome" (typically 85-90%)
+5. **Validate relationship**: Compare with unrelated cities (London, etc.) to confirm
+
+**Why this works**:
+- Embeddings encode semantic relationships as vectors
+- Vector arithmetic preserves these relationships
+- "Capital city of" is encoded as a direction in vector space
+- Paris - France + Italy moves from "France's capital" to "Italy's capital"
+
+This demonstrates that embeddings don't just capture word meanings—they capture the **relationships between concepts**.
 
 ---
 

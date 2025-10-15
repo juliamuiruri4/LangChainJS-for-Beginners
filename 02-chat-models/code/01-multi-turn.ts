@@ -3,21 +3,14 @@
  * Run: npx tsx 02-chat-models/code/01-multi-turn.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
 async function main() {
   console.log("💬 Multi-Turn Conversation Example\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Start with system message and first question
   const messages = [

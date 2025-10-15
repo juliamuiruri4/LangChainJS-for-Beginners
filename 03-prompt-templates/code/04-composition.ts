@@ -4,20 +4,13 @@
  */
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 async function educatorExample() {
   console.log("1️⃣  Example: Composable Educator Prompts\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Reusable prompt pieces
   const systemRole = "You are an expert {domain} educator.";
@@ -58,14 +51,7 @@ async function customerServiceExample() {
   console.log("\n" + "=".repeat(80));
   console.log("\n2️⃣  Example: Customer Service Templates\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Composable pieces for customer service
   const brandVoice = "You represent {company_name}, known for {brand_personality}.";
@@ -96,14 +82,7 @@ async function partialTemplateExample() {
   console.log("\n" + "=".repeat(80));
   console.log("\n3️⃣  Example: Partial Templates (Pre-fill Some Variables)\n");
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   // Create a template with many variables
   const template = ChatPromptTemplate.fromMessages([

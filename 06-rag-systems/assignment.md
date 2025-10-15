@@ -38,7 +38,7 @@ Practice building Retrieval Augmented Generation systems that combine document r
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -47,27 +47,9 @@ import { createRetrievalChain } from "langchain/chains/retrieval";
 import "dotenv/config";
 
 // 2. Create embeddings and model
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const embeddings = createEmbeddingsModel();
 
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+const model = createChatModel();
 
 // 3. Create documents with metadata
 const docs = [

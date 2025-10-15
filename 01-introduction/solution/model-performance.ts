@@ -4,7 +4,7 @@
  * Compare different models on speed, response length, and quality.
  */
 
-import { ChatOpenAI } from "@langchain/openai";
+import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 
 const question = "Explain the difference between machine learning and deep learning.";
@@ -22,14 +22,7 @@ interface ModelResult {
 }
 
 async function testModel(modelName: string): Promise<ModelResult> {
-  const model = new ChatOpenAI({
-    model: modelName,
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   const startTime = Date.now();
   const response = await model.invoke(question);

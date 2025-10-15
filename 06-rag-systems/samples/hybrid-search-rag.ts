@@ -5,7 +5,7 @@
  * Run: npx tsx 06-rag-systems/solution/hybrid-search-rag.ts
  */
 
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
@@ -120,23 +120,9 @@ async function main() {
   console.log("🔬 Hybrid Search RAG System\n");
   console.log("=".repeat(80) + "\n");
 
-  const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const embeddings = createEmbeddingsModel();
 
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+  const model = createChatModel();
 
   console.log("📚 Loading knowledge base...\n");
   const vectorStore = await MemoryVectorStore.fromDocuments(knowledgeBase, embeddings);
