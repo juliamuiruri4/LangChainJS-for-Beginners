@@ -88,8 +88,9 @@ async function main() {
   console.log("Expected result: Should be similar to Embedding('sushi')\n");
 
   // Generate embeddings for food and countries
-  const [pizzaEmbed, japanEmbed, sushiEmbed] = await Promise.all([
+  const [pizzaEmbed, italyEmbed, japanEmbed, sushiEmbed] = await Promise.all([
     embeddings.embedQuery("pizza"),
+    embeddings.embedQuery("Italy"),
     embeddings.embedQuery("Japan"),
     embeddings.embedQuery("sushi"),
   ]);
