@@ -1,6 +1,6 @@
 /**
  * Comparing Chunk Overlap
- * Run: npx tsx 04-working-with-documents/code/03-overlap.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/03-overlap.ts
  */
 
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";

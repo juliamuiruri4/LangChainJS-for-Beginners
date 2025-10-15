@@ -2,7 +2,7 @@
  * Chapter 5 Assignment Solution: Challenge 3
  * Keyword vs Semantic Comparison
  *
- * Run: npx tsx 05-embeddings-semantic-search/solution/search-comparison.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/samples/search-comparison.ts
  */
 
 import { createEmbeddingsModel } from "@/scripts/create-model.js";

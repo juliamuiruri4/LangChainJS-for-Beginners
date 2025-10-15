@@ -1,10 +1,6 @@
-import { initChatModel } from "langchain/chat_models/universal";
-import { createChatModel } from "@/scripts/create-model.js";
-import { HumanMessage } from "@langchain/core/messages";
-import "dotenv/config";
-
 /**
  * Provider-Agnostic Model Initialization
+ * Run: npx tsx 02-chat-models/code/06-init-chat-model.ts
  *
  * IMPORTANT: initChatModel() works best with standard provider APIs.
  * For GitHub Models or Azure OpenAI (used in this course), use ChatOpenAI directly.
@@ -12,6 +8,11 @@ import "dotenv/config";
  * This example demonstrates initChatModel() concepts, but the course uses
  * ChatOpenAI because it properly handles custom endpoints like GitHub Models.
  */
+
+import { initChatModel } from "langchain/chat_models/universal";
+import { createChatModel } from "@/scripts/create-model.js";
+import { HumanMessage } from "@langchain/core/messages";
+import "dotenv/config";
 
 async function standardOpenAIExample() {
   console.log("\n=== initChatModel() with Standard OpenAI ===\n");

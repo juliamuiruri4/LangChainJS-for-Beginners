@@ -1,5 +1,6 @@
 /**
  * Challenge 4 Solution: Model Performance Comparison
+ * Run: npx tsx 01-introduction/solution/model-performance.ts
  *
  * Compare different models on speed, response length, and quality.
  */

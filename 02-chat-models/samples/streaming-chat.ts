@@ -1,5 +1,6 @@
 /**
  * Challenge 2 Solution: Streaming Chat Interface
+ * Run: npx tsx 02-chat-models/samples/streaming-chat.ts
  */
 
 import { createChatModel } from "@/scripts/create-model.js";

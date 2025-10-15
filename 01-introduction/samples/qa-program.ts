@@ -1,5 +1,6 @@
 /**
  * Simple Q&A Program
+ * Run: npx tsx 01-introduction/samples/qa-program.ts
  *
  * A simple interactive Q&A program that lets users ask questions.
  */

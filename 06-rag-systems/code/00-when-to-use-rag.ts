@@ -6,7 +6,7 @@
  * 2. RAG (large, dynamic knowledge base)
  * 3. Fine-Tuning (changing model behavior/style)
  *
- * Run: tsx 06-rag-systems/code/00-when-to-use-rag.ts
+ * Run: npx tsx 06-rag-systems/code/00-when-to-use-rag.ts
  */
 
 import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";

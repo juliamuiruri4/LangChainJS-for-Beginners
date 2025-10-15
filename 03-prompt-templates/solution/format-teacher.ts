@@ -1,5 +1,6 @@
 /**
  * Challenge 2 Solution: Few-Shot Format Teacher
+ * Run: npx tsx 03-prompt-templates/solution/format-teacher.ts
  */
 
 import {

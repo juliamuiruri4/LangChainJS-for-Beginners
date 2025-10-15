@@ -1,3 +1,8 @@
+/**
+ * Token Usage Tracking Example
+ * Run: npx tsx 02-chat-models/code/05-token-tracking.ts
+ */
+
 import { createChatModel } from "@/scripts/create-model.js";
 import "dotenv/config";
 

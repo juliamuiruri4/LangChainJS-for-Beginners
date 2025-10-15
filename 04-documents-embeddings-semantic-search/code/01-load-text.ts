@@ -1,6 +1,6 @@
 /**
  * Loading Text Files
- * Run: npx tsx 04-working-with-documents/code/01-load-text.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/01-load-text.ts
  */
 
 import { TextLoader } from "langchain/document_loaders/fs/text";

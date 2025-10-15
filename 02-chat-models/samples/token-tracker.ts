@@ -2,7 +2,7 @@
  * Chapter 2 Assignment Solution: Bonus Challenge
  * Token Usage Tracker
  *
- * Run: npx tsx 02-chat-models/solution/token-tracker.ts
+ * Run: npx tsx 02-chat-models/samples/token-tracker.ts
  */
 
 import { createChatModel } from "@/scripts/create-model.js";

@@ -1,5 +1,6 @@
 /**
  * Challenge 1 Solution: Interactive Chatbot
+ * Run: npx tsx 02-chat-models/solution/chatbot.ts
  */
 
 import { createChatModel } from "@/scripts/create-model.js";

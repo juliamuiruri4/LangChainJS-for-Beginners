@@ -1,5 +1,6 @@
 /**
  * Challenge 3 Solution: System Prompt Experiment
+ * Run: npx tsx 01-introduction/solution/personality-test.ts
  *
  * Test how different system prompts affect AI personality.
  */

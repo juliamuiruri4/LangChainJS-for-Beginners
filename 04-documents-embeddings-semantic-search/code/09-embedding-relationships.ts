@@ -4,7 +4,7 @@
  * This example demonstrates how embeddings capture semantic relationships
  * that can be manipulated through vector arithmetic.
  *
- * Run: tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts
  */
 
 import { createEmbeddingsModel } from "@/scripts/create-model.js";

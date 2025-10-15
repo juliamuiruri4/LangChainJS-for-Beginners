@@ -1,6 +1,6 @@
 /**
  * Working with Metadata
- * Run: npx tsx 04-working-with-documents/code/04-metadata.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/04-metadata.ts
  */
 
 import { Document } from "langchain/document";

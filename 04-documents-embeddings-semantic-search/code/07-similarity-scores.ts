@@ -1,6 +1,6 @@
 /**
  * Similarity Search with Scores
- * Run: npx tsx 05-embeddings-semantic-search/code/03-similarity-scores.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/07-similarity-scores.ts
  */
 
 import { MemoryVectorStore } from "langchain/vectorstores/memory";

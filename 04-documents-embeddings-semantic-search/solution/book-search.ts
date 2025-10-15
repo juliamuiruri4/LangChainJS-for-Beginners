@@ -2,7 +2,7 @@
  * Chapter 5 Assignment Solution: Challenge 2
  * Semantic Book Search
  *
- * Run: npx tsx 05-embeddings-semantic-search/solution/book-search.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/solution/book-search.ts
  */
 
 import { createEmbeddingsModel } from "@/scripts/create-model.js";

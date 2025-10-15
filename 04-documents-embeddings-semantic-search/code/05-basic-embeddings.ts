@@ -1,6 +1,6 @@
 /**
  * Basic Embeddings
- * Run: npx tsx 05-embeddings-semantic-search/code/01-basic-embeddings.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts
  */
 
 import { createEmbeddingsModel } from "@/scripts/create-model.js";

@@ -1,6 +1,6 @@
 /**
  * Text Splitting
- * Run: npx tsx 04-working-with-documents/code/02-splitting.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/02-splitting.ts
  */
 
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";

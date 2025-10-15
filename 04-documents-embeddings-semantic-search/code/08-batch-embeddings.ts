@@ -1,6 +1,6 @@
 /**
  * Batch Embeddings for Efficiency
- * Run: npx tsx 05-embeddings-semantic-search/code/04-batch-embeddings.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/08-batch-embeddings.ts
  */
 
 import { createEmbeddingsModel } from "@/scripts/create-model.js";

@@ -1,6 +1,6 @@
 /**
  * Vector Store and Semantic Search
- * Run: npx tsx 05-embeddings-semantic-search/code/02-vector-store.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/code/06-vector-store.ts
  */
 
 import { MemoryVectorStore } from "langchain/vectorstores/memory";

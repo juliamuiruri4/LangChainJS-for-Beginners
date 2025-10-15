@@ -1,5 +1,6 @@
 /**
  * Challenge 4 Solution: Robust Error Handler
+ * Run: npx tsx 02-chat-models/samples/robust-chat.ts
  */
 
 import { createChatModel } from "@/scripts/create-model.js";

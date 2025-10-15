@@ -1,5 +1,6 @@
 /**
  * Challenge 3 Solution: Temperature Experiment
+ * Run: npx tsx 02-chat-models/solution/temperature-lab.ts
  */
 
 import { createChatModel } from "@/scripts/create-model.js";
