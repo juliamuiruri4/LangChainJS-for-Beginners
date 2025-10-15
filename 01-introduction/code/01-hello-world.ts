@@ -7,7 +7,6 @@ import "dotenv/config";
 
 async function main() {
   console.log("🚀 Hello LangChain.js!\n");
-
   const model = createChatModel();
 
   const response = await model.invoke("What is LangChain in one sentence?");

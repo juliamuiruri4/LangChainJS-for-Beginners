@@ -22,24 +22,10 @@ import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
  * @returns Configured ChatOpenAI instance
  */
 export function createChatModel(options?: ConstructorParameters<typeof ChatOpenAI>[0]) {
-  const model = process.env.AI_MODEL || "gpt-4o-mini";
-  const endpoint = process.env.AI_ENDPOINT;
-
-  // Azure AI Foundry requires full deployment path in baseURL
-  const baseURL = endpoint?.includes('azure.com')
-    ? `${endpoint}/openai/deployments/${model}`
-    : endpoint;
-
   return new ChatOpenAI({
-    model,
-    configuration: {
-      baseURL,
-      defaultQuery: process.env.AI_API_VERSION
-        ? { "api-version": process.env.AI_API_VERSION }
-        : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-    ...options, // Allow overriding any defaults
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
   });
 }
 
