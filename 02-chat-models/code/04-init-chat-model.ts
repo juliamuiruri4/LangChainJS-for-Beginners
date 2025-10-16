@@ -1,6 +1,6 @@
 /**
  * Provider-Agnostic Model Initialization
- * Run: npx tsx 02-chat-models/code/06-init-chat-model.ts
+ * Run: npx tsx 02-chat-models/code/04-init-chat-model.ts
  *
  * IMPORTANT: initChatModel() works best with standard provider APIs.
  * For GitHub Models or Azure OpenAI (used in this course), use ChatOpenAI directly.
@@ -10,7 +10,7 @@
  */
 
 import { initChatModel } from "langchain/chat_models/universal";
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
@@ -69,7 +69,11 @@ async function courseRecommendation() {
   console.log("\n=== Recommended Approach for This Course ===\n");
 
   // For GitHub Models and Azure OpenAI, use ChatOpenAI directly:
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   const response = await model.invoke([
     new HumanMessage("What is LangChain.js in one sentence?")

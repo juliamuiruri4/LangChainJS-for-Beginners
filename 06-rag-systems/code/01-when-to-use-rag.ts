@@ -6,10 +6,11 @@
  * 2. RAG (large, dynamic knowledge base)
  * 3. Fine-Tuning (changing model behavior/style)
  *
- * Run: npx tsx 06-rag-systems/code/00-when-to-use-rag.ts
+ * Run: npx tsx 06-rag-systems/code/01-when-to-use-rag.ts
  */
 
-import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "langchain/document";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -21,7 +22,11 @@ async function main() {
   console.log("🎯 When to Use RAG: Decision Framework Demo\n");
   console.log("=".repeat(80) + "\n");
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // ============================================================================
   // Scenario 1: Small FAQ (Use Prompt Engineering)
@@ -126,7 +131,11 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
   ];
 
   console.log("Creating vector store from documents...");
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
   const retriever = vectorStore.asRetriever({ k: 2 });

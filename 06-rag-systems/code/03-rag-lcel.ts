@@ -1,9 +1,10 @@
 /**
  * RAG with LCEL (LangChain Expression Language)
- * Run: npx tsx 06-rag-systems/code/02-rag-lcel.ts
+ * Run: npx tsx 06-rag-systems/code/03-rag-lcel.ts
  */
 
-import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
@@ -15,9 +16,17 @@ async function main() {
   console.log("⛓️  RAG with LCEL Example\n");
 
   // Setup
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Knowledge base
   const docs = [

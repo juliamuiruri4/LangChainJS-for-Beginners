@@ -5,11 +5,15 @@
  * Test how different system prompts affect AI personality.
  */
 
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 const personalities = [
   {

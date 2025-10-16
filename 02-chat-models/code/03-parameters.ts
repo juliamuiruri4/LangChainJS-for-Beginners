@@ -3,7 +3,7 @@
  * Run: npx tsx 02-chat-models/code/03-parameters.ts
  */
 
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function temperatureComparison() {
@@ -19,7 +19,11 @@ async function temperatureComparison() {
     console.log(`\nTemperature: ${temp}`);
     console.log("-".repeat(80));
 
-    const model = createChatModel();
+    const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
     for (let i = 1; i <= tries; i++) {
       const response = await model.invoke(prompt);
       console.log(`  Try ${i}: ${response.content}`);
@@ -45,7 +49,11 @@ async function maxTokensExample() {
     console.log(`\nMax Tokens: ${maxTokens}`);
     console.log("-".repeat(80));
 
-    const model = createChatModel();
+    const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
     const response = await model.invoke(prompt);
     console.log(response.content);

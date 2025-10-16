@@ -59,12 +59,16 @@ The following example shows you how to maintain conversation context across mult
 **Run**: `tsx 02-chat-models/code/01-multi-turn.ts`
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
 async function main() {
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Conversation history
   const messages = [
@@ -142,11 +146,15 @@ In this example, you'll learn how to stream AI responses in real-time, displayin
 **Run**: `tsx 02-chat-models/code/02-streaming.ts`
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function main() {
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   console.log("🤖 AI (streaming): ");
 
@@ -202,6 +210,8 @@ You'll notice the text appears progressively, word by word, rather than all at o
 - ✅ When you want to display progress to users
 - ❌ When you need the full response first (parsing, validation, post-processing)
 
+> **💡 Note**: The actual file [`02-streaming.ts`](./code/02-streaming.ts) includes additional timing measurements and a comparison between streaming and non-streaming approaches to demonstrate the performance benefits. The code above shows the core streaming concept for clarity.
+
 ---
 
 ## 🎛️ Model Parameters
@@ -237,7 +247,7 @@ This sample compares AI responses at different temperature settings (0, 1, 2) to
 **Run**: `tsx 02-chat-models/code/03-parameters.ts`
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function compareTemperatures() {
@@ -249,7 +259,12 @@ async function compareTemperatures() {
     console.log(`\n🌡️ Temperature: ${temp}`);
     console.log("─".repeat(60));
 
-    const model = createChatModel({ temperature: temp });
+    const model = new ChatOpenAI({
+      model: process.env.AI_MODEL,
+      configuration: { baseURL: process.env.AI_ENDPOINT },
+      apiKey: process.env.AI_API_KEY,
+      temperature: temp
+    });
 
     const response = await model.invoke(prompt);
     console.log(response.content);
@@ -321,16 +336,16 @@ Throughout this course, we've been initializing models directly with `ChatOpenAI
 
 > **💡 Important**: `initChatModel()` works best with standard provider APIs (native OpenAI, Anthropic, Google). For GitHub Models and Azure OpenAI used in this course, `ChatOpenAI` is the recommended and most reliable approach.
 
-### Example 6: Understanding Provider-Agnostic Patterns
+### Example 4: Understanding Provider-Agnostic Patterns
 
 This example demonstrates the concept of provider-agnostic initialization and why `ChatOpenAI` is recommended for this course.
 
-**Code**: [`code/06-init-chat-model.ts`](./code/06-init-chat-model.ts)
-**Run**: `tsx 02-chat-models/code/06-init-chat-model.ts`
+**Code**: [`code/04-init-chat-model.ts`](./code/04-init-chat-model.ts)
+**Run**: `tsx 02-chat-models/code/04-init-chat-model.ts`
 
 ```typescript
 import { initChatModel } from "langchain/chat_models/universal";
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
@@ -357,7 +372,12 @@ async function switchingProviders() {
 
 // Recommended approach for this course (GitHub Models/Azure)
 async function courseRecommendation() {
-  const model = createChatModel({ temperature: 0.7 });
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY,
+    temperature: 0.7
+  });
 
   const response = await model.invoke([
     new HumanMessage("What is LangChain.js in one sentence?")
@@ -369,10 +389,10 @@ async function courseRecommendation() {
 
 ### Comparison: ChatOpenAI vs initChatModel()
 
-| Feature | `createChatModel()` | `initChatModel()` |
+| Feature | `ChatOpenAI` (Direct) | `initChatModel()` |
 |---------|-------------|-------------------|
-| **Import** | `import { createChatModel } from "@/scripts/create-model.js"` | `import { initChatModel } from "langchain/chat_models/universal"` |
-| **Initialization** | `createChatModel()` | `await initChatModel(...)` |
+| **Import** | `import { ChatOpenAI } from "@langchain/openai"` | `import { initChatModel } from "langchain/chat_models/universal"` |
+| **Initialization** | `new ChatOpenAI({ ... })` | `await initChatModel(...)` |
 | **Custom Endpoints** | ✅ Excellent (GitHub Models, Azure) | ⚠️ Limited (standard APIs only) |
 | **Type Safety** | ✅ Excellent (provider-specific types) | ✅ Good (generic types) |
 | **Learning Curve** | ✅ Easier (explicit) | 🔄 Moderate (abstraction) |
@@ -380,10 +400,14 @@ async function courseRecommendation() {
 
 ### When to Use Each Approach
 
-**Use `createChatModel()` (Recommended for this course)**:
+**Use `ChatOpenAI` (Recommended for this course)**:
 ```typescript
 // ✅ Works perfectly with GitHub Models and Azure OpenAI
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 ```
 
 **Use `initChatModel()` (Advanced multi-provider apps)**:
@@ -397,7 +421,7 @@ const model = await initChatModel("gpt-4o-mini", {
 
 ### Key Takeaway
 
-**For this course**: Stick with `createChatModel()` - it works reliably with GitHub Models and Azure OpenAI, provides excellent type safety, and is more explicit for learning.
+**For this course**: Stick with `ChatOpenAI` - it works reliably with GitHub Models and Azure OpenAI, provides excellent type safety, and is more explicit for learning.
 
 **For future projects**: Consider `initChatModel()` if you're building applications that need to support multiple provider types (OpenAI + Anthropic + Google, etc.) with standard APIs.
 
@@ -412,19 +436,23 @@ APIs can fail. Networks drop. Rate limits hit. Good error handling is essential.
 - **500 Server Error**: Provider issues
 - **Network timeout**: Connection problems
 
-### Example 4: Error Handling
+### Example 5: Error Handling
 
 Here you'll implement robust error handling with retry logic and exponential backoff to handle API failures, rate limits, and network issues.
 
-**Code**: [`code/04-error-handling.ts`](./code/04-error-handling.ts)
-**Run**: `tsx 02-chat-models/code/04-error-handling.ts`
+**Code**: [`code/05-error-handling.ts`](./code/05-error-handling.ts)
+**Run**: `tsx 02-chat-models/code/05-error-handling.ts`
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
-async function robustCall(prompt: string, maxRetries = 3) {
-  const model = createChatModel();
+async function robustCall(prompt: string, maxRetries = 3): Promise<string> {
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -462,7 +490,7 @@ main();
 
 ### Expected Output
 
-When you run this example with `tsx 02-chat-models/code/04-error-handling.ts`, you'll see:
+When you run this example with `tsx 02-chat-models/code/05-error-handling.ts`, you'll see:
 
 **Success case** (API works normally):
 ```
@@ -521,19 +549,23 @@ waitTime = 2^attempt * 1000ms
 
 Tokens power AI models, and they directly impact cost and performance. Let's track them!
 
-### Example 5: Tracking Token Usage
+### Example 6: Tracking Token Usage
 
 This example shows you how to track token usage for cost estimation and monitoring, helping you optimize your AI application expenses.
 
-**Code**: [`code/05-token-tracking.ts`](./code/05-token-tracking.ts)
-**Run**: `tsx 02-chat-models/code/05-token-tracking.ts`
+**Code**: [`code/06-token-tracking.ts`](./code/06-token-tracking.ts)
+**Run**: `tsx 02-chat-models/code/06-token-tracking.ts`
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function trackTokenUsage() {
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   console.log("📊 Token Usage Tracking Example\n");
 
@@ -561,7 +593,7 @@ trackTokenUsage().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 02-chat-models/code/05-token-tracking.ts`, you'll see:
+When you run this example with `tsx 02-chat-models/code/06-token-tracking.ts`, you'll see:
 
 ```
 📊 Token Usage Tracking Example
@@ -601,8 +633,11 @@ TypeScript is a superset of JavaScript that adds static typing to help catch err
 - ✅ **Use the right model for the task**
 - ✅ **Limit response length**
 ```typescript
-const model = createChatModel({
-  maxTokens: 100, // Cap the response length
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY,
+  maxTokens: 100 // Cap the response length
 });
 ```
 

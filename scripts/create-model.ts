@@ -25,7 +25,8 @@ export function createChatModel(options?: ConstructorParameters<typeof ChatOpenA
   return new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
+    ...options, // Allow overriding any defaults
   });
 }
 
@@ -39,22 +40,10 @@ export function createChatModel(options?: ConstructorParameters<typeof ChatOpenA
  * @returns Configured OpenAIEmbeddings instance
  */
 export function createEmbeddingsModel(options?: ConstructorParameters<typeof OpenAIEmbeddings>[0]) {
-  const model = process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small";
-  const endpoint = process.env.AI_ENDPOINT;
-
-  // Azure AI Foundry requires full deployment path in baseURL
-  const baseURL = endpoint?.includes('azure.com')
-    ? `${endpoint}/openai/deployments/${model}`
-    : endpoint;
 
   return new OpenAIEmbeddings({
-    model,
-    configuration: {
-      baseURL,
-      defaultQuery: process.env.AI_API_VERSION
-        ? { "api-version": process.env.AI_API_VERSION }
-        : undefined,
-    },
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
     ...options, // Allow overriding any defaults
   });

@@ -309,14 +309,18 @@ In this example, you'll create your first LangChain.js program that sends a simp
 This example shows the simplest possible LangChain.js application:
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function main() {
   console.log("🚀 Hello LangChain.js!\n");
 
-  // Create a model instance using our helper function
-  const model = createChatModel();
+  // Create a chat model instance
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Make your first AI call!
   const response = await model.invoke("What is LangChain in one sentence?");
@@ -343,24 +347,25 @@ When you run this example with `tsx 01-introduction/code/01-hello-world.ts`, you
 ### How It Works
 
 **What's happening here?**
-1. We import `createChatModel` from our helper module (`@/scripts/create-model.js`)
-2. We create a model instance by calling `createChatModel()` - this handles all the configuration
+1. We import `ChatOpenAI` from the `@langchain/openai` package
+2. We create a model instance by instantiating `ChatOpenAI` with configuration
 3. We call `invoke()` with a simple string prompt
 4. We get back a response with the AI's answer
 
-**What is `createChatModel()`?**
+**Understanding ChatOpenAI Configuration**:
 
-Instead of directly instantiating `ChatOpenAI` with complex configuration in every file, we've created a centralized helper function that:
+The `ChatOpenAI` constructor takes a configuration object with three key properties:
 
-- Reads configuration from environment variables (`AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`)
-- Works seamlessly with both GitHub Models and Azure AI Foundry
-- Auto-detects if you're using Azure AI Foundry or GitHub Models based on the endpoint URL
-- Formats the endpoint correctly for Azure (adds `/openai/deployments/{model}`)
-- Keeps all AI provider configuration in **one place** (`scripts/create-model.ts`)
+- **`model`**: Which AI model to use (e.g., `"gpt-4o-mini"`, `"gpt-4o"`)
+- **`configuration.baseURL`**: The API endpoint URL for your provider
+- **`apiKey`**: Your API key for authentication
 
-This means you can switch between providers (GitHub Models ↔ Azure AI Foundry) by just changing your `.env` file - no code changes needed in any of the project's sample files!
+We read these values from environment variables (`AI_MODEL`, `AI_ENDPOINT`, `AI_API_KEY`) defined in your `.env` file. This approach:
 
-**Path alias**: The `@/scripts/` import uses a TypeScript path mapping (defined in `tsconfig.json`) so you can import from any file without complex relative paths like `../../../scripts`.
+- Keeps sensitive credentials out of your code
+- Allows you to switch between providers (GitHub Models ↔ Azure AI Foundry) by just updating `.env`
+- Works seamlessly with both GitHub Models and Azure AI Foundry endpoints
+- Makes it easy to use different configurations for development vs production
 
 ---
 
@@ -376,14 +381,18 @@ This example shows you how to use structured message types (SystemMessage and Hu
 **Run**: `tsx 01-introduction/code/02-message-types.ts`
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
-import { HumanMessage, SystemMessage, AIMessage } from "@langchain/core/messages";
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
 async function main() {
   console.log("🎭 Understanding Message Types\n");
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Using structured messages
   const messages = [
@@ -440,7 +449,7 @@ Here you'll compare responses from different AI models (gpt-4o vs gpt-4o-mini) t
 **Run**: `tsx 01-introduction/code/03-model-comparison.ts`
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function compareModels() {
@@ -453,8 +462,12 @@ async function compareModels() {
     console.log(`\n📊 Testing: ${modelName}`);
     console.log("─".repeat(50));
 
-    // You can override specific options when needed
-    const model = createChatModel({ model: modelName });
+    // Create a model instance with the specific model name
+    const model = new ChatOpenAI({
+      model: modelName,
+      configuration: { baseURL: process.env.AI_ENDPOINT },
+      apiKey: process.env.AI_API_KEY
+    });
 
     const response = await model.invoke(prompt);
     console.log(`Response: ${response.content}`);
@@ -545,27 +558,23 @@ AI_MODEL=gpt-4o-mini
 
 ### The Magic of Provider Abstraction ✨
 
-Notice that our `createChatModel()` function reads from environment variables and automatically configures everything based on which provider you're using:
+Notice that our `ChatOpenAI` configuration uses environment variables, making it easy to switch between providers:
 
 ```typescript
-const model = createChatModel();  // That's it!
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 ```
-
-Behind the scenes (in `/scripts/create-model.ts`), this function:
-
-1. **Reads your `.env` configuration** (`AI_API_KEY`, `AI_ENDPOINT`, `AI_MODEL`)
-2. **Detects if you're using Azure AI Foundry** (checks if endpoint contains 'azure.com')
-3. **Automatically formats the URL correctly** for Azure (adds `/openai/deployments/{model}`)
-4. **Works with GitHub Models** too (no special formatting needed)
-5. **Passes through any custom options** you provide (like `{ model: "gpt-4o" }`)
 
 This pattern means:
 
-- **No code changes** to switch providers - just update `.env`
-- **Easy testing** - Use GitHub Models for quick tests, Azure for production
-- **Cost optimization** - Switch to cheaper providers when appropriate
-- **Azure compatibility** - Handles Azure's special URL requirements automatically
-- **Single source of truth** - All 60+ sample files use the same configuration logic
+- **No code changes** to switch providers - just update your `.env` file
+- **Easy testing** - Use GitHub Models for development, Azure AI Foundry for production
+- **Cost optimization** - Switch to different models or providers as needed
+- **Works with both providers** - The same configuration works with GitHub Models and Azure AI Foundry endpoints
+- **Keeps credentials secure** - API keys and endpoints are in `.env`, not in your code
 
 > **💡 Note**: LangChain.js also provides `initChatModel()` for even more flexible, provider-agnostic initialization. You'll learn about this alternative pattern in [Chapter 2](../02-chat-models/README.md#-provider-agnostic-initialization-with-initchatmodel).
 

@@ -5,7 +5,7 @@
  * Run: npx tsx 05-embeddings-semantic-search/solution/embedding-visualizer.ts
  */
 
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { writeFileSync } from "fs";
 import "dotenv/config";
 
@@ -73,7 +73,11 @@ async function main() {
   console.log("📈 Embedding Visualizer\n");
   console.log("=".repeat(80) + "\n");
 
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   console.log("🔢 Creating embeddings for diverse topics...\n");
 

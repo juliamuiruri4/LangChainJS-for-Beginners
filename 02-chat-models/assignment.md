@@ -47,13 +47,17 @@ You: quit
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
 import readline from "readline";
 import "dotenv/config";
 
 // 2. Create the model
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // 3. Initialize conversation history with a system message
 const messages: (SystemMessage | HumanMessage | AIMessage)[] = [
@@ -117,7 +121,7 @@ Try 3: "Where Magic Meets Mocha"
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 // 2. Define temperatures to test
@@ -129,8 +133,11 @@ for (const temp of temperatures) {
   console.log(`\n🌡️ Temperature: ${temp}`);
 
   // Create model with current temperature (inside loop!)
-  const model = createChatModel({
-    temperature: temp, // Use loop variable
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY,
+    temperature: temp // Use loop variable
   });
 
   // 4. Run multiple trials for this temperature

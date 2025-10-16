@@ -7,7 +7,7 @@
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts
  */
 
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 
 // Helper function to calculate cosine similarity between two vectors
@@ -35,7 +35,11 @@ async function main() {
   console.log("=".repeat(70) + "\n");
 
   // Initialize embeddings model
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // ============================================================================
   // Example 1: Animal Life Stages

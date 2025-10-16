@@ -5,7 +5,7 @@
  * Run: npx tsx 05-embeddings-semantic-search/solution/similarity-explorer.ts
  */
 
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 
 function cosineSimilarity(a: number[], b: number[]): number {
@@ -32,7 +32,11 @@ async function main() {
   console.log("🔬 Similarity Explorer\n");
   console.log("=".repeat(80) + "\n");
 
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   console.log("📝 Creating embeddings for 10 sentences...\n");
 

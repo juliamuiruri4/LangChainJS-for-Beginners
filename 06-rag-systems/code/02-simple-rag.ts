@@ -1,9 +1,10 @@
 /**
  * Simple RAG System
- * Run: npx tsx 06-rag-systems/code/01-simple-rag.ts
+ * Run: npx tsx 06-rag-systems/code/02-simple-rag.ts
  */
 
-import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "langchain/document";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -15,9 +16,17 @@ async function main() {
   console.log("🔍 Simple RAG System Example\n");
 
   // 1. Setup embeddings and model
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // 2. Create knowledge base
   const docs = [

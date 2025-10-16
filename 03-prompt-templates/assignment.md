@@ -45,11 +45,16 @@ Practice creating reusable, maintainable prompts using templates, few-shot learn
 ```typescript
 // 1. Import required modules
 import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from "@langchain/core/prompts";
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 // 2. Create model with temperature 0 for consistent formatting
-const model = createChatModel({ temperature: 0 });
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY,
+  temperature: 0
+});
 
 // 3. Define teaching examples
 const examples = [
@@ -117,13 +122,17 @@ const parsed = JSON.parse(result.content.toString());
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
 import "dotenv/config";
 
 // 2. Create model
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // 3. Define Zod schema for validation
 const ProductSchema = z.object({

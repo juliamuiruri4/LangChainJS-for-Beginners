@@ -4,7 +4,7 @@
  * Run: npx tsx 05-function-calling-tooling/code/04-multiple-tools.ts
  */
 
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import "dotenv/config";
@@ -51,7 +51,11 @@ async function main() {
   console.log("🎛️ Multiple Tools Demo\n");
   console.log("=".repeat(80) + "\n");
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   const modelWithTools = model.bindTools([calculatorTool, searchTool, weatherTool]);
 

@@ -43,14 +43,18 @@ Practice creating type-safe tools with Zod schemas, implementing the complete to
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { tool } from "@langchain/core/tools";
 import { ToolMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import "dotenv/config";
 
 // 2. Create the model
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // 3. Define tool with Zod schema
 const weatherTool = tool(
@@ -111,13 +115,17 @@ const finalResponse = await model.invoke(messages);
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import "dotenv/config";
 
 // 2. Create model
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // 3. Define multiple tools
 const currencyConverter = tool(

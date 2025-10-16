@@ -3,7 +3,7 @@
  * Run: npx tsx 02-chat-models/solution/temperature-lab.ts
  */
 
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 const prompt = "Write a catchy tagline for a coffee shop.";
@@ -20,7 +20,11 @@ async function temperatureExperiment() {
     console.log(`\n🌡️ Temperature: ${temp}`);
     console.log("-".repeat(80));
 
-    const model = createChatModel();
+    const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
     const responses: string[] = [];
 

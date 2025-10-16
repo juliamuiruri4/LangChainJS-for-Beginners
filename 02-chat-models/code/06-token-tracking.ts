@@ -1,13 +1,17 @@
 /**
  * Token Usage Tracking Example
- * Run: npx tsx 02-chat-models/code/05-token-tracking.ts
+ * Run: npx tsx 02-chat-models/code/06-token-tracking.ts
  */
 
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function trackTokenUsage() {
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   console.log("📊 Token Usage Tracking Example\n");
 

@@ -3,7 +3,7 @@
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts
  */
 
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 
 function cosineSimilarity(a: number[], b: number[]): number {
@@ -16,7 +16,11 @@ function cosineSimilarity(a: number[], b: number[]): number {
 async function main() {
   console.log("🔢 Basic Embeddings Example\n");
 
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Create embeddings for different texts
   const texts = [

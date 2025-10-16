@@ -3,7 +3,8 @@
  * Run: npx tsx 06-rag-systems/code/06-branch-lcel.ts
  */
 
-import { createChatModel, createEmbeddingsModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
@@ -15,9 +16,17 @@ async function main() {
   console.log("🌿 Branch LCEL Example (Smart Routing)\n");
 
   // Setup
-  const embeddings = createEmbeddingsModel();
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Create knowledge base
   const docs = [

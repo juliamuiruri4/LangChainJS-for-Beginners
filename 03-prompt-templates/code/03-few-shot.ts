@@ -7,13 +7,17 @@ import {
   ChatPromptTemplate,
   FewShotChatMessagePromptTemplate,
 } from "@langchain/core/prompts";
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function emotionToEmojiExample() {
   console.log("1️⃣  Example: Emotion to Emoji Converter\n");
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
   const examples = [
     { input: "happy", output: "😊" },
     { input: "sad", output: "😢" },
@@ -54,7 +58,11 @@ async function codeCommentExample() {
   console.log("\n" + "=".repeat(80));
   console.log("\n2️⃣  Example: Code Comment Generator\n");
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Examples of code → comment pairs
   const examples = [

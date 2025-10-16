@@ -130,7 +130,7 @@ In this example, you'll build an agent from scratch using a manual ReAct (Reason
 This example shows the core agent pattern manually implemented:
 
 ```typescript
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
@@ -151,7 +151,11 @@ const calculatorTool = tool(
 );
 
 // Create model with tools
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 const modelWithTools = model.bindTools([calculatorTool]);
 
@@ -302,7 +306,11 @@ const searchTool = tool(
 );
 
 // Bind all tools to the model
-const model = createChatModel();
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 const modelWithTools = model.bindTools([calculatorTool, weatherTool, searchTool]);
 
 // Test with different queries
@@ -542,7 +550,11 @@ const tools = await mcpClient.getTools();
 // Returns: [createGithubIssue, searchCode, sendSlackMessage, ...]
 
 // 3. Use tools with your agent
-const model = new ChatOpenAI({ /* config */ });
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 const modelWithTools = model.bindTools(tools);
 
 const response = await modelWithTools.invoke(

@@ -3,14 +3,18 @@
  * Run: npx tsx 03-prompt-templates/code/05-structured-output.ts
  */
 
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import { z } from "zod";
 import "dotenv/config";
 
 async function main() {
   console.log("📋 Structured Output Example\n");
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   // Define the structure using Zod schema
   const PersonSchema = z.object({

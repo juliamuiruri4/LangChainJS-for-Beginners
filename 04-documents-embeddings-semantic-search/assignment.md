@@ -45,11 +45,15 @@ Practice creating embeddings, building vector stores, and performing semantic se
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 
 // 2. Create embeddings instance
-const embeddings = createEmbeddingsModel();
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.AI_EMBEDDING_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // 3. Generate embeddings for all sentences
 const sentences = ["sentence 1", "sentence 2", ...];
@@ -109,13 +113,17 @@ for (let i = 0; i < sentences.length; i++) {
 **Hints**:
 ```typescript
 // 1. Import required modules
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
 // 2. Create embeddings instance
-const embeddings = createEmbeddingsModel();
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.AI_EMBEDDING_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // 3. Create documents from your books
 const documents = books.map(book =>

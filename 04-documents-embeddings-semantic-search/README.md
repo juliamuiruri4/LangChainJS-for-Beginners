@@ -462,67 +462,31 @@ But what do these numbers mean? Let's break it down:
 
 ### Understanding Vector Spaces
 
-Think of embeddings as **coordinates in a high-dimensional space** where meaning determines location.
+Embeddings are **coordinates in a high-dimensional space** where meaning determines location.
 
-**2D Analogy** (simplified for understanding):
-```
-     North (0.9)
-         ↑
-         |  🐕 "dog"
-         |      🐈 "cat"
-         |
-West ←---+---→ East
-         |
-         |  🍕 "pizza"
-         ↓
-     South (-0.9)
-```
+**Simple Example**: If we could visualize embeddings in a simple space:
+- "dog" and "cat" would be close together (both animals, pets)
+- "pizza" would be far away (different concept)
+- Position captures meaning and relationships
 
-In this simplified 2D space:
-- "dog" and "cat" are close (both animals, pets)
-- "pizza" is far from both (different concept)
-- Position captures relationships
-
-**Real Embeddings** (1536 or more dimensions):
-- Instead of 2 dimensions (x, y), we have many
-- Each dimension captures a different aspect of meaning
-- Dimension 1 might represent "is it an animal?"
-- Dimension 2 might represent "is it food?"
-- Dimension 537 might represent "formality level"
+**Real Embeddings** use 1536+ dimensions. Each dimension captures a different aspect:
+- Some dimensions might represent "is it an animal?"
+- Others might represent "is it food?"
 - And so on...
 
-You can't visualize 1536+ dimensions, but the math works the same way!
+You can't visualize 1536 dimensions, but the math works the same way!
 
 ### Why Embeddings Are Powerful
 
-**Example 1**: Animal Life Stages
-
+**Semantic Relationships**:
 ```typescript
 Embedding("Puppy") - Embedding("Dog") + Embedding("Cat") ≈ Embedding("Kitten")
 ```
 
-This works because embeddings capture **semantic relationships**:
+This works because embeddings capture relationships:
 - "Puppy" is to "Dog" as "Kitten" is to "Cat"
 - The vectors encode species and life stage as separate dimensions
 - Vector math preserves these relationships!
-
-**Example 2**: Cultural Relationships
-
-```typescript
-Embedding("pizza") - Embedding("Italy") + Embedding("Japan") ≈ Embedding("sushi")
-```
-
-- "Pizza" is to "Italy" as "sushi" is to "Japan"
-- The embeddings understand cultural food associations
-- Subtracting "Italy" removes the country, adding "Japan" finds Japan's iconic food
-
-**Example 3**: Synonyms
-
-```typescript
-Embedding("happy") ≈ Embedding("joyful") ≈ Embedding("cheerful")
-```
-
-These words have similar meanings, so their embeddings are close in vector space.
 
 ### How Embedding Models Learn
 
@@ -582,20 +546,6 @@ Low Similarity (score ≈ 0.0-0.3):
 - "happy" ↔ "mountain"
 - "car" ↔ "philosophy"
 
-### What Each Number Represents
-
-While individual dimensions aren’t directly human-interpretable, the **pattern across all dimensions** captures meaning.
-
-**Conceptual Example** (not how the model is actually organized):  
-- Dimensions 1-100: Topic or domain (technology, food, animals, etc.)  
-- Dimensions 101-300: Sentiment or emotional tone  
-- Dimensions 301-600: Entity-related features (person, place, object)  
-- Dimensions 601-1000: Relational patterns (cause-effect, part-whole)  
-- Dimensions 1001-1536: Linguistic or stylistic traits (grammar, formality)
-
-**Note:** These ranges are *illustrative only* — the model doesn’t store information in neat blocks. Instead, all 1536 values work together to encode semantic meaning.
-
-
 ### Why 1536 (or more) Dimensions?
 
 - **text-embedding-3-small**: 1536 dimensions
@@ -640,10 +590,14 @@ Here you'll create text embeddings and calculate cosine similarity to see how si
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts`
 
 ```typescript
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 
-const embeddings = createEmbeddingsModel();
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.AI_EMBEDDING_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // Create an embedding for text
 const text = "LangChain makes building AI apps easier";
@@ -720,11 +674,15 @@ In this example, you'll build a vector store from documents and perform semantic
 
 ```typescript
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { createEmbeddingsModel } from "@/scripts/create-model.js";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import { Document } from "langchain/document";
 import "dotenv/config";
 
-const embeddings = createEmbeddingsModel();
+const embeddings = new OpenAIEmbeddings({
+  model: process.env.AI_EMBEDDING_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // Create documents
 const docs = [
@@ -897,90 +855,29 @@ Each with 1536 dimensions
 
 ---
 
-## 🧮 Embedding Relationships
+## 🧮 Embedding Relationships (Bonus)
 
-Remember the enhanced conceptual content about embedding relationships? Let's see vector arithmetic in action!
+Embeddings can demonstrate semantic relationships through vector arithmetic!
 
-### Example 9: Embedding Vector Math
+**Example**: `Embedding("Puppy") - Embedding("Dog") + Embedding("Cat") ≈ Embedding("Kitten")`
 
-In this example, you'll demonstrate how embeddings capture semantic relationships through vector arithmetic—proving that "Puppy" is to "Dog" as "Kitten" is to "Cat".
+This works because embeddings encode relationships as vectors. The demo code shows this in action.
 
 **Code**: [`code/09-embedding-relationships.ts`](./code/09-embedding-relationships.ts)
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts`
 
-This example demonstrates three powerful embedding capabilities:
-
-1. **Animal Life Stages**: `Embedding("Puppy") - Embedding("Dog") + Embedding("Cat") ≈ Embedding("Kitten")`
-2. **Cultural Relationships**: `Embedding("pizza") - Embedding("Italy") + Embedding("Japan") ≈ Embedding("sushi")`
-3. **Synonym Clustering**: Similar words have similar embeddings
-
-### Expected Output
-
-When you run this example with `tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts`, you'll see:
-
-```
-🔬 Embedding Relationships: Vector Math Demo
-
-🐶 Example 1: Animal Life Stages
-──────────────────────────────────────────────────────────────────────
-
-Testing: Embedding('Puppy') - Embedding('Dog') + Embedding('Cat')
-Expected result: Should be similar to Embedding('Kitten')
-
-✅ Similarity to 'Kitten': 64.38%
-
-What this means:
-  • Puppy is to Dog as Kitten is to Cat
-  • The vectors encode 'species' and 'life stage' as separate dimensions
-  • Subtracting 'Dog' removes the adult dog, adding 'Cat' finds the young cat
-
-📊 Comparison: Similarity to 'Bird': 34.35%
-   (Lower than Kitten - Bird is a different species, not a young cat)
-```
-
-### How It Works
-
-**What's happening**:
-1. **Generate embeddings** for Puppy, Dog, Cat, and Kitten
-2. **Perform vector math**: Subtract Dog from Puppy, then add Cat
-3. **Compare result** to Kitten embedding using cosine similarity
-4. **High similarity**: The result is very close to "Kitten"
-5. **Validate relationship**: Compare with unrelated animals (Bird) to confirm
-
-**Why this works**:
-- Embeddings encode semantic relationships as vectors
-- Vector arithmetic preserves these relationships
-- "Young version of" is encoded as a direction in vector space
-- Puppy - Dog + Cat moves from "young dog" to "young cat"
-
-This demonstrates that embeddings don't just capture word meanings, they capture the **relationships between concepts**.
+*This is bonus content - feel free to explore it after mastering the basics!*
 
 ---
 
-## 📊 Choosing Similarity Metrics
+## 📊 Similarity Metrics
 
-### Cosine Similarity (Most Common)
-
+**Cosine Similarity** (Recommended for text):
 - Measures angle between vectors
 - Range: -1 to 1 (usually 0 to 1 for text)
-- **Best for**: Text, embeddings
-- **Use when**: You care about direction, not magnitude
+- Best for comparing text embeddings
 
-### Euclidean Distance
-
-- Measures straight-line distance
-- Range: 0 to ∞ (smaller = more similar)
-- **Best for**: Spatial data
-- **Use when**: Magnitude matters
-
-### Dot Product
-
-- Measures alignment and magnitude
-- Range: -∞ to ∞
-- **Best for**: Recommendation systems
-- **Use when**: Both direction and magnitude matter
-
-**Recommendation**: Use **cosine similarity** for text embeddings.
+Other metrics like Euclidean Distance and Dot Product exist but are used for specialized cases. **Stick with cosine similarity for text and embeddings.**
 
 ---
 

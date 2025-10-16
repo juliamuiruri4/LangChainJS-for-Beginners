@@ -3,7 +3,7 @@
  * Run: npx tsx 02-chat-models/samples/robust-chat.ts
  */
 
-import { createChatModel } from "@/scripts/create-model.js";
+import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 interface ChatOptions {
@@ -18,7 +18,11 @@ async function robustChat(
 ): Promise<string> {
   const { maxRetries = 3, timeout = 30000, fallbackResponse = "I apologize, but I'm having trouble connecting right now. Please try again later." } = options;
 
-  const model = createChatModel();
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
