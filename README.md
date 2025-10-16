@@ -91,6 +91,12 @@ You'll need access to an AI provider. We recommend:
 
 ---
 
+## 📖 Course Resources
+
+- **[Glossary](./GLOSSARY.md)** - Comprehensive definitions of all terms used throughout the course
+
+---
+
 ## 📚 Related Courses
 
 Expand your AI development skills with these Microsoft courses:

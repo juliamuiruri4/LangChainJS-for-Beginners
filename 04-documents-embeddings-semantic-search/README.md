@@ -452,7 +452,7 @@ Finds: "Preparing Italian noodles", "Making spaghetti", etc.
 
 ### What Are Embeddings?
 
-**Embeddings are numerical representations of text** that convert words, sentences, or documents into arrays of numbers (vectors) that capture semantic meaning.
+**[Embeddings](../GLOSSARY.md#embedding) are numerical representations of text** that convert words, sentences, or documents into arrays of numbers (vectors) that capture semantic meaning.
 
 **Quick Overview**:
 1. **Text goes in**: "LangChain is a framework"

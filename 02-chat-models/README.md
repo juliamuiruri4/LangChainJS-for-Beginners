@@ -222,7 +222,7 @@ You can control how the AI responds by adjusting parameters.
 
 #### Temperature (0.0 - 2.0)
 
-Controls randomness and creativity:
+[Temperature](../GLOSSARY.md#temperature) controls randomness and creativity:
 
 - **0.0 = Deterministic**: Same question → Same answer
   - Use for: Code generation, factual answers
@@ -233,7 +233,7 @@ Controls randomness and creativity:
 
 #### Max Tokens
 
-**What are tokens?** Tokens are the basic units of text that AI models process. Think of them as pieces of words - roughly 1 token ≈ 4 characters or ¾ of a word. For example, "Hello world!" is about 3 tokens.
+**What are tokens?** [Tokens](../GLOSSARY.md#token) are the basic units of text that AI models process. Think of them as pieces of words - roughly 1 token ≈ 4 characters or ¾ of a word. For example, "Hello world!" is about 3 tokens.
 
 Limits response length:
 

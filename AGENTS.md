@@ -73,10 +73,9 @@ AI_EMBEDDING_MODEL=text-embedding-3-small
 **Azure AI Foundry** (Production):
 ```bash
 AI_API_KEY=your_azure_openai_api_key
-AI_ENDPOINT=https://your-resource.openai.azure.com
+AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
 AI_MODEL=gpt-4o-mini
 AI_EMBEDDING_MODEL=text-embedding-3-small
-AI_API_VERSION=2025-01-01-preview
 ```
 
 **OpenAI Direct**:
