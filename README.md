@@ -73,7 +73,7 @@ This course contains **8 chapters** (setup + 7 chapters), each building on the p
 | 4 | [Documents, Embeddings & Semantic Search](./04-documents-embeddings-semantic-search/README.md) | Loading documents, creating embeddings, and building semantic search | Vector embeddings, similarity search |
 | 5 | [Function Calling & Tooling](./05-function-calling-tooling/README.md) | Extending AI capabilities with function calling and tools | Zod schemas, tool binding, type safety |
 | 6 | [Building RAG Systems](./06-rag-systems/README.md) | Combining retrieval with generation using LCEL | RAG pattern, LCEL chains, retrieval |
-| 7 | [Agents & MCP](./07-agents-mcp/README.md) | Building autonomous agents and integrating Model Context Protocol | ReAct pattern, agent loops, MCP |
+| 7 | [Getting Started with Agents & MCP](./07-agents-mcp/README.md) | Building autonomous agents and integrating Model Context Protocol | ReAct pattern, agent loops, MCP |
 
 Each chapter includes:
 - 📖 **Conceptual explanations** with real-world analogies
