@@ -62,7 +62,7 @@ This course takes you from zero to building robust AI applications. Here's your 
 
 ## 📚 Course Structure
 
-This course contains **8 sections** (setup + 7 chapters), each building on the previous to teach you LangChain.js from the ground up. Each chapter includes conceptual explanations, working code examples, and hands-on challenges.
+This course contains **8 chapters** (setup + 7 chapters), each building on the previous to teach you LangChain.js from the ground up. Each chapter includes conceptual explanations, working code examples, and hands-on challenges.
 
 | # | Chapter | Description | Key Concepts |
 |---|---------|-------------|--------------|
