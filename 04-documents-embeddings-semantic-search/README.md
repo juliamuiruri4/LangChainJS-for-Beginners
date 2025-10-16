@@ -432,6 +432,8 @@ Metadata: {
 
 ## 🔢 Part 2: Embeddings & Semantic Search
 
+Now that we can load and chunk documents, how do we search them intelligently? Let's compare traditional keyword search to semantic search.
+
 ### Traditional Search vs. Semantic Search
 
 **Keyword Search**:
