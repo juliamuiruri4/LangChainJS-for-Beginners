@@ -1,6 +1,6 @@
 # Course Setup
 
-Welcome! Before we dive into building AI applications with LangChain.js, let's get your development environment ready. This chapter walks you through installing Node.js, setting up your GitHub token for free AI model access, and configuring your project environment. By the end, you'll have everything you need to start building with LangChain.js.
+Welcome! Before we dive into building AI applications with LangChain.js, let's get your development environment ready. This chapter walks you through installing Node.js, setting up your GitHub token for free AI model access (you can also use Azure AI Foundry), and configuring your project environment. By the end, you'll have everything you need to start building with LangChain.js.
 
 ## Prerequisites
 
@@ -62,8 +62,8 @@ If you see an LTS version number (visit [nodejs.org](https://nodejs.org/) to che
 4. Verify installation:
 
 ```bash
-node --version  # Should show an LTS version
-npm --version
+node --version  # Displays LTS version
+npm --version # Displays npm version
 ```
 
 **Why LTS?**
@@ -139,7 +139,7 @@ GitHub Models provides free access to powerful AI models—you just need a Perso
    - ✅ No scopes needed for GitHub Models!
    - You can leave all checkboxes unchecked
 5. **Click**: "Generate token"
-6. **⚠️ IMPORTANT**: Copy your token now - you won't see it again!
+6. **⚠️ IMPORTANT**: Copy your token now and save it to a text file temporarily! You'll need it in the next step.
 
 ### Why GitHub Models?
 
@@ -154,9 +154,20 @@ GitHub Models provides free access to powerful AI models—you just need a Perso
 
 ### Create `.env` file:
 
+**Mac, Linux, WSL on Windows:**
+
 ```bash
-# Copy the example file
 cp .env.example .env
+```
+
+**Windows Command Prompt:**
+
+```bash
+# Windows Command Prompt
+copy .env.example .env
+
+# Windows PowerShell
+Copy-Item .env.example .env
 ```
 
 ### Edit `.env` file:
@@ -234,10 +245,12 @@ After deploying your models, you need two pieces of information:
 
 **4. Add the API Key and Endpoint to Your `.env` File:**
 
+Ensure that you add `/openai/v1` to the end of your endpoint URL.
+
 ```bash
 # Azure AI Foundry Configuration
 AI_API_KEY=your_azure_api_key_here
-AI_ENDPOINT=https://your-resource.openai.azure.com
+AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
 ```
 
 **Important Notes:**
@@ -294,13 +307,6 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 2. Download for your OS
 3. Install
 
-### Recommended VS Code Extensions:
-
-- **TypeScript** (built-in)
-- **ESLint** - Code quality
-- **Prettier** - Code formatting
-- **Error Lens** - Inline error display
-
 ---
 
 ## 🐛 Troubleshooting
@@ -312,7 +318,7 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 ### Issue: "AI_API_KEY not found" or "AI_ENDPOINT not found"
 
 **Solutions**:
-1. Make sure `.env` file exists in project root
+1. Make sure `.env` file exists in the project root
 2. Check that `.env` contains all required variables:
    - `AI_API_KEY=your_key`
    - `AI_ENDPOINT=your_endpoint_url`
@@ -325,15 +331,15 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 **Solutions**:
 1. Create a new GitHub Personal Access Token
 2. Make sure you copied the entire token
-3. Token should start with `ghp_` or `github_pat_`
-4. Check for extra spaces in `.env` file
+3. The token should start with `ghp_` or `github_pat_`
+4. Check for extra spaces in the `.env` file
 
 ### Issue: Rate limit errors
 
-**Solution**: GitHub Models has rate limits. If you hit them:
+**Solution**: GitHub Models have rate limits. If you hit them:
 - Wait a few minutes
 - The limits reset quickly
-- In Chapter 9, we'll move to Azure AI Foundry for production
+- You can use Azure AI Foundry instead if you went through the optional setup above
 
 ---
 
@@ -343,8 +349,8 @@ Before moving to Chapter 1, make sure you have:
 
 - [ ] Node.js LTS installed
 - [ ] Project cloned and dependencies installed (`npm install`)
-- [ ] GitHub Personal Access Token created
-- [ ] `.env` file configured with your token
+- [ ] GitHub Personal Access Token created if you're using GitHub Models. If you're using Azure AI Foundry, ensure your models are deployed and you have your API key and endpoint.
+- [ ] `.env` file configured with your token (or key if using Azure AI Foundry) and endpoint
 - [ ] Test script runs successfully
 - [ ] VS Code installed (optional but recommended)
 
@@ -366,14 +372,6 @@ You're all set! Time to build your first AI application.
 
 ---
 
-## 💬 Need Help?
-
-- Join our [Discord community](https://aka.ms/foundry/discord)
-- Ask in [GitHub Discussions](https://github.com/danwahlin/langchainjs-for-beginners/discussions)
-- Check the [FAQ](../FAQ.md)
-
----
-
 ## 🗺️ Navigation
 
 - **Next**: [01-introduction](../01-introduction/README.md)
@@ -381,7 +379,7 @@ You're all set! Time to build your first AI application.
 
 ---
 
-## 💬 Questions or stuck?
+## 💬 Questions?
 
 If you get stuck or have any questions about building AI apps, join:
 
@@ -390,3 +388,7 @@ If you get stuck or have any questions about building AI apps, join:
 If you have product feedback or errors while building visit:
 
 [![Azure AI Foundry Developer Forum](https://img.shields.io/badge/GitHub-Azure_AI_Foundry_Developer_Forum-blue?style=for-the-badge&logo=github&color=000000&logoColor=fff)](https://aka.ms/foundry/forum)
+
+If you run into issues with the course materials, please open an issue in the GitHub repo:
+
+[![Course Issues](https://img.shields.io/badge/GitHub-LangChain.js_for_Beginners_Issues-blue?style=for-the-badge&logo=github&color=green&logoColor=fff)](https://github.com/danwahlin/langchainjs-for-beginners/issues)
