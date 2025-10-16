@@ -414,6 +414,10 @@ This is an educational repository optimized for learning:
 - Code prioritizes clarity over performance
 - Each chapter is self-contained for easy navigation
 - All examples are tested automatically to ensure they work
+- **Pedagogical approach**: Hands-on examples before heavy theory
+- Terms and concepts defined before extensive use
+- Advanced/future content clearly marked as optional
+- Deep dive sections available for those wanting more depth
 
 ### Working with Chapters
 
