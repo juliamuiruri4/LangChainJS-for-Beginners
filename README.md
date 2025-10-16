@@ -16,11 +16,11 @@
 
 Welcome to **LangChain.js for Beginners** - your complete, hands-on guide to building AI-powered applications with LangChain.js and TypeScript!
 
-Think of building an AI application like cooking a gourmet meal. You could source ingredients from scratch, create every sauce from base components, and build your own cooking tools—or you could use a well-stocked kitchen with quality ingredients and proven recipes. **LangChain.js is that well-stocked kitchen for AI development.**
+Think of building an AI application like cooking a gourmet meal. You could source ingredients from scratch, create every sauce from base components, and build your own cooking tools. Or, you could use a well-stocked kitchen with quality ingredients and proven recipes. **LangChain.js is that well-stocked kitchen for AI development.**
 
 ### What You'll Learn and Build
 
-This course takes you from zero to building production-ready AI applications. Here's your journey:
+This course takes you from zero to building robust AI applications. Here's your journey:
 
 **🤖 Interactive AI Chatbots**
 - Build chatbots that remember your conversation (like ChatGPT)
