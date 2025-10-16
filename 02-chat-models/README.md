@@ -233,11 +233,13 @@ Controls randomness and creativity:
 
 #### Max Tokens
 
+**What are tokens?** Tokens are the basic units of text that AI models process. Think of them as pieces of words - roughly 1 token ≈ 4 characters or ¾ of a word. For example, "Hello world!" is about 3 tokens.
+
 Limits response length:
 
 - Controls how long responses can be
-- 1 token ≈ 4 characters (rough estimate)
-- Prevents runaway costs
+- Setting `maxTokens: 100` limits the response to approximately 75 words
+- Prevents runaway costs by capping output length
 
 ### Example 3: Model Parameters
 
@@ -314,116 +316,7 @@ Notice how temperature 0 is straightforward, temperature 1 is more interesting, 
 
 **Pro tip**: Run the same prompt multiple times at temperature 2 and you'll get very different results each time!
 
-## 🔌 Provider-Agnostic Initialization with initChatModel()
-
-Throughout this course, we've been initializing models directly with `ChatOpenAI`. This is the recommended approach for learning and for working with GitHub Models or Azure OpenAI. However, LangChain.js also provides `initChatModel()` - a provider-agnostic pattern for advanced use cases.
-
-### Why Learn About initChatModel()?
-
-**Think of it like universal power adapters**: Instead of carrying different chargers for each device (OpenAI, Anthropic, Google), you have one adapter that works with all of them.
-
-**When `initChatModel()` Shines**:
-- 🔄 **Multiple Provider Types**: Switching between OpenAI, Anthropic, Google, etc.
-- 🏗️ **Framework Building**: Creating libraries that support many providers
-- 🎯 **Provider-Agnostic Code**: Write once, work with any standard provider
-
-**When to Use `ChatOpenAI` (This Course)**:
-
-- ✅ **GitHub Models**: Custom endpoints require specific configuration
-- ✅ **Azure OpenAI**: Non-standard API paths work better with ChatOpenAI
-- ✅ **Learning**: More explicit and easier to understand
-- ✅ **Single Provider**: When you're primarily using one provider
-
-> **💡 Important**: `initChatModel()` works best with standard provider APIs (native OpenAI, Anthropic, Google). For GitHub Models and Azure OpenAI used in this course, `ChatOpenAI` is the recommended and most reliable approach.
-
-### Example 4: Understanding Provider-Agnostic Patterns
-
-This example demonstrates the concept of provider-agnostic initialization and why `ChatOpenAI` is recommended for this course.
-
-**Code**: [`code/04-init-chat-model.ts`](./code/04-init-chat-model.ts)
-**Run**: `tsx 02-chat-models/code/04-init-chat-model.ts`
-
-```typescript
-import { initChatModel } from "langchain/chat_models/universal";
-import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage } from "@langchain/core/messages";
-import "dotenv/config";
-
-// Switching between different provider types (conceptual example)
-async function switchingProviders() {
-  // OpenAI with standard API
-  const openaiModel = await initChatModel("gpt-4o-mini", {
-    modelProvider: "openai",
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
-  // Anthropic
-  const anthropicModel = await initChatModel("claude-3-5-sonnet-20241022", {
-    modelProvider: "anthropic",
-    apiKey: process.env.ANTHROPIC_API_KEY,
-  });
-
-  // Google
-  const googleModel = await initChatModel("gemini-pro", {
-    modelProvider: "google",
-    apiKey: process.env.GOOGLE_API_KEY,
-  });
-}
-
-// Recommended approach for this course (GitHub Models/Azure)
-async function courseRecommendation() {
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY,
-    temperature: 0.7
-  });
-
-  const response = await model.invoke([
-    new HumanMessage("What is LangChain.js in one sentence?")
-  ]);
-
-  console.log("Response:", response.content);
-}
-```
-
-### Comparison: ChatOpenAI vs initChatModel()
-
-| Feature | `ChatOpenAI` (Direct) | `initChatModel()` |
-|---------|-------------|-------------------|
-| **Import** | `import { ChatOpenAI } from "@langchain/openai"` | `import { initChatModel } from "langchain/chat_models/universal"` |
-| **Initialization** | `new ChatOpenAI({ ... })` | `await initChatModel(...)` |
-| **Custom Endpoints** | ✅ Excellent (GitHub Models, Azure) | ⚠️ Limited (standard APIs only) |
-| **Type Safety** | ✅ Excellent (provider-specific types) | ✅ Good (generic types) |
-| **Learning Curve** | ✅ Easier (explicit) | 🔄 Moderate (abstraction) |
-| **Use Case** | Single provider or custom endpoints | Multiple standard provider types |
-
-### When to Use Each Approach
-
-**Use `ChatOpenAI` (Recommended for this course)**:
-```typescript
-// ✅ Works perfectly with GitHub Models and Azure OpenAI
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
-```
-
-**Use `initChatModel()` (Advanced multi-provider apps)**:
-```typescript
-// Best when switching between different provider types
-const model = await initChatModel("gpt-4o-mini", {
-  modelProvider: "openai",  // or "anthropic", "google", etc.
-  apiKey: process.env.OPENAI_API_KEY,
-});
-```
-
-### Key Takeaway
-
-**For this course**: Stick with `ChatOpenAI` - it works reliably with GitHub Models and Azure OpenAI, provides excellent type safety, and is more explicit for learning.
-
-**For future projects**: Consider `initChatModel()` if you're building applications that need to support multiple provider types (OpenAI + Anthropic + Google, etc.) with standard APIs.
+---
 
 ## 🛡️ Error Handling
 
@@ -731,3 +624,62 @@ If you get stuck or have any questions about building AI apps, join:
 If you have product feedback or errors while building visit:
 
 [![Azure AI Foundry Developer Forum](https://img.shields.io/badge/GitHub-Azure_AI_Foundry_Developer_Forum-blue?style=for-the-badge&logo=github&color=000000&logoColor=fff)](https://aka.ms/foundry/forum)
+
+---
+
+## 📎 Appendix: Provider-Agnostic Initialization
+
+> **💡 Note**: This is a bonus topic. The recommended approach for this course is using `ChatOpenAI` directly, as shown in all the examples above.
+
+### Alternative Pattern: initChatModel()
+
+LangChain.js provides `initChatModel()` for provider-agnostic initialization. Think of it like universal power adapters - instead of different chargers for each device (OpenAI, Anthropic, Google), you have one adapter that works with all of them.
+
+**When `initChatModel()` Shines**:
+- 🔄 **Multiple Provider Types**: Switching between OpenAI, Anthropic, Google, etc.
+- 🏗️ **Framework Building**: Creating libraries that support many providers
+- 🎯 **Provider-Agnostic Code**: Write once, work with any standard provider
+
+**When to Use `ChatOpenAI` (This Course)**:
+- ✅ **GitHub Models**: Custom endpoints require specific configuration
+- ✅ **Azure OpenAI**: Non-standard API paths work better with ChatOpenAI
+- ✅ **Learning**: More explicit and easier to understand
+- ✅ **Single Provider**: When you're primarily using one provider
+
+### Example: Provider-Agnostic Patterns
+
+**Code**: [`code/04-init-chat-model.ts`](./code/04-init-chat-model.ts)
+
+```typescript
+import { initChatModel } from "langchain/chat_models/universal";
+import { ChatOpenAI } from "@langchain/openai";
+
+// Switching between different provider types (conceptual)
+const openaiModel = await initChatModel("gpt-4o-mini", {
+  modelProvider: "openai",
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const anthropicModel = await initChatModel("claude-3-5-sonnet-20241022", {
+  modelProvider: "anthropic",
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+// Recommended for this course (GitHub Models/Azure)
+const model = new ChatOpenAI({
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
+```
+
+### Comparison
+
+| Feature | `ChatOpenAI` (Recommended) | `initChatModel()` |
+|---------|-------------|-------------------|
+| **Custom Endpoints** | ✅ Excellent | ⚠️ Limited |
+| **Type Safety** | ✅ Excellent | ✅ Good |
+| **Learning Curve** | ✅ Easier | 🔄 Moderate |
+| **Use Case** | Single provider or custom endpoints | Multiple standard providers |
+
+**For this course**: Stick with `ChatOpenAI`. It's more explicit and works best with GitHub Models and Azure OpenAI.
