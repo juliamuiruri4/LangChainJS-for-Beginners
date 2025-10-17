@@ -19,7 +19,7 @@ const currencyConverter = tool(
       GBP: 0.79,
       JPY: 149.5,
       AUD: 1.53,
-      CAD: 1.36
+      CAD: 1.36,
     };
 
     const fromRate = rates[input.from.toUpperCase()];
@@ -46,8 +46,8 @@ const currencyConverter = tool(
     schema: z.object({
       amount: z.number().describe("The amount to convert"),
       from: z.string().describe("Source currency code (e.g., 'USD', 'EUR', 'GBP')"),
-      to: z.string().describe("Target currency code (e.g., 'USD', 'EUR', 'GBP')")
-    })
+      to: z.string().describe("Target currency code (e.g., 'USD', 'EUR', 'GBP')"),
+    }),
   }
 );
 
@@ -61,7 +61,7 @@ const distanceCalculator = tool(
       Paris: { "New York": 5837, London: 344, Tokyo: 9714, Rome: 1430 },
       Tokyo: { "New York": 10850, London: 9562, Paris: 9714, Sydney: 7823 },
       Sydney: { "New York": 15993, London: 17015, Tokyo: 7823, Paris: 16965 },
-      Rome: { Paris: 1430, London: 1434, "New York": 6896, Tokyo: 9853 }
+      Rome: { Paris: 1430, London: 1434, "New York": 6896, Tokyo: 9853 },
     };
 
     const fromCity = input.from;
@@ -93,8 +93,8 @@ const distanceCalculator = tool(
       units: z
         .enum(["miles", "kilometers"])
         .optional()
-        .describe("Distance unit (default: kilometers)")
-    })
+        .describe("Distance unit (default: kilometers)"),
+    }),
   }
 );
 
@@ -109,7 +109,7 @@ const timeZoneTool = tool(
       Tokyo: { offset: 9, name: "JST" },
       Sydney: { offset: 10, name: "AEST" },
       Seattle: { offset: -8, name: "PST" },
-      Mumbai: { offset: 5.5, name: "IST" }
+      Mumbai: { offset: 5.5, name: "IST" },
     };
 
     const cityTZ = timeZones[input.city];
@@ -134,8 +134,8 @@ const timeZoneTool = tool(
     description:
       "Get the current time in a specific city and its time zone information. Use this when the user asks what time it is somewhere, about time zones, or time differences between locations.",
     schema: z.object({
-      city: z.string().describe("City name to get time for, e.g., 'Tokyo' or 'New York'")
-    })
+      city: z.string().describe("City name to get time for, e.g., 'Tokyo' or 'New York'"),
+    }),
   }
 );
 
@@ -146,7 +146,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([currencyConverter, distanceCalculator, timeZoneTool]);
@@ -157,7 +157,7 @@ async function main() {
     "What's the distance between New York and London?",
     "What time is it in Tokyo right now?",
     "How many miles from Paris to Rome?",
-    "Convert 50 GBP to JPY"
+    "Convert 50 GBP to JPY",
   ];
 
   for (const query of queries) {

@@ -19,35 +19,35 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Create a diverse set of documents
   const docs = [
     new Document({
       pageContent: "Python is excellent for data science and machine learning applications.",
-      metadata: { category: "programming", language: "python" }
+      metadata: { category: "programming", language: "python" },
     }),
     new Document({
       pageContent: "JavaScript powers interactive web applications and modern frontends.",
-      metadata: { category: "programming", language: "javascript" }
+      metadata: { category: "programming", language: "javascript" },
     }),
     new Document({
       pageContent: "Machine learning algorithms identify patterns in large datasets.",
-      metadata: { category: "AI", topic: "ml" }
+      metadata: { category: "AI", topic: "ml" },
     }),
     new Document({
       pageContent: "Cats are independent pets that enjoy lounging in sunny spots.",
-      metadata: { category: "animals", type: "pets" }
+      metadata: { category: "animals", type: "pets" },
     }),
     new Document({
       pageContent: "Dogs are loyal companions that love outdoor activities and play.",
-      metadata: { category: "animals", type: "pets" }
+      metadata: { category: "animals", type: "pets" },
     }),
     new Document({
       pageContent: "TypeScript adds static typing to JavaScript for safer code.",
-      metadata: { category: "programming", language: "typescript" }
-    })
+      metadata: { category: "programming", language: "typescript" },
+    }),
   ];
 
   console.log(`📚 Creating vector store with ${docs.length} documents...\n`);
@@ -61,7 +61,7 @@ async function main() {
   const queries = [
     "programming languages for web development",
     "pets that are good for apartments",
-    "understanding data with AI"
+    "understanding data with AI",
   ];
 
   for (const query of queries) {

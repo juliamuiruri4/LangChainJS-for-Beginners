@@ -18,13 +18,13 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Start with system message and first question
   const messages = [
     new SystemMessage("You are a helpful coding tutor who gives clear, concise explanations."),
-    new HumanMessage("What is TypeScript?")
+    new HumanMessage("What is TypeScript?"),
   ];
 
   console.log("👤 User: What is TypeScript?");

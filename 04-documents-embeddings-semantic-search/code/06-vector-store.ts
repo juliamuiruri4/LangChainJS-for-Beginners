@@ -19,7 +19,7 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Create documents about different topics
@@ -27,29 +27,29 @@ async function main() {
     new Document({
       pageContent:
         "Python is a popular programming language for data science and machine learning.",
-      metadata: { category: "programming", language: "python" }
+      metadata: { category: "programming", language: "python" },
     }),
     new Document({
       pageContent:
         "JavaScript is widely used for web development and building interactive websites.",
-      metadata: { category: "programming", language: "javascript" }
+      metadata: { category: "programming", language: "javascript" },
     }),
     new Document({
       pageContent: "Machine learning algorithms can identify patterns in large datasets.",
-      metadata: { category: "AI", topic: "machine-learning" }
+      metadata: { category: "AI", topic: "machine-learning" },
     }),
     new Document({
       pageContent: "Neural networks are inspired by the human brain and used in deep learning.",
-      metadata: { category: "AI", topic: "deep-learning" }
+      metadata: { category: "AI", topic: "deep-learning" },
     }),
     new Document({
       pageContent: "Cats are independent pets that enjoy napping and hunting mice.",
-      metadata: { category: "animals", type: "mammals" }
+      metadata: { category: "animals", type: "mammals" },
     }),
     new Document({
       pageContent: "Dogs are loyal companions that love playing fetch and going for walks.",
-      metadata: { category: "animals", type: "mammals" }
-    })
+      metadata: { category: "animals", type: "mammals" },
+    }),
   ];
 
   console.log(`📚 Creating vector store with ${docs.length} documents...\n`);
@@ -65,7 +65,7 @@ async function main() {
     { query: "programming languages for AI", k: 2 },
     { query: "pets that need exercise", k: 2 },
     { query: "building websites", k: 2 },
-    { query: "understanding data patterns", k: 2 }
+    { query: "understanding data patterns", k: 2 },
   ];
 
   for (const { query, k } of searches) {

@@ -24,13 +24,13 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Create knowledge base about programming languages
@@ -38,23 +38,23 @@ async function main() {
     new Document({
       pageContent:
         "Python is a high-level programming language known for its simplicity and readability. It's widely used in data science, machine learning, and web development.",
-      metadata: { category: "language", popularity: "high" }
+      metadata: { category: "language", popularity: "high" },
     }),
     new Document({
       pageContent:
         "JavaScript runs in browsers and on servers via Node.js. It's the primary language for web development and powers interactive websites.",
-      metadata: { category: "language", popularity: "high" }
+      metadata: { category: "language", popularity: "high" },
     }),
     new Document({
       pageContent:
         "Rust is a systems programming language focused on safety and performance. It prevents memory bugs and ensures thread safety.",
-      metadata: { category: "language", popularity: "growing" }
+      metadata: { category: "language", popularity: "growing" },
     }),
     new Document({
       pageContent:
         "TypeScript adds static typing to JavaScript, catching errors at compile time and improving developer experience in large codebases.",
-      metadata: { category: "language", popularity: "high" }
-    })
+      metadata: { category: "language", popularity: "high" },
+    }),
   ];
 
   const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
@@ -95,7 +95,7 @@ Answer:`);
     },
 
     // Operation 3: Pass through the question
-    question: new RunnablePassthrough()
+    question: new RunnablePassthrough(),
   });
 
   // Combine parallel results with the rest of the chain
@@ -103,7 +103,7 @@ Answer:`);
     parallelChain, // All three operations run at once!
     prompt,
     model,
-    new StringOutputParser()
+    new StringOutputParser(),
   ]);
 
   console.log("\n✅ Parallel chain created!\n");

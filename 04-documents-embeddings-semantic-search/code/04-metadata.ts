@@ -28,8 +28,8 @@ multiple LLM providers including OpenAI, Anthropic, and Azure.
         difficulty: "beginner",
         date: "2024-01-15",
         author: "Tech Team",
-        tags: ["langchain", "javascript", "ai"]
-      }
+        tags: ["langchain", "javascript", "ai"],
+      },
     }),
     new Document({
       pageContent: `
@@ -43,8 +43,8 @@ and provide more accurate, contextual responses without retraining the model.
         difficulty: "intermediate",
         date: "2024-02-20",
         author: "AI Research Team",
-        tags: ["rag", "retrieval", "llm"]
-      }
+        tags: ["rag", "retrieval", "llm"],
+      },
     }),
     new Document({
       pageContent: `
@@ -58,9 +58,9 @@ databases include Pinecone, Weaviate, and Chroma.
         difficulty: "intermediate",
         date: "2024-03-10",
         author: "Data Team",
-        tags: ["vectors", "embeddings", "database"]
-      }
-    })
+        tags: ["vectors", "embeddings", "database"],
+      },
+    }),
   ];
 
   console.log(`📚 Created ${docs.length} documents with metadata\n`);
@@ -81,7 +81,7 @@ databases include Pinecone, Weaviate, and Chroma.
 
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 100,
-    chunkOverlap: 20
+    chunkOverlap: 20,
   });
 
   const splitDocs = await splitter.splitDocuments(docs);

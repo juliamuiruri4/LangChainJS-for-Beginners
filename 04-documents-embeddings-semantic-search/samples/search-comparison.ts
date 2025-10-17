@@ -20,7 +20,7 @@ const articles = [
   "Medical professionals and physician training programs",
   "Computer programming fundamentals for beginners",
   "Vehicle safety features and automotive technology",
-  "Doctor consultation tips for better health outcomes"
+  "Doctor consultation tips for better health outcomes",
 ];
 
 function keywordSearch(query: string, documents: string[]): string[] {
@@ -44,7 +44,7 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("📚 Creating vector store...\n");
@@ -58,7 +58,7 @@ async function main() {
   const queries = [
     { query: "automobile", synonym: "car" },
     { query: "coding", synonym: "programming" },
-    { query: "physician", synonym: "doctor" }
+    { query: "physician", synonym: "doctor" },
   ];
 
   for (const { query, synonym } of queries) {

@@ -28,7 +28,7 @@ const INTERACTIVE_FILES = [
   { file: "chatbot.ts", input: "Hello\n" },
   { file: "streaming-chat.ts", input: "Hello\n" },
   { file: "qa-program.ts", input: "What is 2+2?\n" },
-  { file: "03-human-in-loop.ts", input: "yes\nno\nno\n" }
+  { file: "03-human-in-loop.ts", input: "yes\nno\nno\n" },
 ];
 
 // Timeout for all examples (generous to handle API calls and complex examples)
@@ -73,7 +73,7 @@ function runExample(filePath: string): Promise<TestResult> {
 
     const child = spawn("npx", ["tsx", filePath], {
       stdio: ["pipe", "pipe", "pipe"],
-      env: { ...process.env, CI: "true" }
+      env: { ...process.env, CI: "true" },
     });
 
     let stdout = "";
@@ -93,7 +93,7 @@ function runExample(filePath: string): Promise<TestResult> {
         file: filePath,
         success: false,
         duration: Date.now() - startTime,
-        error: `Timeout after ${TIMEOUT_MS}ms`
+        error: `Timeout after ${TIMEOUT_MS}ms`,
       });
     }, TIMEOUT_MS);
 
@@ -121,14 +121,14 @@ function runExample(filePath: string): Promise<TestResult> {
         resolve({
           file: filePath,
           success: true,
-          duration
+          duration,
         });
       } else {
         resolve({
           file: filePath,
           success: false,
           duration,
-          error: hasError ? stderr : stderr || `Exit code: ${code}`
+          error: hasError ? stderr : stderr || `Exit code: ${code}`,
         });
       }
     });
@@ -139,7 +139,7 @@ function runExample(filePath: string): Promise<TestResult> {
         file: filePath,
         success: false,
         duration: Date.now() - startTime,
-        error: error.message
+        error: error.message,
       });
     });
   });

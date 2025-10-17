@@ -30,7 +30,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // ============================================================================
@@ -66,9 +66,9 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
   const faqPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      "You are a helpful customer service assistant. Answer questions based on this FAQ:\n\n{context}"
+      "You are a helpful customer service assistant. Answer questions based on this FAQ:\n\n{context}",
     ],
-    ["human", "{question}"]
+    ["human", "{question}"],
   ]);
 
   const faqChain = faqPrompt.pipe(model);
@@ -78,7 +78,7 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
 
   const faqResponse = await faqChain.invoke({
     context: faqContext,
-    question: faqQuestion
+    question: faqQuestion,
   });
 
   console.log("Answer:", faqResponse.content);
@@ -107,50 +107,50 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
     new Document({
       pageContent:
         "The API authentication uses OAuth 2.0 with bearer tokens. Tokens expire after 24 hours.",
-      metadata: { source: "api-auth.md", category: "API" }
+      metadata: { source: "api-auth.md", category: "API" },
     }),
     new Document({
       pageContent:
         "Database migrations are handled automatically by the ORM. Use 'npm run migrate' to apply pending migrations.",
-      metadata: { source: "database.md", category: "Database" }
+      metadata: { source: "database.md", category: "Database" },
     }),
     new Document({
       pageContent:
         "Deployment to production requires approval from two team leads. Use the GitHub Actions workflow.",
-      metadata: { source: "deployment.md", category: "DevOps" }
+      metadata: { source: "deployment.md", category: "DevOps" },
     }),
     new Document({
       pageContent:
         "Error logging is handled by Sentry. All errors are automatically tracked and reported to the #alerts channel.",
-      metadata: { source: "monitoring.md", category: "DevOps" }
+      metadata: { source: "monitoring.md", category: "DevOps" },
     }),
     new Document({
       pageContent:
         "The frontend uses React 18 with TypeScript. All components should be functional with hooks.",
-      metadata: { source: "frontend.md", category: "Frontend" }
+      metadata: { source: "frontend.md", category: "Frontend" },
     }),
     new Document({
       pageContent:
         "CSS styling uses Tailwind CSS. Avoid inline styles and use utility classes instead.",
-      metadata: { source: "styling.md", category: "Frontend" }
+      metadata: { source: "styling.md", category: "Frontend" },
     }),
     new Document({
       pageContent:
         "API rate limiting is 100 requests per minute per user. Exceeding this returns a 429 status code.",
-      metadata: { source: "api-limits.md", category: "API" }
+      metadata: { source: "api-limits.md", category: "API" },
     }),
     new Document({
       pageContent:
         "User passwords are hashed using bcrypt with 12 rounds. Never store passwords in plain text.",
-      metadata: { source: "security.md", category: "Security" }
-    })
+      metadata: { source: "security.md", category: "Security" },
+    }),
   ];
 
   console.log("Creating vector store from documents...");
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
@@ -159,26 +159,26 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
   const ragPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      "You are a helpful documentation assistant. Answer questions based on the following context:\n\n{context}"
+      "You are a helpful documentation assistant. Answer questions based on the following context:\n\n{context}",
     ],
-    ["human", "{input}"]
+    ["human", "{input}"],
   ]);
 
   const combineDocsChain = await createStuffDocumentsChain({
     llm: model,
-    prompt: ragPrompt
+    prompt: ragPrompt,
   });
 
   const ragChain = await createRetrievalChain({
     retriever,
-    combineDocsChain
+    combineDocsChain,
   });
 
   const ragQuestion = "How does API authentication work?";
   console.log(`\nQuestion: "${ragQuestion}"\n`);
 
   const ragResponse = await ragChain.invoke({
-    input: ragQuestion
+    input: ragQuestion,
   });
 
   console.log("Answer:", ragResponse.answer);

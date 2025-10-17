@@ -103,8 +103,8 @@ function parseStructure(content: string): SmartChunk[] {
           subsection: currentSubsection || undefined,
           subsubsection: currentSubsubsection || undefined,
           level: level,
-          chunkIndex: chunkIndex++
-        }
+          chunkIndex: chunkIndex++,
+        },
       });
       currentContent = [];
     }
@@ -149,7 +149,7 @@ async function naiveChunking(content: string) {
 
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 500,
-    chunkOverlap: 50
+    chunkOverlap: 50,
   });
 
   const chunks = await splitter.createDocuments([content]);

@@ -18,9 +18,9 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("=".repeat(80));
@@ -43,7 +43,7 @@ async function main() {
       .min(1)
       .max(5)
       .describe("How relevant the answer is to the question (1-5)"),
-    reasoning: z.string().describe("Brief explanation of the scores and overall assessment")
+    reasoning: z.string().describe("Brief explanation of the scores and overall assessment"),
   });
 
   // Create evaluator model with structured output
@@ -61,7 +61,7 @@ Evaluate the response based on:
 - Clarity: Is it well-written and easy to understand?
 - Relevance: Does it stay on topic?
 
-Rate each criterion from 1 (poor) to 5 (excellent).`
+Rate each criterion from 1 (poor) to 5 (excellent).`,
     ],
     [
       "human",
@@ -69,8 +69,8 @@ Rate each criterion from 1 (poor) to 5 (excellent).`
 
 Answer to evaluate: {answer}
 
-Provide your evaluation:`
-    ]
+Provide your evaluation:`,
+    ],
   ]);
 
   /**
@@ -118,7 +118,7 @@ Provide your evaluation:`
       question,
       answer,
       evaluation,
-      averageScore
+      averageScore,
     };
   }
 

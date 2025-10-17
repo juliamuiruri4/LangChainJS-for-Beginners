@@ -30,9 +30,9 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Ensure memory directory exists
@@ -155,7 +155,7 @@ async function main() {
     const storedFormat: StoredMessage[] = messages.map((msg) => ({
       type: msg._getType() === "human" ? "human" : "ai",
       content: String(msg.content),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }));
 
     await saveMemory(userId, storedFormat);
@@ -171,7 +171,7 @@ async function main() {
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     const askQuestion = () => {
@@ -183,7 +183,7 @@ async function main() {
           const storedFormat: StoredMessage[] = messages.map((msg) => ({
             type: msg._getType() === "human" ? "human" : "ai",
             content: String(msg.content),
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           }));
 
           await saveMemory(userId, storedFormat);
@@ -228,7 +228,7 @@ async function main() {
           const storedFormat: StoredMessage[] = messages.map((msg) => ({
             type: msg._getType() === "human" ? "human" : "ai",
             content: String(msg.content),
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           }));
 
           await saveMemory(userId, storedFormat);

@@ -24,7 +24,7 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Create embeddings for different texts
@@ -32,7 +32,7 @@ async function main() {
     "LangChain makes building AI apps easier",
     "LangChain simplifies AI application development",
     "I love eating pizza for dinner",
-    "The weather is sunny today"
+    "The weather is sunny today",
   ];
 
   console.log("Creating embeddings for texts...\n");
@@ -54,7 +54,7 @@ async function main() {
     [0, 1, "LangChain vs LangChain (similar meaning)"],
     [0, 2, "LangChain vs Pizza (different topics)"],
     [0, 3, "LangChain vs Weather (different topics)"],
-    [2, 3, "Pizza vs Weather (both different from LangChain)"]
+    [2, 3, "Pizza vs Weather (both different from LangChain)"],
   ];
 
   pairs.forEach(([i, j, description]) => {

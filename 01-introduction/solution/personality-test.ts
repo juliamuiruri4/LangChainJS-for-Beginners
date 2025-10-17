@@ -12,23 +12,23 @@ import "dotenv/config";
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
   configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
+  apiKey: process.env.AI_API_KEY,
 });
 
 const personalities = [
   {
     name: "🏴‍☠️ Pirate",
     system:
-      "You are a pirate. Answer all questions in pirate speak with 'Arrr!' and nautical terms."
+      "You are a pirate. Answer all questions in pirate speak with 'Arrr!' and nautical terms.",
   },
   {
     name: "💼 Business Analyst",
-    system: "You are a professional business analyst. Give precise, data-driven answers."
+    system: "You are a professional business analyst. Give precise, data-driven answers.",
   },
   {
     name: "👨‍🏫 Friendly Teacher",
-    system: "You are a friendly teacher explaining concepts to 8-year-old children."
-  }
+    system: "You are a friendly teacher explaining concepts to 8-year-old children.",
+  },
 ];
 
 const question = "What is artificial intelligence?";

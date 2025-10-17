@@ -24,7 +24,7 @@ const searchTool = tool(
       "distance london to paris":
         "The distance between London and Paris is approximately 343 kilometers.",
       "highest mountain":
-        "Mount Everest is the highest mountain in the world at 8,849 meters (29,032 feet)."
+        "Mount Everest is the highest mountain in the world at 8,849 meters (29,032 feet).",
     };
 
     const queryLower = input.query.toLowerCase();
@@ -45,8 +45,8 @@ const searchTool = tool(
     schema: z.object({
       query: z
         .string()
-        .describe("The search query, e.g., 'population of Tokyo' or 'capital of France'")
-    })
+        .describe("The search query, e.g., 'population of Tokyo' or 'capital of France'"),
+    }),
   }
 );
 
@@ -70,8 +70,8 @@ const calculatorTool = tool(
         .string()
         .describe(
           "The mathematical expression to evaluate, e.g., '14000000 * 2' or '(100 + 50) / 2'"
-        )
-    })
+        ),
+    }),
   }
 );
 
@@ -82,7 +82,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([searchTool, calculatorTool]);
@@ -90,7 +90,7 @@ async function main() {
   // Test queries
   const queries = [
     "What is the population of Tokyo multiplied by 2?",
-    "Search for the capital of France and tell me how many letters are in its name"
+    "Search for the capital of France and tell me how many letters are in its name",
   ];
 
   for (const query of queries) {
@@ -134,11 +134,11 @@ async function main() {
       messages.push(
         new AIMessage({
           content: response.content,
-          tool_calls: response.tool_calls
+          tool_calls: response.tool_calls,
         }),
         new ToolMessage({
           content: String(toolResult),
-          tool_call_id: toolCall.id || ""
+          tool_call_id: toolCall.id || "",
         })
       );
 

@@ -24,33 +24,33 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Create knowledge base
   const docs = [
     new Document({
       pageContent:
-        "Machine learning is a subset of AI that enables systems to learn from data without explicit programming. It uses algorithms to identify patterns."
+        "Machine learning is a subset of AI that enables systems to learn from data without explicit programming. It uses algorithms to identify patterns.",
     }),
     new Document({
       pageContent:
-        "Deep learning uses neural networks with multiple layers to process data. It excels at image recognition, natural language processing, and complex pattern matching."
+        "Deep learning uses neural networks with multiple layers to process data. It excels at image recognition, natural language processing, and complex pattern matching.",
     }),
     new Document({
       pageContent:
-        "Supervised learning trains models on labeled data where the correct answers are provided. Examples include classification and regression tasks."
+        "Supervised learning trains models on labeled data where the correct answers are provided. Examples include classification and regression tasks.",
     }),
     new Document({
       pageContent:
-        "Unsupervised learning finds patterns in data without labels. Clustering and dimensionality reduction are common applications."
-    })
+        "Unsupervised learning finds patterns in data without labels. Clustering and dimensionality reduction are common applications.",
+    }),
   ];
 
   const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
@@ -74,11 +74,11 @@ Answer:`);
 
   const simpleChain = RunnableSequence.from([
     {
-      question: new RunnablePassthrough()
+      question: new RunnablePassthrough(),
     },
     simplePrompt,
     model, // Short, direct answers
-    new StringOutputParser()
+    new StringOutputParser(),
   ]);
 
   // DETAILED PATH: For complex questions with context
@@ -96,11 +96,11 @@ Detailed Answer:`);
         const docs = await retriever.invoke(input.question);
         return formatDocs(docs);
       },
-      question: new RunnablePassthrough()
+      question: new RunnablePassthrough(),
     },
     detailedPrompt,
     model, // Comprehensive answers with context
-    new StringOutputParser()
+    new StringOutputParser(),
   ]);
 
   // EXPERT PATH: For technical, deep questions
@@ -118,11 +118,11 @@ Expert Answer:`);
         const docs = await retriever.invoke(input.question);
         return formatDocs(docs);
       },
-      question: new RunnablePassthrough()
+      question: new RunnablePassthrough(),
     },
     expertPrompt,
     model, // Precise, technical responses
-    new StringOutputParser()
+    new StringOutputParser(),
   ]);
 
   // BRANCHING LOGIC: Route based on question characteristics
@@ -134,7 +134,7 @@ Expert Answer:`);
         if (isShort) console.log("   🚀 ROUTE: Simple (question is short)");
         return isShort;
       },
-      simpleChain
+      simpleChain,
     ],
     [
       // Condition 2: Contains technical keywords → expert path
@@ -144,7 +144,7 @@ Expert Answer:`);
           "architecture",
           "implementation",
           "optimization",
-          "mathematical"
+          "mathematical",
         ];
         const isTechnical = technicalWords.some((word) =>
           input.question.toLowerCase().includes(word)
@@ -152,13 +152,13 @@ Expert Answer:`);
         if (isTechnical) console.log("   🎓 ROUTE: Expert (technical keywords detected)");
         return isTechnical;
       },
-      expertChain
+      expertChain,
     ],
     // Default: Detailed path for everything else
     (input: { question: string }) => {
       console.log("   📚 ROUTE: Detailed (complex question)");
       return detailedChain.invoke(input);
-    }
+    },
   ]);
 
   console.log("\n✅ Branching chain created!\n");
@@ -172,24 +172,24 @@ Expert Answer:`);
   const testCases = [
     {
       question: "What is ML?",
-      expectedRoute: "Simple"
+      expectedRoute: "Simple",
     },
     {
       question: "How does the machine learning algorithm architecture work?",
-      expectedRoute: "Expert"
+      expectedRoute: "Expert",
     },
     {
       question: "Can you explain supervised learning?",
-      expectedRoute: "Detailed"
+      expectedRoute: "Detailed",
     },
     {
       question: "Explain the mathematical optimization techniques in deep learning",
-      expectedRoute: "Expert"
+      expectedRoute: "Expert",
     },
     {
       question: "What are neural networks and how do they process information?",
-      expectedRoute: "Detailed"
-    }
+      expectedRoute: "Detailed",
+    },
   ];
 
   for (const testCase of testCases) {

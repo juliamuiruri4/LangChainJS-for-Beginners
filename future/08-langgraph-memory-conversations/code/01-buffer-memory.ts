@@ -17,9 +17,9 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define the chatbot node
@@ -48,7 +48,7 @@ async function main() {
 
   const response1 = await app.invoke(
     {
-      messages: [new HumanMessage("My name is Alex and I'm a TypeScript developer.")]
+      messages: [new HumanMessage("My name is Alex and I'm a TypeScript developer.")],
     },
     config
   );

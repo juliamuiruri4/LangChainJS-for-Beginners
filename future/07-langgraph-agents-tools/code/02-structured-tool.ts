@@ -32,8 +32,8 @@ async function main() {
       schema: z.object({
         city: z.string().describe("The city name, e.g., 'Paris', 'Tokyo'"),
         country: z.string().optional().describe("Optional country code, e.g., 'US', 'JP'"),
-        units: z.enum(["celsius", "fahrenheit"]).default("celsius").describe("Temperature units")
-      })
+        units: z.enum(["celsius", "fahrenheit"]).default("celsius").describe("Temperature units"),
+      }),
     }
   );
 
@@ -46,14 +46,14 @@ async function main() {
           name: "Alice Johnson",
           email: "alice@example.com",
           location: "Seattle",
-          preferences: "Likes TypeScript and hiking"
+          preferences: "Likes TypeScript and hiking",
         },
         "456": {
           name: "Bob Smith",
           email: "bob@example.com",
           location: "Austin",
-          preferences: "Enjoys coffee and reading"
-        }
+          preferences: "Enjoys coffee and reading",
+        },
       };
 
       const user = users[input.userId];
@@ -73,8 +73,8 @@ async function main() {
         userId: z.string().describe("The user's unique identifier"),
         fields: z
           .array(z.enum(["name", "email", "location", "preferences"]))
-          .describe("Which fields to retrieve")
-      })
+          .describe("Which fields to retrieve"),
+      }),
     }
   );
 
@@ -85,20 +85,20 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const agent = createReactAgent({
     llm: model,
-    tools: [weatherTool, userInfoTool]
+    tools: [weatherTool, userInfoTool],
   });
 
   const queries = [
     "What's the weather like in Paris?",
     "Get the name and email for user 123",
-    "What's the weather in Tokyo, Japan in fahrenheit?"
+    "What's the weather in Tokyo, Japan in fahrenheit?",
   ];
 
   for (const query of queries) {
@@ -106,7 +106,7 @@ async function main() {
     console.log(`\n❓ ${query}\n`);
 
     const response = await agent.invoke({
-      messages: [new HumanMessage(query)]
+      messages: [new HumanMessage(query)],
     });
 
     const lastMessage = response.messages[response.messages.length - 1];

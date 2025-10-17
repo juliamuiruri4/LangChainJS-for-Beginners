@@ -64,7 +64,7 @@ const texts = [
   // Sports topics
   { text: "Football games", category: "Sports" },
   { text: "Basketball training", category: "Sports" },
-  { text: "Athletic performance", category: "Sports" }
+  { text: "Athletic performance", category: "Sports" },
 ];
 
 async function main() {
@@ -74,7 +74,7 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("🔢 Creating embeddings for diverse topics...\n");
@@ -97,7 +97,7 @@ async function main() {
     text: item.text,
     category: item.category,
     x: reduced2D[index][0],
-    y: reduced2D[index][1]
+    y: reduced2D[index][1],
   }));
 
   // Save to JSON

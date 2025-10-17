@@ -25,7 +25,7 @@ async function compareModels() {
     const model = new ChatOpenAI({
       model: modelName,
       configuration: { baseURL: process.env.AI_ENDPOINT },
-      apiKey: process.env.AI_API_KEY
+      apiKey: process.env.AI_API_KEY,
     });
 
     const startTime = Date.now();

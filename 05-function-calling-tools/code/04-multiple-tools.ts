@@ -23,7 +23,7 @@ const calculatorTool = tool(
   {
     name: "calculator",
     description: "Perform mathematical calculations",
-    schema: z.object({ expression: z.string() })
+    schema: z.object({ expression: z.string() }),
   }
 );
 
@@ -32,21 +32,21 @@ const searchTool = tool(
     const results: Record<string, string> = {
       "capital of France": "Paris",
       "population of Tokyo": "14 million",
-      "who created JavaScript": "Brendan Eich"
+      "who created JavaScript": "Brendan Eich",
     };
     return results[input.query.toLowerCase()] || "No results found";
   },
   {
     name: "search",
     description: "Search for factual information",
-    schema: z.object({ query: z.string() })
+    schema: z.object({ query: z.string() }),
   }
 );
 
 const weatherTool = tool(async (input) => `Weather in ${input.city}: 72°F, sunny`, {
   name: "getWeather",
   description: "Get current weather for a city",
-  schema: z.object({ city: z.string() })
+  schema: z.object({ city: z.string() }),
 });
 
 async function main() {
@@ -56,7 +56,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([calculatorTool, searchTool, weatherTool]);
@@ -64,7 +64,7 @@ async function main() {
   const queries = [
     "What is 125 * 8?",
     "What's the capital of France?",
-    "What's the weather in Tokyo?"
+    "What's the weather in Tokyo?",
   ];
 
   for (const query of queries) {

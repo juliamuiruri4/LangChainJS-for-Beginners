@@ -13,7 +13,7 @@ import "dotenv/config";
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
   configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
+  apiKey: process.env.AI_API_KEY,
 });
 
 // Template Library
@@ -32,9 +32,9 @@ const templates = {
 {code}
 \`\`\`
 
-Describe what it does, how it works, and any key concepts.`
-      ]
-    ])
+Describe what it does, how it works, and any key concepts.`,
+      ],
+    ]),
   },
 
   summarizer: {
@@ -43,8 +43,8 @@ Describe what it does, how it works, and any key concepts.`
     variables: ["text", "length"],
     template: ChatPromptTemplate.fromMessages([
       ["system", "You are a professional summarizer. Create clear, {length} summaries."],
-      ["human", "Summarize this text:\n\n{text}"]
-    ])
+      ["human", "Summarize this text:\n\n{text}"],
+    ]),
   },
 
   creativeWriter: {
@@ -54,10 +54,10 @@ Describe what it does, how it works, and any key concepts.`
     template: ChatPromptTemplate.fromMessages([
       [
         "system",
-        "You are a creative writer. Write {length} {genre} stories that are engaging and well-crafted."
+        "You are a creative writer. Write {length} {genre} stories that are engaging and well-crafted.",
       ],
-      ["human", "Write a story about: {theme}"]
-    ])
+      ["human", "Write a story about: {theme}"],
+    ]),
   },
 
   dataFormatter: {
@@ -67,10 +67,10 @@ Describe what it does, how it works, and any key concepts.`
     template: ChatPromptTemplate.fromMessages([
       [
         "system",
-        "You are a data formatting expert. Convert data to {format} format with proper structure."
+        "You are a data formatting expert. Convert data to {format} format with proper structure.",
       ],
-      ["human", "Format this data:\n\n{data}"]
-    ])
+      ["human", "Format this data:\n\n{data}"],
+    ]),
   },
 
   questionAnswerer: {
@@ -79,14 +79,14 @@ Describe what it does, how it works, and any key concepts.`
     variables: ["question", "expertise"],
     template: ChatPromptTemplate.fromMessages([
       ["system", "You are an expert in {expertise}. Provide accurate, detailed answers."],
-      ["human", "{question}"]
-    ])
-  }
+      ["human", "{question}"],
+    ]),
+  },
 };
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 function question(prompt: string): Promise<string> {
@@ -129,14 +129,14 @@ async function main() {
     console.log("Testing Code Explainer Template:");
     await executeTemplate("codeExplainer", {
       code: "const sum = (a, b) => a + b;",
-      language: "JavaScript"
+      language: "JavaScript",
     });
 
     // Test Summarizer
     console.log("Testing Summarizer Template:");
     await executeTemplate("summarizer", {
       text: "Artificial intelligence is transforming the world. Machine learning enables computers to learn from data without explicit programming. Deep learning uses neural networks to solve complex problems.",
-      length: "brief"
+      length: "brief",
     });
 
     console.log("✅ Template library working correctly!");

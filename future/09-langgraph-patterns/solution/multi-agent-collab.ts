@@ -12,28 +12,28 @@ import "dotenv/config";
 const CollaborationState = Annotation.Root({
   task: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   plan: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   researchFindings: Annotation<string[]>({
     reducer: (left, right) => [...left, ...right],
-    default: () => []
+    default: () => [],
   }),
   analysis: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   finalReport: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   status: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "planning"
-  })
+    default: () => "planning",
+  }),
 });
 
 async function main() {
@@ -47,9 +47,9 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const workflow = new StateGraph(CollaborationState);
@@ -162,7 +162,7 @@ Format as a brief executive summary with Introduction, Key Findings, and Conclus
   // Test tasks
   const tasks = [
     "Research and analyze the benefits of TypeScript for large-scale applications",
-    "Investigate the impact of microservices architecture on development teams"
+    "Investigate the impact of microservices architecture on development teams",
   ];
 
   for (const task of tasks) {
@@ -176,7 +176,7 @@ Format as a brief executive summary with Introduction, Key Findings, and Conclus
       researchFindings: [],
       analysis: "",
       finalReport: "",
-      status: "planning"
+      status: "planning",
     });
 
     console.log("─".repeat(80));

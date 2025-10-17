@@ -21,9 +21,9 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // System prompt for the assistant
@@ -64,7 +64,7 @@ Be friendly and refer back to information they've told you. If they mention pref
       "Hi! My name is Alex",
       "I prefer concise answers",
       "What's my name?",
-      "Can you help me with a quick question about TypeScript?"
+      "Can you help me with a quick question about TypeScript?",
     ];
 
     for (const msg of testMessages) {
@@ -85,7 +85,7 @@ Be friendly and refer back to information they've told you. If they mention pref
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     const askQuestion = () => {

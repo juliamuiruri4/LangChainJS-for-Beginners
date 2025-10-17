@@ -26,8 +26,8 @@ const weatherTool = tool(
     name: "getWeather",
     description: "Get current weather for a city",
     schema: z.object({
-      city: z.string().describe("City name")
-    })
+      city: z.string().describe("City name"),
+    }),
   }
 );
 
@@ -38,7 +38,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([weatherTool]);
@@ -95,12 +95,12 @@ async function main() {
     new HumanMessage(query),
     new AIMessage({
       content: response1.content,
-      tool_calls: response1.tool_calls
+      tool_calls: response1.tool_calls,
     }),
     new ToolMessage({
       content: String(toolResult),
-      tool_call_id: toolCall.id || ""
-    })
+      tool_call_id: toolCall.id || "",
+    }),
   ];
 
   const finalResponse = await model.invoke(messages);

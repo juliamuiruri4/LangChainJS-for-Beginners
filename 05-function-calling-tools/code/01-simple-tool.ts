@@ -30,8 +30,8 @@ const calculatorTool = tool(
     description:
       "Useful for performing mathematical calculations. Use this when you need to compute numbers.",
     schema: z.object({
-      expression: z.string().describe("The mathematical expression to evaluate, e.g., '25 * 4'")
-    })
+      expression: z.string().describe("The mathematical expression to evaluate, e.g., '25 * 4'"),
+    }),
   }
 );
 

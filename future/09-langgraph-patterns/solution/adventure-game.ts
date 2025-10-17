@@ -12,24 +12,24 @@ import "dotenv/config";
 const GameState = Annotation.Root({
   currentScene: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "start"
+    default: () => "start",
   }),
   inventory: Annotation<string[]>({
     reducer: (left, right) => [...left, ...right],
-    default: () => []
+    default: () => [],
   }),
   choiceHistory: Annotation<string[]>({
     reducer: (left, right) => [...left, ...right],
-    default: () => []
+    default: () => [],
   }),
   gameStatus: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "playing"
+    default: () => "playing",
   }),
   nextChoice: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
-  })
+    default: () => "",
+  }),
 });
 
 interface SceneData {
@@ -42,8 +42,8 @@ const scenes: Record<string, SceneData> = {
     description: "You stand at the entrance of an ancient forest. Two paths lie before you.",
     choices: [
       { text: "Take the left path through the dark woods", nextScene: "cave" },
-      { text: "Take the right path along the river", nextScene: "river" }
-    ]
+      { text: "Take the right path along the river", nextScene: "river" },
+    ],
   },
   cave: {
     description:
@@ -51,16 +51,16 @@ const scenes: Record<string, SceneData> = {
     choices: [
       { text: "Enter the cave", nextScene: "treasure_or_trap" },
       { text: "Return to the forest", nextScene: "start" },
-      { text: "Search around the entrance", nextScene: "hidden_item" }
-    ]
+      { text: "Search around the entrance", nextScene: "hidden_item" },
+    ],
   },
   river: {
     description: "A crystal-clear river flows before you. You hear sounds of a village nearby.",
     choices: [
       { text: "Cross the river", nextScene: "village" },
       { text: "Follow the river downstream", nextScene: "waterfall" },
-      { text: "Set up camp here", nextScene: "camp" }
-    ]
+      { text: "Set up camp here", nextScene: "camp" },
+    ],
   },
   treasure_or_trap: {
     description:
@@ -69,10 +69,10 @@ const scenes: Record<string, SceneData> = {
       {
         text: "Carefully approach and open the chest",
         nextScene: "treasure_ending",
-        item: "golden_amulet"
+        item: "golden_amulet",
       },
-      { text: "Look for another way around", nextScene: "secret_passage" }
-    ]
+      { text: "Look for another way around", nextScene: "secret_passage" },
+    ],
   },
   hidden_item: {
     description: "You find an ancient map hidden in the rocks!",
@@ -80,30 +80,30 @@ const scenes: Record<string, SceneData> = {
       {
         text: "Take the map and enter the cave",
         nextScene: "treasure_or_trap",
-        item: "ancient_map"
-      }
-    ]
+        item: "ancient_map",
+      },
+    ],
   },
   village: {
     description: "You arrive at a peaceful village. The locals welcome you warmly.",
     choices: [
       { text: "Rest and end your journey here", nextScene: "peaceful_ending" },
-      { text: "Ask about nearby adventures", nextScene: "new_quest" }
-    ]
+      { text: "Ask about nearby adventures", nextScene: "new_quest" },
+    ],
   },
   waterfall: {
     description: "You discover a magnificent waterfall with a cave behind it!",
     choices: [
       {
         text: "Explore the cave behind the waterfall",
-        nextScene: "waterfall_cave"
+        nextScene: "waterfall_cave",
       },
-      { text: "Head back", nextScene: "river" }
-    ]
+      { text: "Head back", nextScene: "river" },
+    ],
   },
   camp: {
     description: "You set up a cozy camp by the river. It's peaceful here.",
-    choices: [{ text: "End your adventure and rest", nextScene: "restful_ending" }]
+    choices: [{ text: "End your adventure and rest", nextScene: "restful_ending" }],
   },
   secret_passage: {
     description: "You find a secret passage leading to ancient treasure without traps!",
@@ -111,9 +111,9 @@ const scenes: Record<string, SceneData> = {
       {
         text: "Claim the treasure",
         nextScene: "treasure_ending",
-        item: "ancient_treasure"
-      }
-    ]
+        item: "ancient_treasure",
+      },
+    ],
   },
   waterfall_cave: {
     description: "Behind the waterfall, you find a legendary artifact!",
@@ -121,37 +121,37 @@ const scenes: Record<string, SceneData> = {
       {
         text: "Take the artifact and return home",
         nextScene: "legendary_ending",
-        item: "water_crystal"
-      }
-    ]
+        item: "water_crystal",
+      },
+    ],
   },
   new_quest: {
     description: "The villagers tell you about a dragon nearby that needs help!",
-    choices: [{ text: "Help the dragon", nextScene: "dragon_ending" }]
+    choices: [{ text: "Help the dragon", nextScene: "dragon_ending" }],
   },
   // Endings
   treasure_ending: {
     description:
       "You've found incredible treasure! You return home wealthy and celebrated. THE END.",
-    choices: []
+    choices: [],
   },
   peaceful_ending: {
     description: "You decide to stay in the village and live a peaceful life. THE END.",
-    choices: []
+    choices: [],
   },
   restful_ending: {
     description: "You enjoy a peaceful rest by the river and return home refreshed. THE END.",
-    choices: []
+    choices: [],
   },
   legendary_ending: {
     description: "With the legendary water crystal, you become a hero of legend! THE END.",
-    choices: []
+    choices: [],
   },
   dragon_ending: {
     description:
       "You help the dragon and gain a powerful ally. Together you protect the realm! THE END.",
-    choices: []
-  }
+    choices: [],
+  },
 };
 
 async function main() {
@@ -201,7 +201,7 @@ async function main() {
       currentScene: choice.nextScene,
       choiceHistory: [`${state.currentScene}: ${choice.text}`],
       inventory: newItems,
-      gameStatus: "playing"
+      gameStatus: "playing",
     };
   });
 
@@ -219,7 +219,7 @@ async function main() {
   workflow.addEdge("__start__" as any, "display_scene" as any);
   workflow.addConditionalEdges("display_scene" as any, routeGame, {
     process_choice: "process_choice",
-    __end__: END
+    __end__: END,
   } as any);
   workflow.addEdge("process_choice" as any, "display_scene" as any);
 
@@ -238,7 +238,7 @@ async function main() {
       inventory: [] as string[],
       choiceHistory: [] as string[],
       gameStatus: "playing",
-      nextChoice: ""
+      nextChoice: "",
     };
 
     for (const choice of choices) {
@@ -266,7 +266,7 @@ async function main() {
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     let state: typeof GameState.State = {
@@ -274,7 +274,7 @@ async function main() {
       inventory: [] as string[],
       choiceHistory: [] as string[],
       gameStatus: "playing",
-      nextChoice: ""
+      nextChoice: "",
     };
 
     const playTurn = async () => {

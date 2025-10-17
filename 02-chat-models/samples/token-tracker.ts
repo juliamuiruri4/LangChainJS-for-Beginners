@@ -63,8 +63,8 @@ class TokenTracker {
         promptTokens,
         completionTokens,
         totalTokens,
-        cost
-      }
+        cost,
+      },
     };
 
     this.calls.push(callRecord);
@@ -159,7 +159,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const tracker = new TokenTracker();
@@ -169,7 +169,7 @@ async function main() {
     "Explain async/await in JavaScript in detail",
     "Write a short example of a Node.js HTTP server",
     "What are the benefits of using React hooks?",
-    "Explain the difference between SQL and NoSQL databases"
+    "Explain the difference between SQL and NoSQL databases",
   ];
 
   console.log("🚀 Running test queries...");

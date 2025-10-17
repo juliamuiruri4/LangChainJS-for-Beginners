@@ -24,8 +24,8 @@ const calculatorTool = tool(
     name: "calculator",
     description: "Perform mathematical calculations",
     schema: z.object({
-      expression: z.string().describe("Math expression to evaluate")
-    })
+      expression: z.string().describe("Math expression to evaluate"),
+    }),
   }
 );
 
@@ -37,7 +37,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([calculatorTool]);

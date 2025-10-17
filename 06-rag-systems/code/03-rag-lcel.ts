@@ -24,31 +24,31 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Knowledge base
   const docs = [
     new Document({
-      pageContent: "TypeScript adds static typing to JavaScript, catching errors at compile time."
+      pageContent: "TypeScript adds static typing to JavaScript, catching errors at compile time.",
     }),
     new Document({
       pageContent:
-        "React is a library for building user interfaces using component-based architecture."
+        "React is a library for building user interfaces using component-based architecture.",
     }),
     new Document({
-      pageContent: "Node.js enables JavaScript to run on servers, powering backend applications."
+      pageContent: "Node.js enables JavaScript to run on servers, powering backend applications.",
     }),
     new Document({
       pageContent:
-        "npm is the package manager for JavaScript, providing access to millions of libraries."
-    })
+        "npm is the package manager for JavaScript, providing access to millions of libraries.",
+    }),
   ];
 
   const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
@@ -77,11 +77,11 @@ Answer:`);
         return formatDocs(docs);
       },
       // Pass through the question
-      question: new RunnablePassthrough()
+      question: new RunnablePassthrough(),
     },
     prompt,
     model,
-    new StringOutputParser()
+    new StringOutputParser(),
   ]);
 
   console.log("✅ LCEL RAG chain created!\n");
@@ -89,7 +89,7 @@ Answer:`);
   const questions = [
     "What is TypeScript used for?",
     "How does React work?",
-    "What can Node.js do?"
+    "What can Node.js do?",
   ];
 
   for (const question of questions) {

@@ -27,7 +27,7 @@ async function temperatureComparison() {
     const model = new ChatOpenAI({
       model: process.env.AI_MODEL,
       configuration: { baseURL: process.env.AI_ENDPOINT },
-      apiKey: process.env.AI_API_KEY
+      apiKey: process.env.AI_API_KEY,
     });
     for (let i = 1; i <= tries; i++) {
       const response = await model.invoke(prompt);
@@ -57,7 +57,7 @@ async function maxTokensExample() {
     const model = new ChatOpenAI({
       model: process.env.AI_MODEL,
       configuration: { baseURL: process.env.AI_ENDPOINT },
-      apiKey: process.env.AI_API_KEY
+      apiKey: process.env.AI_API_KEY,
     });
 
     const response = await model.invoke(prompt);

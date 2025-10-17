@@ -19,7 +19,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define a complex nested schema
@@ -29,12 +29,12 @@ async function main() {
     headquarters: z
       .object({
         city: z.string(),
-        country: z.string()
+        country: z.string(),
       })
       .describe("Company headquarters location"),
     products: z.array(z.string()).describe("List of main products or services"),
     employeeCount: z.number().describe("Approximate number of employees"),
-    isPublic: z.boolean().describe("Whether the company is publicly traded")
+    isPublic: z.boolean().describe("Whether the company is publicly traded"),
   });
 
   // Create structured model
@@ -44,9 +44,9 @@ async function main() {
   const template = ChatPromptTemplate.fromMessages([
     [
       "system",
-      "Extract company information from the text. If information is not available, make reasonable estimates based on common knowledge."
+      "Extract company information from the text. If information is not available, make reasonable estimates based on common knowledge.",
     ],
-    ["human", "{text}"]
+    ["human", "{text}"],
   ]);
 
   // Combine template with structured output

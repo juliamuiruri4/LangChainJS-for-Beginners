@@ -11,18 +11,18 @@ import "dotenv/config";
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
   configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
+  apiKey: process.env.AI_API_KEY,
 });
 
 const messages: (SystemMessage | HumanMessage | AIMessage)[] = [
   new SystemMessage(
     "You are a friendly and helpful AI assistant. Be conversational and warm in your responses."
-  )
+  ),
 ];
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 async function chat() {

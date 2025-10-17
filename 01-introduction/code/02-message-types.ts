@@ -18,13 +18,13 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Using structured messages for better control
   const messages = [
     new SystemMessage("You are a helpful AI assistant who explains things simply."),
-    new HumanMessage("Explain quantum computing to a 10-year-old.")
+    new HumanMessage("Explain quantum computing to a 10-year-old."),
   ];
 
   const response = await model.invoke(messages);

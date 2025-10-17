@@ -18,16 +18,16 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Keep only last 4 messages (2 exchanges)
   const trimmer = trimMessages({
     maxTokens: 200,
     strategy: "last",
-    tokenCounter: model
+    tokenCounter: model,
   });
 
   // Define the chatbot node with message trimming

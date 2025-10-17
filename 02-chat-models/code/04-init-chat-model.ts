@@ -77,7 +77,7 @@ async function courseRecommendation() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const response = await model.invoke([new HumanMessage("What is LangChain.js in one sentence?")]);

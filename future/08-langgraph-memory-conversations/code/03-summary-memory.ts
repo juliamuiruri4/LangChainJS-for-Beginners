@@ -11,12 +11,12 @@ import "dotenv/config";
 const ConversationState = Annotation.Root({
   messages: Annotation<BaseMessage[]>({
     reducer: (left, right) => left.concat(right),
-    default: () => []
+    default: () => [],
   }),
   summary: Annotation<string>({
     reducer: (_, right) => right ?? "",
-    default: () => ""
-  })
+    default: () => "",
+  }),
 });
 
 async function main() {
@@ -28,9 +28,9 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Node to summarize old messages
@@ -55,7 +55,7 @@ Summary:`;
 
     return {
       summary,
-      messages: recentMessages
+      messages: recentMessages,
     };
   };
 
@@ -99,14 +99,14 @@ Summary:`;
         // Reduced for CI mode
         "I'm planning a trip to Japan next month for two weeks.",
         "I want to visit Tokyo, Kyoto, and Osaka during my trip.",
-        "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine."
+        "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine.",
       ]
     : [
         "I'm planning a trip to Japan next month for two weeks.",
         "I want to visit Tokyo, Kyoto, and Osaka during my trip.",
         "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine.",
         "I'm also excited about experiencing both modern technology districts and historical sites.",
-        "My budget is around $3000 for the entire trip, including flights and accommodation."
+        "My budget is around $3000 for the entire trip, including flights and accommodation.",
       ];
 
   for (let i = 0; i < exchanges.length; i++) {
@@ -133,8 +133,8 @@ Summary:`;
       messages: [
         new HumanMessage(
           "Based on our conversation, where am I traveling to and what am I interested in?"
-        )
-      ]
+        ),
+      ],
     },
     config
   );

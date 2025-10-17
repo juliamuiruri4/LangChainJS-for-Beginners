@@ -43,7 +43,7 @@ async function main() {
   const embeddings = new OpenAIEmbeddings({
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // ============================================================================
@@ -61,7 +61,7 @@ async function main() {
     embeddings.embedQuery("Puppy"),
     embeddings.embedQuery("Dog"),
     embeddings.embedQuery("Cat"),
-    embeddings.embedQuery("Kitten")
+    embeddings.embedQuery("Kitten"),
   ]);
 
   // Perform vector arithmetic: Puppy - Dog + Cat
@@ -101,7 +101,7 @@ async function main() {
     embeddings.embedQuery("pizza"),
     embeddings.embedQuery("Italy"),
     embeddings.embedQuery("Japan"),
-    embeddings.embedQuery("sushi")
+    embeddings.embedQuery("sushi"),
   ]);
 
   // Perform vector arithmetic: pizza - Italy + Japan
@@ -144,7 +144,7 @@ async function main() {
     embeddings.embedQuery("happy"),
     embeddings.embedQuery("joyful"),
     embeddings.embedQuery("cheerful"),
-    embeddings.embedQuery("sad")
+    embeddings.embedQuery("sad"),
   ]);
 
   // Calculate similarities

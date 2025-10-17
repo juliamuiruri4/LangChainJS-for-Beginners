@@ -18,7 +18,7 @@ async function robustCall(prompt: string, maxRetries = 3): Promise<string> {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -60,7 +60,7 @@ async function errorExamples() {
     const badModel = new ChatOpenAI({
       model: process.env.AI_MODEL,
       configuration: { baseURL: process.env.AI_ENDPOINT },
-      apiKey: process.env.AI_API_KEY
+      apiKey: process.env.AI_API_KEY,
     });
 
     await badModel.invoke("Hello");
@@ -81,7 +81,7 @@ async function errorExamples() {
       const timeoutModel = new ChatOpenAI({
         model: process.env.AI_MODEL,
         configuration: { baseURL: process.env.AI_ENDPOINT },
-        apiKey: process.env.AI_API_KEY
+        apiKey: process.env.AI_API_KEY,
       });
 
       await timeoutModel.invoke("Write a detailed essay about the history of computing");

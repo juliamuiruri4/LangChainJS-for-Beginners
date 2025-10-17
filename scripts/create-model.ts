@@ -26,7 +26,7 @@ export function createChatModel(options?: ConstructorParameters<typeof ChatOpenA
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
-    ...options // Allow overriding any defaults
+    ...options, // Allow overriding any defaults
   });
 }
 
@@ -44,6 +44,6 @@ export function createEmbeddingsModel(options?: ConstructorParameters<typeof Ope
     model: process.env.AI_EMBEDDING_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
-    ...options // Allow overriding any defaults
+    ...options, // Allow overriding any defaults
   });
 }

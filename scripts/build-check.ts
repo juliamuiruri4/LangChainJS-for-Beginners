@@ -53,7 +53,7 @@ async function main() {
   // Using project config for faster compilation
   const tsc = spawn("npx", ["tsc", "--noEmit", "--pretty"], {
     stdio: "inherit",
-    shell: true
+    shell: true,
   });
 
   tsc.on("close", (code) => {

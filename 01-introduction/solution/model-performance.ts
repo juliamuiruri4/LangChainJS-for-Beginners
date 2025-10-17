@@ -12,7 +12,7 @@ const question = "Explain the difference between machine learning and deep learn
 
 const models = [
   { name: "gpt-4o", description: "Most capable" },
-  { name: "gpt-4o-mini", description: "Fast and efficient" }
+  { name: "gpt-4o-mini", description: "Fast and efficient" },
 ];
 
 interface ModelResult {
@@ -26,7 +26,7 @@ async function testModel(modelName: string): Promise<ModelResult> {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const startTime = Date.now();
@@ -37,7 +37,7 @@ async function testModel(modelName: string): Promise<ModelResult> {
     name: modelName,
     time: endTime - startTime,
     length: response.content.toString().length,
-    response: response.content.toString()
+    response: response.content.toString(),
   };
 }
 

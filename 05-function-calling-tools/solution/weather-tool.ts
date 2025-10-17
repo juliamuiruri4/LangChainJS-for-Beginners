@@ -21,7 +21,7 @@ const weatherTool = tool(
       "New York": { temp_f: 72, temp_c: 22, condition: "clear" },
       Seattle: { temp_f: 62, temp_c: 17, condition: "cloudy" },
       Sydney: { temp_f: 79, temp_c: 26, condition: "sunny" },
-      Mumbai: { temp_f: 88, temp_c: 31, condition: "humid and hot" }
+      Mumbai: { temp_f: 88, temp_c: 31, condition: "humid and hot" },
     };
 
     const cityData = weatherData[input.city];
@@ -45,8 +45,8 @@ const weatherTool = tool(
       units: z
         .enum(["celsius", "fahrenheit"])
         .optional()
-        .describe("Temperature unit (default: fahrenheit)")
-    })
+        .describe("Temperature unit (default: fahrenheit)"),
+    }),
   }
 );
 
@@ -57,7 +57,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([weatherTool]);
@@ -66,7 +66,7 @@ async function main() {
   const queries = [
     "What's the weather in Tokyo?",
     "Tell me the temperature in Paris in celsius",
-    "Is it raining in London?"
+    "Is it raining in London?",
   ];
 
   for (const query of queries) {
@@ -99,12 +99,12 @@ async function main() {
       new HumanMessage(query),
       new AIMessage({
         content: response1.content,
-        tool_calls: response1.tool_calls
+        tool_calls: response1.tool_calls,
       }),
       new ToolMessage({
         content: String(toolResult),
-        tool_call_id: toolCall.id || ""
-      })
+        tool_call_id: toolCall.id || "",
+      }),
     ];
 
     const finalResponse = await model.invoke(messages);

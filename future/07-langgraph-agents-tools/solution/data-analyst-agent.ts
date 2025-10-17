@@ -29,7 +29,7 @@ const salesData: SalesData[] = [
   { product: "Widget C", sales: 140, revenue: 2800, month: "Feb" },
   { product: "Widget A", sales: 160, revenue: 3200, month: "Mar" },
   { product: "Widget B", sales: 190, revenue: 4750, month: "Mar" },
-  { product: "Widget C", sales: 130, revenue: 2600, month: "Mar" }
+  { product: "Widget C", sales: 130, revenue: 2600, month: "Mar" },
 ];
 
 async function main() {
@@ -43,9 +43,9 @@ async function main() {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Tool 1: Filter Data
@@ -65,8 +65,8 @@ async function main() {
       description: "Filter sales data by field and value (e.g., month='Jan', product='Widget A')",
       schema: z.object({
         field: z.enum(["product", "month"]).describe("The field to filter by"),
-        value: z.string().describe("The value to filter for")
-      })
+        value: z.string().describe("The value to filter for"),
+      }),
     }
   );
 
@@ -102,8 +102,8 @@ async function main() {
       description: "Calculate statistics on sales or revenue (sum, average, min, max)",
       schema: z.object({
         metric: z.enum(["sales", "revenue"]).describe("The metric to calculate"),
-        operation: z.enum(["sum", "average", "min", "max"]).describe("The calculation to perform")
-      })
+        operation: z.enum(["sum", "average", "min", "max"]).describe("The calculation to perform"),
+      }),
     }
   );
 
@@ -138,8 +138,8 @@ async function main() {
       description: "Find top N products by sales or revenue",
       schema: z.object({
         metric: z.enum(["sales", "revenue"]).describe("What to rank by"),
-        count: z.number().describe("How many top items to return")
-      })
+        count: z.number().describe("How many top items to return"),
+      }),
     }
   );
 
@@ -170,14 +170,14 @@ Difference: ${Math.abs(total1 - total2)} sales, $${Math.abs(revenue1 - revenue2)
       description: "Compare two products by their total sales and revenue",
       schema: z.object({
         product1: z.string().describe("First product name"),
-        product2: z.string().describe("Second product name")
-      })
+        product2: z.string().describe("Second product name"),
+      }),
     }
   );
 
   const agent = createReactAgent({
     llm: model,
-    tools: [filterTool, statsTool, topItemsTool, compareTool]
+    tools: [filterTool, statsTool, topItemsTool, compareTool],
   });
 
   console.log("📋 Sample Data Preview:");
@@ -195,14 +195,14 @@ Difference: ${Math.abs(total1 - total2)} sales, $${Math.abs(revenue1 - revenue2)
     "Which product had the highest sales overall?",
     "What's the average revenue per month?",
     "Compare Widget A and Widget B sales",
-    "Show me the top 2 products by revenue"
+    "Show me the top 2 products by revenue",
   ];
 
   for (const question of questions) {
     console.log(`❓ ${question}\n`);
 
     const response = await agent.invoke({
-      messages: [new HumanMessage(question)]
+      messages: [new HumanMessage(question)],
     });
 
     const lastMessage = response.messages[response.messages.length - 1];
