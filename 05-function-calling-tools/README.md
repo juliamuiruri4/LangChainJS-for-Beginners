@@ -1,6 +1,6 @@
-# Chapter 5: Function Calling & Tooling
+# Chapter 5: Function Calling & Tools
 
-In this chapter, you'll learn how to extend AI capabilities beyond text generation by enabling function calling and tooling. You'll discover how LLMs can invoke functions with structured arguments, create type-safe tools using Zod schemas, and build systems where AI can trigger real-world actions like API calls, database queries, or calculations. This foundational skill bridges the gap between AI reasoning and practical application capabilities.
+In this chapter, you'll learn how to extend AI capabilities beyond text generation by enabling function calling and tools. You'll discover how LLMs can invoke functions with structured arguments, create type-safe tools using Zod schemas, and build systems where AI can trigger real-world actions like API calls, database queries, or calculations. This foundational skill bridges the gap between AI reasoning and practical application capabilities.
 
 ## Prerequisites
 
