@@ -2,7 +2,7 @@
 
 ## Overview
 
-Practice building production-ready LangChain.js applications with proper error handling, monitoring, and optimization.
+Practice building LangChain.js applications with proper error handling, monitoring, and optimization.
 
 ## Prerequisites
 

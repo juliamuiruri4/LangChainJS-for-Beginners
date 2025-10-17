@@ -699,6 +699,24 @@ See the [LangChain.js documentation](https://js.langchain.com/docs/modules/data_
 
 ---
 
+## 🗺️ Concept Map
+
+This chapter taught you how to build RAG systems:
+
+```mermaid
+graph LR
+    A[Question] --> B[Embed]
+    B --> C[Search]
+    C --> D[Retrieve]
+    D --> E[Combine]
+    E --> F[Generate]
+    F --> G[Answer]
+```
+
+*RAG retrieves relevant context, then generates accurate answers with citations.*
+
+---
+
 ## 🎓 Key Takeaways
 
 - ✅ **RAG = Retrieval + Generation**: Find relevant docs, then generate answers

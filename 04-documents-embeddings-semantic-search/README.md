@@ -815,6 +815,23 @@ Other metrics like Euclidean Distance and Dot Product exist but are used for spe
 
 ---
 
+## 🗺️ Concept Map
+
+This chapter taught you the complete pipeline for document processing and semantic search:
+
+```mermaid
+graph LR
+    A[Documents] --> B[Load]
+    B --> C[Split]
+    C --> D[Embed]
+    D --> E[Vector Store]
+    E --> F[Semantic Search]
+```
+
+*This pipeline powers RAG systems and intelligent document retrieval.*
+
+---
+
 ## 🎓 Key Takeaways
 
 - **Document loaders** handle different file formats

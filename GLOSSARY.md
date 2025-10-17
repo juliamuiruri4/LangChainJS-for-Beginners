@@ -152,7 +152,7 @@ LangChain's syntax for building chains using the pipe operator (`|`). LCEL allow
 
 ### LLM (Large Language Model)
 
-An AI model trained on massive amounts of text data that can understand and generate human-like text. Examples include GPT-4, GPT-4o-mini, Claude, and others.
+An AI model trained on massive amounts of text data that can understand and generate human-like text. Examples include GPT-5, GPT-4, GPT-4o-mini, Claude Sonnet, and many others.
 
 **See**: [Chapter 1: Introduction](./01-introduction/README.md)
 
@@ -171,8 +171,6 @@ A parameter that limits the length of the AI's response by capping the maximum n
 ### MCP (Model Context Protocol)
 
 An emerging open standard that lets AI applications connect to external tools and data sources through a universal interface. Think of it as "USB-C for AI" - one protocol that works with many services.
-
-**Status**: MCP integration in LangChain.js is actively evolving. The course covers conceptual understanding to prepare for when it's production-ready.
 
 **See**: [Chapter 7: Model Context Protocol](./07-agents-mcp/README.md#-model-context-protocol-mcp)
 

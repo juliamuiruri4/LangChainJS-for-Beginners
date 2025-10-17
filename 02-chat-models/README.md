@@ -105,22 +105,7 @@ When you run this example with `tsx 02-chat-models/code/01-multi-turn.ts`, you'l
 AI: TypeScript is a superset of JavaScript that adds static typing to the language. It was developed by Microsoft and helps catch errors during development rather than at runtime. TypeScript code compiles down to plain JavaScript that can run in any JavaScript environment.
 
 AI: Sure! Here's a simple TypeScript example:
-
-```typescript
-// Define an interface
-interface Person {
-  name: string;
-  age: number;
-}
-
-// Use the interface
-function greet(person: Person): string {
-  return `Hello, ${person.name}! You are ${person.age} years old.`;
-}
-
-// This works - matches the interface
-const user = { name: "Alice", age: 30 };
-console.log(greet(user));
+[TypeScript code showing interface definition and usage]
 ```
 
 Notice how the second response references "TypeScript" from the first exchange and provides a relevant example!
@@ -189,7 +174,7 @@ When you run this example with `tsx 02-chat-models/code/02-streaming.ts`, you'll
 🤖 AI (streaming):
 The internet is a global network of interconnected computers that communicate using standardized protocols, primarily TCP/IP. When you visit a website, your device sends a request to a server, which responds with the data needed to display the page. This data travels through multiple routers and networks before reaching you.
 
-At its core, the internet works through a system of addresses called IP addresses, which uniquely identify each device. Domain names (like google.com) are translated to IP addresses by DNS servers. When you type a URL, your browser contacts these DNS servers to find the right destination.
+At its core, the internet works through a system of addresses called IP addresses, which uniquely identify each device. Domain names (like bing.com) are translated to IP addresses by DNS servers. When you type a URL, your browser contacts these DNS servers to find the right destination.
 
 Data on the internet is broken into small packets that travel independently and are reassembled at the destination. This packet-switching method makes the internet resilient and efficient, allowing information to take different routes if one path is blocked or congested.
 
@@ -548,25 +533,25 @@ TypeScript is a superset of JavaScript that adds static typing to help catch err
 
 ### Cost Optimization Strategies
 
-- ✅ **Use the right model for the task**
-- ✅ **Limit response length**
+- **Use the right model for the task**
+- **Limit response length**
 ```typescript
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
   configuration: { baseURL: process.env.AI_ENDPOINT },
   apiKey: process.env.AI_API_KEY,
-  maxTokens: 100 // Cap the response length
+  maxTokens: 1000 // Cap the response length
 });
 ```
 
-- ✅ **Trim conversation history**
+- **Trim conversation history**
 ```typescript
 // Keep only the last 10 messages
 const recentMessages = messages.slice(-10);
 const response = await model.invoke(recentMessages);
 ```
 
-- ✅ **Cache responses for common queries**
+- **Cache responses for common queries**
 ```typescript
 const cache = new Map();
 
@@ -581,7 +566,7 @@ async function getCachedResponse(prompt: string) {
 }
 ```
 
-- ✅ **Batch process when possible**
+- **Batch process when possible**
 ```typescript
 // Process multiple items in one call instead of separate calls
 const prompt = `Summarize each of these articles:
@@ -598,6 +583,23 @@ const prompt = `Summarize each of these articles:
 - **Speed impact**: More tokens = longer processing time
 - **Budget planning**: Understand costs before going to production
 - **Efficiency**: Optimize prompts to reduce unnecessary tokens
+
+---
+
+## 🗺️ Concept Map
+
+This chapter covered the essential building blocks for creating interactive AI conversations:
+
+```mermaid
+graph LR
+    A[Chat Models] --> B[Multi-Turn]
+    A --> C[Streaming]
+    A --> D[Parameters]
+    A --> E[Error Handling]
+    A --> F[Token Tracking]
+```
+
+*Master these concepts to build robust AI applications.*
 
 ---
 

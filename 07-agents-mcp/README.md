@@ -389,13 +389,15 @@ In Examples 1 and 2, you manually created tools (calculator, weather, search) by
 
 **But what about connecting to existing services?** Imagine needing tools for:
 - GitHub (create issues, search code, manage PRs)
-- Slack (send messages, read channels)
-- Google Calendar (check availability, create events)
+- Teams (send messages, read channels)
+- Outlook Calendar (check availability, create events)
 - Your company database (query data, get schemas)
 
 Writing custom integrations for each service means dealing with different APIs, authentication methods, and data formats. This is where **Model Context Protocol (MCP)** comes in.
 
 **The key insight**: In Examples 1 & 2, you built the tool *implementations*. With MCP, you connect to tool *providers* that expose their capabilities through a standard protocol. Same agent loop, different tool source!
+
+> **📘 Note for This Course**: The examples in this chapter (1 & 2) use manual tools because they're perfect for learning agent concepts without additional complexity. MCP is production-ready in LangChain.js via `@langchain/mcp-adapters`, but requires MCP servers to be running. The sections below explain MCP concepts and API usage so you understand how to integrate it when you're ready to connect to external services.
 
 ---
 
@@ -404,9 +406,9 @@ Writing custom integrations for each service means dealing with different APIs, 
 ### The USB-C for AI Applications
 
 **Imagine this scenario**: You build an AI assistant. It needs to:
-- Check your Google Calendar
+- Check your Calendar
 - Query your company's database
-- Send Slack messages
+- Send Teams messages
 - Read from Notion
 
 **The old way**: Write custom integrations for each service. Different APIs, different auth, different data formats. Multiply this by 50+ services your company uses = chaos.
@@ -427,11 +429,11 @@ Think of it as **"USB-C for AI"**:
 
 **For Developers**:
 ```
-Your AI Agent → MCP → [GitHub API, Jira, Figma, Google Drive, PostgreSQL, ...]
+Your AI Agent → MCP → [GitHub API, Jira, Figma, PostgreSQL, ...]
 ```
 
 **For Users**:
-- "Check my calendar and find a 30-minute slot this week" → AI connects to Google Calendar via MCP
+- "Check my calendar and find a 30-minute slot this week" → AI connects to Exchange Calendar via MCP
 - "Summarize our latest product feedback" → AI connects to your database via MCP
 - "Create a Jira ticket for this bug" → AI connects to Jira via MCP
 
@@ -490,74 +492,81 @@ Your agent connects to this server and can now use the calculator tool!
 
 ### Transport Types
 
-MCP supports two ways to connect to servers:
+MCP supports three ways to connect to servers:
 
-1. **stdio** (Standard Input/Output) - For local processes
+1. **stdio** (Standard Input/Output) - For local subprocess communication
    ```typescript
    // Server runs as a local process
    {
      transport: "stdio",
-     command: "npx",
-     args: ["@modelcontextprotocol/server-github"]
+     command: "node",
+     args: ["/path/to/server.js"]
    }
    ```
-   **Use when**: Running servers on your machine (development, local tools)
+   **Use when**: Running servers on your machine (development, local tools). Ideal for simple setups.
 
-2. **SSE** (Server-Sent Events) - For remote HTTP servers
+2. **SSE** (Server-Sent Events) - For HTTP servers with real-time streaming
    ```typescript
-   // Server runs on a URL
+   // Server runs on a URL with SSE support
    {
      transport: "sse",
+     url: "http://localhost:8000/mcp"
+   }
+   ```
+   **Use when**: Need real-time streaming updates from remote servers. Optimized for streaming communication.
+
+3. **Streamable HTTP** - For independent server processes
+   ```typescript
+   // Server runs on a URL with HTTP support
+   {
+     transport: "http",
      url: "https://api.mycompany.com/mcp"
    }
    ```
-   **Use when**: Connecting to cloud services, shared servers, production APIs
+   **Use when**: Connecting to production APIs, cloud services, or shared servers that support remote connections.
 
 ---
 
 ## 🎯 MCP in Practice
 
-### Current Status & What You Can Do
+### Getting Started with MCP
 
-**Important**: MCP integration in LangChain.js is actively evolving. The code below is conceptual to teach you how MCP works and how it will integrate with agents.
+**What you can do now**:
+1. **Build agents with manual tools** - Use the patterns from Examples 1 & 2 above (great for learning)
+2. **Use MCP in LangChain.js** - MCP support is available via `@langchain/mcp-adapters`
+3. **Explore MCP servers** - Visit [modelcontextprotocol.io](https://modelcontextprotocol.io) to see available servers
+4. **Build custom MCP servers** - Create your own using `@modelcontextprotocol/sdk`
 
-**What you CAN do now**:
-1. **Build agents with manual tools** - Use the patterns from Examples 1 & 2 above
-2. **Explore MCP servers** - Visit [modelcontextprotocol.io](https://modelcontextprotocol.io) to see available servers
-3. **Try MCP with Claude Desktop** - MCP is production-ready with Claude Desktop app (see MCP docs for setup)
-4. **Prepare for integration** - Understand the concepts so you're ready when LangChain.js support is complete
+### Working with MCP in LangChain.js
 
-**What's coming**:
-- Direct MCP support in LangChain.js (currently in development)
-- When available, connecting to MCP servers will work similarly to the pattern below
+**Installation**:
+```bash
+npm install @langchain/mcp-adapters
+```
 
-### Conceptual Example
-
-Here's how MCP integration will look once available in LangChain.js:
-
+**Basic Usage**:
 ```typescript
-import { MCPClient } from "@modelcontextprotocol/client";
+import { MultiServerMCPClient } from "@langchain/mcp-adapters";
+import { ChatOpenAI } from "@langchain/openai";
 
 // 1. Connect to MCP servers
-const mcpClient = new MCPClient({
-  servers: {
-    // GitHub tools (issues, PRs, code search)
-    github: {
-      transport: "stdio",
-      command: "npx",
-      args: ["@modelcontextprotocol/server-github"]
-    },
-    // Slack tools (send messages, read channels)
-    slack: {
-      transport: "sse",
-      url: "https://mcp.slack.com"
-    }
+const client = new MultiServerMCPClient({
+  // Math server running locally
+  math: {
+    transport: "stdio",
+    command: "node",
+    args: ["/path/to/math_server.js"]
+  },
+  // Weather server running remotely
+  weather: {
+    transport: "sse",
+    url: "http://localhost:8000/mcp"
   }
 });
 
 // 2. Get all available tools from all servers
-const tools = await mcpClient.getTools();
-// Returns: [createGithubIssue, searchCode, sendSlackMessage, ...]
+const tools = await client.getTools();
+// Returns tools from both math and weather servers
 
 // 3. Use tools with your agent
 const model = new ChatOpenAI({
@@ -567,13 +576,61 @@ const model = new ChatOpenAI({
 });
 const modelWithTools = model.bindTools(tools);
 
+// Agent can now use any tool from any connected MCP server
 const response = await modelWithTools.invoke(
-  "Create a GitHub issue for the bug we discussed in #engineering channel"
+  "What's 25 * 4 and what's the weather like?"
 );
-// Agent will:
-// 1. Read Slack channel (using Slack MCP tools)
-// 2. Create GitHub issue (using GitHub MCP tools)
 ```
+
+**Key Characteristics**:
+- `MultiServerMCPClient` is **stateless by default** - creates fresh sessions per tool invocation
+- For **persistent context** between calls, use `client.session()` to maintain state
+- Connect to multiple MCP servers simultaneously
+- Tools from all servers are available to your agent
+
+### Building Custom MCP Servers
+
+Want to create your own MCP server? Use the `@modelcontextprotocol/sdk`:
+
+```typescript
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { ListToolsRequestSchema, CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+
+// Create MCP server
+const server = new Server({ name: "my-calculator", version: "1.0.0" });
+
+// Define available tools
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    {
+      name: "calculate",
+      description: "Perform mathematical calculations",
+      inputSchema: {
+        type: "object",
+        properties: {
+          expression: { type: "string", description: "Math expression to evaluate" }
+        },
+        required: ["expression"]
+      }
+    }
+  ]
+}));
+
+// Handle tool execution
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  if (request.params.name === "calculate") {
+    const { expression } = request.params.arguments;
+    const result = eval(expression); // In production, sanitize input!
+    return { content: [{ type: "text", text: String(result) }] };
+  }
+  throw new Error(`Unknown tool: ${request.params.name}`);
+});
+```
+
+**Key Components**:
+- `ListToolsRequestSchema` - Defines what tools your server provides
+- `CallToolRequestSchema` - Handles tool execution requests
+- Standard input/output schemas ensure compatibility with all MCP clients
 
 ### Benefits for Your AI Applications
 
@@ -582,14 +639,15 @@ const response = await modelWithTools.invoke(
 - ✅ **Community ecosystem**: Use tools others have built
 - ✅ **Future-proof**: As MCP adoption grows, more tools become available
 
-### Getting Started with MCP
+### Next Steps with MCP
 
-The MCP ecosystem is growing rapidly. To learn more:
-- Visit [modelcontextprotocol.io](https://modelcontextprotocol.io)
-- Explore available MCP servers
+The MCP ecosystem is growing rapidly:
+- Check out the [MCP for Beginners](https://github.com/microsoft/mcp-for-beginners) course
+- Visit the [GitHub MCP Registry](https://github.com/mcp) to explore available servers
+- Use MCP servers and tools with [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp/extend-copilot-chat-with-mcp)
+- Check out the [LangChain MCP documentation](https://docs.langchain.com/oss/javascript/langchain/mcp)
 - Build your own MCP server for custom tools
-
-**For this course**, we focus on understanding the concept. In production, you'll combine the agent patterns you learned here with MCP servers to build powerful, connected AI systems!
+- Combine agent patterns from this chapter with MCP servers for production applications
 
 ---
 
@@ -628,6 +686,24 @@ Now that you've learned both chains (Chapter 6) and agents (Chapter 7), here's h
 - ✨ **Flexibility**: Limited to predefined flow
 
 **Rule of thumb**: Start with chains for known workflows. Upgrade to agents when you need dynamic decision-making.
+
+---
+
+## 🗺️ Concept Map
+
+This chapter taught you how agents use the ReAct pattern for autonomous reasoning:
+
+```mermaid
+graph TD
+    A[User Query] --> B[Thought]
+    B --> C{Need Tool?}
+    C -->|Yes| D[Action]
+    D --> E[Observation]
+    E --> B
+    C -->|No| F[Answer]
+```
+
+*Agents iterate (Think → Act → Observe) until they solve the problem.*
 
 ---
 

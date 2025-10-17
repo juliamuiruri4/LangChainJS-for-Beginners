@@ -787,6 +787,22 @@ CompanySchema = {
 
 ---
 
+## 🗺️ Concept Map
+
+This chapter taught you how to create maintainable, reusable prompts with templates:
+
+```mermaid
+graph LR
+    A[Prompt Templates] --> B[Variables]
+    A --> C[Few-Shot]
+    A --> D[Composition]
+    A --> E[Structured Output]
+```
+
+*Templates make your prompts testable, maintainable, and consistent across your application.*
+
+---
+
 ## 🎓 Key Takeaways
 
 - **Templates reduce code duplication** - Write once, use everywhere

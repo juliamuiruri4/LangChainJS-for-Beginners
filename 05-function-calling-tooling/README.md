@@ -666,6 +666,23 @@ const emailTool = tool(
 
 ---
 
+## 🗺️ Concept Map
+
+This chapter taught you the complete function calling workflow:
+
+```mermaid
+graph LR
+    A[Query] --> B[LLM Plans]
+    B --> C[Generate Tool Call]
+    C --> D[Execute Tool]
+    D --> E[Get Result]
+    E --> F[LLM Responds]
+```
+
+*The LLM plans, your code executes, and the LLM communicates the results.*
+
+---
+
 ## 🎓 Key Takeaways
 
 - **Function calling** lets LLMs trigger real-world actions
