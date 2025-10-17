@@ -199,6 +199,11 @@ while (iteration <= maxIterations) {
 }
 ```
 
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does an agent differ from a simple chain?"
+> - "Why does the agent loop have a maximum iteration limit?"
+> - "What happens if the agent can't answer the question?"
+
 ### Expected Output
 
 When you run this example with `tsx 07-agents-mcp/code/01-basic-agent.ts`, you'll see:
@@ -331,6 +336,11 @@ for (const query of queries) {
   }
 }
 ```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does the agent choose between multiple available tools?"
+> - "What role do tool descriptions play in tool selection?"
+> - "Can I create custom logic for tool selection instead of letting the LLM decide?"
 
 ### Expected Output
 

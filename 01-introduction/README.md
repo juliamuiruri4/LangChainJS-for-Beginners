@@ -385,13 +385,13 @@ AI_MODEL=gpt-4o-mini
 
 # NEW: Azure AI Foundry (Production)
 AI_API_KEY=your_azure_openai_api_key
-AI_ENDPOINT=https://your-resource.openai.azure.com
+AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
 AI_MODEL=gpt-4o-mini
 ```
 
 **That's it!** All examples in this chapter (and the entire course) now use Azure AI Foundry.
 
-### Getting Your Azure AI Foundry Credentials
+### Getting Your Azure AI Foundry Endpoint and API Key
 
 1. **Create** an Azure AI Foundry project at [ai.azure.com](https://ai.azure.com)
 2. **Deploy** a model (e.g., gpt-4o-mini)
@@ -401,29 +401,6 @@ AI_MODEL=gpt-4o-mini
 
 **Model name** matches your deployment name (e.g., `gpt-4o-mini`, `gpt-4o`)
 
-### The Magic of Provider Abstraction ✨
-
-Notice that our `ChatOpenAI` configuration uses environment variables, making it easy to switch between providers:
-
-```typescript
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
-```
-
-This pattern means:
-
-- **No code changes** to switch providers - just update your `.env` file
-- **Easy testing** - Use GitHub Models for development, Azure AI Foundry for production
-- **Cost optimization** - Switch to different models or providers as needed
-- **Works with both providers** - The same configuration works with GitHub Models and Azure AI Foundry endpoints
-- **Keeps credentials secure** - API keys and endpoints are in `.env`, not in your code
-
-> **💡 Note**: LangChain.js also provides `initChatModel()` for even more flexible, provider-agnostic initialization. See [Chapter 2 Appendix](../02-chat-models/README.md#-appendix-provider-agnostic-initialization) for details on this advanced pattern.
-
-You'll learn more about production deployment strategies in [Chapter 10](../10-production-best-practices/README.md).
 
 ---
 
@@ -434,9 +411,8 @@ Let's review what you learned:
 - **LangChain.js is an abstraction layer** - It provides a consistent interface across different LLM providers
 - **Built on composable components** - Models, prompts, chains, agents, and memory work together
 - **GitHub Models offers free access** - Perfect for learning and prototyping
-- **Azure AI Foundry is production-ready** - Switch anytime with just environment variables
+- **Azure AI Foundry is production-ready** - Switch anytime by changing the environment variables in your `.env` file
 - **Messages have types** - SystemMessage, HumanMessage, and AIMessage serve different purposes
-- **Provider flexibility** - Switch between models and providers with zero code changes
 
 ---
 

@@ -4,7 +4,7 @@ In this chapter, you'll learn to build RAG (Retrieval Augmented Generation) syst
 
 ## Prerequisites
 
-- Completed [Chapter 4](../04-documents-embeddings-semantic-search/README.md)
+- Completed [Chapter 5](../05-function-calling-tooling/README.md)
 
 ## 🎯 Learning Objectives
 
@@ -108,6 +108,152 @@ This demo shows three real-world scenarios:
 1. **Scenario 1: Small FAQ Bot** → Uses **Prompt Engineering** (5 Q&As fit in prompt)
 2. **Scenario 2: Large Documentation Bot** → Uses **RAG** (1000s of docs, needs search)
 3. **Scenario 3: Code Style Enforcer** → Uses **Fine-Tuning** (teaching patterns, not facts)
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { Document } from "langchain/document";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
+import { createRetrievalChain } from "langchain/chains/retrieval";
+import "dotenv/config";
+
+async function main() {
+  console.log("🎯 When to Use RAG: Decision Framework Demo\n");
+  console.log("=".repeat(80) + "\n");
+
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
+
+  // Scenario 1: Small FAQ (Prompt Engineering)
+  console.log("📋 SCENARIO 1: Small FAQ Bot");
+  console.log("─".repeat(80));
+  console.log("\nProblem: Answer 5 common questions about a product");
+  console.log("Data size: 5 questions/answers (fits easily in prompt)");
+  console.log("Update frequency: Rarely changes");
+  console.log("\n✅ BEST APPROACH: Prompt Engineering\n");
+
+  const faqContext = `
+Product FAQ:
+Q: What is the return policy?
+A: 30-day money-back guarantee, no questions asked.
+
+Q: How long is shipping?
+A: 2-3 business days for standard, 1 day for express.
+
+Q: Is there a warranty?
+A: Yes, 1-year manufacturer warranty on all products.
+
+Q: Do you ship internationally?
+A: Yes, we ship to over 100 countries worldwide.
+
+Q: What payment methods do you accept?
+A: We accept all major credit cards, PayPal, and Apple Pay.
+`;
+
+  const faqPrompt = ChatPromptTemplate.fromMessages([
+    ["system", "You are a helpful customer service assistant. Answer questions based on this FAQ:\n\n{context}"],
+    ["human", "{question}"],
+  ]);
+
+  const faqChain = faqPrompt.pipe(model);
+
+  const faqQuestion = "What's your return policy?";
+  console.log(`Question: "${faqQuestion}"\n`);
+
+  const faqResponse = await faqChain.invoke({
+    context: faqContext,
+    question: faqQuestion,
+  });
+
+  console.log("Answer:", faqResponse.content);
+
+  console.log("\n💡 Why Prompt Engineering works here:");
+  console.log("   • Small dataset (5 Q&As) fits easily in prompt");
+  console.log("   • No search needed - all context is relevant");
+  console.log("   • Simple to maintain - just update the string");
+  console.log("   • Fast and cost-effective");
+
+  console.log("\n" + "=".repeat(80) + "\n");
+
+  // Scenario 2: Large Knowledge Base (RAG)
+  console.log("📚 SCENARIO 2: Company Documentation Bot");
+  console.log("─".repeat(80));
+  console.log("\nProblem: Answer questions from 1,000+ documentation pages");
+  console.log("Data size: Too large to fit in prompt (exceeds context window)");
+  console.log("Update frequency: Documentation changes frequently");
+  console.log("\n✅ BEST APPROACH: RAG (Retrieval Augmented Generation)\n");
+
+  // Simulate a large knowledge base
+  const docs = [
+    new Document({
+      pageContent: "The API authentication uses OAuth 2.0 with bearer tokens. Tokens expire after 24 hours.",
+      metadata: { source: "api-auth.md", category: "API" },
+    }),
+    new Document({
+      pageContent: "API rate limiting is 100 requests per minute per user. Exceeding this returns a 429 status code.",
+      metadata: { source: "api-limits.md", category: "API" },
+    }),
+    // ... (abbreviated for brevity - see full code file)
+  ];
+
+  console.log("Creating vector store from documents...");
+  const embeddings = new OpenAIEmbeddings({
+    model: process.env.AI_EMBEDDING_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
+
+  const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
+  const retriever = vectorStore.asRetriever({ k: 2 });
+
+  const ragPrompt = ChatPromptTemplate.fromMessages([
+    ["system", "You are a helpful documentation assistant. Answer questions based on the following context:\n\n{context}"],
+    ["human", "{input}"],
+  ]);
+
+  const combineDocsChain = await createStuffDocumentsChain({
+    llm: model,
+    prompt: ragPrompt,
+  });
+
+  const ragChain = await createRetrievalChain({
+    retriever,
+    combineDocsChain,
+  });
+
+  const ragQuestion = "How does API authentication work?";
+  console.log(`\nQuestion: "${ragQuestion}"\n`);
+
+  const ragResponse = await ragChain.invoke({
+    input: ragQuestion,
+  });
+
+  console.log("Answer:", ragResponse.answer);
+  console.log("\nRetrieved documents:");
+  ragResponse.context.forEach((doc: Document, i: number) => {
+    console.log(`  ${i + 1}. [${doc.metadata.source}] ${doc.pageContent.substring(0, 80)}...`);
+  });
+
+  console.log("\n💡 Why RAG works here:");
+  console.log("   • Large dataset (1000s of docs) - can't fit in prompt");
+  console.log("   • Search capability - finds relevant 2 docs out of thousands");
+  console.log("   • Easy to update - just add/remove documents from vector store");
+  console.log("   • Source attribution - know which docs were used");
+  console.log("   • Scalable - works with millions of documents");
+}
+
+main().catch(console.error);
+```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How do I decide between RAG and fine-tuning for my specific use case?"
+> - "What are the cost implications of using RAG vs prompt engineering?"
+> - "Can I combine RAG with fine-tuning for the best of both approaches?"
 
 ### Expected Output
 
@@ -254,6 +400,11 @@ console.log("Answer:", response.answer);
 console.log("Source docs:", response.context.length);
 ```
 
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "What does createRetrievalChain do and how does it combine retrieval with generation?"
+> - "How can I customize the number of documents retrieved with the k parameter?"
+> - "What's the difference between createStuffDocumentsChain and other document chain types?"
+
 ### Expected Output
 
 When you run this example with `tsx 06-rag-systems/code/02-simple-rag.ts`, you'll see:
@@ -319,6 +470,11 @@ const answer = await ragChain.invoke("What is RAG?");
 console.log(answer);
 ```
 
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does RunnableSequence.from() create a chain from components?"
+> - "What does RunnablePassthrough do in the chain?"
+> - "How can I add streaming support to this LCEL chain?"
+
 ### Expected Output
 
 When you run this example with `tsx 06-rag-systems/code/03-rag-lcel.ts`, you'll see:
@@ -373,6 +529,11 @@ const parallelChain = RunnableParallel.from({
 const fullChain = parallelChain.pipe(prompt).pipe(model).pipe(new StringOutputParser());
 ```
 
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does RunnableParallel improve performance compared to sequential execution?"
+> - "What happens if one branch of the parallel chain fails?"
+> - "Can I limit the number of parallel operations to avoid overwhelming APIs?"
+
 **Key benefit**: Three operations run simultaneously instead of sequentially (3x faster).
 
 **Use when**: Fetching from multiple sources, enriching context.
@@ -402,6 +563,11 @@ const fallbackChain = RunnableSequence.from([
 // Combine with fallback
 const robustChain = primaryChain.withFallbacks({ fallbacks: [fallbackChain] });
 ```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does withFallbacks handle errors in the primary chain?"
+> - "Can I chain multiple fallbacks in sequence for progressively simpler responses?"
+> - "What conditions trigger the fallback chain to execute?"
 
 **Key benefit**: Provides answers even when documents don't cover the topic.
 
@@ -437,6 +603,11 @@ const branchingChain = RunnableBranch.from([
   complexChain, // default
 ]);
 ```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does RunnableBranch evaluate conditions to choose the right chain?"
+> - "Can I add multiple condition branches beyond just simple vs complex?"
+> - "What criteria should I use to determine which branch to execute?"
 
 **Key benefit**: Adapts processing depth to question complexity (faster, cheaper for simple queries).
 

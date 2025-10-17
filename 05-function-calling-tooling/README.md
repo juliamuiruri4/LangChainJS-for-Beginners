@@ -260,6 +260,11 @@ console.log("Tool created:", calculatorTool.name);
 console.log("Schema:", calculatorTool.schema);
 ```
 
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "Why do we need to sanitize the input expression before evaluating it?"
+> - "How does the Zod schema help with type safety in this calculator tool?"
+> - "Can I add validation to ensure the expression only contains numbers and operators?"
+
 ### Expected Output
 
 When you run this example with `tsx 05-function-calling-tooling/code/01-simple-tool.ts`, you'll see:
@@ -340,13 +345,18 @@ console.log("\nTool calls:", response.tool_calls);
 // The LLM returns structured tool calls:
 // {
 //   "name": "calculator",
-//   "args": { 
-//       "expression": "25 * 17" 
+//   "args": {
+//       "expression": "25 * 17"
 //   },
 //   "type": "tool_call",
 //   "id": "call_abc123"
 // }
 ```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "What's in the response.tool_calls array and how does it differ from response.content?"
+> - "Why does the LLM return structured tool calls instead of executing the function?"
+> - "Can I bind multiple tools and let the LLM choose which one to call?"
 
 ### Expected Output
 
@@ -429,6 +439,11 @@ const messages = [
 const finalResponse = await model.invoke(messages);
 console.log("Final answer:", finalResponse.content);
 ```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "Why do we need to send tool results back to the LLM in step 3?"
+> - "What is ToolMessage and how does it differ from AIMessage?"
+> - "How would I handle errors that occur during tool execution?"
 
 ### Expected Output
 
@@ -530,6 +545,11 @@ for (const query of queries) {
   console.log("Args:", response.tool_calls[0]?.args);
 }
 ```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does the LLM decide which tool to use for each query?"
+> - "What happens if a query matches multiple tool descriptions?"
+> - "Can I prioritize certain tools over others by adjusting their descriptions?"
 
 ### Expected Output
 
