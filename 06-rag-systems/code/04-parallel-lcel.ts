@@ -1,6 +1,11 @@
 /**
  * Parallel LCEL - Running Multiple Operations Simultaneously
  * Run: npx tsx 06-rag-systems/code/04-parallel-lcel.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does RunnableParallel execute operations concurrently?"
+ * - "When would I use parallel execution vs sequential in a RAG chain?"
+ * - "How can I add error handling for parallel operations?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

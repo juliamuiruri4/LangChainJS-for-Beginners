@@ -7,6 +7,11 @@
  * 3. Fine-Tuning (changing model behavior/style)
  *
  * Run: npx tsx 06-rag-systems/code/01-when-to-use-rag.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "When should I use prompt engineering vs RAG vs fine-tuning?"
+ * - "How do I calculate if my data fits in a prompt (context window)?"
+ * - "What are the cost implications of each approach?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

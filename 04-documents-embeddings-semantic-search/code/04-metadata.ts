@@ -1,6 +1,11 @@
 /**
  * Working with Metadata
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/04-metadata.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How is metadata preserved when documents are split into chunks?"
+ * - "Can I add custom metadata fields beyond the examples shown?"
+ * - "How would I use metadata to filter search results in a vector store?"
  */
 
 import { Document } from "langchain/document";

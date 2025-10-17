@@ -1,6 +1,11 @@
 /**
  * Multi-Turn Conversation
  * Run: npx tsx 02-chat-models/code/01-multi-turn.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "Why do we need to push AIMessage to the messages array after each response?"
+ * - "How would I implement a loop to keep the conversation going with user input?"
+ * - "What happens if I don't include the SystemMessage at the beginning?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

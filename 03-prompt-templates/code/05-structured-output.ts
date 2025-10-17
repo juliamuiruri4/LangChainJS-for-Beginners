@@ -1,6 +1,11 @@
 /**
  * Structured Output Example
  * Run: npx tsx 03-prompt-templates/code/05-structured-output.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does withStructuredOutput() ensure the response matches the schema?"
+ * - "What happens if the AI can't extract all the required fields?"
+ * - "Can I make some Zod schema fields optional instead of required?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

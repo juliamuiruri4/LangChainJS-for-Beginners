@@ -1,6 +1,11 @@
 /**
  * Model Parameters
  * Run: npx tsx 02-chat-models/code/03-parameters.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "What temperature value should I use for a customer service chatbot?"
+ * - "How do I add the temperature and maxTokens parameters to the ChatOpenAI constructor?"
+ * - "Why might a response be cut off when using maxTokens?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

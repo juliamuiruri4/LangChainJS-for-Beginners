@@ -1,6 +1,11 @@
 /**
  * Streaming Responses
  * Run: npx tsx 02-chat-models/code/02-streaming.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does the 'for await...of' loop work with the stream?"
+ * - "Can I collect all chunks into a single string while streaming?"
+ * - "Why does process.stdout.write not add newlines between chunks?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

@@ -1,6 +1,11 @@
 /**
  * Prompt Composition
  * Run: npx tsx 03-prompt-templates/code/04-composition.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does template.partial() work and when would I use it?"
+ * - "Can I combine multiple partial templates together?"
+ * - "What's the benefit of composing prompts vs using one large template?"
  */
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";

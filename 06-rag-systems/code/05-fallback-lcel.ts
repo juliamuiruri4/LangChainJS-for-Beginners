@@ -1,6 +1,11 @@
 /**
  * Fallback LCEL - Graceful Error Handling with Alternative Chains
  * Run: npx tsx 06-rag-systems/code/05-fallback-lcel.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does the fallback pattern improve RAG system reliability?"
+ * - "When should I use .withFallbacks() vs try-catch blocks?"
+ * - "Can I chain multiple fallbacks together?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

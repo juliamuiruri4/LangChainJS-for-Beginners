@@ -1,6 +1,11 @@
 /**
  * Similarity Search with Scores
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/07-similarity-scores.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How should I set a threshold to filter out low-quality search results?"
+ * - "Why do similarity scores range between 0 and 1?"
+ * - "How can I combine similarity scores with metadata filtering?"
  */
 
 import { MemoryVectorStore } from "langchain/vectorstores/memory";

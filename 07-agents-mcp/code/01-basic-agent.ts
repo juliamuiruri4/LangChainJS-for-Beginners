@@ -6,6 +6,11 @@
  * use the actual LangChain agent implementation.
  *
  * Run: npx tsx 07-agents-mcp/code/01-basic-agent.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does an agent differ from a simple chain?"
+ * - "Why does the agent loop have a maximum iteration limit?"
+ * - "What happens if the agent can't answer the question?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

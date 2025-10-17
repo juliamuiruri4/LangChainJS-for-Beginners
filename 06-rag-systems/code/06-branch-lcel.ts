@@ -1,6 +1,11 @@
 /**
  * Branch LCEL - Conditional Routing Based on Input
  * Run: npx tsx 06-rag-systems/code/06-branch-lcel.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does RunnableBranch decide which path to take?"
+ * - "Can I use multiple conditions in a branch for complex routing?"
+ * - "How would I add a default branch when no conditions match?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

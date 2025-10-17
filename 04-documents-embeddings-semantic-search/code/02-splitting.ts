@@ -1,6 +1,11 @@
 /**
  * Text Splitting
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/02-splitting.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "Why does RecursiveCharacterTextSplitter split 'recursively'?"
+ * - "How do I determine the right chunkSize for my use case?"
+ * - "What happens if chunkSize is smaller than a single sentence?"
  */
 
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";

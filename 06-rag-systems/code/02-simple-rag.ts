@@ -1,6 +1,11 @@
 /**
  * Simple RAG System
  * Run: npx tsx 06-rag-systems/code/02-simple-rag.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does createRetrievalChain differ from building the chain manually?"
+ * - "What does the retriever's k parameter control?"
+ * - "How can I customize the prompt template for better answers?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

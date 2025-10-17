@@ -2,6 +2,11 @@
  * Chapter 5 Example 1: Simple Calculator Tool
  *
  * Run: npx tsx 05-function-calling-tooling/code/01-simple-tool.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "Why do we use Zod schemas to define tool parameters?"
+ * - "How does the tool() function create a callable tool from my code?"
+ * - "What security considerations should I have when using Function() to evaluate expressions?"
  */
 
 import { tool } from "@langchain/core/tools";

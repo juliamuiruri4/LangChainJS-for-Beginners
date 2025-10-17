@@ -1,6 +1,11 @@
 /**
  * Token Usage Tracking Example
  * Run: npx tsx 02-chat-models/code/06-token-tracking.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How can I track token usage across multiple API calls in a conversation?"
+ * - "What's the difference between promptTokens and completionTokens?"
+ * - "How would I calculate the cost based on token usage?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

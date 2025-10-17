@@ -1,5 +1,10 @@
 /**
  * Run: npx tsx 01-introduction/code/01-hello-world.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "What does the invoke() method return and how do I access different properties?"
+ * - "How does the configuration baseURL work with different AI providers?"
+ * - "What happens if the environment variables are not set?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

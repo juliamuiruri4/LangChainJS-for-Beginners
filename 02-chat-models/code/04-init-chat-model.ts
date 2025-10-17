@@ -7,6 +7,11 @@
  *
  * This example demonstrates initChatModel() concepts, but the course uses
  * ChatOpenAI because it properly handles custom endpoints like GitHub Models.
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "What are the advantages of initChatModel over using ChatOpenAI directly?"
+ * - "How would I switch from OpenAI to Anthropic using initChatModel?"
+ * - "Why does ChatOpenAI work better with GitHub Models than initChatModel?"
  */
 
 import { initChatModel } from "langchain/chat_models/universal";

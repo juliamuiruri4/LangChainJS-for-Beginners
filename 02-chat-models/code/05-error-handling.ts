@@ -1,6 +1,11 @@
 /**
  * Error Handling and Retries
  * Run: npx tsx 02-chat-models/code/05-error-handling.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "Explain how the exponential backoff calculation works in this retry logic"
+ * - "How can I add different error handling for rate limit vs network errors?"
+ * - "What's the purpose of the setTimeout with Promise in the retry logic?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

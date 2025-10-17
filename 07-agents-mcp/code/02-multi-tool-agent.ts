@@ -2,6 +2,11 @@
  * Chapter 7 Example 2: Agent with Multiple Tools
  *
  * Run: npx tsx 07-agents-mcp/code/02-multi-tool-agent.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does the agent decide which tool to use at each step?"
+ * - "Can an agent use multiple tools in sequence to answer one question?"
+ * - "What strategies help the agent choose the right tool?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

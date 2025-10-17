@@ -1,6 +1,11 @@
 /**
  * Loading Text Files
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/01-load-text.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does TextLoader differ from reading a file with fs.readFile?"
+ * - "What information is stored in the document metadata?"
+ * - "How can I load multiple text files from a directory at once?"
  */
 
 import { TextLoader } from "langchain/document_loaders/fs/text";

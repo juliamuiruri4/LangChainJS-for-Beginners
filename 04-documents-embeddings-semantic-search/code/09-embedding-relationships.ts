@@ -5,6 +5,11 @@
  * that can be manipulated through vector arithmetic.
  *
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/09-embedding-relationships.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does vector arithmetic like 'King - Man + Woman = Queen' actually work?"
+ * - "What real-world applications benefit from embedding relationships?"
+ * - "Why do the subtractVectors and addVectors functions work for analogies?"
  */
 
 import { OpenAIEmbeddings } from "@langchain/openai";

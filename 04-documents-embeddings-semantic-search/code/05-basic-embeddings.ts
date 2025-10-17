@@ -1,6 +1,11 @@
 /**
  * Basic Embeddings
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/05-basic-embeddings.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does the cosineSimilarity function calculate similarity between vectors?"
+ * - "Why do similar meanings produce higher similarity scores?"
+ * - "What does the dimensionality (length) of an embedding vector represent?"
  */
 
 import { OpenAIEmbeddings } from "@langchain/openai";

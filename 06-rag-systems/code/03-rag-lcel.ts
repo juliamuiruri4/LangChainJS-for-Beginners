@@ -1,6 +1,11 @@
 /**
  * RAG with LCEL (LangChain Expression Language)
  * Run: npx tsx 06-rag-systems/code/03-rag-lcel.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does RunnableSequence.from() create a chain from components?"
+ * - "What does RunnablePassthrough do in the chain?"
+ * - "How can I add streaming support to this LCEL chain?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

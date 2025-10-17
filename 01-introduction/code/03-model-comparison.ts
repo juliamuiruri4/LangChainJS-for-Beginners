@@ -1,6 +1,11 @@
 /**
  * Model Comparison
  * Run: npx tsx 01-introduction/code/03-model-comparison.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "Why do we create a new ChatOpenAI instance inside the loop?"
+ * - "How can I add another model to this comparison?"
+ * - "What other metrics besides time could I measure for each model?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

@@ -1,6 +1,11 @@
 /**
  * Comparing Chunk Overlap
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/03-overlap.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "Why is overlap important when splitting documents for search?"
+ * - "What's the trade-off between larger and smaller overlap values?"
+ * - "How does overlap affect the total number of chunks created?"
  */
 
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";

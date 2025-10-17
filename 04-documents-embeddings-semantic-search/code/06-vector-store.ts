@@ -1,6 +1,11 @@
 /**
  * Vector Store and Semantic Search
  * Run: npx tsx 04-documents-embeddings-semantic-search/code/06-vector-store.ts
+ *
+ * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
+ * - "How does MemoryVectorStore.fromDocuments() work internally?"
+ * - "What's the difference between similaritySearch and similaritySearchWithScore?"
+ * - "When would I use a persistent vector store instead of MemoryVectorStore?"
  */
 
 import { MemoryVectorStore } from "langchain/vectorstores/memory";

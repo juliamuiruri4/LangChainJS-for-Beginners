@@ -162,6 +162,11 @@ async function main() {
 main().catch(console.error);
 ```
 
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "What does the invoke() method return and how do I access different properties?"
+> - "How does the configuration baseURL work with different AI providers?"
+> - "What happens if the environment variables are not set?"
+
 ### Expected Output
 
 When you run this example with `tsx 01-introduction/code/01-hello-world.ts`, you'll see:
@@ -237,6 +242,11 @@ async function main() {
 main().catch(console.error);
 ```
 
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "What's the difference between SystemMessage and HumanMessage?"
+> - "How would I add an AIMessage to continue this conversation?"
+> - "Can I change the SystemMessage personality to be more formal instead of simple?"
+
 ### Expected Output
 
 When you run this example with `tsx 01-introduction/code/02-message-types.ts`, you'll see:
@@ -308,6 +318,11 @@ async function compareModels() {
 
 compareModels().catch(console.error);
 ```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "Why do we create a new ChatOpenAI instance inside the loop?"
+> - "How can I add another model to this comparison?"
+> - "What other metrics besides time could I measure for each model?"
 
 ### Expected Output
 
