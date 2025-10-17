@@ -53,7 +53,7 @@ async function main() {
 
   // Configuration from environment
   const provider = (process.env.AI_PROVIDER as any) || "github";
-  const modelName = process.env.AI_MODEL || "gpt-4o-mini";
+  const modelName = process.env.AI_MODEL || "gpt-5-mini";
 
   console.log(`\nUsing provider: ${provider}`);
   console.log(`Using model: ${modelName}\n`);
@@ -74,7 +74,7 @@ async function main() {
   console.log("=".repeat(80));
   console.log("\n💡 To switch providers:");
   console.log('   export AI_PROVIDER="azure"');
-  console.log('   export AI_MODEL="gpt-4o"');
+  console.log('   export AI_MODEL="gpt-5"');
   console.log("\n   Your code stays exactly the same!");
 
   console.log("\n✅ Benefits:");

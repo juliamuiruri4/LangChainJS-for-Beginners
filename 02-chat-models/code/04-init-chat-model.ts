@@ -25,7 +25,7 @@ async function standardOpenAIExample() {
   // NOTE: This requires a standard OpenAI API key (not GitHub Models)
   // Uncomment and add OPENAI_API_KEY to your .env to test:
   /*
-  const model = await initChatModel("gpt-4o-mini", {
+  const model = await initChatModel("gpt-5-mini", {
     modelProvider: "openai",
     temperature: 0.7,
     apiKey: process.env.OPENAI_API_KEY,
@@ -48,7 +48,7 @@ async function switchingProviders() {
   // This is where initChatModel() shines - switching providers with similar code:
   /*
   // OpenAI
-  const openaiModel = await initChatModel("gpt-4o-mini", {
+  const openaiModel = await initChatModel("gpt-5-mini", {
     modelProvider: "openai",
     apiKey: process.env.OPENAI_API_KEY,
   });

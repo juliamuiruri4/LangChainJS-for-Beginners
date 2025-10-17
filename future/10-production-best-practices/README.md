@@ -57,7 +57,7 @@ All examples use this pattern:
 
 ```typescript
 const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-5-mini",
   configuration: {
     baseURL: process.env.AI_ENDPOINT,
   },
@@ -71,17 +71,17 @@ const model = new ChatOpenAI({
 # GitHub Models (Free)
 AI_API_KEY=ghp_your_github_token
 AI_ENDPOINT=https://models.inference.ai.azure.com
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 
 # Switch to Azure AI Foundry
 AI_API_KEY=your_azure_key
 AI_ENDPOINT=https://your-resource.openai.azure.com
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 
 # Or use OpenAI directly
 AI_API_KEY=your_openai_key
 AI_ENDPOINT=https://api.openai.com/v1
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 ```
 
 **Zero code changes needed!** 🎉
@@ -120,7 +120,7 @@ Azure AI Foundry is Microsoft's platform for deploying production AI application
 ### Setup Azure AI Foundry
 
 1. **Create** an Azure AI Foundry project at [ai.azure.com](https://ai.azure.com)
-2. **Deploy** a model (GPT-4o, GPT-4o-mini, etc.)
+2. **Deploy** a model (GPT-5, GPT-5-mini, etc.)
 3. **Get** your endpoint and API key from the Azure Portal
 
 ### Switching to Azure AI Foundry
@@ -131,14 +131,14 @@ Update your `.env` file (that's it!):
 # Change these three values:
 AI_API_KEY=your_azure_openai_api_key
 AI_ENDPOINT=https://your-resource.openai.azure.com
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 
 # All course examples now use Azure AI Foundry!
 ```
 
 **Your endpoint** looks like: `https://YOUR-RESOURCE-NAME.openai.azure.com`
 
-**Model name** matches your deployment name in Azure (e.g., `gpt-4o-mini`, `gpt-4o`)
+**Model name** matches your deployment name in Azure (e.g., `gpt-5-mini`, `gpt-5`)
 
 ---
 
@@ -170,7 +170,7 @@ import "dotenv/config";
 
 // Traces are automatically sent to LangSmith!
 const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-5-mini",
   configuration: {
     baseURL: process.env.AI_ENDPOINT,
   },
@@ -193,7 +193,7 @@ const response = await model.invoke("Test tracing");
 import { ChatOpenAI } from "@langchain/openai";
 
 const primaryModel = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o",
+  model: process.env.AI_MODEL || "gpt-5",
   configuration: {
     baseURL: process.env.AI_ENDPOINT,
   },
@@ -201,7 +201,7 @@ const primaryModel = new ChatOpenAI({
 });
 
 const fallbackModel = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-5-mini",
   configuration: {
     baseURL: process.env.AI_ENDPOINT,
   },
@@ -213,7 +213,7 @@ const modelWithFallback = primaryModel.withFallbacks({
   fallbacks: [fallbackModel],
 });
 
-// If gpt-4o fails, automatically uses gpt-4o-mini
+// If gpt-5 fails, automatically uses gpt-5-mini
 const response = await modelWithFallback.invoke("Hello!");
 ```
 
@@ -233,7 +233,7 @@ const cache = new InMemoryCache();
 
 const model = new ChatOpenAI({
   cache,
-  model: process.env.AI_MODEL || "gpt-4o-mini",
+  model: process.env.AI_MODEL || "gpt-5-mini",
 });
 
 // First call hits API
@@ -247,10 +247,10 @@ await model.invoke("What is LangChain?");
 
 ```typescript
 // Expensive
-const gpt4o = new ChatOpenAI({ model: process.env.AI_MODEL || "gpt-4o" });
+const gpt4o = new ChatOpenAI({ model: process.env.AI_MODEL || "gpt-5" });
 
 // 10x cheaper for simple tasks
-const gpt4omini = new ChatOpenAI({ model: process.env.AI_MODEL || "gpt-4o-mini" });
+const gpt4omini = new ChatOpenAI({ model: process.env.AI_MODEL || "gpt-5-mini" });
 ```
 
 ### 3. Streaming
@@ -385,7 +385,7 @@ import "dotenv/config";
 
 async function evaluateWithLLM(question: string, answer: string) {
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
     },

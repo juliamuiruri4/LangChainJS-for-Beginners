@@ -124,7 +124,7 @@ Notice how the second response references "TypeScript" from the first exchange a
 
 ## ⚡ Streaming Responses
 
-When you ask a complex question, waiting for the entire response can feel slow. Streaming sends the response word-by-word as it's generated.
+When you ask a complex question, waiting for the entire response can feel slow. [Streaming](../GLOSSARY.md#streaming) sends the response word-by-word as it's generated.
 
 **Like watching a friend think out loud** instead of waiting for them to finish their entire thought.
 
@@ -324,7 +324,7 @@ API calls can fail due to rate limits, network issues, or temporary service prob
 
 ### Common Errors You'll Encounter
 
-- **429 Too Many Requests**: Rate limit exceeded (most common for free tiers)
+- **429 Too Many Requests**: [Rate limit](../GLOSSARY.md#rate-limit) exceeded (most common for free tiers)
 - **401 Unauthorized**: Invalid API key
 - **500 Server Error**: Temporary provider issues
 - **Network timeout**: Connection problems
@@ -537,7 +537,7 @@ const prompt = `Summarize each of these articles:
 
 ### Why Costs Matter
 
-- **Models have limits**: Most models have token limits (4K-128K tokens)
+- **Models have limits**: Most models have [context window](../GLOSSARY.md#context-window) limits (4K-128K tokens)
 - **Speed impact**: More tokens = longer processing time
 - **Budget planning**: Understand costs before going to production
 - **Efficiency**: Optimize prompts to reduce unnecessary tokens
@@ -642,7 +642,7 @@ import { initChatModel } from "langchain/chat_models/universal";
 import { ChatOpenAI } from "@langchain/openai";
 
 // Switching between different provider types (conceptual)
-const openaiModel = await initChatModel("gpt-4o-mini", {
+const openaiModel = await initChatModel("gpt-5-mini", {
   modelProvider: "openai",
   apiKey: process.env.OPENAI_API_KEY,
 });

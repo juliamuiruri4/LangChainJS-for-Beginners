@@ -16,7 +16,7 @@ async function invokeWithFallback(input: string, maxRetries: number = 2): Promis
     {
       name: "GitHub Models (Primary)",
       model: new ChatOpenAI({
-        model: process.env.AI_MODEL || "gpt-4o-mini",
+        model: process.env.AI_MODEL || "gpt-5-mini",
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
           defaultQuery: process.env.AI_API_VERSION
@@ -30,7 +30,7 @@ async function invokeWithFallback(input: string, maxRetries: number = 2): Promis
     {
       name: "GitHub Models Backup",
       model: new ChatOpenAI({
-        model: process.env.AI_MODEL || "gpt-4o",
+        model: process.env.AI_MODEL || "gpt-5",
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
           defaultQuery: process.env.AI_API_VERSION

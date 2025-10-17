@@ -62,7 +62,7 @@ LLMs have context limits which means they can only process so much text at once.
 
 ### Why Document Loaders?
 
-LLMs need text input, but your data comes in many formats:
+LLMs need text input, but your data comes in many formats ([Document Loader](../GLOSSARY.md#document-loader)):
 - Text files (.txt, .md)
 - PDFs
 - Websites
@@ -166,7 +166,7 @@ Metadata: {
 - **Relevance**: Smaller chunks = more precise retrieval
 - **Cost**: Smaller inputs = lower API costs
 
-### Chunk Size Trade-offs
+### Chunk Size Trade-offs ([Chunking](../GLOSSARY.md#chunk--chunking))
 
 | Small Chunks (200-500 chars) | Large Chunks (1000-2000 chars) |
 |------------------------------|--------------------------------|
@@ -241,7 +241,7 @@ Chunk 3:
 - `chunkSize: 500`: Small enough for focused retrieval, large enough for context
 - `chunkOverlap: 50`: 10% overlap preserves context between chunks
 
-**Splitter Types**:
+**Splitter Types ([Text Splitter](../GLOSSARY.md#text-splitter))**:
 
 1. **RecursiveCharacterTextSplitter** (recommended)
    - Splits on paragraphs, then sentences, then words
@@ -258,7 +258,7 @@ Chunk 3:
 
 ## 🔄 Chunk Overlap
 
-**Why overlap chunks?**
+**Why overlap chunks ([chunk overlap](../GLOSSARY.md#chunk-overlap))?**
 
 Without overlap:
 ```
@@ -345,7 +345,7 @@ With overlap:
 
 ## 🏷️ Document Metadata
 
-Metadata helps you:
+[Metadata](../GLOSSARY.md#metadata) helps you:
 - Track document source
 - Filter by category, date, author
 - Understand context
@@ -463,7 +463,7 @@ Matches: Documents containing "cook" AND "pasta"
 Misses: "Preparing Italian noodles" (different words, same meaning!)
 ```
 
-**Semantic Search**:
+**[Semantic Search](../GLOSSARY.md#semantic-search)**:
 ```
 Query: "How do I cook pasta?"
 Understands: cooking = preparing, pasta = noodles
@@ -524,7 +524,7 @@ console.log(`First 10 values: ${embedding.slice(0, 10)}`);
 const similar = await embeddings.embedQuery("LangChain simplifies AI development");
 const different = await embeddings.embedQuery("I love pizza");
 
-// Calculate similarity (cosine similarity)
+// Calculate similarity ([cosine similarity](../GLOSSARY.md#cosine-similarity))
 function cosineSimilarity(a: number[], b: number[]): number {
   const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
   const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
@@ -572,7 +572,7 @@ Similarity (LangChain vs pizza): 0.124
 
 ## 🗄️ Vector Stores
 
-Vector stores are databases optimized for storing and searching embeddings.
+[Vector stores](../GLOSSARY.md#vector-store) are databases optimized for storing and searching embeddings.
 
 ### Popular Vector Stores
 
@@ -725,7 +725,7 @@ Score: 0.623 - Dogs are loyal companions that enjoy playing fetch.
 
 ## ⚡ Batch Processing
 
-Creating embeddings one at a time is slow. Use batch processing!
+Creating embeddings one at a time is slow. Use [batch processing](../GLOSSARY.md#batch-processing)!
 
 ### Example 8: Batch Embeddings
 

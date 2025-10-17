@@ -47,7 +47,7 @@ The key: The LLM doesn't *do* the actions—it *describes* which functions to ca
 
 ## 🎯 What is Function Calling?
 
-Function calling is a breakthrough that transforms LLMs from text generators into action coordinators. Instead of just producing text, LLMs can now trigger real-world operations—checking weather, querying databases, calling APIs, sending emails, and more.
+[Function calling](../GLOSSARY.md#function-calling) is a breakthrough that transforms LLMs from text generators into action coordinators. Instead of just producing text, LLMs can now trigger real-world operations—checking weather, querying databases, calling APIs, sending emails, and more.
 
 ### The Paradigm Shift
 
@@ -223,7 +223,7 @@ const messages = [
 
 ## 🛠️ Creating Tools with Zod
 
-In LangChain.js, tools are created using the `tool()` function with Zod schemas for type safety.
+In LangChain.js, [tools](../GLOSSARY.md#tool) are created using the `tool()` function with Zod schemas for type safety.
 
 If you're new to Zod, it's a TypeScript-first schema validation library that lets you define the shape and constraints of your data. Think of it as a way to describe what valid input looks like—for example, "this parameter must be a string" or "this number must be between 1 and 100." Zod validates data at runtime and provides excellent TypeScript type inference, making your code both safer and more maintainable. [Learn more about Zod](https://zod.dev/).
 

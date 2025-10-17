@@ -162,7 +162,7 @@ GitHub Models provides free access to powerful AI models—you just need a Perso
 #### Why GitHub Models?
 
 - ✅ **Free**: No credit card required
-- ✅ **Powerful**: Access to GPT-4o, GPT-4o-mini, and other models
+- ✅ **Powerful**: Access to GPT-5, GPT-5-mini, and other models
 - ✅ **Easy**: Use your existing GitHub account
 - ✅ **Learning**: Perfect for this course!
 
@@ -197,7 +197,7 @@ Open `.env` in your text editor and configure your AI provider.
 ```bash
 AI_API_KEY=ghp_your_github_token_here
 AI_ENDPOINT=https://models.inference.ai.azure.com
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 ```
 
 **Replace `ghp_your_github_token_here` with your actual GitHub token!**
@@ -207,6 +207,8 @@ AI_MODEL=gpt-4o-mini
 If you have an Azure subscription, you can use Azure AI Foundry for production-grade AI applications with enterprise features.
 
 #### Step-by-Step Setup:
+
+You can follow the steps below to deploy models in Azure AI Foundry or visit the [Deploy an Azure OpenAI model quickstart](https://learn.microsoft.com/azure/ai-foundry/quickstarts/get-started-code?tabs=azure-ai-foundry) which will also walk you through the process.
 
 **1. Create an Azure AI Foundry Project**
 
@@ -224,18 +226,19 @@ If you have an Azure subscription, you can use Azure AI Foundry for production-g
 
 You'll need to deploy two models for this course:
 
-**Deploy GPT-4o-mini (Chat Model):**
+**Deploy gpt-5-mini & gpt-5 (Chat Model):**
 
 1. In your project, go to **Models + endpoints** in the left navigation
 2. Click **+ Deploy model** → **Deploy base model**
-3. Search for and select **gpt-4o-mini**
+3. Search for and select **gpt-5-mini**
 4. Click **Confirm**
 5. Configure deployment:
-   - **Deployment name**: `gpt-4o-mini` (keep this name for consistency)
+   - **Deployment name**: `gpt-5-mini` (keep this name for consistency)
    - **Model version**: Select the latest available
    - **Deployment type**: Global Standard
    - Click **Deploy**
 6. Wait for deployment to complete
+7. Follow the same process and deploy `gpt-5` as well
 
 **Deploy Text Embedding Model:**
 
@@ -273,7 +276,7 @@ AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
 
 **Important Notes:**
 
-- ✅ **Deployment names must match**: The course uses `gpt-4o-mini` and `text-embedding-3-small` as deployment names
+- ✅ **Deployment names must match**: The course uses `gpt-5-mini` and `text-embedding-3-small` as deployment names
 - ✅ **Keep your API key secure**: Never commit `.env` to version control
 - ✅ **Cost management**: Azure AI Foundry is a paid service. Set up cost alerts in the Azure portal
 - ✅ **Production ready**: Azure AI Foundry provides enterprise features like Responsible AI, monitoring, logging, and SLA guarantees
@@ -304,7 +307,7 @@ tsx scripts/test-setup.ts
 
 ✅ SUCCESS! Your AI provider is working!
    Provider: https://models.inference.ai.azure.com
-   Model: gpt-4o-mini
+   Model: gpt-5-mini
 
 Model response: Setup successful!
 
@@ -340,7 +343,7 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 2. Check that `.env` contains all required variables:
    - `AI_API_KEY=your_key`
    - `AI_ENDPOINT=your_endpoint_url`
-   - `AI_MODEL=gpt-4o-mini`
+   - `AI_MODEL=gpt-5-mini`
 3. No quotes needed around the values
 4. No spaces before or after the `=`
 

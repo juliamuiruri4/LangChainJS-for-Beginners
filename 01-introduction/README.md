@@ -41,7 +41,7 @@ LangChain.js provides:
 
 ## 🧠 What is LangChain.js?
 
-LangChain.js is a **framework for building AI-powered applications** using Large Language Models (LLMs).
+LangChain.js is a **framework for building AI-powered applications** using Large Language Models ([LLMs](../GLOSSARY.md#llm-large-language-model)).
 
 ### The Problem It Solves
 
@@ -56,7 +56,7 @@ Without LangChain.js, you'd need to:
 
 With LangChain.js, you get:
 
-- **Provider abstraction** - Switch between OpenAI, Azure, Anthropic with minimal code changes
+- **[Provider](../GLOSSARY.md#provider) abstraction** - Switch between OpenAI, Azure, Anthropic with minimal code changes
 - **Prompt templates** - Reusable, testable prompts
 - **Tools** - Extend AI with custom functions and APIs
 - **Memory** - Built-in conversation history
@@ -70,13 +70,13 @@ LangChain.js is built around 5 main concepts that work together to create powerf
 
 ### 1. Models
 
-**Models** are the AI "brains" that process your inputs and generate outputs. They're the foundation of every AI application. LangChain.js provides a consistent interface to work with different AI providers (OpenAI, Anthropic, Azure, etc.) using the same code.
+**[Models](../GLOSSARY.md#model)** are the AI "brains" that process your inputs and generate outputs. They're the foundation of every AI application. LangChain.js provides a consistent interface to work with different AI providers (OpenAI, Anthropic, Azure, etc.) using the same code.
 
 You'll start using models in this chapter and use them throughout the course.
 
 ### 2. Prompts
 
-**Prompts** are how you communicate with AI models. LangChain.js helps you create reusable prompt templates instead of hardcoding strings, making your prompts testable, maintainable, and secure.
+**[Prompts](../GLOSSARY.md#prompt)** are how you communicate with AI models. LangChain.js helps you create reusable prompt templates instead of hardcoding strings, making your prompts testable, maintainable, and secure.
 
 **Simple example**: `"Translate {text} from {source_lang} to {target_lang}"` - Define once, reuse with different values.
 
@@ -84,7 +84,7 @@ You'll learn prompt engineering and templates in [Chapter 3](../03-prompt-templa
 
 ### 3. Tools
 
-**Tools** extend what AI models can do by giving them access to external functions and APIs. Instead of just generating text, models can call functions to fetch data, perform calculations, or interact with other systems.
+**[Tools](../GLOSSARY.md#tool)** extend what AI models can do by giving them access to external functions and APIs. Instead of just generating text, models can call functions to fetch data, perform calculations, or interact with other systems.
 
 **Example**: A weather tool that lets the AI check current conditions, or a calculator tool for mathematical operations.
 
@@ -92,7 +92,7 @@ You'll build and use tools in [Chapter 5](../05-function-calling-tools/README.md
 
 ### 4. Agents
 
-**Agents** are AI systems that can reason, decide which actions to take, and iterate until they solve a task. They autonomously choose which tools to use and when, making dynamic decisions to accomplish goals.
+**[Agents](../GLOSSARY.md#agent)** are AI systems that can reason, decide which actions to take, and iterate until they solve a task. They autonomously choose which tools to use and when, making dynamic decisions to accomplish goals.
 
 **Key capability**: Agents think (reasoning), choose tools (action), see results (observation), and repeat until they solve the task.
 
@@ -100,7 +100,7 @@ You'll build agents from scratch in [Chapter 7](../07-agents-mcp/README.md).
 
 ### 5. Memory
 
-**Memory** enables AI applications to remember context across multiple interactions. Without memory, the AI forgets everything after each response.
+**[Memory](../GLOSSARY.md#memory)** enables AI applications to remember context across multiple interactions. Without memory, the AI forgets everything after each response.
 
 You maintain conversation history and send it with each new message, allowing the AI to reference previous parts of the conversation.
 
@@ -186,7 +186,7 @@ When you run this example with `tsx 01-introduction/code/01-hello-world.ts`, you
 
 The `ChatOpenAI` constructor takes a configuration object with three key properties:
 
-- **`model`**: Which AI model to use (e.g., `"gpt-4o-mini"`, `"gpt-4o"`)
+- **`model`**: Which AI model to use (e.g., `"gpt-5-mini"`, `"gpt-5"`)
 - **`configuration.baseURL`**: The API endpoint URL for your provider
 - **`apiKey`**: Your API key for authentication
 
@@ -278,7 +278,7 @@ GitHub Models gives you access to multiple AI models. Let's compare them!
 
 ### Example 3: Model Comparison
 
-Here you'll compare responses from different AI models (gpt-4o vs gpt-4o-mini) to understand their capabilities, speed, and output quality differences.
+Here you'll compare responses from different AI models (gpt-5 vs gpt-5-mini) to understand their capabilities, speed, and output quality differences.
 
 **Code**: [`code/03-model-comparison.ts`](./code/03-model-comparison.ts)
 **Run**: `tsx 01-introduction/code/03-model-comparison.ts`
@@ -291,7 +291,7 @@ async function compareModels() {
   console.log("🔬 Comparing AI Models\n");
 
   const prompt = "Explain recursion in programming in one sentence.";
-  const models = ["gpt-4o", "gpt-4o-mini"];
+  const models = ["gpt-5", "gpt-5-mini"];
 
   for (const modelName of models) {
     console.log(`\n📊 Testing: ${modelName}`);
@@ -327,12 +327,12 @@ When you run this example with `tsx 01-introduction/code/03-model-comparison.ts`
 🔬 Comparing AI Models
 
 
-📊 Testing: gpt-4o
+📊 Testing: gpt-5
 ──────────────────────────────────────────────────
 Response: Recursion in programming is a technique where a function calls itself to solve smaller instances of the same problem until it reaches a base case.
 
 
-📊 Testing: gpt-4o-mini
+📊 Testing: gpt-5-mini
 ──────────────────────────────────────────────────
 Response: Recursion is when a function calls itself to solve a problem by breaking it down into smaller, similar sub-problems.
 
@@ -343,17 +343,17 @@ Response: Recursion is when a function calls itself to solve a problem by breaki
 
 **What's happening**:
 1. We define a single prompt asking about recursion
-2. We loop through two different models: `gpt-4o` and `gpt-4o-mini`
+2. We loop through two different models: `gpt-5` and `gpt-5-mini`
 3. For each model, we create a new `ChatOpenAI` instance with that model name
 4. We invoke the same prompt on each model
 5. We display the response from each model for comparison
 
 **What you'll notice**:
 - Different models have different response styles
-- `gpt-4o` tends to be more detailed and sophisticated
-- `gpt-4o-mini` is more concise but still accurate
+- `gpt-5` tends to be more detailed and sophisticated
+- `gpt-5-mini` is more concise but still accurate
 - Both answers are correct, just expressed differently
-- `gpt-4o` is more capable for complex tasks, `gpt-4o-mini` is faster and cheaper for simple tasks
+- `gpt-5` is more capable for complex tasks, `gpt-5-mini` is faster and cheaper for simple tasks
 
 ---
 
@@ -376,12 +376,12 @@ Simply update your `.env` file with three values:
 # OLD: GitHub Models (Free)
 AI_API_KEY=ghp_your_github_token
 AI_ENDPOINT=https://models.inference.ai.azure.com
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 
 # NEW: Azure AI Foundry (Production)
 AI_API_KEY=your_azure_openai_api_key
 AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 ```
 
 **That's it!** All examples in this chapter (and the entire course) now use Azure AI Foundry.
@@ -391,7 +391,7 @@ AI_MODEL=gpt-4o-mini
 Follow the [Deploy an Azure OpenAI model](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=azure-ai-foundry) tutorial to:
 
 1. **Create** an Azure AI Foundry project at [ai.azure.com](https://ai.azure.com)
-2. **Deploy** a model (e.g., gpt-4o-mini)
+2. **Deploy** a model (e.g., gpt-5-mini)
 3. **Copy** your endpoint and API key from the project
 
 **Your endpoint** looks like: `https://YOUR-RESOURCE-NAME.openai.azure.com`
@@ -403,8 +403,28 @@ Follow the [Deploy an Azure OpenAI model](https://learn.microsoft.com/en-us/azur
 >
 > Without this suffix, your requests will fail.
 
-**Model name** matches your deployment name (e.g., `gpt-4o-mini`, `gpt-4o`)
+**Model name** matches your deployment name (e.g., `gpt-5-mini`, `gpt-5`)
 
+
+---
+
+## 🗺️ Concept Map
+
+This chapter introduced you to the core concepts of LangChain.js:
+
+```mermaid
+graph LR
+    A[LangChain.js] --> B[Models]
+    A --> C[Prompts]
+    A --> D[Tools]
+    A --> E[Agents]
+    A --> F[Memory]
+    B --> G[Provider Abstraction]
+    G --> H[GitHub Models]
+    G --> I[Azure AI Foundry]
+```
+
+*These concepts work together to create powerful AI applications. You'll explore each in depth throughout the course.*
 
 ---
 

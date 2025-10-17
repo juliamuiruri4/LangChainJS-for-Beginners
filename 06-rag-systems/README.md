@@ -34,7 +34,7 @@ By the end of this chapter, you'll be able to:
 - Combines knowledge with current resources
 - More accurate, can cite sources
 
-**RAG = Retrieval Augmented Generation**
+**[RAG](../GLOSSARY.md#rag-retrieval-augmented-generation) = Retrieval Augmented Generation**
 
 Instead of relying solely on the LLM's training, RAG:
 1. **Retrieves** relevant documents from your database
@@ -82,7 +82,7 @@ RAG solves a fundamental problem: **How do you give an LLM access to information
 - **Limitations**: Retrieval quality matters, adds latency
 
 #### Fine-Tuning
-- **Use when**: Teaching new patterns, changing behavior/style
+- **Use when**: Teaching new patterns, changing behavior/style ([fine-tuning](../GLOSSARY.md#fine-tuning))
 - **Example**: Code generation in company-specific style
 - **Limitations**: Expensive, time-consuming, static knowledge
 
@@ -376,7 +376,7 @@ const docs = [
 // Create vector store
 const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
 
-// Create retriever
+// Create [retriever](../GLOSSARY.md#retriever)
 const retriever = vectorStore.asRetriever({ k: 2 });
 
 // Create prompt
@@ -385,7 +385,7 @@ const prompt = ChatPromptTemplate.fromMessages([
   ["human", "{input}"],
 ]);
 
-// Create RAG chain
+// Create RAG [chain](../GLOSSARY.md#chain)
 const combineDocsChain = await createStuffDocumentsChain({ llm: model, prompt });
 const ragChain = await createRetrievalChain({ retriever, combineDocsChain });
 
@@ -442,7 +442,7 @@ const retriever = vectorStore.asRetriever({ k: 4 });
 
 ### 2. MMR (Maximum Marginal Relevance)
 
-Balances relevance with diversity:
+Balances relevance with diversity ([MMR](../GLOSSARY.md#mmr-maximum-marginal-relevance)):
 
 ```typescript
 const retriever = vectorStore.asRetriever({

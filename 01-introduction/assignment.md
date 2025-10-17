@@ -62,10 +62,9 @@ import "dotenv/config";
 
 **Tasks**:
 1. Create a file called `model-performance.ts`
-2. Test at least 3 models available on GitHub Models:
-   - `gpt-4o`
-   - `gpt-4o-mini`
-   - `gpt-4` (if available)
+2. Test at least 2 models available on GitHub Models:
+   - `gpt-5`
+   - `gpt-5-mini`
 3. For each model, measure:
    - Response time
    - Response length (character count)
@@ -80,12 +79,12 @@ import "dotenv/config";
 ─────────────────────────────────────────────
 Model          | Time    | Length | Quality
 ─────────────────────────────────────────────
-gpt-4o         | 1234ms  | 456ch  | ⭐⭐⭐⭐⭐
-gpt-4o-mini    | 567ms   | 234ch  | ⭐⭐⭐⭐
+gpt-5-mini     | 567ms   | 234ch  | ⭐⭐⭐⭐
+gpt-5          | 1234ms  | 456ch  | ⭐⭐⭐⭐⭐
 ```
 
 **Success Criteria**:
-- Script compares at least 3 models
+- Script compares at least 2 models
 - Results are displayed in a clear format
 - You can explain which model you'd choose for different use cases
 
@@ -99,8 +98,8 @@ import "dotenv/config";
 const question = "Explain the difference between machine learning and deep learning.";
 
 const models = [
-  { name: "gpt-4o", description: "Most capable" },
-  { name: "gpt-4o-mini", description: "Fast and efficient" },
+  { name: "gpt-5", description: "Most capable" },
+  { name: "gpt-5-mini", description: "Fast and efficient" },
 ];
 
 // 3. Create a function to test each model:

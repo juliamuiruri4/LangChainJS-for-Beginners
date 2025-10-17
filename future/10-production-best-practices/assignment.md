@@ -35,10 +35,10 @@ Practice building LangChain.js applications with proper error handling, monitori
 AI_PROVIDER=github npm run start
 
 # Via CLI
-node app.js --provider azure --model gpt-4o
+node app.js --provider azure --model gpt-5
 
 # Via config file
-# config.json: { "provider": "github", "model": "gpt-4o-mini" }
+# config.json: { "provider": "github", "model": "gpt-5-mini" }
 ```
 
 **Success Criteria**:
@@ -59,9 +59,9 @@ node app.js --provider azure --model gpt-4o
    ```typescript
    function selectModel(query: string, complexity: string) {
      if (complexity === "simple" || query.length < 50) {
-       return cheapModel; // gpt-4o-mini
+       return cheapModel; // gpt-5-mini
      } else {
-       return premiumModel; // gpt-4o
+       return premiumModel; // gpt-5
      }
    }
    ```
@@ -76,8 +76,8 @@ node app.js --provider azure --model gpt-4o
 5. Display cost savings vs always using premium
 
 **Pricing** (approximate):
-- gpt-4o-mini: $0.15 per 1M input tokens
-- gpt-4o: $2.50 per 1M input tokens
+- gpt-5-mini: $0.15 per 1M input tokens
+- gpt-5: $2.50 per 1M input tokens
 
 **Success Criteria**:
 - Routes queries appropriately

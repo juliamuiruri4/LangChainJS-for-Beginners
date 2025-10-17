@@ -154,7 +154,7 @@ const modelWithTools = model.bindTools([calculatorTool]);
 const query = "What is 125 * 8?";
 let messages = [new HumanMessage(query)];
 let iteration = 1;
-const maxIterations = 3; // Prevent infinite loops - agent stops after 3 attempts
+const maxIterations = 3; // Prevent infinite loops - [agent loop](../GLOSSARY.md#agent-loop) stops after 3 attempts
 
 while (iteration <= maxIterations) {
   console.log(`Iteration ${iteration}:`);
@@ -179,7 +179,7 @@ while (iteration <= maxIterations) {
   // 4. Add results to conversation history
   // We need to add TWO messages:
   // - AIMessage: What the agent decided to do (which tool to call)
-  // - ToolMessage: What the tool actually returned (the result)
+  // - [ToolMessage](../GLOSSARY.md#toolmessage): What the tool actually returned (the result)
   // This history helps the agent remember what it's already tried
   messages.push(
     new AIMessage({ content: response.content, tool_calls: response.tool_calls }),
@@ -378,7 +378,7 @@ Query: "Search for information about TypeScript"
 
 ### Example 3: Agent with MCP Server Integration (Context7)
 
-In this example, you'll see how to connect a LangChain.js agent to **Context7** - an MCP server that provides current, version-specific documentation for libraries and frameworks. This demonstrates using HTTP transport to connect to a real-world MCP service.
+In this example, you'll see how to connect a LangChain.js agent to **Context7** - an [MCP server](../GLOSSARY.md#mcp-server) that provides current, version-specific documentation for libraries and frameworks. This demonstrates using HTTP transport to connect to a real-world MCP service.
 
 **Code**: [`code/03-mcp-integration.ts`](./code/03-mcp-integration.ts)
 **Run**: `tsx 07-agents-mcp/code/03-mcp-integration.ts`
@@ -859,6 +859,87 @@ graph TD
 
 ---
 
+## 🏆 Assignment
+
+Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
+
+The assignment includes:
+1. **Research Agent with ReAct Loop** - Build an agent from scratch that uses the ReAct pattern to answer questions
+2. **Multi-Step Planning Agent** (Bonus) - Build an agent with multiple specialized tools that requires multi-step reasoning
+
+---
+
+## 📚 Additional Resources
+
+- [LangChain Agents Documentation](https://docs.langchain.com/oss/javascript/langchain/agents)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [MCP LangChain Integration](https://docs.langchain.com/oss/javascript/langchain/mcp)
+- [ReAct Paper](https://arxiv.org/abs/2210.03629)
+
+---
+
+## 🚀 What's Next?
+
+Congratulations! You've completed the core LangChain.js course. You've learned:
+
+- ✅ Chat models and conversations
+- ✅ Prompt engineering and templates
+- ✅ Documents, embeddings, and semantic search
+- ✅ Function calling and tool integration
+- ✅ RAG systems
+- ✅ Autonomous agents and MCP
+
+### Applying What You've Learned
+
+You now have the foundation to build production AI applications! Here's how to continue:
+
+**For Production Agents**:
+- Use `AgentExecutor` from LangChain - it handles the agent loop for you
+- Consider LangGraph for complex, stateful agents with branching logic
+- Check out the `future/` folder in this repository for advanced LangGraph content
+
+**Next Steps**:
+1. **Build a real project** - Apply these concepts to solve a problem you care about
+2. **Explore advanced patterns** - LangGraph, memory management, streaming responses
+3. **Join the community** - Share what you build, ask questions, help others
+
+**Project Ideas**:
+- 🤖 **Personal assistant** - Combine RAG (your docs) + agents (web search, calendar)
+- 📊 **Data analyzer** - Agent with database tools + visualization
+- 📝 **Content generator** - RAG + multi-step editing with agents
+- 🔧 **DevOps helper** - Agents with GitHub, Jira, and deployment tools
+
+### Keep Learning
+
+The AI field moves fast! Stay updated by:
+- Following [LangChain.js releases](https://github.com/langchain-ai/langchainjs)
+- Joining the [Azure AI Foundry Discord](https://aka.ms/foundry/discord)
+- Exploring new MCP servers as they become available
+- Experimenting with different models and providers
+
+**You're ready to build amazing AI applications!** 🎉
+
+---
+
+## 🗺️ Navigation
+
+- **Previous**: [06-rag-systems](../06-rag-systems/README.md)
+- **Home**: [Course Home](../README.md)
+
+---
+
+## 💬 Questions or stuck?
+
+If you get stuck or have any questions about building AI apps, join:
+
+[![Azure AI Foundry Discord](https://img.shields.io/badge/Discord-Azure_AI_Foundry_Community_Discord-blue?style=for-the-badge&logo=discord&color=5865f2&logoColor=fff)](https://aka.ms/foundry/discord)
+
+If you have product feedback or errors while building visit:
+
+[![Azure AI Foundry Developer Forum](https://img.shields.io/badge/GitHub-Azure_AI_Foundry_Developer_Forum-blue?style=for-the-badge&logo=github&color=000000&logoColor=fff)](https://aka.ms/foundry/forum)
+
+---
+
 ## 🐛 Troubleshooting
 
 Common issues you might encounter when building agents:
@@ -958,84 +1039,3 @@ return "42";
 // ✅ Descriptive
 return "The calculation result is 42. This is the answer to 6 * 7.";
 ```
-
----
-
-## 🏆 Assignment
-
-Ready to practice? Complete the challenges in [assignment.md](./assignment.md)!
-
-The assignment includes:
-1. **Research Agent with ReAct Loop** - Build an agent from scratch that uses the ReAct pattern to answer questions
-2. **Multi-Step Planning Agent** (Bonus) - Build an agent with multiple specialized tools that requires multi-step reasoning
-
----
-
-## 📚 Additional Resources
-
-- [LangChain Agents Documentation](https://docs.langchain.com/oss/javascript/langchain/agents)
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [MCP LangChain Integration](https://docs.langchain.com/oss/javascript/langchain/mcp)
-- [ReAct Paper](https://arxiv.org/abs/2210.03629)
-
----
-
-## 🚀 What's Next?
-
-Congratulations! You've completed the core LangChain.js course. You've learned:
-
-- ✅ Chat models and conversations (Chapters 1-2)
-- ✅ Prompt engineering and templates (Chapter 3)
-- ✅ Documents, embeddings, and semantic search (Chapter 4)
-- ✅ Function calling and tool integration (Chapter 5)
-- ✅ RAG systems (Chapter 6)
-- ✅ Autonomous agents and MCP (Chapter 7)
-
-### Applying What You've Learned
-
-You now have the foundation to build production AI applications! Here's how to continue:
-
-**For Production Agents**:
-- Use `AgentExecutor` from LangChain - it handles the agent loop for you
-- Consider LangGraph for complex, stateful agents with branching logic
-- Check out the `future/` folder in this repository for advanced LangGraph content
-
-**Next Steps**:
-1. **Build a real project** - Apply these concepts to solve a problem you care about
-2. **Explore advanced patterns** - LangGraph, memory management, streaming responses
-3. **Join the community** - Share what you build, ask questions, help others
-
-**Project Ideas**:
-- 🤖 **Personal assistant** - Combine RAG (your docs) + agents (web search, calendar)
-- 📊 **Data analyzer** - Agent with database tools + visualization
-- 📝 **Content generator** - RAG + multi-step editing with agents
-- 🔧 **DevOps helper** - Agents with GitHub, Jira, and deployment tools
-
-### Keep Learning
-
-The AI field moves fast! Stay updated by:
-- Following [LangChain.js releases](https://github.com/langchain-ai/langchainjs)
-- Joining the [Azure AI Foundry Discord](https://aka.ms/foundry/discord)
-- Exploring new MCP servers as they become available
-- Experimenting with different models and providers
-
-**You're ready to build amazing AI applications!** 🎉
-
----
-
-## 🗺️ Navigation
-
-- **Previous**: [06-rag-systems](../06-rag-systems/README.md)
-- **Home**: [Course Home](../README.md)
-
----
-
-## 💬 Questions or stuck?
-
-If you get stuck or have any questions about building AI apps, join:
-
-[![Azure AI Foundry Discord](https://img.shields.io/badge/Discord-Azure_AI_Foundry_Community_Discord-blue?style=for-the-badge&logo=discord&color=5865f2&logoColor=fff)](https://aka.ms/foundry/discord)
-
-If you have product feedback or errors while building visit:
-
-[![Azure AI Foundry Developer Forum](https://img.shields.io/badge/GitHub-Azure_AI_Foundry_Developer_Forum-blue?style=for-the-badge&logo=github&color=000000&logoColor=fff)](https://aka.ms/foundry/forum)

@@ -23,21 +23,21 @@ function getProviderConfig(): ProviderConfig {
   const configs: Record<string, ProviderConfig> = {
     github: {
       name: "GitHub Models",
-      model: process.env.AI_MODEL || "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-5-mini",
       baseURL: process.env.AI_ENDPOINT,
       apiVersion: process.env.AI_API_VERSION,
       apiKey: process.env.AI_API_KEY,
     },
     azure: {
       name: "Azure OpenAI",
-      model: process.env.AZURE_MODEL || "gpt-4o",
+      model: process.env.AZURE_MODEL || "gpt-5",
       baseURL: process.env.AZURE_ENDPOINT,
       apiVersion: process.env.AZURE_API_VERSION || "2024-02-15-preview",
       apiKey: process.env.AZURE_API_KEY,
     },
     openai: {
       name: "OpenAI",
-      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+      model: process.env.OPENAI_MODEL || "gpt-5-mini",
       apiKey: process.env.OPENAI_API_KEY,
     },
   };

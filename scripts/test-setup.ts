@@ -20,7 +20,7 @@ async function testSetup() {
 
   try {
     const model = new ChatOpenAI({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-5-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
       },
@@ -31,7 +31,7 @@ async function testSetup() {
 
     console.log("✅ SUCCESS! Your AI provider is working!");
     console.log(`   Provider: ${process.env.AI_ENDPOINT}`);
-    console.log(`   Model: ${process.env.AI_MODEL || "gpt-4o-mini"}`);
+    console.log(`   Model: ${process.env.AI_MODEL || "gpt-5-mini"}`);
     console.log("\nModel response:", response.content);
     console.log("\n🎉 You're ready to start the course!");
   } catch (error) {

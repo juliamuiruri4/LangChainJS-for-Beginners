@@ -65,7 +65,7 @@ npm run validate
 By default, GitHub Actions will use:
 - `GITHUB_TOKEN` (built-in) → Falls back for `AI_API_KEY`
 - `https://models.inference.ai.azure.com` → Default for `AI_ENDPOINT`
-- `gpt-4o-mini` → Default for `AI_MODEL`
+- `gpt-5-mini` → Default for `AI_MODEL`
 
 **To use a different provider in CI/CD**, add these secrets to your repository:
 

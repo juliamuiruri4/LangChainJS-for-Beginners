@@ -92,7 +92,7 @@ const template = ChatPromptTemplate.fromMessages([
 
 ### Example 1: Simple Translation Template
 
-In this example, you'll create a reusable translation template with variables for input language, output language, and text to be translated.
+In this example, you'll create a reusable translation template ([Prompt Template](../GLOSSARY.md#prompt-template)) with variables for input language, output language, and text to be translated.
 
 **Code**: [`code/01-basic-template.ts`](./code/01-basic-template.ts)
 **Run**: `tsx 03-prompt-templates/code/01-basic-template.ts`
@@ -303,7 +303,7 @@ But we still love you, I swear!
 
 ## 💡 Few-Shot Prompting
 
-Few-shot prompting means teaching the AI by showing examples.
+[Few-shot prompting](../GLOSSARY.md#few-shot-prompting) means teaching the AI by showing examples.
 
 **Think of it like training a new employee**: Instead of just telling them what to do, you show them examples of good work.
 
@@ -513,6 +513,37 @@ Closures are a fundamental concept where a function retains access to variables 
 ## 📋 Structured Outputs
 
 So far, we've been getting text responses from AI models. But what if you need **structured data** - like JSON objects with specific fields?
+
+### What is Zod?
+
+Before we dive into structured outputs, let's understand the tool we'll be using: **[Zod](../GLOSSARY.md#zod-schema)**.
+
+**[Zod](https://zod.dev/) is a TypeScript-first schema validation library** that lets you define the structure and rules for your data. Think of it as a blueprint that describes exactly what shape your data should have.
+
+**Why use Zod?**
+- ✅ **Type Safety**: Automatically generates TypeScript types from your schema
+- ✅ **Runtime Validation**: Checks data is valid when your code runs (not just at compile time)
+- ✅ **Clear Descriptions**: You can add `.describe()` to help the AI understand each field
+- ✅ **Easy to Use**: Simple, readable syntax for defining data structures
+
+**Quick example**:
+```typescript
+import { z } from "zod";
+
+// Define a schema
+const PersonSchema = z.object({
+  name: z.string().describe("Person's full name"),
+  age: z.number().describe("Age in years"),
+  email: z.string().email().describe("Email address"),
+});
+
+// TypeScript automatically knows the type!
+// type Person = { name: string; age: number; email: string; }
+```
+
+With LangChain, Zod schemas tell the AI **exactly what format to return data in** - ensuring you always get structured, validated data instead of free text that you have to parse.
+
+Now let's see how to use Zod with AI models to get structured outputs!
 
 ### The Form Analogy
 
