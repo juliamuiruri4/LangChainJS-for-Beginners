@@ -10,7 +10,7 @@ In this chapter, you'll learn to build AI [agents](../GLOSSARY.md#agent) that ca
 
 By the end of this chapter, you'll be able to:
 
-- ✅ Understand what AI agents are and how they differ from chains
+- ✅ Understand what AI agents are and how they work
 - ✅ Implement the ReAct (Reasoning + Acting) pattern
 - ✅ Build agent loops that iterate until solving a problem
 - ✅ Give agents multiple tools and let them choose the right one
@@ -70,15 +70,6 @@ Agent: [Uses] getWeather({ city: "Paris" })
 Agent: [Observes] "18°C, partly cloudy"
 Agent: [Responds] "It's currently 18°C and partly cloudy in Paris"
 ```
-
-### Key Differences from Chains
-
-| Chains | Agents |
-|--------|--------|
-| **Fixed sequence of steps**<br/>Example: Always retrieve → format → generate (same order) | **Dynamic step selection**<br/>Example: Agent might search, then calculate, then search again |
-| **Predetermined flow**<br/>You define the exact path upfront | **Adaptive reasoning**<br/>Agent decides the path based on the task |
-| **Execute once**<br/>RAG chain: retrieve documents, then answer | **Iterate until solved**<br/>Agent: try tool, evaluate, try another if needed |
-| **Limited flexibility**<br/>Best for known workflows | **High flexibility**<br/>Best for unpredictable tasks |
 
 ---
 
@@ -200,7 +191,7 @@ while (iteration <= maxIterations) {
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "How does an agent differ from a simple chain?"
+> - "How does the ReAct pattern enable autonomous decision-making?"
 > - "Why does the agent loop have a maximum iteration limit?"
 > - "What happens if the agent can't answer the question?"
 
@@ -838,44 +829,6 @@ The MCP ecosystem is growing rapidly:
 
 ---
 
-## 🤔 When to Use Agents vs Chains?
-
-Now that you've learned both chains (Chapter 6) and agents (Chapter 7), here's how to decide which to use:
-
-### Use Agents When:
-
-| Scenario | Why Agents | Example |
-|----------|------------|---------|
-| **Unpredictable path** | You don't know what steps are needed upfront | "Research topic X and find relevant papers" - agent decides which sources to check |
-| **Dynamic tool selection** | Need to choose from multiple tools based on input | User asks mixed questions - agent picks calculator, weather, or search |
-| **Multi-step reasoning** | Multiple iterations needed, each depending on previous results | "Find cheapest flight, then book hotel nearby" - second step depends on first |
-| **Exploratory tasks** | Open-ended problem solving | "Analyze our sales data and recommend improvements" |
-
-### Use Chains When:
-
-| Scenario | Why Chains | Example |
-|----------|-----------|---------|
-| **Known workflow** | You know exactly what steps to follow | "Retrieve relevant docs, then answer question" - always same steps |
-| **Performance matters** | Chains are faster (fewer LLM calls) | High-volume API with predictable tasks |
-| **Cost optimization** | One LLM call vs multiple | Simple transformations or fixed pipelines |
-| **Deterministic processing** | Need consistent, repeatable behavior | Data processing pipelines, batch operations |
-
-### Cost & Performance Considerations
-
-**Agents**:
-- 💰 **Cost**: 2-5+ LLM calls per query (one per iteration)
-- ⏱️ **Speed**: Slower due to multiple round trips
-- ✨ **Flexibility**: High - can handle unpredictable scenarios
-
-**Chains**:
-- 💰 **Cost**: 1-2 LLM calls per query
-- ⏱️ **Speed**: Faster - fixed sequence
-- ✨ **Flexibility**: Limited to predefined flow
-
-**Rule of thumb**: Start with chains for known workflows. Upgrade to agents when you need dynamic decision-making.
-
----
-
 ## 🗺️ Concept Map
 
 This chapter taught you how agents use the ReAct pattern for autonomous reasoning:
@@ -1035,7 +988,7 @@ Congratulations! You've completed the core LangChain.js course. You've learned:
 - ✅ Prompt engineering and templates (Chapter 3)
 - ✅ Documents, embeddings, and semantic search (Chapter 4)
 - ✅ Function calling and tool integration (Chapter 5)
-- ✅ RAG systems with LCEL (Chapter 6)
+- ✅ RAG systems (Chapter 6)
 - ✅ Autonomous agents and MCP (Chapter 7)
 
 ### Applying What You've Learned

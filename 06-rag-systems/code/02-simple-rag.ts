@@ -52,8 +52,8 @@ async function main() {
     }),
     new Document({
       pageContent:
-        "LangChain Expression Language (LCEL) provides a declarative way to compose chains. It uses a pipe operator to connect components, making complex workflows easier to build and understand.",
-      metadata: { source: "lcel-guide", topic: "development" },
+        "LangChain supports multiple document loaders for PDFs, web pages, databases, and APIs. Text splitters help break large documents into chunks that fit within LLM context windows while preserving semantic meaning.",
+      metadata: { source: "document-processing", topic: "development" },
     }),
   ];
 

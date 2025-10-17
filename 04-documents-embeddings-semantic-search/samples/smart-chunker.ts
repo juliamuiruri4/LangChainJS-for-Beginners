@@ -60,11 +60,11 @@ LangChain provides prompt templates that make it easy to create reusable, parame
 
 ## Chapter 4: Advanced Topics
 
-### Chains
+### Tools
 
-Chains allow you to combine multiple operations into a single workflow. This is essential for building complex AI applications that require multiple steps.
+Tools extend AI capabilities by providing access to external functions and APIs. This allows AI models to interact with the real world and perform actions beyond text generation.
 
-You can chain together models, prompts, and other operations to create sophisticated processing pipelines.
+You can create custom tools for specific tasks like database queries, web searches, or calculations that the AI can use when needed.
 
 ### Agents
 

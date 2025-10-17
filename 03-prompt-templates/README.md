@@ -831,7 +831,8 @@ The assignment includes:
 
 - [Prompt Templates Documentation](https://js.langchain.com/docs/modules/prompts/)
 - [Few-Shot Prompting Guide](https://js.langchain.com/docs/modules/prompts/few_shot/)
-- [LCEL Piping](https://js.langchain.com/docs/expression_language/)
+
+**💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples including email generation, translation systems, dynamic prompt builders, and template libraries!
 
 ---
 

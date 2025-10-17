@@ -865,6 +865,8 @@ The assignment includes:
 - [Vector Stores Guide](https://js.langchain.com/docs/modules/data_connection/vectorstores/)
 - [Understanding Embeddings](https://platform.openai.com/docs/guides/embeddings)
 
+**💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples including keyword vs semantic comparison, multilingual search, embedding visualization, chunking strategies, document organization, and web processing!
+
 ---
 
 ## 🗺️ Navigation

@@ -1,6 +1,6 @@
 # Chapter 1: Introduction to LangChain.js
 
-Welcome to your first step in building AI-powered applications with LangChain.js! In this chapter, you'll learn what LangChain.js is and why it exists, explore its core concepts like models, prompts, and chains, and make your first AI call using GitHub Models. By the end, you'll understand how LangChain.js provides a consistent interface across different AI providers, making it easy to switch between them with just environment variables.
+Welcome to your first step in building AI-powered applications with LangChain.js! In this chapter, you'll learn what LangChain.js is and why it exists, explore its core concepts like models, prompts, and tools, and make your first AI call using GitHub Models. By the end, you'll understand how LangChain.js provides a consistent interface across different AI providers, making it easy to switch between them with just environment variables.
 
 ## Prerequisites
 
@@ -30,7 +30,7 @@ Just like a hardware store provides:
 - 🔄 **Interchangeable parts** (standard sizes that work together)
 
 LangChain.js provides:
-- 🔨 **Pre-built components** (chat models, prompts, chains)
+- 🔨 **Pre-built components** (chat models, prompts, tools)
 - 🧱 **Quality abstractions** (works with any LLM provider)
 - 📋 **Patterns** (common AI application designs)
 - 🔄 **Composability** (components that work together seamlessly)
@@ -48,7 +48,7 @@ LangChain.js is a **framework for building AI-powered applications** using Large
 Without LangChain.js, you'd need to:
 - Write different code for each LLM provider (OpenAI, Anthropic, Azure, etc.)
 - Build your own prompt management system
-- Create custom chains for multi-step operations
+- Create custom tools and function calling logic
 - Implement memory and conversation handling from scratch
 - Build agent systems without any structure
 
@@ -58,7 +58,7 @@ With LangChain.js, you get:
 
 - **Provider abstraction** - Switch between OpenAI, Azure, Anthropic with minimal code changes
 - **Prompt templates** - Reusable, testable prompts
-- **Chains** - Combine multiple operations seamlessly
+- **Tools** - Extend AI with custom functions and APIs
 - **Memory** - Built-in conversation history
 - **Agents** - Decision-making AI that can use tools
 
@@ -82,24 +82,19 @@ You'll start using models in this chapter and use them throughout the course.
 
 You'll learn prompt engineering and templates in [Chapter 3](../03-prompt-templates/README.md).
 
-### 3. Chains (LCEL)
+### 3. Tools
 
-**Chains** connect multiple operations into pipelines. Think of them as assembly lines where the output of one step becomes the input to the next.
+**Tools** extend what AI models can do by giving them access to external functions and APIs. Instead of just generating text, models can call functions to fetch data, perform calculations, or interact with other systems.
 
-**Example flow**: `User Question → Retrieve Docs → Format → LLM → Parse Answer`
+**Example**: A weather tool that lets the AI check current conditions, or a calculator tool for mathematical operations.
 
-LCEL (LangChain Expression Language) uses the pipe operator to chain operations:
-```typescript
-const chain = prompt | model | outputParser;
-```
-
-You'll build chains in [Chapter 6](../06-rag-systems/README.md) when creating RAG systems.
+You'll build and use tools in [Chapter 5](../05-function-calling-tools/README.md).
 
 ### 4. Agents
 
-**Agents** are AI systems that can reason, decide which actions to take, and iterate until they solve a task. Unlike chains (which follow a fixed path), agents make dynamic decisions.
+**Agents** are AI systems that can reason, decide which actions to take, and iterate until they solve a task. They autonomously choose which tools to use and when, making dynamic decisions to accomplish goals.
 
-**Key difference**: Chains are deterministic (A → B → C), while agents are dynamic (Think → Choose Tool → Execute → Observe → Repeat).
+**Key capability**: Agents think (reasoning), choose tools (action), see results (observation), and repeat until they solve the task.
 
 You'll build agents from scratch in [Chapter 7](../07-agents-mcp/README.md).
 
@@ -118,7 +113,7 @@ You'll implement memory in [Chapter 2](../02-chat-models/README.md) when buildin
 As you progress through the course, you'll see how these concepts combine:
 
 ```
-User Input → [Memory] → [Prompts] → [Chains/Agents] → [Models] → Response
+User Input → [Memory] → [Prompts] → [Tools/Agents] → [Models] → Response
 ```
 
 **Don't worry about understanding everything now!** You'll learn each concept hands-on, building progressively more sophisticated applications. Let's start with your first AI call.
@@ -393,11 +388,20 @@ AI_MODEL=gpt-4o-mini
 
 ### Getting Your Azure AI Foundry Endpoint and API Key
 
+Follow the [Deploy an Azure OpenAI model](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=azure-ai-foundry) tutorial to:
+
 1. **Create** an Azure AI Foundry project at [ai.azure.com](https://ai.azure.com)
 2. **Deploy** a model (e.g., gpt-4o-mini)
-3. **Copy** your endpoint and API key from the Azure Portal
+3. **Copy** your endpoint and API key from the project
 
 **Your endpoint** looks like: `https://YOUR-RESOURCE-NAME.openai.azure.com`
+
+> [!IMPORTANT]
+> Ensure that you append `/openai/v1` to your endpoint URL. For example:
+> - ❌ Wrong: `https://YOUR-RESOURCE-NAME.openai.azure.com`
+> - ✅ Correct: `https://YOUR-RESOURCE-NAME.openai.azure.com/openai/v1`
+>
+> Without this suffix, your requests will fail.
 
 **Model name** matches your deployment name (e.g., `gpt-4o-mini`, `gpt-4o`)
 
@@ -409,7 +413,7 @@ AI_MODEL=gpt-4o-mini
 Let's review what you learned:
 
 - **LangChain.js is an abstraction layer** - It provides a consistent interface across different LLM providers
-- **Built on composable components** - Models, prompts, chains, agents, and memory work together
+- **Built on composable components** - Models, prompts, tools, agents, and memory work together
 - **GitHub Models offers free access** - Perfect for learning and prototyping
 - **Azure AI Foundry is production-ready** - Switch anytime by changing the environment variables in your `.env` file
 - **Messages have types** - SystemMessage, HumanMessage, and AIMessage serve different purposes
@@ -431,6 +435,8 @@ The assignment includes:
 - [LangChain.js Concepts](https://js.langchain.com/docs/concepts/)
 - [GitHub Models Marketplace](https://github.com/marketplace/models)
 - [Chat Models Documentation](https://js.langchain.com/docs/integrations/chat/)
+
+**💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples that demonstrate other useful concepts and patterns!
 
 ---
 

@@ -8,7 +8,7 @@ Practice building Retrieval Augmented Generation systems that combine document r
 
 - Completed [Chapter 6](./README.md)
 - Run all code examples
-- Understand RAG architecture and LCEL
+- Understand RAG architecture
 
 ---
 
@@ -145,8 +145,7 @@ Solutions available in [`solution/`](./solution/) folder. Try on your own first!
 ## Need Help?
 
 - **RAG basics**: Review example 1
-- **LCEL syntax**: Check example 2
-- **Metadata**: See example 3
+- **Retrieval strategies**: Check example 2
 - **Still stuck**: Join our [Discord community](https://aka.ms/foundry/discord)
 
 ---

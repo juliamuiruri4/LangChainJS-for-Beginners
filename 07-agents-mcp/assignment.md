@@ -252,7 +252,7 @@ You've learned:
 - ✅ Prompt engineering with templates
 - ✅ Documents, embeddings, and semantic search
 - ✅ Function calling and tooling
-- ✅ RAG systems with LCEL
+- ✅ RAG systems
 - ✅ Autonomous agents with ReAct pattern
 
 ### Continue Your Learning:

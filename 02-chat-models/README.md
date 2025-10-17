@@ -632,6 +632,8 @@ The assignment includes:
 - [Streaming Guide](https://js.langchain.com/docs/how_to/streaming/)
 - [Model Parameters](https://platform.openai.com/docs/api-reference/chat/create)
 
+**💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples including streaming responses, error handling, and token tracking!
+
 ---
 
 ## 🗺️ Navigation

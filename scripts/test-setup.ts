@@ -23,9 +23,6 @@ async function testSetup() {
       model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
-        defaultQuery: process.env.AI_API_VERSION
-          ? { "api-version": process.env.AI_API_VERSION }
-          : undefined,
       },
       apiKey: process.env.AI_API_KEY,
     });
@@ -43,8 +40,7 @@ async function testSetup() {
     console.log("1. Check your AI_API_KEY in .env file");
     console.log("2. Verify the AI_ENDPOINT is correct");
     console.log("3. Ensure the AI_MODEL is valid for your provider");
-    console.log("4. For Azure AI Foundry: Verify AI_API_VERSION is set");
-    console.log("5. Verify the token/key has no extra spaces");
+    console.log("4. Verify the token/key has no extra spaces");
   }
 }
 

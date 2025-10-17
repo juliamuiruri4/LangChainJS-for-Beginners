@@ -42,37 +42,16 @@ import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
-// 2. Create the model (outside the loop, reuse for all personalities)
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+// 2. Create the ChatOpenAI model (reuse for all personalities)
 
-// 3. Define personalities array
-const personalities = [
-  { name: "Pirate", system: "You are a pirate..." },
-  { name: "Analyst", system: "You are a business analyst..." },
-  // ... more personalities
-];
+// 3. Define an array of personalities with name and system prompt
 
-const question = "What is artificial intelligence?";
+// 4. Define the question to test
 
-// 4. Loop through personalities
-for (const personality of personalities) {
-  const messages = [
-    new SystemMessage(personality.system),
-    new HumanMessage(question)
-  ];
-
-  const response = await model.invoke(messages);
-  console.log(response.content);
-}
+// 5. Loop through each personality:
+//    - Create messages array with SystemMessage and HumanMessage
+//    - Invoke the model with the messages
+//    - Display the response with personality name
 ```
 
 ---
@@ -124,37 +103,18 @@ const models = [
   { name: "gpt-4o-mini", description: "Fast and efficient" },
 ];
 
-// 3. Create a function to test each model
-async function testModel(modelName: string) {
-  const model = new ChatOpenAI({
-    model: modelName,
-    configuration: {
-      baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION
-        ? { "api-version": process.env.AI_API_VERSION }
-        : undefined,
-    },
-    apiKey: process.env.AI_API_KEY,
-  });
+// 3. Create a function to test each model:
+//    - Accept modelName as parameter
+//    - Create ChatOpenAI instance with that model
+//    - Measure start time with Date.now()
+//    - Invoke the model with the question
+//    - Measure end time and calculate duration
+//    - Return an object with name, time, length, and response
 
-  const startTime = Date.now();
-  const response = await model.invoke(question);
-  const endTime = Date.now();
-
-  return {
-    name: modelName,
-    time: endTime - startTime,
-    length: response.content.toString().length,
-    response: response.content.toString(),
-  };
-}
-
-// 4. Loop through models and collect results
-for (const modelInfo of models) {
-  const result = await testModel(modelInfo.name);
-  // Display results with padEnd for table formatting
-  console.log(`${result.name.padEnd(15)} | ${result.time}ms`.padEnd(8));
-}
+// 4. Loop through models array:
+//    - Call testModel() for each model
+//    - Display results in a formatted table
+//    - Use .padEnd() for consistent column widths
 ```
 
 ---
