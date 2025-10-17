@@ -17,7 +17,7 @@ Practice creating type-safe tools with Zod schemas, implementing the complete to
 **Goal**: Build a weather tool and implement the complete 3-step execution pattern (generate → execute → respond).
 
 **Tasks**:
-1. Create `weather-tool.ts` in the `05-function-calling-tooling/code/` folder
+1. Create `weather-tool.ts` in the `05-function-calling-tools/code/` folder
 2. Build a weather tool with Zod schema that accepts:
    - `city` (string, required) - The city name
    - `units` (enum: "celsius" or "fahrenheit", optional, default: "fahrenheit") - Temperature unit

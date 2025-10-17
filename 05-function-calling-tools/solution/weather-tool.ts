@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Assignment Solution: Weather Tool with Complete Execution Loop
  *
- * Run: npx tsx 05-function-calling-tooling/solution/weather-tool.ts
+ * Run: npx tsx 05-function-calling-tools/solution/weather-tool.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

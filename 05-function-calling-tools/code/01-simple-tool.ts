@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Example 1: Simple Calculator Tool
  *
- * Run: npx tsx 05-function-calling-tooling/code/01-simple-tool.ts
+ * Run: npx tsx 05-function-calling-tools/code/01-simple-tool.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "Why do we use Zod schemas to define tool parameters?"

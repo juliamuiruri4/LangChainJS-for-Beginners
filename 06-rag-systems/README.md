@@ -4,7 +4,7 @@ In this chapter, you'll learn to build RAG (Retrieval Augmented Generation) syst
 
 ## Prerequisites
 
-- Completed [Chapter 5](../05-function-calling-tooling/README.md)
+- Completed [Chapter 5](../05-function-calling-tools/README.md)
 
 ## 🎯 Learning Objectives
 
@@ -525,7 +525,7 @@ The assignment includes:
 
 ## 🗺️ Navigation
 
-- **Previous**: [05-function-calling-tooling](../05-function-calling-tooling/README.md)
+- **Previous**: [05-function-calling-tools](../05-function-calling-tools/README.md)
 - **Next**: [07-agents-mcp](../07-agents-mcp/README.md)
 - **Home**: [Course Home](../README.md)
 

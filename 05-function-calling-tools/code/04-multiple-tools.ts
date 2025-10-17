@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Example 4: Multiple Tools
  *
- * Run: npx tsx 05-function-calling-tooling/code/04-multiple-tools.ts
+ * Run: npx tsx 05-function-calling-tools/code/04-multiple-tools.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does the LLM decide which tool to use for a given query?"

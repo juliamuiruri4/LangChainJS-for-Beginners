@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Example 2: Binding and Invoking Tools
  *
- * Run: npx tsx 05-function-calling-tooling/code/02-tool-calling.ts
+ * Run: npx tsx 05-function-calling-tools/code/02-tool-calling.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "What does bindTools() do and how does it change the model's behavior?"

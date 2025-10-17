@@ -152,6 +152,6 @@ Solutions available in [`solution/`](./solution/) folder. Try on your own first!
 
 ## Next Steps
 
-Ready for [Chapter 5: Function Calling & Tooling](../05-function-calling-tooling/README.md)!
+Ready for [Chapter 5: Function Calling & Tooling](../05-function-calling-tools/README.md)!
 
 Great work on understanding embeddings and semantic search! 🚀

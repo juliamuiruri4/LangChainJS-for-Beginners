@@ -2,7 +2,7 @@
  * Chapter 4 Assignment Solution: Challenge 2
  * Optimal Chunking Experiment
  *
- * Run: npx tsx 04-working-with-documents/solution/chunk-optimizer.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/samples/chunk-optimizer.ts
  */
 
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";

@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Assignment Solution: Multi-Tool Travel Assistant
  *
- * Run: npx tsx 05-function-calling-tooling/solution/travel-assistant.ts
+ * Run: npx tsx 05-function-calling-tools/solution/travel-assistant.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

@@ -2,7 +2,7 @@
  * Chapter 4 Assignment Solution: Challenge 3
  * Document Organization System
  *
- * Run: npx tsx 04-working-with-documents/solution/doc-organizer.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/samples/doc-organizer.ts
  */
 
 import { Document } from "@langchain/core/documents";

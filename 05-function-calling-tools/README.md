@@ -232,7 +232,7 @@ If you're new to Zod, it's a TypeScript-first schema validation library that let
 In this example, you'll create a basic calculator tool using Zod schema to define parameters and learn tool creation fundamentals.
 
 **Code**: [`code/01-simple-tool.ts`](./code/01-simple-tool.ts)
-**Run**: `tsx 05-function-calling-tooling/code/01-simple-tool.ts`
+**Run**: `tsx 05-function-calling-tools/code/01-simple-tool.ts`
 
 ```typescript
 import { tool } from "@langchain/core/tools";
@@ -267,7 +267,7 @@ console.log("Schema:", calculatorTool.schema);
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/01-simple-tool.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/01-simple-tool.ts`, you'll see:
 
 ```
 Tool created: calculator
@@ -305,7 +305,7 @@ Use `bindTools()` to make tools available to the LLM.
 Here you'll bind tools to a model and see how the LLM generates structured tool calls with arguments.
 
 **Code**: [`code/02-tool-calling.ts`](./code/02-tool-calling.ts)
-**Run**: `tsx 05-function-calling-tooling/code/02-tool-calling.ts`
+**Run**: `tsx 05-function-calling-tools/code/02-tool-calling.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -360,7 +360,7 @@ console.log("\nTool calls:", response.tool_calls);
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/02-tool-calling.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/02-tool-calling.ts`, you'll see:
 
 ```
 🤖 Asking: What is 25 * 17?
@@ -399,7 +399,7 @@ Tool calls: [
 In this example, you'll see the complete flow: LLM generates tool call, your code executes the tool, and results return to LLM for the final response.
 
 **Code**: [`code/03-tool-execution.ts`](./code/03-tool-execution.ts)
-**Run**: `tsx 05-function-calling-tooling/code/03-tool-execution.ts`
+**Run**: `tsx 05-function-calling-tools/code/03-tool-execution.ts`
 
 ```typescript
 const weatherTool = tool(
@@ -447,7 +447,7 @@ console.log("Final answer:", finalResponse.content);
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/03-tool-execution.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/03-tool-execution.ts`, you'll see:
 
 ```
 User: What's the weather in Seattle?
@@ -492,7 +492,7 @@ LLMs can choose from multiple tools based on the query.
 Here you'll build a system with multiple tools (calculator, search, weather) where the LLM automatically selects the appropriate tool for each query.
 
 **Code**: [`code/04-multiple-tools.ts`](./code/04-multiple-tools.ts)
-**Run**: `tsx 05-function-calling-tooling/code/04-multiple-tools.ts`
+**Run**: `tsx 05-function-calling-tools/code/04-multiple-tools.ts`
 
 ```typescript
 const calculatorTool = tool(
@@ -553,7 +553,7 @@ for (const query of queries) {
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/04-multiple-tools.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/04-multiple-tools.ts`, you'll see:
 
 ```
 Query: What is 125 * 8?

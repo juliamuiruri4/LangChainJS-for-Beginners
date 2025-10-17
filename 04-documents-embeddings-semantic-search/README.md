@@ -872,7 +872,7 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [03-prompt-templates](../03-prompt-templates/README.md)
-- **Next**: [05-function-calling-tooling](../05-function-calling-tooling/README.md)
+- **Next**: [05-function-calling-tools](../05-function-calling-tools/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---

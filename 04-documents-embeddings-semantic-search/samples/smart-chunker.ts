@@ -2,7 +2,7 @@
  * Chapter 4 Assignment Solution: Bonus Challenge
  * Smart Document Chunker
  *
- * Run: npx tsx 04-working-with-documents/solution/smart-chunker.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/samples/smart-chunker.ts
  */
 
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
