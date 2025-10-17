@@ -50,22 +50,22 @@ const configs: ChunkConfig[] = [
     chunkSize: 200,
     chunkOverlap: 20,
     description: "Precise, focused chunks",
-    useCase: "Precise question answering, specific fact retrieval",
+    useCase: "Precise question answering, specific fact retrieval"
   },
   {
     name: "Medium Chunks",
     chunkSize: 500,
     chunkOverlap: 50,
     description: "Balanced approach",
-    useCase: "General-purpose RAG, balanced context and specificity",
+    useCase: "General-purpose RAG, balanced context and specificity"
   },
   {
     name: "Large Chunks",
     chunkSize: 1000,
     chunkOverlap: 100,
     description: "Comprehensive context",
-    useCase: "Understanding broad topics, cost optimization",
-  },
+    useCase: "Understanding broad topics, cost optimization"
+  }
 ];
 
 async function testChunking(config: ChunkConfig) {
@@ -74,7 +74,7 @@ async function testChunking(config: ChunkConfig) {
 
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: config.chunkSize,
-    chunkOverlap: config.chunkOverlap,
+    chunkOverlap: config.chunkOverlap
   });
 
   const chunks = await splitter.createDocuments([longDocument]);
@@ -108,7 +108,7 @@ async function testChunking(config: ChunkConfig) {
     chunkCount: chunks.length,
     avgSize: avgChunkSize,
     firstChunk: chunks[0].pageContent.substring(0, 150),
-    lastChunk: chunks[chunks.length - 1].pageContent.substring(0, 150),
+    lastChunk: chunks[chunks.length - 1].pageContent.substring(0, 150)
   };
 }
 

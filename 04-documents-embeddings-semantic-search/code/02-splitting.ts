@@ -52,7 +52,7 @@ with new architectures and techniques emerging regularly.
   // Create splitter with specific configuration
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 300,
-    chunkOverlap: 50,
+    chunkOverlap: 50
   });
 
   const docs = await splitter.createDocuments([longText]);

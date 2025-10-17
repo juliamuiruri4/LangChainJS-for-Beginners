@@ -16,20 +16,34 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
-  console.log("=" .repeat(80));
+  console.log("=".repeat(80));
 
   // Define evaluation criteria schema
   const EvaluationSchema = z.object({
     accuracy: z.number().min(1).max(5).describe("Factual accuracy and correctness (1-5)"),
-    completeness: z.number().min(1).max(5).describe("How complete and comprehensive the answer is (1-5)"),
-    clarity: z.number().min(1).max(5).describe("How clear, well-written, and easy to understand (1-5)"),
-    relevance: z.number().min(1).max(5).describe("How relevant the answer is to the question (1-5)"),
-    reasoning: z.string().describe("Brief explanation of the scores and overall assessment"),
+    completeness: z
+      .number()
+      .min(1)
+      .max(5)
+      .describe("How complete and comprehensive the answer is (1-5)"),
+    clarity: z
+      .number()
+      .min(1)
+      .max(5)
+      .describe("How clear, well-written, and easy to understand (1-5)"),
+    relevance: z
+      .number()
+      .min(1)
+      .max(5)
+      .describe("How relevant the answer is to the question (1-5)"),
+    reasoning: z.string().describe("Brief explanation of the scores and overall assessment")
   });
 
   // Create evaluator model with structured output
@@ -37,7 +51,9 @@ async function main() {
 
   // Create evaluation prompt
   const evaluationPrompt = ChatPromptTemplate.fromMessages([
-    ["system", `You are an expert evaluator assessing the quality of AI-generated responses.
+    [
+      "system",
+      `You are an expert evaluator assessing the quality of AI-generated responses.
 
 Evaluate the response based on:
 - Accuracy: Is the information factually correct?
@@ -45,12 +61,16 @@ Evaluate the response based on:
 - Clarity: Is it well-written and easy to understand?
 - Relevance: Does it stay on topic?
 
-Rate each criterion from 1 (poor) to 5 (excellent).`],
-    ["human", `Question: {question}
+Rate each criterion from 1 (poor) to 5 (excellent).`
+    ],
+    [
+      "human",
+      `Question: {question}
 
 Answer to evaluate: {answer}
 
-Provide your evaluation:`],
+Provide your evaluation:`
+    ]
   ]);
 
   /**
@@ -61,23 +81,20 @@ Provide your evaluation:`],
     console.log(`🤖 Answer:\n${answer}\n`);
     console.log("🎯 Evaluating with LLM-as-Judge...\n");
 
-    const evaluation = await evaluationPrompt
-      .pipe(evaluator)
-      .invoke({ question, answer });
+    const evaluation = await evaluationPrompt.pipe(evaluator).invoke({ question, answer });
 
     // Display results
     console.log("📊 Evaluation Results:\n");
     console.log(`   Accuracy:     ${evaluation.accuracy}/5 ${"⭐".repeat(evaluation.accuracy)}`);
-    console.log(`   Completeness: ${evaluation.completeness}/5 ${"⭐".repeat(evaluation.completeness)}`);
+    console.log(
+      `   Completeness: ${evaluation.completeness}/5 ${"⭐".repeat(evaluation.completeness)}`
+    );
     console.log(`   Clarity:      ${evaluation.clarity}/5 ${"⭐".repeat(evaluation.clarity)}`);
     console.log(`   Relevance:    ${evaluation.relevance}/5 ${"⭐".repeat(evaluation.relevance)}`);
 
-    const averageScore = (
-      evaluation.accuracy +
-      evaluation.completeness +
-      evaluation.clarity +
-      evaluation.relevance
-    ) / 4;
+    const averageScore =
+      (evaluation.accuracy + evaluation.completeness + evaluation.clarity + evaluation.relevance) /
+      4;
 
     console.log(`\n   Average Score: ${averageScore.toFixed(2)}/5.00`);
 
@@ -101,7 +118,7 @@ Provide your evaluation:`],
       question,
       answer,
       evaluation,
-      averageScore,
+      averageScore
     };
   }
 

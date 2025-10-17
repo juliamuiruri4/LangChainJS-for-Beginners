@@ -3,21 +3,29 @@
  * Run: npx tsx 09-langgraph-patterns/code/03-human-in-loop.ts
  */
 
-import { StateGraph, START, END, Annotation, Command, interrupt, MemorySaver } from "@langchain/langgraph";
+import {
+  StateGraph,
+  START,
+  END,
+  Annotation,
+  Command,
+  interrupt,
+  MemorySaver
+} from "@langchain/langgraph";
 
 const ApprovalState = Annotation.Root({
   request: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "",
+    default: () => ""
   }),
   approved: Annotation<boolean>({
     reducer: (_, right) => right,
-    default: () => false,
+    default: () => false
   }),
   result: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "",
-  }),
+    default: () => ""
+  })
 });
 
 async function main() {
@@ -34,7 +42,7 @@ async function main() {
     const decision = interrupt({
       question: "Do you approve this request?",
       details: state.request,
-      options: ["approve", "reject"],
+      options: ["approve", "reject"]
     });
 
     // The interrupt() returns the human's decision
@@ -68,7 +76,7 @@ async function main() {
   workflow.addEdge(START, "requestApproval" as any);
   workflow.addConditionalEdges("requestApproval" as any, checkApproval, {
     execute: "execute",
-    reject: "reject",
+    reject: "reject"
   } as any);
   workflow.addEdge("execute" as any, END);
   workflow.addEdge("reject" as any, END);
@@ -80,7 +88,7 @@ async function main() {
   const requests = [
     "Deploy new version to production",
     "Delete user data for user ID 12345",
-    "Send marketing email to all users",
+    "Send marketing email to all users"
   ];
 
   for (let i = 0; i < requests.length; i++) {
@@ -96,7 +104,7 @@ async function main() {
         {
           request,
           approved: false,
-          result: "",
+          result: ""
         },
         config
       );
@@ -134,7 +142,9 @@ async function main() {
   console.log("   - Can resume from exactly where it paused");
   console.log("   - Supports async human input (hours/days later)");
   console.log("   - Production-ready pattern with checkpointing");
-  console.log("\n📚 Learn more: https://docs.langchain.com/oss/javascript/langgraph/add-human-in-the-loop\n");
+  console.log(
+    "\n📚 Learn more: https://docs.langchain.com/oss/javascript/langgraph/add-human-in-the-loop\n"
+  );
 }
 
 main().catch(console.error);

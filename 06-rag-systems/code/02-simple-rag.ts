@@ -38,23 +38,23 @@ async function main() {
     new Document({
       pageContent:
         "LangChain.js was released in 2023 as the JavaScript/TypeScript port of the Python LangChain library. It enables developers to build LLM-powered applications using familiar web technologies.",
-      metadata: { source: "langchain-history", topic: "introduction" },
+      metadata: { source: "langchain-history", topic: "introduction" }
     }),
     new Document({
       pageContent:
         "RAG (Retrieval Augmented Generation) combines document retrieval with LLM generation. It allows models to access external knowledge without retraining, making responses more accurate and up-to-date.",
-      metadata: { source: "rag-explanation", topic: "concepts" },
+      metadata: { source: "rag-explanation", topic: "concepts" }
     }),
     new Document({
       pageContent:
         "Vector stores like Pinecone, Weaviate, and Chroma enable semantic search over documents. They store embeddings and perform fast similarity searches to find relevant content.",
-      metadata: { source: "vector-stores", topic: "infrastructure" },
+      metadata: { source: "vector-stores", topic: "infrastructure" }
     }),
     new Document({
       pageContent:
         "LangChain Expression Language (LCEL) provides a declarative way to compose chains. It uses a pipe operator to connect components, making complex workflows easier to build and understand.",
-      metadata: { source: "lcel-guide", topic: "development" },
-    }),
+      metadata: { source: "lcel-guide", topic: "development" }
+    })
   ];
 
   console.log(`📚 Creating vector store with ${docs.length} documents...\n`);
@@ -77,12 +77,12 @@ Answer: Provide a clear, concise answer based on the context above. If the conte
   // 5. Create RAG chain
   const combineDocsChain = await createStuffDocumentsChain({
     llm: model,
-    prompt,
+    prompt
   });
 
   const ragChain = await createRetrievalChain({
     retriever,
-    combineDocsChain,
+    combineDocsChain
   });
 
   // 6. Ask questions
@@ -90,7 +90,7 @@ Answer: Provide a clear, concise answer based on the context above. If the conte
     "When was LangChain.js released?",
     "What is RAG and why is it useful?",
     "What vector stores can I use with LangChain?",
-    "How do I deploy LangChain to production?", // Not in docs
+    "How do I deploy LangChain to production?" // Not in docs
   ];
 
   for (const question of questions) {
@@ -98,7 +98,7 @@ Answer: Provide a clear, concise answer based on the context above. If the conte
     console.log(`\n❓ Question: ${question}\n`);
 
     const response = await ragChain.invoke({
-      input: question,
+      input: question
     });
 
     console.log("🤖 Answer:", response.answer);

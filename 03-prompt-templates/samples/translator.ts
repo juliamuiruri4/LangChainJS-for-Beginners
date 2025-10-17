@@ -11,17 +11,17 @@ import readline from "readline";
 import "dotenv/config";
 
 const model = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
-  });
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // Translation template with formality support
 const translationTemplate = ChatPromptTemplate.fromMessages([
   [
     "system",
     `You are a professional translator. Translate text to {target_language} with {formality} formality.
-Maintain the original meaning while adapting to cultural context.`,
+Maintain the original meaning while adapting to cultural context.`
   ],
   [
     "human",
@@ -29,8 +29,8 @@ Maintain the original meaning while adapting to cultural context.`,
 
 {text}
 
-Provide only the translation, no explanations.`,
-  ],
+Provide only the translation, no explanations.`
+  ]
 ]);
 
 const languages = {
@@ -38,17 +38,17 @@ const languages = {
   "2": "French",
   "3": "German",
   "4": "Japanese",
-  "5": "Italian",
+  "5": "Italian"
 };
 
 const formalityLevels = {
   "1": "casual",
-  "2": "formal",
+  "2": "formal"
 };
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout,
+  output: process.stdout
 });
 
 function question(prompt: string): Promise<string> {
@@ -65,7 +65,7 @@ async function translateText(targetLanguage: string, formality: string, text: st
   const result = await chain.invoke({
     target_language: targetLanguage,
     formality: formality,
-    text: text,
+    text: text
   });
 
   console.log("─".repeat(80));
@@ -86,17 +86,9 @@ async function main() {
     console.log("Running in CI mode - testing with sample data\n");
 
     // Test translation
-    await translateText(
-      "Spanish",
-      "formal",
-      "Good morning. How can I assist you today?"
-    );
+    await translateText("Spanish", "formal", "Good morning. How can I assist you today?");
 
-    await translateText(
-      "French",
-      "casual",
-      "Thanks for your help! See you later."
-    );
+    await translateText("French", "casual", "Thanks for your help! See you later.");
 
     console.log("✅ Translation system working correctly!");
     rl.close();

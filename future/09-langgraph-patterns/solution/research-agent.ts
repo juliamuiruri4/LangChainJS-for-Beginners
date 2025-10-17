@@ -12,24 +12,24 @@ import "dotenv/config";
 const ResearchState = Annotation.Root({
   question: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "",
+    default: () => ""
   }),
   searchCount: Annotation<number>({
     reducer: (_, right) => right,
-    default: () => 0,
+    default: () => 0
   }),
   searchResults: Annotation<string[]>({
     reducer: (left, right) => [...left, ...right],
-    default: () => [],
+    default: () => []
   }),
   needsMoreInfo: Annotation<boolean>({
     reducer: (_, right) => right,
-    default: () => true,
+    default: () => true
   }),
   finalAnswer: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "",
-  }),
+    default: () => ""
+  })
 });
 
 const MAX_SEARCHES = 3;
@@ -39,18 +39,18 @@ const knowledgeBase: Record<string, string[]> = {
   typescript: [
     "TypeScript is a typed superset of JavaScript developed by Microsoft in 2012.",
     "TypeScript adds static typing, interfaces, and enhanced IDE support to JavaScript.",
-    "TypeScript compiles to plain JavaScript and is widely used in large-scale applications.",
+    "TypeScript compiles to plain JavaScript and is widely used in large-scale applications."
   ],
   react: [
     "React is a JavaScript library for building user interfaces, created by Facebook.",
     "React uses a component-based architecture and virtual DOM for efficient rendering.",
-    "React hooks like useState and useEffect enable state and side effects in functional components.",
+    "React hooks like useState and useEffect enable state and side effects in functional components."
   ],
   nodejs: [
     "Node.js is a JavaScript runtime built on Chrome's V8 engine, released in 2009.",
     "Node.js enables server-side JavaScript with event-driven, non-blocking I/O.",
-    "Node.js has a rich ecosystem with npm, the largest package registry.",
-  ],
+    "Node.js has a rich ecosystem with npm, the largest package registry."
+  ]
 };
 
 function simulateSearch(query: string, searchNum: number): string {
@@ -76,9 +76,11 @@ async function main() {
     temperature: 0.7,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   const workflow = new StateGraph(ResearchState);
@@ -88,7 +90,9 @@ async function main() {
     console.log("1️⃣  Analyzing question...");
 
     const complexKeywords = ["compare", "analyze", "explain in detail", "history of"];
-    const needsResearch = complexKeywords.some((keyword) => state.question.toLowerCase().includes(keyword));
+    const needsResearch = complexKeywords.some((keyword) =>
+      state.question.toLowerCase().includes(keyword)
+    );
 
     console.log(`   Needs research: ${needsResearch}\n`);
 
@@ -105,7 +109,7 @@ async function main() {
 
     return {
       searchCount: searchNum,
-      searchResults: [searchResult],
+      searchResults: [searchResult]
     };
   });
 
@@ -161,14 +165,14 @@ Provide a clear, well-structured answer that synthesizes the research findings.`
 
   workflow.addConditionalEdges("analyze" as any, routeAfterAnalyze, {
     search: "search",
-    generate_answer: "generate_answer",
+    generate_answer: "generate_answer"
   } as any);
 
   workflow.addEdge("search" as any, "evaluate" as any);
 
   workflow.addConditionalEdges("evaluate" as any, routeAfterEvaluate, {
     search: "search",
-    generate_answer: "generate_answer",
+    generate_answer: "generate_answer"
   } as any);
 
   workflow.addEdge("generate_answer" as any, END);
@@ -179,7 +183,7 @@ Provide a clear, well-structured answer that synthesizes the research findings.`
   const questions = [
     "What is TypeScript?",
     "Compare and analyze React and its component architecture in detail",
-    "Tell me about Node.js",
+    "Tell me about Node.js"
   ];
 
   for (const question of questions) {
@@ -192,7 +196,7 @@ Provide a clear, well-structured answer that synthesizes the research findings.`
       searchCount: 0,
       searchResults: [],
       needsMoreInfo: true,
-      finalAnswer: "",
+      finalAnswer: ""
     });
 
     console.log("─".repeat(80));

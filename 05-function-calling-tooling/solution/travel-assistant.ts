@@ -19,7 +19,7 @@ const currencyConverter = tool(
       GBP: 0.79,
       JPY: 149.5,
       AUD: 1.53,
-      CAD: 1.36,
+      CAD: 1.36
     };
 
     const fromRate = rates[input.from.toUpperCase()];
@@ -45,13 +45,9 @@ const currencyConverter = tool(
       "Convert amounts between different currencies (USD, EUR, GBP, JPY, AUD, CAD). Use this when the user wants to convert money from one currency to another or asks about exchange rates.",
     schema: z.object({
       amount: z.number().describe("The amount to convert"),
-      from: z
-        .string()
-        .describe("Source currency code (e.g., 'USD', 'EUR', 'GBP')"),
-      to: z
-        .string()
-        .describe("Target currency code (e.g., 'USD', 'EUR', 'GBP')"),
-    }),
+      from: z.string().describe("Source currency code (e.g., 'USD', 'EUR', 'GBP')"),
+      to: z.string().describe("Target currency code (e.g., 'USD', 'EUR', 'GBP')")
+    })
   }
 );
 
@@ -65,7 +61,7 @@ const distanceCalculator = tool(
       Paris: { "New York": 5837, London: 344, Tokyo: 9714, Rome: 1430 },
       Tokyo: { "New York": 10850, London: 9562, Paris: 9714, Sydney: 7823 },
       Sydney: { "New York": 15993, London: 17015, Tokyo: 7823, Paris: 16965 },
-      Rome: { Paris: 1430, London: 1434, "New York": 6896, Tokyo: 9853 },
+      Rome: { Paris: 1430, London: 1434, "New York": 6896, Tokyo: 9853 }
     };
 
     const fromCity = input.from;
@@ -82,8 +78,7 @@ const distanceCalculator = tool(
     }
 
     const units = input.units || "kilometers";
-    const distance =
-      units === "miles" ? (distanceKm * 0.621371).toFixed(0) : distanceKm;
+    const distance = units === "miles" ? (distanceKm * 0.621371).toFixed(0) : distanceKm;
     const unit = units === "miles" ? "miles" : "kilometers";
 
     return `The distance from ${fromCity} to ${toCity} is approximately ${distance} ${unit}`;
@@ -93,15 +88,13 @@ const distanceCalculator = tool(
     description:
       "Calculate the distance between two cities in miles or kilometers. Use this when the user asks about distance between locations, how far apart cities are, or travel distances.",
     schema: z.object({
-      from: z
-        .string()
-        .describe("Starting city name, e.g., 'New York' or 'Paris'"),
+      from: z.string().describe("Starting city name, e.g., 'New York' or 'Paris'"),
       to: z.string().describe("Destination city name, e.g., 'London' or 'Tokyo'"),
       units: z
         .enum(["miles", "kilometers"])
         .optional()
-        .describe("Distance unit (default: kilometers)"),
-    }),
+        .describe("Distance unit (default: kilometers)")
+    })
   }
 );
 
@@ -116,7 +109,7 @@ const timeZoneTool = tool(
       Tokyo: { offset: 9, name: "JST" },
       Sydney: { offset: 10, name: "AEST" },
       Seattle: { offset: -8, name: "PST" },
-      Mumbai: { offset: 5.5, name: "IST" },
+      Mumbai: { offset: 5.5, name: "IST" }
     };
 
     const cityTZ = timeZones[input.city];
@@ -141,10 +134,8 @@ const timeZoneTool = tool(
     description:
       "Get the current time in a specific city and its time zone information. Use this when the user asks what time it is somewhere, about time zones, or time differences between locations.",
     schema: z.object({
-      city: z
-        .string()
-        .describe("City name to get time for, e.g., 'Tokyo' or 'New York'"),
-    }),
+      city: z.string().describe("City name to get time for, e.g., 'Tokyo' or 'New York'")
+    })
   }
 );
 
@@ -158,11 +149,7 @@ async function main() {
     apiKey: process.env.AI_API_KEY
   });
 
-  const modelWithTools = model.bindTools([
-    currencyConverter,
-    distanceCalculator,
-    timeZoneTool,
-  ]);
+  const modelWithTools = model.bindTools([currencyConverter, distanceCalculator, timeZoneTool]);
 
   // Test queries for each tool
   const queries = [
@@ -170,7 +157,7 @@ async function main() {
     "What's the distance between New York and London?",
     "What time is it in Tokyo right now?",
     "How many miles from Paris to Rome?",
-    "Convert 50 GBP to JPY",
+    "Convert 50 GBP to JPY"
   ];
 
   for (const query of queries) {
@@ -187,10 +174,14 @@ async function main() {
       let toolResult;
       switch (toolCall.name) {
         case "currencyConverter":
-          toolResult = await currencyConverter.invoke(currencyConverter.schema.parse(toolCall.args));
+          toolResult = await currencyConverter.invoke(
+            currencyConverter.schema.parse(toolCall.args)
+          );
           break;
         case "distanceCalculator":
-          toolResult = await distanceCalculator.invoke(distanceCalculator.schema.parse(toolCall.args));
+          toolResult = await distanceCalculator.invoke(
+            distanceCalculator.schema.parse(toolCall.args)
+          );
           break;
         case "timeZoneTool":
           toolResult = await timeZoneTool.invoke(timeZoneTool.schema.parse(toolCall.args));

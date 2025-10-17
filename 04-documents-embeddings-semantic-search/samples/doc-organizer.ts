@@ -13,52 +13,116 @@ import "dotenv/config";
 const documents: Document[] = [
   new Document({
     pageContent: "Introduction to machine learning algorithms and supervised learning techniques.",
-    metadata: { category: "AI", date: "2024-01-15", author: "Dr. Sarah Chen", tags: ["ML", "algorithms"] },
+    metadata: {
+      category: "AI",
+      date: "2024-01-15",
+      author: "Dr. Sarah Chen",
+      tags: ["ML", "algorithms"]
+    }
   }),
   new Document({
     pageContent: "Understanding neural networks and deep learning fundamentals for beginners.",
-    metadata: { category: "AI", date: "2024-01-20", author: "Prof. Mike Rodriguez", tags: ["deep-learning", "neural-nets"] },
+    metadata: {
+      category: "AI",
+      date: "2024-01-20",
+      author: "Prof. Mike Rodriguez",
+      tags: ["deep-learning", "neural-nets"]
+    }
   }),
   new Document({
     pageContent: "Building RESTful APIs with Node.js and Express framework best practices.",
-    metadata: { category: "Programming", date: "2024-02-01", author: "Jane Developer", tags: ["nodejs", "API", "backend"] },
+    metadata: {
+      category: "Programming",
+      date: "2024-02-01",
+      author: "Jane Developer",
+      tags: ["nodejs", "API", "backend"]
+    }
   }),
   new Document({
     pageContent: "React hooks: useState, useEffect, and custom hooks explained with examples.",
-    metadata: { category: "Programming", date: "2024-02-10", author: "Alex Frontend", tags: ["react", "hooks", "frontend"] },
+    metadata: {
+      category: "Programming",
+      date: "2024-02-10",
+      author: "Alex Frontend",
+      tags: ["react", "hooks", "frontend"]
+    }
   }),
   new Document({
     pageContent: "Database design principles: normalization, indexing, and query optimization.",
-    metadata: { category: "Database", date: "2024-01-25", author: "Emma Database", tags: ["sql", "design", "optimization"] },
+    metadata: {
+      category: "Database",
+      date: "2024-01-25",
+      author: "Emma Database",
+      tags: ["sql", "design", "optimization"]
+    }
   }),
   new Document({
     pageContent: "Introduction to NoSQL databases: MongoDB, Cassandra, and Redis comparison.",
-    metadata: { category: "Database", date: "2024-02-15", author: "David NoSQL", tags: ["nosql", "mongodb", "redis"] },
+    metadata: {
+      category: "Database",
+      date: "2024-02-15",
+      author: "David NoSQL",
+      tags: ["nosql", "mongodb", "redis"]
+    }
   }),
   new Document({
-    pageContent: "Natural language processing techniques for sentiment analysis and text classification.",
-    metadata: { category: "AI", date: "2024-01-30", author: "Dr. Sarah Chen", tags: ["NLP", "sentiment", "text"] },
+    pageContent:
+      "Natural language processing techniques for sentiment analysis and text classification.",
+    metadata: {
+      category: "AI",
+      date: "2024-01-30",
+      author: "Dr. Sarah Chen",
+      tags: ["NLP", "sentiment", "text"]
+    }
   }),
   new Document({
-    pageContent: "TypeScript advanced types: generics, utility types, and conditional types explained.",
-    metadata: { category: "Programming", date: "2024-02-20", author: "Tom TypeScript", tags: ["typescript", "types", "advanced"] },
+    pageContent:
+      "TypeScript advanced types: generics, utility types, and conditional types explained.",
+    metadata: {
+      category: "Programming",
+      date: "2024-02-20",
+      author: "Tom TypeScript",
+      tags: ["typescript", "types", "advanced"]
+    }
   }),
   new Document({
     pageContent: "Docker containerization and Kubernetes orchestration for modern applications.",
-    metadata: { category: "DevOps", date: "2024-02-05", author: "Lisa DevOps", tags: ["docker", "kubernetes", "containers"] },
+    metadata: {
+      category: "DevOps",
+      date: "2024-02-05",
+      author: "Lisa DevOps",
+      tags: ["docker", "kubernetes", "containers"]
+    }
   }),
   new Document({
-    pageContent: "CI/CD pipelines with GitHub Actions: automated testing and deployment strategies.",
-    metadata: { category: "DevOps", date: "2024-02-12", author: "Chris Pipeline", tags: ["ci-cd", "github-actions", "automation"] },
+    pageContent:
+      "CI/CD pipelines with GitHub Actions: automated testing and deployment strategies.",
+    metadata: {
+      category: "DevOps",
+      date: "2024-02-12",
+      author: "Chris Pipeline",
+      tags: ["ci-cd", "github-actions", "automation"]
+    }
   }),
   new Document({
     pageContent: "Reinforcement learning basics: Q-learning, policy gradients, and applications.",
-    metadata: { category: "AI", date: "2024-02-18", author: "Prof. Mike Rodriguez", tags: ["RL", "Q-learning", "algorithms"] },
+    metadata: {
+      category: "AI",
+      date: "2024-02-18",
+      author: "Prof. Mike Rodriguez",
+      tags: ["RL", "Q-learning", "algorithms"]
+    }
   }),
   new Document({
-    pageContent: "GraphQL APIs: schema design, resolvers, and optimization techniques for scalability.",
-    metadata: { category: "Programming", date: "2024-02-25", author: "Jane Developer", tags: ["graphql", "API", "schema"] },
-  }),
+    pageContent:
+      "GraphQL APIs: schema design, resolvers, and optimization techniques for scalability.",
+    metadata: {
+      category: "Programming",
+      date: "2024-02-25",
+      author: "Jane Developer",
+      tags: ["graphql", "API", "schema"]
+    }
+  })
 ];
 
 function listAllDocuments() {
@@ -160,7 +224,9 @@ function sortDocuments(field: "date" | "category" | "author") {
 
   sorted.forEach((doc, index) => {
     console.log(`\n${index + 1}. ${doc.pageContent.substring(0, 60)}...`);
-    console.log(`   ${field === "date" ? "📅" : field === "category" ? "📁" : "✍️"}  ${field}: ${doc.metadata[field]}`);
+    console.log(
+      `   ${field === "date" ? "📅" : field === "category" ? "📁" : "✍️"}  ${field}: ${doc.metadata[field]}`
+    );
   });
 
   console.log("\n─".repeat(80) + "\n");
@@ -168,7 +234,7 @@ function sortDocuments(field: "date" | "category" | "author") {
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout,
+  output: process.stdout
 });
 
 function question(prompt: string): Promise<string> {
@@ -215,7 +281,7 @@ async function interactiveMenu() {
 
       case "5":
         console.log("\nSort by: date, category, or author");
-        const field = await question("Enter field: ") as "date" | "category" | "author";
+        const field = (await question("Enter field: ")) as "date" | "category" | "author";
         if (["date", "category", "author"].includes(field)) {
           sortDocuments(field);
         } else {

@@ -80,9 +80,7 @@ async function courseRecommendation() {
     apiKey: process.env.AI_API_KEY
   });
 
-  const response = await model.invoke([
-    new HumanMessage("What is LangChain.js in one sentence?")
-  ]);
+  const response = await model.invoke([new HumanMessage("What is LangChain.js in one sentence?")]);
 
   console.log("✅ Using ChatOpenAI (recommended for this course)");
   console.log("Response:", response.content);
@@ -95,7 +93,7 @@ async function courseRecommendation() {
 // Run all examples
 async function main() {
   console.log("🔌 Provider-Agnostic Initialization Concepts\n");
-  console.log("=" .repeat(60));
+  console.log("=".repeat(60));
 
   try {
     await standardOpenAIExample();

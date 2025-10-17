@@ -64,8 +64,11 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
 `;
 
   const faqPrompt = ChatPromptTemplate.fromMessages([
-    ["system", "You are a helpful customer service assistant. Answer questions based on this FAQ:\n\n{context}"],
-    ["human", "{question}"],
+    [
+      "system",
+      "You are a helpful customer service assistant. Answer questions based on this FAQ:\n\n{context}"
+    ],
+    ["human", "{question}"]
   ]);
 
   const faqChain = faqPrompt.pipe(model);
@@ -75,7 +78,7 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
 
   const faqResponse = await faqChain.invoke({
     context: faqContext,
-    question: faqQuestion,
+    question: faqQuestion
   });
 
   console.log("Answer:", faqResponse.content);
@@ -102,37 +105,45 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
   // Simulate a large knowledge base (in reality, this would be 1000s of docs)
   const docs = [
     new Document({
-      pageContent: "The API authentication uses OAuth 2.0 with bearer tokens. Tokens expire after 24 hours.",
-      metadata: { source: "api-auth.md", category: "API" },
+      pageContent:
+        "The API authentication uses OAuth 2.0 with bearer tokens. Tokens expire after 24 hours.",
+      metadata: { source: "api-auth.md", category: "API" }
     }),
     new Document({
-      pageContent: "Database migrations are handled automatically by the ORM. Use 'npm run migrate' to apply pending migrations.",
-      metadata: { source: "database.md", category: "Database" },
+      pageContent:
+        "Database migrations are handled automatically by the ORM. Use 'npm run migrate' to apply pending migrations.",
+      metadata: { source: "database.md", category: "Database" }
     }),
     new Document({
-      pageContent: "Deployment to production requires approval from two team leads. Use the GitHub Actions workflow.",
-      metadata: { source: "deployment.md", category: "DevOps" },
+      pageContent:
+        "Deployment to production requires approval from two team leads. Use the GitHub Actions workflow.",
+      metadata: { source: "deployment.md", category: "DevOps" }
     }),
     new Document({
-      pageContent: "Error logging is handled by Sentry. All errors are automatically tracked and reported to the #alerts channel.",
-      metadata: { source: "monitoring.md", category: "DevOps" },
+      pageContent:
+        "Error logging is handled by Sentry. All errors are automatically tracked and reported to the #alerts channel.",
+      metadata: { source: "monitoring.md", category: "DevOps" }
     }),
     new Document({
-      pageContent: "The frontend uses React 18 with TypeScript. All components should be functional with hooks.",
-      metadata: { source: "frontend.md", category: "Frontend" },
+      pageContent:
+        "The frontend uses React 18 with TypeScript. All components should be functional with hooks.",
+      metadata: { source: "frontend.md", category: "Frontend" }
     }),
     new Document({
-      pageContent: "CSS styling uses Tailwind CSS. Avoid inline styles and use utility classes instead.",
-      metadata: { source: "styling.md", category: "Frontend" },
+      pageContent:
+        "CSS styling uses Tailwind CSS. Avoid inline styles and use utility classes instead.",
+      metadata: { source: "styling.md", category: "Frontend" }
     }),
     new Document({
-      pageContent: "API rate limiting is 100 requests per minute per user. Exceeding this returns a 429 status code.",
-      metadata: { source: "api-limits.md", category: "API" },
+      pageContent:
+        "API rate limiting is 100 requests per minute per user. Exceeding this returns a 429 status code.",
+      metadata: { source: "api-limits.md", category: "API" }
     }),
     new Document({
-      pageContent: "User passwords are hashed using bcrypt with 12 rounds. Never store passwords in plain text.",
-      metadata: { source: "security.md", category: "Security" },
-    }),
+      pageContent:
+        "User passwords are hashed using bcrypt with 12 rounds. Never store passwords in plain text.",
+      metadata: { source: "security.md", category: "Security" }
+    })
   ];
 
   console.log("Creating vector store from documents...");
@@ -146,25 +157,28 @@ A: We accept all major credit cards, PayPal, and Apple Pay.
   const retriever = vectorStore.asRetriever({ k: 2 });
 
   const ragPrompt = ChatPromptTemplate.fromMessages([
-    ["system", "You are a helpful documentation assistant. Answer questions based on the following context:\n\n{context}"],
-    ["human", "{input}"],
+    [
+      "system",
+      "You are a helpful documentation assistant. Answer questions based on the following context:\n\n{context}"
+    ],
+    ["human", "{input}"]
   ]);
 
   const combineDocsChain = await createStuffDocumentsChain({
     llm: model,
-    prompt: ragPrompt,
+    prompt: ragPrompt
   });
 
   const ragChain = await createRetrievalChain({
     retriever,
-    combineDocsChain,
+    combineDocsChain
   });
 
   const ragQuestion = "How does API authentication work?";
   console.log(`\nQuestion: "${ragQuestion}"\n`);
 
   const ragResponse = await ragChain.invoke({
-    input: ragQuestion,
+    input: ragQuestion
   });
 
   console.log("Answer:", ragResponse.answer);

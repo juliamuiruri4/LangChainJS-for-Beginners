@@ -25,7 +25,7 @@ const sentences = [
   "Cats are independent animals",
   "Pets bring joy to families",
   "The weather is sunny today",
-  "It's raining outside",
+  "It's raining outside"
 ];
 
 async function main() {
@@ -48,7 +48,12 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   // Calculate all pairs
-  const similarities: Array<{ pair: string; score: number; i: number; j: number }> = [];
+  const similarities: Array<{
+    pair: string;
+    score: number;
+    i: number;
+    j: number;
+  }> = [];
 
   for (let i = 0; i < sentences.length; i++) {
     for (let j = i + 1; j < sentences.length; j++) {
@@ -57,7 +62,7 @@ async function main() {
         pair: `"${sentences[i]}" <-> "${sentences[j]}"`,
         score,
         i,
-        j,
+        j
       });
     }
   }

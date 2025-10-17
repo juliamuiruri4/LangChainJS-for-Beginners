@@ -18,9 +18,11 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   // Chatbot node
@@ -45,7 +47,7 @@ async function main() {
     "I love programming",
     "I work at TechCorp",
     "I have two cats",
-    "I live in Boston",
+    "I live in Boston"
   ];
 
   console.log("📝 Test Conversation:\n");
@@ -91,7 +93,7 @@ async function main() {
 
   const windowFinalResponse = await model.invoke([
     ...windowMessages,
-    new HumanMessage("Tell me everything you know about me"),
+    new HumanMessage("Tell me everything you know about me")
   ]);
 
   console.log(`Question: "Tell me everything you know about me"\n`);
@@ -111,7 +113,7 @@ async function main() {
     const response = await model.invoke([
       ...(summaryContext ? [new HumanMessage(`Context: ${summaryContext}`)] : []),
       ...recentMessages,
-      new HumanMessage(msg),
+      new HumanMessage(msg)
     ]);
 
     recentMessages.push(new HumanMessage(msg), new AIMessage(response.content.toString()));
@@ -129,9 +131,11 @@ async function main() {
   }
 
   const summaryFinalResponse = await model.invoke([
-    ...(summaryContext ? [new HumanMessage(`Previous conversation summary: ${summaryContext}`)] : []),
+    ...(summaryContext
+      ? [new HumanMessage(`Previous conversation summary: ${summaryContext}`)]
+      : []),
     ...recentMessages,
-    new HumanMessage("Tell me everything you know about me"),
+    new HumanMessage("Tell me everything you know about me")
   ]);
 
   console.log(`Question: "Tell me everything you know about me"\n`);

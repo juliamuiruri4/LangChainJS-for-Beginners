@@ -25,10 +25,10 @@ async function temperatureComparison() {
     console.log("-".repeat(80));
 
     const model = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
-  });
+      model: process.env.AI_MODEL,
+      configuration: { baseURL: process.env.AI_ENDPOINT },
+      apiKey: process.env.AI_API_KEY
+    });
     for (let i = 1; i <= tries; i++) {
       const response = await model.invoke(prompt);
       console.log(`  Try ${i}: ${response.content}`);
@@ -55,10 +55,10 @@ async function maxTokensExample() {
     console.log("-".repeat(80));
 
     const model = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
-  });
+      model: process.env.AI_MODEL,
+      configuration: { baseURL: process.env.AI_ENDPOINT },
+      apiKey: process.env.AI_API_KEY
+    });
 
     const response = await model.invoke(prompt);
     console.log(response.content);

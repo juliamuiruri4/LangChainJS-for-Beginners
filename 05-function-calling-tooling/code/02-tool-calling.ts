@@ -24,8 +24,8 @@ const calculatorTool = tool(
     name: "calculator",
     description: "Perform mathematical calculations",
     schema: z.object({
-      expression: z.string().describe("Math expression to evaluate"),
-    }),
+      expression: z.string().describe("Math expression to evaluate")
+    })
   }
 );
 

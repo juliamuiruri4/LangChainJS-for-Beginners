@@ -39,8 +39,8 @@ async function main() {
       name: "get_datetime",
       description: "Get current date, time, or both",
       schema: z.object({
-        type: z.enum(["date", "time", "both"]).describe("What to get: date, time, or both"),
-      }),
+        type: z.enum(["date", "time", "both"]).describe("What to get: date, time, or both")
+      })
     }
   );
 
@@ -49,7 +49,7 @@ async function main() {
     async (input) => {
       const reminder = {
         text: input.text,
-        time: input.time,
+        time: input.time
       };
       reminders.push(reminder);
       return `Reminder set: "${input.text}" at ${input.time}. Total reminders: ${reminders.length}`;
@@ -59,8 +59,8 @@ async function main() {
       description: "Save a reminder with text and time",
       schema: z.object({
         text: z.string().describe("The reminder text"),
-        time: z.string().describe("When the reminder is for (e.g., '3pm', 'tomorrow', '2:30')"),
-      }),
+        time: z.string().describe("When the reminder is for (e.g., '3pm', 'tomorrow', '2:30')")
+      })
     }
   );
 
@@ -70,7 +70,7 @@ async function main() {
       const note = {
         title: input.title,
         content: input.content,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
       notes.push(note);
       return `Note saved: "${input.title}". Total notes: ${notes.length}`;
@@ -80,8 +80,8 @@ async function main() {
       description: "Save a note with title and content",
       schema: z.object({
         title: z.string().describe("The note title"),
-        content: z.string().describe("The note content"),
-      }),
+        content: z.string().describe("The note content")
+      })
     }
   );
 
@@ -124,12 +124,13 @@ async function main() {
     },
     {
       name: "convert_units",
-      description: "Convert between units (temperature: fahrenheit/celsius, distance: miles/kilometers, weight: pounds/kilograms)",
+      description:
+        "Convert between units (temperature: fahrenheit/celsius, distance: miles/kilometers, weight: pounds/kilograms)",
       schema: z.object({
         value: z.number().describe("The value to convert"),
         from: z.string().describe("The unit to convert from"),
-        to: z.string().describe("The unit to convert to"),
-      }),
+        to: z.string().describe("The unit to convert to")
+      })
     }
   );
 
@@ -139,14 +140,12 @@ async function main() {
       if (reminders.length === 0) {
         return "No reminders found";
       }
-      return reminders
-        .map((r, i) => `${i + 1}. "${r.text}" at ${r.time}`)
-        .join("\n");
+      return reminders.map((r, i) => `${i + 1}. "${r.text}" at ${r.time}`).join("\n");
     },
     {
       name: "list_reminders",
       description: "List all saved reminders",
-      schema: z.object({}),
+      schema: z.object({})
     }
   );
 
@@ -157,13 +156,15 @@ async function main() {
         return "No notes found";
       }
       return notes
-        .map((n, i) => `${i + 1}. ${n.title}: ${n.content} (${new Date(n.timestamp).toLocaleString()})`)
+        .map(
+          (n, i) => `${i + 1}. ${n.title}: ${n.content} (${new Date(n.timestamp).toLocaleString()})`
+        )
         .join("\n");
     },
     {
       name: "list_notes",
       description: "List all saved notes",
-      schema: z.object({}),
+      schema: z.object({})
     }
   );
 
@@ -172,14 +173,16 @@ async function main() {
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   const agent = createReactAgent({
     llm: model,
-    tools: [dateTimeTool, reminderTool, noteTool, converterTool, listRemindersTool, listNotesTool],
+    tools: [dateTimeTool, reminderTool, noteTool, converterTool, listRemindersTool, listNotesTool]
   });
 
   const queries = [
@@ -191,14 +194,14 @@ async function main() {
     "Convert 72 fahrenheit to celsius",
     "Show me my reminders",
     "Set a reminder to submit report at 5pm tomorrow",
-    "List my notes",
+    "List my notes"
   ];
 
   for (const query of queries) {
     console.log(`❓ ${query}\n`);
 
     const response = await agent.invoke({
-      messages: [new HumanMessage(query)],
+      messages: [new HumanMessage(query)]
     });
 
     const lastMessage = response.messages[response.messages.length - 1];

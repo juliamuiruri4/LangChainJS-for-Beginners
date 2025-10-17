@@ -12,28 +12,28 @@ import "dotenv/config";
 const ContentState = Annotation.Root({
   content: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "",
+    default: () => ""
   }),
   issues: Annotation<string[]>({
     reducer: (_, right) => right,
-    default: () => [],
+    default: () => []
   }),
   revisionCount: Annotation<number>({
     reducer: (_, right) => right,
-    default: () => 0,
+    default: () => 0
   }),
   approved: Annotation<boolean>({
     reducer: (_, right) => right,
-    default: () => false,
+    default: () => false
   }),
   status: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => "draft",
+    default: () => "draft"
   }),
   humanApproval: Annotation<boolean>({
     reducer: (_, right) => right,
-    default: () => false,
-  }),
+    default: () => false
+  })
 });
 
 const REQUIRED_KEYWORDS = ["javascript", "typescript", "programming"];
@@ -50,9 +50,11 @@ async function main() {
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   const workflow = new StateGraph(ContentState);
@@ -85,7 +87,10 @@ async function main() {
 
     console.log(`   Found ${issues.length} issue(s)\n`);
 
-    return { issues, status: issues.length > 0 ? "needs_revision" : "passed_checks" };
+    return {
+      issues,
+      status: issues.length > 0 ? "needs_revision" : "passed_checks"
+    };
   });
 
   // Node 2: Suggest edits
@@ -93,7 +98,10 @@ async function main() {
     console.log("2️⃣  Suggesting edits...");
     console.log(`   Issues found: ${state.issues.join(", ")}\n`);
 
-    return { revisionCount: state.revisionCount + 1, status: "revision_suggested" };
+    return {
+      revisionCount: state.revisionCount + 1,
+      status: "revision_suggested"
+    };
   });
 
   // Node 3: Request human approval
@@ -148,7 +156,7 @@ async function main() {
   workflow.addConditionalEdges("auto_check" as any, routeAfterCheck, {
     human_approval: "human_approval",
     suggest_edits: "suggest_edits",
-    __end__: END,
+    __end__: END
   } as any);
 
   workflow.addEdge("suggest_edits" as any, "auto_check" as any); // Loop back for revision
@@ -156,7 +164,7 @@ async function main() {
   workflow.addConditionalEdges("human_approval" as any, routeAfterApproval, {
     publish: "publish",
     suggest_edits: "suggest_edits",
-    __end__: END,
+    __end__: END
   } as any);
 
   workflow.addEdge("publish" as any, END);
@@ -168,17 +176,17 @@ async function main() {
     {
       name: "Valid Content",
       content:
-        "JavaScript and TypeScript are powerful programming languages for web development. TypeScript adds static typing to JavaScript, making code more maintainable and catching errors early. Modern programming with these languages enables building robust applications.",
+        "JavaScript and TypeScript are powerful programming languages for web development. TypeScript adds static typing to JavaScript, making code more maintainable and catching errors early. Modern programming with these languages enables building robust applications."
     },
     {
       name: "Too Short",
-      content: "JavaScript is great for programming.",
+      content: "JavaScript is great for programming."
     },
     {
       name: "Missing Keywords",
       content:
-        "This is a long article about web development and modern software engineering practices. It covers various aspects of building applications in today's world. Development teams use various tools and frameworks.",
-    },
+        "This is a long article about web development and modern software engineering practices. It covers various aspects of building applications in today's world. Development teams use various tools and frameworks."
+    }
   ];
 
   for (const test of testContent) {
@@ -192,7 +200,7 @@ async function main() {
       revisionCount: 0,
       approved: false,
       status: "draft",
-      humanApproval: false,
+      humanApproval: false
     });
 
     console.log("─".repeat(80));

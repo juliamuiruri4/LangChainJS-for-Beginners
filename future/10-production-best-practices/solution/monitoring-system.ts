@@ -57,7 +57,7 @@ class MonitoringSystem {
       totalTokens,
       totalCost,
       errorCounts,
-      uptime: Date.now() - this.startTime,
+      uptime: Date.now() - this.startTime
     };
   }
 
@@ -90,7 +90,7 @@ class MonitoringSystem {
     const exportData = {
       generatedAt: new Date().toISOString(),
       summary: stats,
-      requests: this.metrics,
+      requests: this.metrics
     };
 
     await fs.writeFile(filepath, JSON.stringify(exportData, null, 2));
@@ -123,13 +123,17 @@ class MonitoringSystem {
         successRate: `${stats.successRate.toFixed(1)}%`,
         avgResponseTime: `${(stats.avgResponseTime / 1000).toFixed(2)}s`,
         errorCount: stats.failed,
-        uptime: `${Math.floor(stats.uptime / 1000)}s`,
-      },
+        uptime: `${Math.floor(stats.uptime / 1000)}s`
+      }
     };
   }
 }
 
-async function makeRequest(monitor: MonitoringSystem, query: string, shouldFail: boolean = false): Promise<void> {
+async function makeRequest(
+  monitor: MonitoringSystem,
+  query: string,
+  shouldFail: boolean = false
+): Promise<void> {
   const startTime = Date.now();
 
   try {
@@ -141,9 +145,11 @@ async function makeRequest(monitor: MonitoringSystem, query: string, shouldFail:
       model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
-        defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+        defaultQuery: process.env.AI_API_VERSION
+          ? { "api-version": process.env.AI_API_VERSION }
+          : undefined
       },
-      apiKey: process.env.AI_API_KEY,
+      apiKey: process.env.AI_API_KEY
     });
 
     const response = await model.invoke(query);
@@ -158,7 +164,7 @@ async function makeRequest(monitor: MonitoringSystem, query: string, shouldFail:
       success: true,
       responseTime,
       tokens,
-      cost,
+      cost
     });
 
     console.log(`✅ Success: ${query.substring(0, 50)}... (${responseTime}ms)`);
@@ -172,7 +178,7 @@ async function makeRequest(monitor: MonitoringSystem, query: string, shouldFail:
       responseTime,
       tokens: 0,
       cost: 0,
-      error: error.message,
+      error: error.message
     });
 
     console.log(`❌ Error: ${query.substring(0, 50)}... (${error.message})`);
@@ -192,7 +198,7 @@ async function main() {
     { text: "Simulated timeout error", shouldFail: true },
     { text: "What are microservices?", shouldFail: false },
     { text: "Another simulated error", shouldFail: true },
-    { text: "Explain REST APIs", shouldFail: false },
+    { text: "Explain REST APIs", shouldFail: false }
   ];
 
   console.log("🚀 Simulating requests...\n");

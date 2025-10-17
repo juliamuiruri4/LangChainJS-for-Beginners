@@ -36,21 +36,25 @@ async function main() {
   // Create knowledge base about programming languages
   const docs = [
     new Document({
-      pageContent: "Python is a high-level programming language known for its simplicity and readability. It's widely used in data science, machine learning, and web development.",
-      metadata: { category: "language", popularity: "high" },
+      pageContent:
+        "Python is a high-level programming language known for its simplicity and readability. It's widely used in data science, machine learning, and web development.",
+      metadata: { category: "language", popularity: "high" }
     }),
     new Document({
-      pageContent: "JavaScript runs in browsers and on servers via Node.js. It's the primary language for web development and powers interactive websites.",
-      metadata: { category: "language", popularity: "high" },
+      pageContent:
+        "JavaScript runs in browsers and on servers via Node.js. It's the primary language for web development and powers interactive websites.",
+      metadata: { category: "language", popularity: "high" }
     }),
     new Document({
-      pageContent: "Rust is a systems programming language focused on safety and performance. It prevents memory bugs and ensures thread safety.",
-      metadata: { category: "language", popularity: "growing" },
+      pageContent:
+        "Rust is a systems programming language focused on safety and performance. It prevents memory bugs and ensures thread safety.",
+      metadata: { category: "language", popularity: "growing" }
     }),
     new Document({
-      pageContent: "TypeScript adds static typing to JavaScript, catching errors at compile time and improving developer experience in large codebases.",
-      metadata: { category: "language", popularity: "high" },
-    }),
+      pageContent:
+        "TypeScript adds static typing to JavaScript, catching errors at compile time and improving developer experience in large codebases.",
+      metadata: { category: "language", popularity: "high" }
+    })
   ];
 
   const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
@@ -87,19 +91,19 @@ Answer:`);
     stats: async (input: { question: string }) => {
       console.log("   📊 Generating statistics...");
       const docs = await retriever.invoke(input.question);
-      return `Found ${docs.length} relevant documents. Categories: ${docs.map(d => d.metadata.category).join(", ")}`;
+      return `Found ${docs.length} relevant documents. Categories: ${docs.map((d) => d.metadata.category).join(", ")}`;
     },
 
     // Operation 3: Pass through the question
-    question: new RunnablePassthrough(),
+    question: new RunnablePassthrough()
   });
 
   // Combine parallel results with the rest of the chain
   const fullChain = RunnableSequence.from([
-    parallelChain,  // All three operations run at once!
+    parallelChain, // All three operations run at once!
     prompt,
     model,
-    new StringOutputParser(),
+    new StringOutputParser()
   ]);
 
   console.log("\n✅ Parallel chain created!\n");
@@ -110,10 +114,7 @@ Answer:`);
   console.log("\n=".repeat(80));
 
   // Test the parallel chain
-  const questions = [
-    "What makes Python popular?",
-    "How is TypeScript different from JavaScript?",
-  ];
+  const questions = ["What makes Python popular?", "How is TypeScript different from JavaScript?"];
 
   for (const question of questions) {
     console.log(`\n❓ ${question}\n`);

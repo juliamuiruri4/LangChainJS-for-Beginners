@@ -8,10 +8,7 @@
  * - "Can I dynamically select which examples to include based on the input?"
  */
 
-import {
-  ChatPromptTemplate,
-  FewShotChatMessagePromptTemplate,
-} from "@langchain/core/prompts";
+import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
@@ -27,27 +24,27 @@ async function emotionToEmojiExample() {
     { input: "happy", output: "😊" },
     { input: "sad", output: "😢" },
     { input: "excited", output: "🎉" },
-    { input: "angry", output: "😠" },
+    { input: "angry", output: "😠" }
   ];
 
   // Create example template
   const exampleTemplate = ChatPromptTemplate.fromMessages([
     ["human", "{input}"],
-    ["ai", "{output}"],
+    ["ai", "{output}"]
   ]);
 
   // Create few-shot template
   const fewShotTemplate = new FewShotChatMessagePromptTemplate({
     examplePrompt: exampleTemplate,
     examples: examples,
-    inputVariables: [],
+    inputVariables: []
   });
 
   // Combine with the final question
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Convert emotions to emojis based on these examples:"],
     fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
-    ["human", "{input}"],
+    ["human", "{input}"]
   ]);
 
   const chain = finalTemplate.pipe(model);
@@ -73,39 +70,39 @@ async function codeCommentExample() {
   const examples = [
     {
       code: "const sum = (a, b) => a + b;",
-      comment: "// Adds two numbers and returns the result",
+      comment: "// Adds two numbers and returns the result"
     },
     {
       code: "const users = data.filter(u => u.active);",
-      comment: "// Filters the data array to only include active users",
+      comment: "// Filters the data array to only include active users"
     },
     {
       code: "await db.save(record);",
-      comment: "// Saves the record to the database asynchronously",
-    },
+      comment: "// Saves the record to the database asynchronously"
+    }
   ];
 
   const exampleTemplate = ChatPromptTemplate.fromMessages([
     ["human", "Code: {code}"],
-    ["ai", "{comment}"],
+    ["ai", "{comment}"]
   ]);
 
   const fewShotTemplate = new FewShotChatMessagePromptTemplate({
     examplePrompt: exampleTemplate,
     examples: examples,
-    inputVariables: [],
+    inputVariables: []
   });
 
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Generate clear, concise comments for code based on these examples:"],
     fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
-    ["human", "Code: {code}"],
+    ["human", "Code: {code}"]
   ]);
 
   const chain = finalTemplate.pipe(model);
   const testCode = [
     "const sorted = items.sort((a, b) => a.price - b.price);",
-    "if (user.role === 'admin') return true;",
+    "if (user.role === 'admin') return true;"
   ];
 
   for (const code of testCode) {

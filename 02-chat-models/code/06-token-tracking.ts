@@ -21,9 +21,7 @@ async function trackTokenUsage() {
   console.log("📊 Token Usage Tracking Example\n");
 
   // Make a request
-  const response = await model.invoke(
-    "Explain what TypeScript is in 2 sentences."
-  );
+  const response = await model.invoke("Explain what TypeScript is in 2 sentences.");
 
   // Extract token usage from metadata
   const usage = response.response_metadata?.tokenUsage;

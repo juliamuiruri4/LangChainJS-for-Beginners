@@ -28,7 +28,7 @@ async function main() {
     "Reinforcement learning trains agents through rewards and penalties",
     "Supervised learning uses labeled training data",
     "Unsupervised learning finds patterns in unlabeled data",
-    "Transfer learning applies knowledge from one task to another",
+    "Transfer learning applies knowledge from one task to another"
   ];
 
   console.log(`📝 Processing ${texts.length} texts...\n`);
@@ -59,7 +59,12 @@ async function main() {
   console.log("\n📊 Embedding Details:");
   console.log(`   Dimensions per embedding: ${batchEmbeddings[0].length}`);
   console.log(`   Total vectors created: ${batchEmbeddings.length}`);
-  console.log(`   First vector sample: [${batchEmbeddings[0].slice(0, 5).map((n) => n.toFixed(4)).join(", ")}...]`);
+  console.log(
+    `   First vector sample: [${batchEmbeddings[0]
+      .slice(0, 5)
+      .map((n) => n.toFixed(4))
+      .join(", ")}...]`
+  );
 
   console.log("\n💡 Key Takeaways:");
   console.log("   - Batch processing is 5-10x faster");

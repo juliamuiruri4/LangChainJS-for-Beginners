@@ -23,9 +23,11 @@ async function testSetup() {
       model: process.env.AI_MODEL || "gpt-4o-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
-        defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+        defaultQuery: process.env.AI_API_VERSION
+          ? { "api-version": process.env.AI_API_VERSION }
+          : undefined
       },
-      apiKey: process.env.AI_API_KEY,
+      apiKey: process.env.AI_API_KEY
     });
 
     const response = await model.invoke("Say 'Setup successful!' if you can read this.");

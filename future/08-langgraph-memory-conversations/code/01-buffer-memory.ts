@@ -15,9 +15,11 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   // Define the chatbot node
@@ -45,7 +47,9 @@ async function main() {
   console.log("\n👤 User: My name is Alex and I'm a TypeScript developer.");
 
   const response1 = await app.invoke(
-    { messages: [new HumanMessage("My name is Alex and I'm a TypeScript developer.")] },
+    {
+      messages: [new HumanMessage("My name is Alex and I'm a TypeScript developer.")]
+    },
     config
   );
 
@@ -64,10 +68,7 @@ async function main() {
   // Exchange 3
   console.log("👤 User: What's my name?");
 
-  const response3 = await app.invoke(
-    { messages: [new HumanMessage("What's my name?")] },
-    config
-  );
+  const response3 = await app.invoke({ messages: [new HumanMessage("What's my name?")] }, config);
 
   console.log(`🤖 Bot: ${response3.messages[response3.messages.length - 1].content}\n`);
 

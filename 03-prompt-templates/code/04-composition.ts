@@ -23,13 +23,14 @@ async function educatorExample() {
 
   // Reusable prompt pieces
   const systemRole = "You are an expert {domain} educator.";
-  const teachingContext = "Teaching level: {level}\nAudience: {audience}\nGoal: Clear, accurate explanations";
+  const teachingContext =
+    "Teaching level: {level}\nAudience: {audience}\nGoal: Clear, accurate explanations";
   const taskInstruction = "Explain {topic} in simple terms with an example.";
 
   // Compose them together
   const template = ChatPromptTemplate.fromMessages([
     ["system", systemRole + "\n\n" + teachingContext],
-    ["human", taskInstruction],
+    ["human", taskInstruction]
   ]);
 
   const chain = template.pipe(model);
@@ -40,7 +41,7 @@ async function educatorExample() {
     domain: "programming",
     level: "beginner",
     audience: "high school students with no coding experience",
-    topic: "variables",
+    topic: "variables"
   });
   console.log(result1.content);
 
@@ -51,7 +52,7 @@ async function educatorExample() {
     domain: "programming",
     level: "intermediate",
     audience: "college students who know basic programming",
-    topic: "closures in JavaScript",
+    topic: "closures in JavaScript"
   });
   console.log(result2.content);
 }
@@ -73,7 +74,7 @@ async function customerServiceExample() {
 
   const template = ChatPromptTemplate.fromMessages([
     ["system", `${brandVoice}\n\n${servicePolicy}\n\n${responseGuidelines}`],
-    ["human", "Customer issue: {issue}"],
+    ["human", "Customer issue: {issue}"]
   ]);
 
   const chain = template.pipe(model);
@@ -85,7 +86,7 @@ async function customerServiceExample() {
     policy: "30-day returns, free shipping on orders over $50",
     priority: "Customer satisfaction and quick resolution",
     guidelines: "Be empathetic, provide clear steps, offer alternatives",
-    issue: "Customer received wrong item and needs replacement urgently",
+    issue: "Customer received wrong item and needs replacement urgently"
   });
 
   console.log(result.content);
@@ -104,13 +105,13 @@ async function partialTemplateExample() {
   // Create a template with many variables
   const template = ChatPromptTemplate.fromMessages([
     ["system", "You are a {role} at {company} specializing in {specialty}."],
-    ["human", "{task}"],
+    ["human", "{task}"]
   ]);
 
   // Create a partial template with some values pre-filled
   const partialTemplate = await template.partial({
     role: "Technical Writer",
-    company: "DevDocs Pro",
+    company: "DevDocs Pro"
   });
 
   const chain = partialTemplate.pipe(model);
@@ -120,7 +121,7 @@ async function partialTemplateExample() {
 
   const result1 = await chain.invoke({
     specialty: "API documentation",
-    task: "Write a brief intro paragraph for a REST API guide",
+    task: "Write a brief intro paragraph for a REST API guide"
   });
 
   console.log("API Documentation task:");
@@ -130,7 +131,7 @@ async function partialTemplateExample() {
 
   const result2 = await chain.invoke({
     specialty: "user guides",
-    task: "Write a getting started section for a mobile app",
+    task: "Write a getting started section for a mobile app"
   });
 
   console.log("User Guide task:");

@@ -20,7 +20,7 @@ interface CostTracker {
 // Pricing per 1M tokens (approximate)
 const PRICING = {
   "gpt-4o-mini": { input: 0.15, output: 0.6 },
-  "gpt-4o": { input: 2.5, output: 10.0 },
+  "gpt-4o": { input: 2.5, output: 10.0 }
 };
 
 const tracker: CostTracker = {
@@ -29,7 +29,7 @@ const tracker: CostTracker = {
   totalOutputTokens: 0,
   totalCost: 0,
   premiumCost: 0,
-  savings: 0,
+  savings: 0
 };
 
 function estimateTokens(text: string): number {
@@ -67,12 +67,12 @@ function selectModel(query: string): { model: string; reasoning: string } {
   if (complexity === "simple") {
     return {
       model: "gpt-4o-mini",
-      reasoning: "Query is simple/short - using cost-effective model",
+      reasoning: "Query is simple/short - using cost-effective model"
     };
   } else {
     return {
       model: "gpt-4o",
-      reasoning: "Query is complex - using premium model for best results",
+      reasoning: "Query is complex - using premium model for best results"
     };
   }
 }
@@ -88,9 +88,11 @@ async function routeQuery(query: string): Promise<void> {
     model: selection.model,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   const response = await model.invoke(query);
@@ -131,13 +133,17 @@ function displayReport(): void {
   console.log();
   console.log(`💰 Actual Cost: $${tracker.totalCost.toFixed(6)}`);
   console.log(`💸 Premium Cost: $${tracker.premiumCost.toFixed(6)}`);
-  console.log(`✅ Savings: $${tracker.savings.toFixed(6)} (${((tracker.savings / tracker.premiumCost) * 100).toFixed(1)}%)`);
+  console.log(
+    `✅ Savings: $${tracker.savings.toFixed(6)} (${((tracker.savings / tracker.premiumCost) * 100).toFixed(1)}%)`
+  );
   console.log("─".repeat(80));
   console.log("\n💡 Cost Optimization Benefits:");
   console.log("   ✓ Routes simple queries to cost-effective models");
   console.log("   ✓ Uses premium models only when needed");
   console.log("   ✓ Tracks costs in real-time");
-  console.log(`   ✓ Saves ${((tracker.savings / tracker.premiumCost) * 100).toFixed(1)}% compared to always using premium`);
+  console.log(
+    `   ✓ Saves ${((tracker.savings / tracker.premiumCost) * 100).toFixed(1)}% compared to always using premium`
+  );
 }
 
 async function main() {
@@ -150,7 +156,7 @@ async function main() {
     "Analyze and compare the architectural differences between microservices and monolithic applications", // Complex
     "What is Docker?", // Simple
     "Discuss the trade-offs between SQL and NoSQL databases in detail", // Complex
-    "Who created JavaScript?", // Simple
+    "Who created JavaScript?" // Simple
   ];
 
   for (let i = 0; i < queries.length; i++) {

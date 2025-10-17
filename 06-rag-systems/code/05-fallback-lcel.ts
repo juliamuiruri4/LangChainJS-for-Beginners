@@ -36,14 +36,17 @@ async function main() {
   // Create a SPECIFIC knowledge base (only about web frameworks)
   const docs = [
     new Document({
-      pageContent: "React is a JavaScript library for building user interfaces. It uses a component-based architecture and virtual DOM for efficient updates.",
+      pageContent:
+        "React is a JavaScript library for building user interfaces. It uses a component-based architecture and virtual DOM for efficient updates."
     }),
     new Document({
-      pageContent: "Vue.js is a progressive JavaScript framework that's easy to learn. It combines the best features of React and Angular.",
+      pageContent:
+        "Vue.js is a progressive JavaScript framework that's easy to learn. It combines the best features of React and Angular."
     }),
     new Document({
-      pageContent: "Angular is a complete framework by Google for building large-scale applications. It includes routing, forms, HTTP client, and more.",
-    }),
+      pageContent:
+        "Angular is a complete framework by Google for building large-scale applications. It includes routing, forms, HTTP client, and more."
+    })
   ];
 
   const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
@@ -76,11 +79,11 @@ Answer:`);
         }
         return formatDocs(docs);
       },
-      question: new RunnablePassthrough(),
+      question: new RunnablePassthrough()
     },
     primaryPrompt,
     model,
-    new StringOutputParser(),
+    new StringOutputParser()
   ]);
 
   // FALLBACK CHAIN: Use general knowledge if primary fails
@@ -93,16 +96,16 @@ Answer:`);
 
   const fallbackChain = RunnableSequence.from([
     {
-      question: new RunnablePassthrough(),
+      question: new RunnablePassthrough()
     },
     fallbackPrompt,
     model,
-    new StringOutputParser(),
+    new StringOutputParser()
   ]);
 
   // COMBINE: Primary with fallback
   const robustChain = primaryChain.withFallbacks({
-    fallbacks: [fallbackChain],
+    fallbacks: [fallbackChain]
   });
 
   console.log("\n✅ Fallback chain created!\n");
@@ -115,20 +118,20 @@ Answer:`);
   const testCases = [
     {
       question: "What is React used for?",
-      expected: "Should find in documents ✅",
+      expected: "Should find in documents ✅"
     },
     {
       question: "How does Vue.js compare to Angular?",
-      expected: "Should find in documents ✅",
+      expected: "Should find in documents ✅"
     },
     {
       question: "What is quantum computing?",
-      expected: "Not in docs → Should use fallback 🔄",
+      expected: "Not in docs → Should use fallback 🔄"
     },
     {
       question: "Explain blockchain technology",
-      expected: "Not in docs → Should use fallback 🔄",
-    },
+      expected: "Not in docs → Should use fallback 🔄"
+    }
   ];
 
   for (const testCase of testCases) {
