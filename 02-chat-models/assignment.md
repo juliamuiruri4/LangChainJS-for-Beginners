@@ -52,28 +52,22 @@ import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages
 import readline from "readline";
 import "dotenv/config";
 
-// 2. Create the model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 2. Create the ChatOpenAI model with your environment variables
 
-// 3. Initialize conversation history with a system message
-const messages: (SystemMessage | HumanMessage | AIMessage)[] = [
-  new SystemMessage("Your bot personality here"),
-];
+// 3. Initialize conversation history array with a SystemMessage for personality
 
-// 4. Set up readline for user input
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+// 4. Set up readline interface for user input (readline.createInterface)
 
-// 5. Add messages to history as conversation progresses
-messages.push(new HumanMessage(userInput));
-const response = await model.invoke(messages);
-messages.push(new AIMessage(String(response.content)));
+// 5. Create a loop that:
+//    - Prompts for user input
+//    - Adds HumanMessage to messages array
+//    - Invokes model with messages array
+//    - Adds AIMessage to messages array
+//    - Displays the response
+
+// 6. Check for "quit" to exit the loop
+
+// 7. Show conversation history length on exit
 ```
 
 ---
@@ -124,28 +118,16 @@ Try 3: "Where Magic Meets Mocha"
 import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
-// 2. Define temperatures to test
-const temperatures = [0, 0.5, 1, 1.5, 2];
-const prompt = "Write a catchy tagline for a coffee shop.";
+// 2. Define an array of temperature values to test [0, 0.5, 1, 1.5, 2]
 
-// 3. Loop through temperatures
-for (const temp of temperatures) {
-  console.log(`\n🌡️ Temperature: ${temp}`);
+// 3. Define your creative prompt
 
-  // Create model with current temperature (inside loop!)
-  const model = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY,
-    temperature: temp // Use loop variable
-  });
+// 4. Loop through each temperature value:
+//    - Create a NEW model instance with that temperature
+//    - Run 3 trials with the same prompt
+//    - Display the results for each trial
 
-  // 4. Run multiple trials for this temperature
-  for (let trial = 1; trial <= 3; trial++) {
-    const response = await model.invoke(prompt);
-    console.log(`Try ${trial}: "${response.content}"`);
-  }
-}
+// 5. Add your analysis comparing the different temperature results
 ```
 
 ---

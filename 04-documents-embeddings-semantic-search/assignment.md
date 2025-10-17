@@ -48,32 +48,20 @@ Practice creating embeddings, building vector stores, and performing semantic se
 import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 
-// 2. Create embeddings instance
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 2. Create an OpenAIEmbeddings instance with environment variables
 
-// 3. Generate embeddings for all sentences
-const sentences = ["sentence 1", "sentence 2", ...];
-const allEmbeddings = await embeddings.embedDocuments(sentences);
+// 3. Define your array of 10 sentences
 
-// 4. Calculate cosine similarity between two vectors
-function cosineSimilarity(a: number[], b: number[]): number {
-  const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
-  const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
-  const magB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
-  return dotProduct / (magA * magB);
-}
+// 4. Generate embeddings for all sentences using embeddings.embedDocuments()
 
-// 5. Compare all pairs using nested loops
-for (let i = 0; i < sentences.length; i++) {
-  for (let j = i + 1; j < sentences.length; j++) {
-    const score = cosineSimilarity(allEmbeddings[i], allEmbeddings[j]);
-    // Store results...
-  }
-}
+// 5. Create a function to calculate cosine similarity between two vectors
+//    Formula: dot product / (magnitude of A × magnitude of B)
+
+// 6. Use nested loops to compare all pairs (avoid comparing same sentence)
+
+// 7. Track the most similar, least similar, and pairs > 0.8
+
+// 8. Display results with formatted scores
 ```
 
 ---
@@ -118,32 +106,20 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
-// 2. Create embeddings instance
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 2. Create an OpenAIEmbeddings instance
 
-// 3. Create documents from your books
-const documents = books.map(book =>
-  new Document({
-    pageContent: book.summary,
-    metadata: { title: book.title }
-  })
-);
+// 3. Define your books array with title and summary properties
 
-// 4. Create vector store from documents
-const vectorStore = await MemoryVectorStore.fromDocuments(documents, embeddings);
+// 4. Convert books to Document objects using .map()
+//    - pageContent should be the summary
+//    - metadata should include the title
 
-// 5. Perform similarity search with scores
-const results = await vectorStore.similaritySearchWithScore("your query", 3);
+// 5. Create a MemoryVectorStore using MemoryVectorStore.fromDocuments()
 
-// 6. Access results (each result is [document, score])
-results.forEach(([doc, score], index) => {
-  console.log(`${index + 1}. ${doc.metadata.title}`);
-  console.log(`   Score: ${score}`);
-});
+// 6. For each test query, use vectorStore.similaritySearchWithScore()
+//    to get top 3 results with scores
+
+// 7. Display results showing title and similarity score
 ```
 
 ---
