@@ -2,10 +2,10 @@
 
 ## Project Overview
 
-This is **LangChain.js for Beginners** - a comprehensive educational course teaching AI application development with LangChain.js and TypeScript. The repository contains 8 sections (00-07) covering everything from basic chat models to autonomous agents, RAG systems, and Model Context Protocol integration.
+This is **LangChain.js for Beginners** - a comprehensive educational course teaching AI application development with LangChain.js and TypeScript. The repository contains 8 sections (00-07) covering everything from basic chat models to autonomous agents, RAG systems, and Model Context Protocol (MCP) integration.
 
-**Architecture**: Educational course structure with 40+ runnable TypeScript examples organized by topic
-**Key Technologies**: LangChain.js, TypeScript, tsx, Node.js >=22.0.0 (LTS), LangGraph, OpenAI/Azure AI/Anthropic
+**Architecture**: Educational course structure with 85+ runnable TypeScript examples organized by topic
+**Key Technologies**: LangChain.js, TypeScript, tsx, Node.js >=22.0.0 (LTS), LangGraph, MCP, OpenAI/Azure AI/Anthropic
 **Purpose**: Teaching developers how to build AI-powered applications with LangChain.js
 
 ## Repository Structure
@@ -124,7 +124,7 @@ When working on course content or examples:
 npm run build
 ```
 
-This compiles 98 TypeScript files to check for:
+This compiles 106 TypeScript files to check for:
 - ✅ Type errors
 - ✅ Syntax errors
 - ✅ Import issues
