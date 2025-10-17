@@ -318,20 +318,20 @@ Notice how temperature 0 is straightforward, temperature 1 is more interesting, 
 
 ---
 
-## 🛡️ Error Handling
+## 🛡️ Error Handling with Built-In Retries
 
-APIs can fail. Networks drop. Rate limits hit. Good error handling is essential.
+API calls can fail due to rate limits, network issues, or temporary service problems. LangChain provides built-in retry logic with exponential backoff.
 
-### Common Errors
+### Common Errors You'll Encounter
 
+- **429 Too Many Requests**: Rate limit exceeded (most common for free tiers)
 - **401 Unauthorized**: Invalid API key
-- **429 Too Many Requests**: Rate limit exceeded
-- **500 Server Error**: Provider issues
+- **500 Server Error**: Temporary provider issues
 - **Network timeout**: Connection problems
 
-### Example 5: Error Handling
+### Using Built-In Retry Logic
 
-Here you'll implement robust error handling with retry logic and exponential backoff to handle API failures, rate limits, and network issues.
+Instead of implementing manual retry logic, use LangChain's `withRetry()` method which handles exponential backoff automatically:
 
 **Code**: [`code/05-error-handling.ts`](./code/05-error-handling.ts)
 **Run**: `tsx 02-chat-models/code/05-error-handling.ts`
@@ -340,106 +340,64 @@ Here you'll implement robust error handling with retry logic and exponential bac
 import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
-async function robustCall(prompt: string, maxRetries = 3): Promise<string> {
+async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      console.log(`Attempt ${attempt}...`);
-      const response = await model.invoke(prompt);
-      return response.content;
-    } catch (error: any) {
-      console.error(`❌ Attempt ${attempt} failed: ${error.message}`);
+  // Use built-in retry logic - automatically handles 429 errors
+  const modelWithRetry = model.withRetry({
+    stopAfterAttempt: 3,  // Max retry attempts
+  });
 
-      // Check if we should retry
-      if (attempt === maxRetries) {
-        throw new Error(`Failed after ${maxRetries} attempts`);
-      }
+  try {
+    console.log("Making API call with automatic retry...\n");
+    const response = await modelWithRetry.invoke("What is LangChain.js?");
+    console.log("✅ Success!");
+    console.log(response.content);
+  } catch (error: any) {
+    console.error("❌ Error:", error.message);
 
-      // Wait before retrying (exponential backoff)
-      const waitTime = Math.pow(2, attempt) * 1000;
-      console.log(`⏳ Waiting ${waitTime}ms before retry...`);
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
+    // Handle specific error types
+    if (error.message.includes("429")) {
+      console.log("\n💡 Rate limit hit. Try again in a few moments.");
+    } else if (error.message.includes("401")) {
+      console.log("\n💡 Check your API key in .env file");
     }
   }
 }
 
-async function main() {
-  try {
-    const response = await robustCall("What is LangChain.js?");
-    console.log("\n✅ Success!");
-    console.log(response);
-  } catch (error: any) {
-    console.error("\n❌ All retries failed:", error.message);
-  }
-}
-
-main();
+main().catch(console.error);
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "Explain how the exponential backoff calculation works in this retry logic"
-> - "How can I add different error handling for rate limit vs network errors?"
-> - "What's the purpose of the setTimeout with Promise in the retry logic?"
-
-### Expected Output
-
-When you run this example with `tsx 02-chat-models/code/05-error-handling.ts`, you'll see:
-
-**Success case** (API works normally):
-```
-Attempt 1...
-
-✅ Success!
-LangChain.js is a JavaScript framework for building applications powered by large language models (LLMs). It provides tools and abstractions to easily integrate LLMs into your applications.
-```
-
-**Error case** (simulated API failure):
-```
-Attempt 1...
-❌ Attempt 1 failed: Network timeout
-⏳ Waiting 2000ms before retry...
-
-Attempt 2...
-❌ Attempt 2 failed: Network timeout
-⏳ Waiting 4000ms before retry...
-
-Attempt 3...
-
-✅ Success!
-LangChain.js is a JavaScript framework...
-```
+> - "How does withRetry() implement exponential backoff?"
+> - "What's the difference between withRetry() and manual retry logic?"
+> - "Can I customize the retry delay with withRetry()?"
 
 ### How It Works
 
+**Built-in Retry Benefits**:
+- ✅ **Automatic exponential backoff**: Waits longer between each retry (1s, 2s, 4s...)
+- ✅ **Works with all LangChain components**: Compatible with agents, RAG, and chains
+- ✅ **Handles 429 errors gracefully**: Automatically retries rate limit errors
+- ✅ **Less code**: No manual retry loop needed
+
 **What's happening**:
-1. **Retry loop**: We wrap the API call in a loop that tries up to `maxRetries` times (default 3)
-2. **Try-catch**: Each attempt is wrapped in try-catch to catch any errors
-3. **Exponential backoff**: Wait time doubles after each failure (2s, 4s, 8s, etc.)
-4. **Error logging**: Each failure is logged with details for debugging
-5. **Final failure**: If all retries fail, we throw an error
+1. `withRetry()` wraps the model with retry logic
+2. If a request fails (429, 500, timeout), it automatically retries
+3. Exponential backoff increases wait time between retries
+4. After max attempts, it throws the error for you to handle
 
-**Exponential Backoff Formula**:
-```typescript
-waitTime = 2^attempt * 1000ms
-// Attempt 1: 2^1 * 1000 = 2000ms (2 seconds)
-// Attempt 2: 2^2 * 1000 = 4000ms (4 seconds)
-// Attempt 3: 2^3 * 1000 = 8000ms (8 seconds)
-```
+**Why use built-in retries?**
+- Simpler code - no manual loops
+- Production-tested - handles edge cases
+- Works seamlessly when you advance to agents and RAG in later chapters
+- Standardized across LangChain ecosystem
 
-**Why exponential backoff?** If the API is overloaded, waiting longer each time gives it more time to recover. Immediate retries can make the problem worse.
-
-**Error Handling Best Practices**:
-1. Always wrap API calls in try-catch
-2. Implement exponential backoff for retries (don't retry immediately)
-3. Log errors for debugging and monitoring
-4. Provide helpful error messages to users (not raw error objects)
-5. Have fallback behavior (e.g., use cached data, different model, or graceful degradation)
-6. Set reasonable retry limits to avoid infinite loops
+> **💡 Advanced**: LangGraph provides even more sophisticated retry policies with `retryPolicy` for complex agent workflows. You'll learn about this in advanced courses.
 
 ---
 
