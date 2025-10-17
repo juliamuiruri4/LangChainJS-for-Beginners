@@ -26,7 +26,7 @@ async function main() {
     name: z.string().describe("The person's full name"),
     age: z.number().describe("The person's age in years"),
     email: z.string().email().describe("The person's email address"),
-    occupation: z.string().describe("The person's job or profession"),
+    occupation: z.string().describe("The person's job or profession")
   });
 
   // Create a model that returns structured output

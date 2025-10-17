@@ -11,14 +11,38 @@ import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
 const books = [
-  { title: "The AI Revolution", summary: "How artificial intelligence is transforming society and business" },
-  { title: "JavaScript Mastery", summary: "Complete guide to modern web development with JavaScript" },
-  { title: "Data Science Handbook", summary: "Statistical analysis and machine learning for beginners" },
-  { title: "The Startup Playbook", summary: "Building and scaling technology companies from scratch" },
-  { title: "Mystery at Midnight", summary: "A detective solves crimes in Victorian London" },
-  { title: "Space Odyssey", summary: "Humans explore distant galaxies and alien civilizations" },
-  { title: "Cooking Basics", summary: "Essential techniques for home chefs and food enthusiasts" },
-  { title: "Python for Data", summary: "Using Python for data analysis and visualization" },
+  {
+    title: "The AI Revolution",
+    summary: "How artificial intelligence is transforming society and business"
+  },
+  {
+    title: "JavaScript Mastery",
+    summary: "Complete guide to modern web development with JavaScript"
+  },
+  {
+    title: "Data Science Handbook",
+    summary: "Statistical analysis and machine learning for beginners"
+  },
+  {
+    title: "The Startup Playbook",
+    summary: "Building and scaling technology companies from scratch"
+  },
+  {
+    title: "Mystery at Midnight",
+    summary: "A detective solves crimes in Victorian London"
+  },
+  {
+    title: "Space Odyssey",
+    summary: "Humans explore distant galaxies and alien civilizations"
+  },
+  {
+    title: "Cooking Basics",
+    summary: "Essential techniques for home chefs and food enthusiasts"
+  },
+  {
+    title: "Python for Data",
+    summary: "Using Python for data analysis and visualization"
+  }
 ];
 
 async function main() {
@@ -37,7 +61,7 @@ async function main() {
     (book) =>
       new Document({
         pageContent: book.summary,
-        metadata: { title: book.title },
+        metadata: { title: book.title }
       })
   );
 
@@ -50,7 +74,7 @@ async function main() {
     "books about programming",
     "stories set in space",
     "learning about AI and technology",
-    "cooking and recipes",
+    "cooking and recipes"
   ];
 
   for (const query of queries) {

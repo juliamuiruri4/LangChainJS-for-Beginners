@@ -20,24 +20,26 @@ function createModel(config: ModelConfig) {
         model: config.model,
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+          defaultQuery: process.env.AI_API_VERSION
+            ? { "api-version": process.env.AI_API_VERSION }
+            : undefined
         },
-        apiKey: config.apiKey || process.env.AI_API_KEY,
+        apiKey: config.apiKey || process.env.AI_API_KEY
       });
 
     case "azure":
       return new ChatOpenAI({
         model: config.model,
         configuration: {
-          baseURL: config.baseURL || process.env.AI_ENDPOINT,
+          baseURL: config.baseURL || process.env.AI_ENDPOINT
         },
-        apiKey: config.apiKey || process.env.AI_API_KEY,
+        apiKey: config.apiKey || process.env.AI_API_KEY
       });
 
     case "openai":
       return new ChatOpenAI({
         model: config.model,
-        apiKey: config.apiKey || process.env.OPENAI_API_KEY,
+        apiKey: config.apiKey || process.env.OPENAI_API_KEY
       });
 
     default:
@@ -58,7 +60,7 @@ async function main() {
 
   const config: ModelConfig = {
     provider,
-    model: modelName,
+    model: modelName
   };
 
   const model = createModel(config);

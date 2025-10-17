@@ -28,9 +28,11 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   // Ensure memory directory exists
@@ -86,7 +88,9 @@ async function main() {
   async function listSavedUsers(): Promise<string[]> {
     try {
       const files = await fs.readdir(MEMORY_DIR);
-      return files.filter((f) => f.endsWith(".json") && !f.includes("export")).map((f) => f.replace(".json", ""));
+      return files
+        .filter((f) => f.endsWith(".json") && !f.includes("export"))
+        .map((f) => f.replace(".json", ""));
     } catch (error) {
       return [];
     }
@@ -151,7 +155,7 @@ async function main() {
     const storedFormat: StoredMessage[] = messages.map((msg) => ({
       type: msg._getType() === "human" ? "human" : "ai",
       content: String(msg.content),
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     }));
 
     await saveMemory(userId, storedFormat);
@@ -167,7 +171,7 @@ async function main() {
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout,
+      output: process.stdout
     });
 
     const askQuestion = () => {
@@ -179,7 +183,7 @@ async function main() {
           const storedFormat: StoredMessage[] = messages.map((msg) => ({
             type: msg._getType() === "human" ? "human" : "ai",
             content: String(msg.content),
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toISOString()
           }));
 
           await saveMemory(userId, storedFormat);
@@ -224,7 +228,7 @@ async function main() {
           const storedFormat: StoredMessage[] = messages.map((msg) => ({
             type: msg._getType() === "human" ? "human" : "ai",
             content: String(msg.content),
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toISOString()
           }));
 
           await saveMemory(userId, storedFormat);

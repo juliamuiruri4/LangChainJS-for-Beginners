@@ -11,12 +11,12 @@ import "dotenv/config";
 const ConversationState = Annotation.Root({
   messages: Annotation<BaseMessage[]>({
     reducer: (left, right) => left.concat(right),
-    default: () => [],
+    default: () => []
   }),
   summary: Annotation<string>({
     reducer: (_, right) => right ?? "",
-    default: () => "",
-  }),
+    default: () => ""
+  })
 });
 
 async function main() {
@@ -26,9 +26,11 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   // Node to summarize old messages
@@ -44,7 +46,7 @@ async function main() {
 
     const summaryPrompt = `Provide a concise summary of the following conversation:
 
-${messagesToSummarize.map(m => `${m._getType()}: ${m.content}`).join('\n')}
+${messagesToSummarize.map((m) => `${m._getType()}: ${m.content}`).join("\n")}
 
 Summary:`;
 
@@ -53,7 +55,7 @@ Summary:`;
 
     return {
       summary,
-      messages: recentMessages,
+      messages: recentMessages
     };
   };
 
@@ -97,23 +99,20 @@ Summary:`;
         // Reduced for CI mode
         "I'm planning a trip to Japan next month for two weeks.",
         "I want to visit Tokyo, Kyoto, and Osaka during my trip.",
-        "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine.",
+        "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine."
       ]
     : [
         "I'm planning a trip to Japan next month for two weeks.",
         "I want to visit Tokyo, Kyoto, and Osaka during my trip.",
         "I'm particularly interested in visiting traditional temples and trying authentic Japanese cuisine.",
         "I'm also excited about experiencing both modern technology districts and historical sites.",
-        "My budget is around $3000 for the entire trip, including flights and accommodation.",
+        "My budget is around $3000 for the entire trip, including flights and accommodation."
       ];
 
   for (let i = 0; i < exchanges.length; i++) {
     console.log(`\n${i + 1}️⃣  User: ${exchanges[i]}`);
 
-    const response = await app.invoke(
-      { messages: [new HumanMessage(exchanges[i])] },
-      config
-    );
+    const response = await app.invoke({ messages: [new HumanMessage(exchanges[i])] }, config);
 
     console.log(`   🤖 Bot: ${response.messages[response.messages.length - 1].content}\n`);
   }
@@ -125,12 +124,18 @@ Summary:`;
   console.log(`Recent messages: ${exchanges.length * 2} messages`);
   console.log(`Summary: ${exchanges.length >= 3 ? "Generated" : "Not yet"}\n`);
 
-  console.log("=" .repeat(80));
+  console.log("=".repeat(80));
   console.log("\n🧪 Testing Summary Memory:\n");
 
   console.log("❓ Based on our conversation, where am I traveling to and what am I interested in?");
   const response = await app.invoke(
-    { messages: [new HumanMessage("Based on our conversation, where am I traveling to and what am I interested in?")] },
+    {
+      messages: [
+        new HumanMessage(
+          "Based on our conversation, where am I traveling to and what am I interested in?"
+        )
+      ]
+    },
     config
   );
   console.log(`🤖 ${response.messages[response.messages.length - 1].content}\n`);

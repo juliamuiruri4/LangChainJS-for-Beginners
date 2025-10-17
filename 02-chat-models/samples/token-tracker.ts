@@ -63,8 +63,8 @@ class TokenTracker {
         promptTokens,
         completionTokens,
         totalTokens,
-        cost,
-      },
+        cost
+      }
     };
 
     this.calls.push(callRecord);
@@ -124,7 +124,9 @@ class TokenTracker {
 
     console.log();
     console.log("Token Breakdown:");
-    console.log(`  Input: ${totalInput.toLocaleString()} (${((totalInput / this.getTotalTokens()) * 100).toFixed(1)}%)`);
+    console.log(
+      `  Input: ${totalInput.toLocaleString()} (${((totalInput / this.getTotalTokens()) * 100).toFixed(1)}%)`
+    );
     console.log(
       `  Output: ${totalOutput.toLocaleString()} (${((totalOutput / this.getTotalTokens()) * 100).toFixed(1)}%)`
     );
@@ -167,7 +169,7 @@ async function main() {
     "Explain async/await in JavaScript in detail",
     "Write a short example of a Node.js HTTP server",
     "What are the benefits of using React hooks?",
-    "Explain the difference between SQL and NoSQL databases",
+    "Explain the difference between SQL and NoSQL databases"
   ];
 
   console.log("🚀 Running test queries...");

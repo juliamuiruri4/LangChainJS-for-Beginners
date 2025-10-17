@@ -26,13 +26,15 @@ async function main() {
   const CompanySchema = z.object({
     name: z.string().describe("Company name"),
     founded: z.number().describe("Year the company was founded"),
-    headquarters: z.object({
-      city: z.string(),
-      country: z.string(),
-    }).describe("Company headquarters location"),
+    headquarters: z
+      .object({
+        city: z.string(),
+        country: z.string()
+      })
+      .describe("Company headquarters location"),
     products: z.array(z.string()).describe("List of main products or services"),
     employeeCount: z.number().describe("Approximate number of employees"),
-    isPublic: z.boolean().describe("Whether the company is publicly traded"),
+    isPublic: z.boolean().describe("Whether the company is publicly traded")
   });
 
   // Create structured model
@@ -40,8 +42,11 @@ async function main() {
 
   // Create a prompt template
   const template = ChatPromptTemplate.fromMessages([
-    ["system", "Extract company information from the text. If information is not available, make reasonable estimates based on common knowledge."],
-    ["human", "{text}"],
+    [
+      "system",
+      "Extract company information from the text. If information is not available, make reasonable estimates based on common knowledge."
+    ],
+    ["human", "{text}"]
   ]);
 
   // Combine template with structured output

@@ -26,20 +26,20 @@ function getProviderConfig(): ProviderConfig {
       model: process.env.AI_MODEL || "gpt-4o-mini",
       baseURL: process.env.AI_ENDPOINT,
       apiVersion: process.env.AI_API_VERSION,
-      apiKey: process.env.AI_API_KEY,
+      apiKey: process.env.AI_API_KEY
     },
     azure: {
       name: "Azure OpenAI",
       model: process.env.AZURE_MODEL || "gpt-4o",
       baseURL: process.env.AZURE_ENDPOINT,
       apiVersion: process.env.AZURE_API_VERSION || "2024-02-15-preview",
-      apiKey: process.env.AZURE_API_KEY,
+      apiKey: process.env.AZURE_API_KEY
     },
     openai: {
       name: "OpenAI",
       model: process.env.OPENAI_MODEL || "gpt-4o-mini",
-      apiKey: process.env.OPENAI_API_KEY,
-    },
+      apiKey: process.env.OPENAI_API_KEY
+    }
   };
 
   return configs[provider] || configs.github;
@@ -48,13 +48,13 @@ function getProviderConfig(): ProviderConfig {
 function createModel(config: ProviderConfig) {
   const modelConfig: any = {
     model: config.model,
-    apiKey: config.apiKey,
+    apiKey: config.apiKey
   };
 
   if (config.baseURL) {
     modelConfig.configuration = {
       baseURL: config.baseURL,
-      defaultQuery: config.apiVersion ? { "api-version": config.apiVersion } : undefined,
+      defaultQuery: config.apiVersion ? { "api-version": config.apiVersion } : undefined
     };
   }
 
@@ -92,7 +92,7 @@ async function main() {
     const questions = [
       "What is TypeScript?",
       "Explain async/await in JavaScript",
-      "What are the benefits of using Docker?",
+      "What are the benefits of using Docker?"
     ];
 
     for (const question of questions) {

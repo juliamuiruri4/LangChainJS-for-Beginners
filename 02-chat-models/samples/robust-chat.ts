@@ -12,11 +12,12 @@ interface ChatOptions {
   fallbackResponse?: string;
 }
 
-async function robustChat(
-  prompt: string,
-  options: ChatOptions = {}
-): Promise<string> {
-  const { maxRetries = 3, timeout = 30000, fallbackResponse = "I apologize, but I'm having trouble connecting right now. Please try again later." } = options;
+async function robustChat(prompt: string, options: ChatOptions = {}): Promise<string> {
+  const {
+    maxRetries = 3,
+    timeout = 30000,
+    fallbackResponse = "I apologize, but I'm having trouble connecting right now. Please try again later."
+  } = options;
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
@@ -81,7 +82,7 @@ async function testRobustChat() {
 
   const response2 = await robustChat("Hello", {
     maxRetries: 2,
-    fallbackResponse: "Sorry, I'm having connection issues. Please try again.",
+    fallbackResponse: "Sorry, I'm having connection issues. Please try again."
   });
 
   console.log("Final response:", response2);

@@ -58,10 +58,10 @@ async function errorExamples() {
   console.log("\n1️⃣  Example: Invalid API Key\n");
   try {
     const badModel = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
-  });
+      model: process.env.AI_MODEL,
+      configuration: { baseURL: process.env.AI_ENDPOINT },
+      apiKey: process.env.AI_API_KEY
+    });
 
     await badModel.invoke("Hello");
   } catch (error: any) {
@@ -79,14 +79,17 @@ async function errorExamples() {
   } else {
     try {
       const timeoutModel = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
-  });
+        model: process.env.AI_MODEL,
+        configuration: { baseURL: process.env.AI_ENDPOINT },
+        apiKey: process.env.AI_API_KEY
+      });
 
       await timeoutModel.invoke("Write a detailed essay about the history of computing");
     } catch (error: any) {
-      console.log("❌ Caught error:", error.message?.includes("timeout") ? "Request timeout" : error.message);
+      console.log(
+        "❌ Caught error:",
+        error.message?.includes("timeout") ? "Request timeout" : error.message
+      );
       console.log("💡 Solution: Increase timeout or retry\n");
     }
   }

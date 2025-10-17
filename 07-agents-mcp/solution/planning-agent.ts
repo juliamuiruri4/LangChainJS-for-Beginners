@@ -15,11 +15,10 @@ const searchTool = tool(
   async (input) => {
     const searchResults: Record<string, string> = {
       "population of tokyo": "Tokyo has a population of approximately 14 million",
-      "population of new york":
-        "New York City has a population of approximately 8.3 million",
+      "population of new york": "New York City has a population of approximately 8.3 million",
       "distance london to paris": "The distance is approximately 343 kilometers",
       "capital of france": "Paris",
-      "capital of japan": "Tokyo",
+      "capital of japan": "Tokyo"
     };
 
     const queryLower = input.query.toLowerCase();
@@ -35,8 +34,8 @@ const searchTool = tool(
     description:
       "Find factual information including populations, distances, capitals, and general knowledge. Use this first when you need facts.",
     schema: z.object({
-      query: z.string().describe("Search query"),
-    }),
+      query: z.string().describe("Search query")
+    })
   }
 );
 
@@ -56,34 +55,31 @@ const calculatorTool = tool(
     description:
       "Perform mathematical calculations including arithmetic, percentages, and expressions. Use when you need to compute numbers.",
     schema: z.object({
-      expression: z.string().describe("Math expression, e.g., '343 * 0.621371'"),
-    }),
+      expression: z.string().describe("Math expression, e.g., '343 * 0.621371'")
+    })
   }
 );
 
 // Tool 3: Unit Converter
 const unitConverter = tool(
   async (input) => {
-    const conversions: Record<
-      string,
-      Record<string, { rate: number; unit: string }>
-    > = {
+    const conversions: Record<string, Record<string, { rate: number; unit: string }>> = {
       km: {
         miles: { rate: 0.621371, unit: "miles" },
-        meters: { rate: 1000, unit: "meters" },
+        meters: { rate: 1000, unit: "meters" }
       },
       miles: {
         km: { rate: 1.60934, unit: "kilometers" },
-        meters: { rate: 1609.34, unit: "meters" },
+        meters: { rate: 1609.34, unit: "meters" }
       },
       usd: {
         eur: { rate: 0.92, unit: "EUR" },
-        gbp: { rate: 0.79, unit: "GBP" },
+        gbp: { rate: 0.79, unit: "GBP" }
       },
       eur: {
         usd: { rate: 1.09, unit: "USD" },
-        gbp: { rate: 0.86, unit: "GBP" },
-      },
+        gbp: { rate: 0.86, unit: "GBP" }
+      }
     };
 
     const fromUnit = input.from.toLowerCase();
@@ -105,8 +101,8 @@ const unitConverter = tool(
     schema: z.object({
       value: z.number().describe("The numeric value to convert"),
       from: z.string().describe("Source unit, e.g., 'km', 'miles', 'USD'"),
-      to: z.string().describe("Target unit, e.g., 'km', 'miles', 'EUR'"),
-    }),
+      to: z.string().describe("Target unit, e.g., 'km', 'miles', 'EUR'")
+    })
   }
 );
 
@@ -118,17 +114,11 @@ const comparisonTool = tool(
 
     switch (input.operation) {
       case "less":
-        return v1 < v2
-          ? `${v1} is less than ${v2}`
-          : `${v1} is not less than ${v2}`;
+        return v1 < v2 ? `${v1} is less than ${v2}` : `${v1} is not less than ${v2}`;
       case "greater":
-        return v1 > v2
-          ? `${v1} is greater than ${v2}`
-          : `${v1} is not greater than ${v2}`;
+        return v1 > v2 ? `${v1} is greater than ${v2}` : `${v1} is not greater than ${v2}`;
       case "equal":
-        return v1 === v2
-          ? `${v1} equals ${v2}`
-          : `${v1} does not equal ${v2}`;
+        return v1 === v2 ? `${v1} equals ${v2}` : `${v1} does not equal ${v2}`;
       case "difference":
         return `The difference between ${v1} and ${v2} is ${Math.abs(v1 - v2)}`;
       default:
@@ -144,8 +134,8 @@ const comparisonTool = tool(
       value2: z.number().describe("Second value to compare"),
       operation: z
         .enum(["less", "greater", "equal", "difference"])
-        .describe("Comparison operation to perform"),
-    }),
+        .describe("Comparison operation to perform")
+    })
   }
 );
 
@@ -163,7 +153,7 @@ async function main() {
     searchTool,
     calculatorTool,
     unitConverter,
-    comparisonTool,
+    comparisonTool
   ]);
 
   // Complex test query
@@ -219,11 +209,11 @@ async function main() {
     messages.push(
       new AIMessage({
         content: response.content,
-        tool_calls: response.tool_calls,
+        tool_calls: response.tool_calls
       }),
       new ToolMessage({
         content: String(toolResult),
-        tool_call_id: toolCall.id || "",
+        tool_call_id: toolCall.id || ""
       })
     );
 

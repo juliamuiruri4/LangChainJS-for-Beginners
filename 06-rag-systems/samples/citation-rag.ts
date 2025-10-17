@@ -16,50 +16,55 @@ import "dotenv/config";
 // Knowledge base with rich metadata
 const knowledgeBase = [
   new Document({
-    pageContent: "Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on developing algorithms that can access data and use it to learn for themselves.",
+    pageContent:
+      "Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on developing algorithms that can access data and use it to learn for themselves.",
     metadata: {
       title: "Introduction to Machine Learning",
       section: "Chapter 1",
       page: 12,
       author: "AI Research Team"
-    },
+    }
   }),
   new Document({
-    pageContent: "Supervised learning involves training a model on labeled data. The algorithm learns to map inputs to outputs based on example input-output pairs. Common applications include classification and regression problems.",
+    pageContent:
+      "Supervised learning involves training a model on labeled data. The algorithm learns to map inputs to outputs based on example input-output pairs. Common applications include classification and regression problems.",
     metadata: {
       title: "Supervised Learning Fundamentals",
       section: "Chapter 2",
       page: 34,
       author: "AI Research Team"
-    },
+    }
   }),
   new Document({
-    pageContent: "Neural networks are computing systems inspired by biological neural networks. They consist of layers of interconnected nodes (neurons) that process and transform data. Deep learning uses neural networks with many layers.",
+    pageContent:
+      "Neural networks are computing systems inspired by biological neural networks. They consist of layers of interconnected nodes (neurons) that process and transform data. Deep learning uses neural networks with many layers.",
     metadata: {
       title: "Neural Networks Explained",
       section: "Chapter 3",
       page: 56,
       author: "Deep Learning Group"
-    },
+    }
   }),
   new Document({
-    pageContent: "Natural Language Processing (NLP) enables computers to understand, interpret, and generate human language. Techniques include tokenization, part-of-speech tagging, named entity recognition, and sentiment analysis.",
+    pageContent:
+      "Natural Language Processing (NLP) enables computers to understand, interpret, and generate human language. Techniques include tokenization, part-of-speech tagging, named entity recognition, and sentiment analysis.",
     metadata: {
       title: "Natural Language Processing",
       section: "Chapter 5",
       page: 89,
       author: "NLP Research Lab"
-    },
+    }
   }),
   new Document({
-    pageContent: "Transfer learning involves taking a pre-trained model and fine-tuning it for a specific task. This approach saves time and resources while often achieving better performance than training from scratch.",
+    pageContent:
+      "Transfer learning involves taking a pre-trained model and fine-tuning it for a specific task. This approach saves time and resources while often achieving better performance than training from scratch.",
     metadata: {
       title: "Transfer Learning Techniques",
       section: "Chapter 7",
       page: 134,
       author: "AI Research Team"
-    },
-  }),
+    }
+  })
 ];
 
 interface RetrievalResult {
@@ -94,7 +99,7 @@ async function main() {
   const questions = [
     "What is machine learning?",
     "Explain neural networks and deep learning",
-    "What is NLP and what can it do?",
+    "What is NLP and what can it do?"
   ];
 
   for (const question of questions) {
@@ -126,10 +131,10 @@ Provide a comprehensive answer with inline citations like [1] or [2] where you r
     const chain = RunnableSequence.from([
       {
         context: () => contextWithCitations,
-        question: (input: { question: string }) => input.question,
+        question: (input: { question: string }) => input.question
       },
       prompt,
-      model,
+      model
     ]);
 
     const response = await chain.invoke({ question });
@@ -145,7 +150,9 @@ Provide a comprehensive answer with inline citations like [1] or [2] where you r
       const score = result[1];
       const relevancePercent = Math.round((1 - score) * 100); // Convert distance to relevance
 
-      console.log(`[${index + 1}] ${doc.metadata.title} - ${doc.metadata.section} (Page ${doc.metadata.page})`);
+      console.log(
+        `[${index + 1}] ${doc.metadata.title} - ${doc.metadata.section} (Page ${doc.metadata.page})`
+      );
       console.log(`    Relevance: ${relevancePercent}%`);
       console.log(`    Author: ${doc.metadata.author}`);
       console.log(`    Excerpt: "${doc.pageContent.substring(0, 100)}..."\n`);

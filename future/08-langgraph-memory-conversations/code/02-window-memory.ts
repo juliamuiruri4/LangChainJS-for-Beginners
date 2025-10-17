@@ -16,16 +16,18 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   // Keep only last 4 messages (2 exchanges)
   const trimmer = trimMessages({
     maxTokens: 200,
     strategy: "last",
-    tokenCounter: model,
+    tokenCounter: model
   });
 
   // Define the chatbot node with message trimming
@@ -53,31 +55,19 @@ async function main() {
 
   // Exchange 1
   console.log("\n1️⃣  User: My favorite color is blue.");
-  await app.invoke(
-    { messages: [new HumanMessage("My favorite color is blue.")] },
-    config
-  );
+  await app.invoke({ messages: [new HumanMessage("My favorite color is blue.")] }, config);
 
   // Exchange 2
   console.log("2️⃣  User: I have a dog named Max.");
-  await app.invoke(
-    { messages: [new HumanMessage("I have a dog named Max.")] },
-    config
-  );
+  await app.invoke({ messages: [new HumanMessage("I have a dog named Max.")] }, config);
 
   // Exchange 3
   console.log("3️⃣  User: I work as a software engineer.");
-  await app.invoke(
-    { messages: [new HumanMessage("I work as a software engineer.")] },
-    config
-  );
+  await app.invoke({ messages: [new HumanMessage("I work as a software engineer.")] }, config);
 
   // Exchange 4
   console.log("4️⃣  User: I live in Seattle.");
-  await app.invoke(
-    { messages: [new HumanMessage("I live in Seattle.")] },
-    config
-  );
+  await app.invoke({ messages: [new HumanMessage("I live in Seattle.")] }, config);
 
   // Now test memory - should only remember last 2 exchanges
   console.log("\n" + "=".repeat(80));
@@ -92,18 +82,12 @@ async function main() {
   console.log("   (This was mentioned 4 exchanges ago - likely forgotten)\n");
 
   console.log("❓ Question: Where do I live?");
-  const response2 = await app.invoke(
-    { messages: [new HumanMessage("Where do I live?")] },
-    config
-  );
+  const response2 = await app.invoke({ messages: [new HumanMessage("Where do I live?")] }, config);
   console.log(`🤖 ${response2.messages[response2.messages.length - 1].content}`);
   console.log("   (This was recent - should remember)\n");
 
   console.log("❓ Question: What's my job?");
-  const response3 = await app.invoke(
-    { messages: [new HumanMessage("What's my job?")] },
-    config
-  );
+  const response3 = await app.invoke({ messages: [new HumanMessage("What's my job?")] }, config);
   console.log(`🤖 ${response3.messages[response3.messages.length - 1].content}`);
   console.log("   (This was recent - should remember)\n");
 

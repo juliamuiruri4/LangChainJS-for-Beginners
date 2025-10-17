@@ -37,7 +37,7 @@ Used for: web development, data science, machine learning, automation, scientifi
   docker: `Docker is a platform for developing, shipping, and running applications in containers (2013).
 Containers: Lightweight, portable, isolated environments that package applications with dependencies.
 Key concepts: Images (blueprints), containers (running instances), Docker Hub (registry), Dockerfile (build instructions).
-Benefits: consistency across environments, faster deployment, resource efficiency, microservices architecture.`,
+Benefits: consistency across environments, faster deployment, resource efficiency, microservices architecture.`
 };
 
 async function main() {
@@ -49,9 +49,11 @@ async function main() {
     temperature: 0.7,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   // Tool 1: Web Search (simulated)
@@ -72,8 +74,8 @@ async function main() {
       name: "web_search",
       description: "Search for information on a topic. Returns detailed information if found.",
       schema: z.object({
-        query: z.string().describe("The search query or topic to research"),
-      }),
+        query: z.string().describe("The search query or topic to research")
+      })
     }
   );
 
@@ -89,8 +91,8 @@ async function main() {
       name: "summarize",
       description: "Summarize long text into key points",
       schema: z.object({
-        text: z.string().describe("The text to summarize"),
-      }),
+        text: z.string().describe("The text to summarize")
+      })
     }
   );
 
@@ -107,20 +109,20 @@ async function main() {
       name: "format_citations",
       description: "Format a list of sources as citations",
       schema: z.object({
-        sources: z.array(z.string()).describe("Array of source strings to format as citations"),
-      }),
+        sources: z.array(z.string()).describe("Array of source strings to format as citations")
+      })
     }
   );
 
   const agent = createReactAgent({
     llm: model,
-    tools: [searchTool, summarizerTool, citationTool],
+    tools: [searchTool, summarizerTool, citationTool]
   });
 
   const queries = [
     "Research the history of JavaScript and provide a summary",
     "Find information about machine learning and summarize the key types",
-    "What is TypeScript? Give me a summary with citations",
+    "What is TypeScript? Give me a summary with citations"
   ];
 
   for (const query of queries) {
@@ -128,7 +130,7 @@ async function main() {
     console.log("─".repeat(80) + "\n");
 
     const response = await agent.invoke({
-      messages: [new HumanMessage(query)],
+      messages: [new HumanMessage(query)]
     });
 
     const lastMessage = response.messages[response.messages.length - 1];

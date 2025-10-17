@@ -14,29 +14,38 @@ import "dotenv/config";
 // Knowledge base about programming languages
 const knowledgeBase = [
   new Document({
-    pageContent: "Python is a high-level, interpreted programming language known for its simplicity and readability. It supports multiple programming paradigms including procedural, object-oriented, and functional programming.",
-    metadata: { id: "doc1", title: "Python Overview" },
+    pageContent:
+      "Python is a high-level, interpreted programming language known for its simplicity and readability. It supports multiple programming paradigms including procedural, object-oriented, and functional programming.",
+    metadata: { id: "doc1", title: "Python Overview" }
   }),
   new Document({
-    pageContent: "JavaScript is a versatile programming language primarily used for web development. It runs in browsers and on servers via Node.js. JavaScript is dynamically typed and supports event-driven programming.",
-    metadata: { id: "doc2", title: "JavaScript Basics" },
+    pageContent:
+      "JavaScript is a versatile programming language primarily used for web development. It runs in browsers and on servers via Node.js. JavaScript is dynamically typed and supports event-driven programming.",
+    metadata: { id: "doc2", title: "JavaScript Basics" }
   }),
   new Document({
-    pageContent: "Rust is a systems programming language focused on safety, speed, and concurrency. It prevents memory errors without using a garbage collector, making it ideal for performance-critical applications.",
-    metadata: { id: "doc3", title: "Rust Language" },
+    pageContent:
+      "Rust is a systems programming language focused on safety, speed, and concurrency. It prevents memory errors without using a garbage collector, making it ideal for performance-critical applications.",
+    metadata: { id: "doc3", title: "Rust Language" }
   }),
   new Document({
-    pageContent: "Go (Golang) is a statically typed language designed for simplicity and efficiency. It features built-in concurrency support through goroutines and channels, making it excellent for network services.",
-    metadata: { id: "doc4", title: "Go Programming" },
+    pageContent:
+      "Go (Golang) is a statically typed language designed for simplicity and efficiency. It features built-in concurrency support through goroutines and channels, making it excellent for network services.",
+    metadata: { id: "doc4", title: "Go Programming" }
   }),
   new Document({
-    pageContent: "TypeScript extends JavaScript by adding static type definitions. Types provide a way to describe the shape of objects, enabling better tooling and catching errors at compile time instead of runtime.",
-    metadata: { id: "doc5", title: "TypeScript Features" },
-  }),
+    pageContent:
+      "TypeScript extends JavaScript by adding static type definitions. Types provide a way to describe the shape of objects, enabling better tooling and catching errors at compile time instead of runtime.",
+    metadata: { id: "doc5", title: "TypeScript Features" }
+  })
 ];
 
 // Simple BM25-like keyword scoring
-function keywordSearch(query: string, documents: Document[], k: number = 3): Array<{ doc: Document; score: number }> {
+function keywordSearch(
+  query: string,
+  documents: Document[],
+  k: number = 3
+): Array<{ doc: Document; score: number }> {
   const queryTerms = query.toLowerCase().split(/\s+/);
 
   const scores = documents.map((doc) => {
@@ -70,7 +79,12 @@ function fuseResults(
   keywordResults: Array<{ doc: Document; score: number }>,
   semanticResults: Array<[Document, number]>,
   k: number = 60
-): Array<{ doc: Document; fusedScore: number; keywordScore: number; semanticScore: number }> {
+): Array<{
+  doc: Document;
+  fusedScore: number;
+  keywordScore: number;
+  semanticScore: number;
+}> {
   const scoreMap = new Map<string, { keywordRank: number; semanticRank: number; doc: Document }>();
 
   // Process keyword results
@@ -79,7 +93,7 @@ function fuseResults(
     scoreMap.set(id, {
       keywordRank: index + 1,
       semanticRank: 0,
-      doc: result.doc,
+      doc: result.doc
     });
   });
 
@@ -94,7 +108,7 @@ function fuseResults(
       scoreMap.set(id, {
         keywordRank: 0,
         semanticRank: index + 1,
-        doc: result[0],
+        doc: result[0]
       });
     }
   });
@@ -109,7 +123,7 @@ function fuseResults(
       doc: data.doc,
       fusedScore,
       keywordScore: keywordRRF,
-      semanticScore: semanticRRF,
+      semanticScore: semanticRRF
     };
   });
 
@@ -142,7 +156,7 @@ async function main() {
   const queries = [
     "What is TypeScript?", // Exact keyword match
     "Tell me about languages with static typing", // Semantic match
-    "Which language is best for system programming?", // Mixed
+    "Which language is best for system programming?" // Mixed
   ];
 
   for (const query of queries) {
@@ -153,7 +167,9 @@ async function main() {
     console.log("📝 Keyword Search Results:");
     const keywordResults = keywordSearch(query, knowledgeBase, 3);
     keywordResults.forEach((result, index) => {
-      console.log(`   ${index + 1}. ${result.doc.metadata.title} (score: ${result.score.toFixed(2)})`);
+      console.log(
+        `   ${index + 1}. ${result.doc.metadata.title} (score: ${result.score.toFixed(2)})`
+      );
     });
     console.log();
 
@@ -163,7 +179,9 @@ async function main() {
     semanticResults.forEach((result, index) => {
       const doc = result[0];
       const distance = result[1];
-      console.log(`   ${index + 1}. ${doc.metadata.title} (similarity: ${(1 - distance).toFixed(2)})`);
+      console.log(
+        `   ${index + 1}. ${doc.metadata.title} (similarity: ${(1 - distance).toFixed(2)})`
+      );
     });
     console.log();
 
@@ -173,7 +191,9 @@ async function main() {
     fusedResults.slice(0, 3).forEach((result, index) => {
       console.log(`   ${index + 1}. ${result.doc.metadata.title}`);
       console.log(`      Fused Score: ${result.fusedScore.toFixed(4)}`);
-      console.log(`      Keyword: ${result.keywordScore.toFixed(4)} | Semantic: ${result.semanticScore.toFixed(4)}`);
+      console.log(
+        `      Keyword: ${result.keywordScore.toFixed(4)} | Semantic: ${result.semanticScore.toFixed(4)}`
+      );
     });
     console.log();
 

@@ -28,7 +28,7 @@ const INTERACTIVE_FILES = [
   { file: "chatbot.ts", input: "Hello\n" },
   { file: "streaming-chat.ts", input: "Hello\n" },
   { file: "qa-program.ts", input: "What is 2+2?\n" },
-  { file: "03-human-in-loop.ts", input: "yes\nno\nno\n" },
+  { file: "03-human-in-loop.ts", input: "yes\nno\nno\n" }
 ];
 
 // Timeout for all examples (generous to handle API calls and complex examples)
@@ -45,7 +45,7 @@ async function findCodeFiles(dir: string): Promise<string[]> {
 
       if (entry.isDirectory()) {
         // Recursively search subdirectories
-        files.push(...await findCodeFiles(fullPath));
+        files.push(...(await findCodeFiles(fullPath)));
       } else if (entry.isFile() && entry.name.endsWith(".ts")) {
         // Skip the validate script itself
         if (!entry.name.includes("validate-examples")) {
@@ -62,7 +62,7 @@ async function findCodeFiles(dir: string): Promise<string[]> {
 }
 
 function getInteractiveInput(filePath: string): string | null {
-  const interactive = INTERACTIVE_FILES.find(item => filePath.includes(item.file));
+  const interactive = INTERACTIVE_FILES.find((item) => filePath.includes(item.file));
   return interactive ? interactive.input : null;
 }
 
@@ -73,7 +73,7 @@ function runExample(filePath: string): Promise<TestResult> {
 
     const child = spawn("npx", ["tsx", filePath], {
       stdio: ["pipe", "pipe", "pipe"],
-      env: { ...process.env, CI: "true" },
+      env: { ...process.env, CI: "true" }
     });
 
     let stdout = "";
@@ -93,7 +93,7 @@ function runExample(filePath: string): Promise<TestResult> {
         file: filePath,
         success: false,
         duration: Date.now() - startTime,
-        error: `Timeout after ${TIMEOUT_MS}ms`,
+        error: `Timeout after ${TIMEOUT_MS}ms`
       });
     }, TIMEOUT_MS);
 
@@ -110,25 +110,25 @@ function runExample(filePath: string): Promise<TestResult> {
       const duration = Date.now() - startTime;
 
       // Check for error indicators in stderr even if exit code is 0
-      const hasError = stderr && (
-        stderr.includes("Error:") ||
-        stderr.includes("Error\n") ||
-        stderr.includes("at ") || // Stack trace indicator
-        stderr.toLowerCase().includes("exception")
-      );
+      const hasError =
+        stderr &&
+        (stderr.includes("Error:") ||
+          stderr.includes("Error\n") ||
+          stderr.includes("at ") || // Stack trace indicator
+          stderr.toLowerCase().includes("exception"));
 
       if (code === 0 && !hasError) {
         resolve({
           file: filePath,
           success: true,
-          duration,
+          duration
         });
       } else {
         resolve({
           file: filePath,
           success: false,
           duration,
-          error: hasError ? stderr : (stderr || `Exit code: ${code}`),
+          error: hasError ? stderr : stderr || `Exit code: ${code}`
         });
       }
     });
@@ -139,7 +139,7 @@ function runExample(filePath: string): Promise<TestResult> {
         file: filePath,
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: error.message
       });
     });
   });
@@ -148,11 +148,11 @@ function runExample(filePath: string): Promise<TestResult> {
 async function findChapters(projectRoot: string): Promise<string[]> {
   const entries = await readdir(projectRoot, { withFileTypes: true });
   // Match directories starting with 2 digits followed by "-", for example "00-", "01-", etc.
-  const chapterPattern = /^\d{2}-/; 
+  const chapterPattern = /^\d{2}-/;
 
   return entries
-    .filter(entry => entry.isDirectory() && chapterPattern.test(entry.name))
-    .map(entry => entry.name)
+    .filter((entry) => entry.isDirectory() && chapterPattern.test(entry.name))
+    .map((entry) => entry.name)
     .sort(); // Ensure chapters are in numerical order
 }
 
@@ -189,7 +189,7 @@ async function main() {
   console.log(`📁 Found ${allFiles.length} code files\n`);
 
   // Identify interactive files (will be tested with automated input)
-  const interactiveCount = allFiles.filter(file => getInteractiveInput(file)).length;
+  const interactiveCount = allFiles.filter((file) => getInteractiveInput(file)).length;
   if (interactiveCount > 0) {
     console.log(`🤖 ${interactiveCount} interactive files will be tested with automated input\n`);
   }
@@ -218,7 +218,7 @@ async function main() {
       failed++;
       console.log(`❌`);
       if (result.error) {
-        console.log(`   Error: ${result.error.split('\n')[0]}`);
+        console.log(`   Error: ${result.error.split("\n")[0]}`);
       }
     }
   }
@@ -237,12 +237,12 @@ async function main() {
     console.log("❌ Failed Examples:\n");
 
     results
-      .filter(r => !r.success)
-      .forEach(result => {
+      .filter((r) => !r.success)
+      .forEach((result) => {
         const relativePath = result.file.replace(projectRoot + "/", "");
         console.log(`   ${relativePath}`);
         if (result.error) {
-          console.log(`   → ${result.error.split('\n').slice(0, 3).join('\n   ')}`);
+          console.log(`   → ${result.error.split("\n").slice(0, 3).join("\n   ")}`);
         }
         console.log();
       });

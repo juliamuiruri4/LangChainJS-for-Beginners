@@ -24,7 +24,7 @@ async function main() {
   // Start with system message and first question
   const messages = [
     new SystemMessage("You are a helpful coding tutor who gives clear, concise explanations."),
-    new HumanMessage("What is TypeScript?"),
+    new HumanMessage("What is TypeScript?")
   ];
 
   console.log("👤 User: What is TypeScript?");

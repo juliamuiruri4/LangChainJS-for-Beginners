@@ -61,7 +61,7 @@ async function main() {
     embeddings.embedQuery("Puppy"),
     embeddings.embedQuery("Dog"),
     embeddings.embedQuery("Cat"),
-    embeddings.embedQuery("Kitten"),
+    embeddings.embedQuery("Kitten")
   ]);
 
   // Perform vector arithmetic: Puppy - Dog + Cat
@@ -101,7 +101,7 @@ async function main() {
     embeddings.embedQuery("pizza"),
     embeddings.embedQuery("Italy"),
     embeddings.embedQuery("Japan"),
-    embeddings.embedQuery("sushi"),
+    embeddings.embedQuery("sushi")
   ]);
 
   // Perform vector arithmetic: pizza - Italy + Japan
@@ -115,13 +115,17 @@ async function main() {
   console.log("\nWhat this means:");
   console.log("  • Pizza is to Italy as sushi is to Japan");
   console.log("  • The embeddings understand cultural food associations");
-  console.log("  • Subtracting 'Italy' removes the country, adding 'Japan' finds Japan's iconic food");
+  console.log(
+    "  • Subtracting 'Italy' removes the country, adding 'Japan' finds Japan's iconic food"
+  );
 
   // Show comparison with unrelated food
   const burgerEmbed = await embeddings.embedQuery("hamburger");
   const similarityToBurger = cosineSimilarity(result2, burgerEmbed);
 
-  console.log(`\n📊 Comparison: Similarity to 'hamburger': ${(similarityToBurger * 100).toFixed(2)}%`);
+  console.log(
+    `\n📊 Comparison: Similarity to 'hamburger': ${(similarityToBurger * 100).toFixed(2)}%`
+  );
   console.log(`   (Lower than sushi, as expected - hamburger is more associated with USA)\n`);
 
   console.log("=".repeat(70) + "\n");
@@ -140,7 +144,7 @@ async function main() {
     embeddings.embedQuery("happy"),
     embeddings.embedQuery("joyful"),
     embeddings.embedQuery("cheerful"),
-    embeddings.embedQuery("sad"),
+    embeddings.embedQuery("sad")
   ]);
 
   // Calculate similarities
@@ -148,8 +152,12 @@ async function main() {
   const happyCheerful = cosineSimilarity(happyEmbed, cheerfulEmbed);
   const happySad = cosineSimilarity(happyEmbed, sadEmbed);
 
-  console.log(`Similarity: 'happy' ↔ 'joyful'   = ${(happyJoyful * 100).toFixed(2)}% ✅ (synonyms)`);
-  console.log(`Similarity: 'happy' ↔ 'cheerful' = ${(happyCheerful * 100).toFixed(2)}% ✅ (synonyms)`);
+  console.log(
+    `Similarity: 'happy' ↔ 'joyful'   = ${(happyJoyful * 100).toFixed(2)}% ✅ (synonyms)`
+  );
+  console.log(
+    `Similarity: 'happy' ↔ 'cheerful' = ${(happyCheerful * 100).toFixed(2)}% ✅ (synonyms)`
+  );
   console.log(`Similarity: 'happy' ↔ 'sad'      = ${(happySad * 100).toFixed(2)}% ❌ (opposites)`);
 
   console.log("\nWhat this means:");

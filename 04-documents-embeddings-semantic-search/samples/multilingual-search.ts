@@ -19,7 +19,7 @@ const sentences = [
   { text: "Me encanta la inteligencia artificial", lang: "es" },
   { text: "Good morning, have a great day", lang: "en" },
   { text: "Bon matin, passez une bonne journée", lang: "fr" },
-  { text: "Buenos días, que tengas un gran día", lang: "es" },
+  { text: "Buenos días, que tengas un gran día", lang: "es" }
 ];
 
 async function main() {
@@ -38,7 +38,7 @@ async function main() {
     (sentence) =>
       new Document({
         pageContent: sentence.text,
-        metadata: { language: sentence.lang },
+        metadata: { language: sentence.lang }
       })
   );
 
@@ -51,7 +51,7 @@ async function main() {
   const queries = [
     { query: "greetings and how are you", desc: "English greeting query" },
     { query: "artificial intelligence", desc: "English AI query" },
-    { query: "good morning", desc: "English morning query" },
+    { query: "good morning", desc: "English morning query" }
   ];
 
   for (const { query, desc } of queries) {

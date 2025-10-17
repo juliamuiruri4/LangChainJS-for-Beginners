@@ -43,7 +43,7 @@ async function main() {
   const mcpClient = new MultiServerMCPClient({
     context7: {
       transport: "http",
-      url: MCP_SERVER_URL,
+      url: MCP_SERVER_URL
       // Optional: Add Context7 API key for higher rate limits
       // headers: {
       //   "Authorization": `Bearer ${process.env.CONTEXT7_API_KEY}`
@@ -52,19 +52,18 @@ async function main() {
   });
 
   try {
-
     // 2. Get all available tools from Context7
     console.log("🔧 Fetching tools from Context7 MCP server...");
     const tools = await mcpClient.getTools();
 
     console.log(`✅ Retrieved ${tools.length} tools from Context7:`);
-    tools.forEach(tool => {
+    tools.forEach((tool) => {
       console.log(`   • ${tool.name}: ${tool.description}`);
     });
     console.log();
 
     // Create a map of tool names to tools for easy lookup
-    const toolsByName = new Map(tools.map(tool => [tool.name, tool]));
+    const toolsByName = new Map(tools.map((tool) => [tool.name, tool]));
 
     // 3. Create agent with Context7 documentation tools
     const model = new ChatOpenAI({
@@ -105,11 +104,19 @@ async function main() {
       }
 
       const toolResult = await tool.invoke(toolCall.args);
-      console.log(`  Observation: ${typeof toolResult === 'string' ? toolResult.substring(0, 150) + '...' : toolResult}\n`);
+      console.log(
+        `  Observation: ${typeof toolResult === "string" ? toolResult.substring(0, 150) + "..." : toolResult}\n`
+      );
 
       messages.push(
-        new AIMessage({ content: response.content, tool_calls: response.tool_calls }),
-        new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
+        new AIMessage({
+          content: response.content,
+          tool_calls: response.tool_calls
+        }),
+        new ToolMessage({
+          content: String(toolResult),
+          tool_call_id: toolCall.id || ""
+        })
       );
 
       iteration++;
@@ -122,7 +129,6 @@ async function main() {
     console.log("   • HTTP transport works with remote servers like Context7");
     console.log("   • Tools from MCP servers work like manually created tools");
     console.log("   • Same agent pattern as Examples 1 & 2, different tool source");
-
   } catch (error) {
     console.error("❌ Error connecting to Context7 MCP server:", error);
   } finally {

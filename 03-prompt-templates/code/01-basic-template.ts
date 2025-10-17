@@ -25,9 +25,9 @@ async function main() {
   const template = ChatPromptTemplate.fromMessages([
     [
       "system",
-      "You are a helpful assistant that translates {input_language} to {output_language}.",
+      "You are a helpful assistant that translates {input_language} to {output_language}."
     ],
-    ["human", "{text}"],
+    ["human", "{text}"]
   ]);
 
   console.log("Template created with variables: input_language, output_language, text\n");
@@ -40,7 +40,7 @@ async function main() {
   const result1 = await chain.invoke({
     input_language: "English",
     output_language: "French",
-    text: "Hello, how are you?",
+    text: "Hello, how are you?"
   });
   console.log("   →", result1.content, "\n");
 
@@ -49,7 +49,7 @@ async function main() {
   const result2 = await chain.invoke({
     input_language: "English",
     output_language: "Spanish",
-    text: "Hello, how are you?",
+    text: "Hello, how are you?"
   });
   console.log("   →", result2.content, "\n");
 
@@ -58,7 +58,7 @@ async function main() {
   const result3 = await chain.invoke({
     input_language: "English",
     output_language: "Japanese",
-    text: "Hello, how are you?",
+    text: "Hello, how are you?"
   });
   console.log("   →", result3.content, "\n");
 

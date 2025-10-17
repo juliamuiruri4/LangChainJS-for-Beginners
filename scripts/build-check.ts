@@ -12,12 +12,7 @@ async function findTypeScriptFiles(dir: string): Promise<string[]> {
   const files: string[] = [];
 
   // Directories and files to skip during build check
-  const skipItems = [
-    "node_modules",
-    "dist",
-    "future",
-    "scripts",
-  ];
+  const skipItems = ["node_modules", "dist", "future", "scripts"];
 
   try {
     const entries = await readdir(dir, { withFileTypes: true });
@@ -31,7 +26,7 @@ async function findTypeScriptFiles(dir: string): Promise<string[]> {
       }
 
       if (entry.isDirectory()) {
-        files.push(...await findTypeScriptFiles(fullPath));
+        files.push(...(await findTypeScriptFiles(fullPath)));
       } else if (entry.isFile() && entry.name.endsWith(".ts")) {
         files.push(fullPath);
       }
@@ -56,18 +51,10 @@ async function main() {
 
   // Run tsc on all files with --noEmit to check without generating output
   // Using project config for faster compilation
-  const tsc = spawn(
-    "npx",
-    [
-      "tsc",
-      "--noEmit",
-      "--pretty"
-    ],
-    {
-      stdio: "inherit",
-      shell: true,
-    }
-  );
+  const tsc = spawn("npx", ["tsc", "--noEmit", "--pretty"], {
+    stdio: "inherit",
+    shell: true
+  });
 
   tsc.on("close", (code) => {
     console.log("\n" + "=" + "=".repeat(79));

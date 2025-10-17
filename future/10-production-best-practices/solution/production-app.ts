@@ -89,9 +89,11 @@ async function makeRequestWithRetry(
         timeout,
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
-          defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+          defaultQuery: process.env.AI_API_VERSION
+            ? { "api-version": process.env.AI_API_VERSION }
+            : undefined
         },
-        apiKey: process.env.AI_API_KEY,
+        apiKey: process.env.AI_API_KEY
       });
 
       const response = await model.invoke(query);
@@ -130,7 +132,7 @@ async function processQuery(query: string): Promise<void> {
       query,
       cached: false,
       responseTime: Date.now() - startTime,
-      success: false,
+      success: false
     });
     return;
   }
@@ -144,7 +146,7 @@ async function processQuery(query: string): Promise<void> {
       query,
       cached: false,
       responseTime: Date.now() - startTime,
-      success: false,
+      success: false
     });
     return;
   }
@@ -160,7 +162,7 @@ async function processQuery(query: string): Promise<void> {
       query,
       cached: true,
       responseTime: Date.now() - startTime,
-      success: true,
+      success: true
     });
     return;
   }
@@ -180,7 +182,7 @@ async function processQuery(query: string): Promise<void> {
       query,
       cached: false,
       responseTime: Date.now() - startTime,
-      success: true,
+      success: true
     });
   } catch (error: any) {
     console.log(`   ❌ Request failed: ${error.message}`);
@@ -190,7 +192,7 @@ async function processQuery(query: string): Promise<void> {
       query,
       cached: false,
       responseTime: Date.now() - startTime,
-      success: false,
+      success: false
     });
   }
 }
@@ -201,7 +203,9 @@ function healthCheck(): { status: string; checks: any } {
   const successRate = totalRequests > 0 ? (successfulRequests / totalRequests) * 100 : 100;
 
   const avgResponseTime =
-    requestLogs.length > 0 ? requestLogs.reduce((sum, log) => sum + log.responseTime, 0) / requestLogs.length : 0;
+    requestLogs.length > 0
+      ? requestLogs.reduce((sum, log) => sum + log.responseTime, 0) / requestLogs.length
+      : 0;
 
   const isHealthy = successRate > 95 && avgResponseTime < 5000;
 
@@ -211,8 +215,8 @@ function healthCheck(): { status: string; checks: any } {
       successRate: `${successRate.toFixed(1)}%`,
       avgResponseTime: `${avgResponseTime.toFixed(0)}ms`,
       cacheSize: cache.size,
-      totalRequests,
-    },
+      totalRequests
+    }
   };
 }
 
@@ -241,7 +245,7 @@ async function main() {
     "Explain JavaScript",
     "", // Invalid - empty
     "What is Docker?",
-    "What is TypeScript?", // Should still be cached
+    "What is TypeScript?" // Should still be cached
   ];
 
   for (const query of queries) {

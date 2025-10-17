@@ -8,16 +8,16 @@ import { BaseMessage } from "@langchain/core/messages";
 const AgentState = Annotation.Root({
   messages: Annotation<BaseMessage[]>({
     reducer: (left, right) => left.concat(right),
-    default: () => [],
+    default: () => []
   }),
   step: Annotation<string>({
     reducer: (left, right) => right ?? left ?? "",
-    default: () => "",
+    default: () => ""
   }),
   data: Annotation<string | undefined>({
     reducer: (left, right) => right ?? left,
-    default: () => undefined,
-  }),
+    default: () => undefined
+  })
 });
 
 async function main() {
@@ -31,7 +31,7 @@ async function main() {
     console.log("1️⃣  Initializing...");
     return {
       step: "initialized",
-      data: "Starting process",
+      data: "Starting process"
     };
   });
 
@@ -40,7 +40,7 @@ async function main() {
     console.log("2️⃣  Processing data...");
     return {
       step: "processed",
-      data: `${state.data} -> Processed`,
+      data: `${state.data} -> Processed`
     };
   });
 
@@ -49,7 +49,7 @@ async function main() {
     console.log("3️⃣  Finalizing...");
     return {
       step: "completed",
-      data: `${state.data} -> Completed`,
+      data: `${state.data} -> Completed`
     };
   });
 
@@ -65,7 +65,7 @@ async function main() {
 
   const result = await app.invoke({
     messages: [],
-    step: "",
+    step: ""
   });
 
   console.log("\n" + "=".repeat(80));

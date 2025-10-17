@@ -19,9 +19,11 @@ async function main() {
     model: process.env.AI_MODEL || "gpt-4o-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
-      defaultQuery: process.env.AI_API_VERSION ? { "api-version": process.env.AI_API_VERSION } : undefined,
+      defaultQuery: process.env.AI_API_VERSION
+        ? { "api-version": process.env.AI_API_VERSION }
+        : undefined
     },
-    apiKey: process.env.AI_API_KEY,
+    apiKey: process.env.AI_API_KEY
   });
 
   // System prompt for the assistant
@@ -62,7 +64,7 @@ Be friendly and refer back to information they've told you. If they mention pref
       "Hi! My name is Alex",
       "I prefer concise answers",
       "What's my name?",
-      "Can you help me with a quick question about TypeScript?",
+      "Can you help me with a quick question about TypeScript?"
     ];
 
     for (const msg of testMessages) {
@@ -83,7 +85,7 @@ Be friendly and refer back to information they've told you. If they mention pref
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout,
+      output: process.stdout
     });
 
     const askQuestion = () => {
@@ -113,7 +115,9 @@ Be friendly and refer back to information they've told you. If they mention pref
           state.values.messages.slice(-6).forEach((msg: any, i: number) => {
             const role = msg._getType() === "human" ? "You" : "Assistant";
             const preview = String(msg.content).substring(0, 60);
-            console.log(`   ${i + 1}. ${role}: ${preview}${String(msg.content).length > 60 ? "..." : ""}`);
+            console.log(
+              `   ${i + 1}. ${role}: ${preview}${String(msg.content).length > 60 ? "..." : ""}`
+            );
           });
 
           console.log("\n" + "─".repeat(80) + "\n");
@@ -149,7 +153,9 @@ Be friendly and refer back to information they've told you. If they mention pref
         try {
           const response = await app.invoke({ messages: [new HumanMessage(userInput)] }, config);
 
-          console.log(`\n🤖 Assistant: ${response.messages[response.messages.length - 1].content}\n`);
+          console.log(
+            `\n🤖 Assistant: ${response.messages[response.messages.length - 1].content}\n`
+          );
           console.log("─".repeat(80) + "\n");
         } catch (error) {
           console.error("\n❌ Error:", error);

@@ -42,9 +42,7 @@ function pca(embeddings: number[][], dimensions: number = 2): number[][] {
     }
   }
 
-  return reduced.map((point) =>
-    point.map((val, i) => ((val - mins[i]) / (maxs[i] - mins[i])))
-  );
+  return reduced.map((point) => point.map((val, i) => (val - mins[i]) / (maxs[i] - mins[i])));
 }
 
 const texts = [
@@ -66,7 +64,7 @@ const texts = [
   // Sports topics
   { text: "Football games", category: "Sports" },
   { text: "Basketball training", category: "Sports" },
-  { text: "Athletic performance", category: "Sports" },
+  { text: "Athletic performance", category: "Sports" }
 ];
 
 async function main() {
@@ -99,7 +97,7 @@ async function main() {
     text: item.text,
     category: item.category,
     x: reduced2D[index][0],
-    y: reduced2D[index][1],
+    y: reduced2D[index][1]
   }));
 
   // Save to JSON

@@ -7,10 +7,10 @@ import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 const model = new ChatOpenAI({
-    model: process.env.AI_MODEL,
-    configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
-  });
+  model: process.env.AI_MODEL,
+  configuration: { baseURL: process.env.AI_ENDPOINT },
+  apiKey: process.env.AI_API_KEY
+});
 
 // Create reusable email template
 const emailTemplate = ChatPromptTemplate.fromMessages([
@@ -18,7 +18,7 @@ const emailTemplate = ChatPromptTemplate.fromMessages([
     "system",
     `You are a customer service representative for {company_name}.
 Write professional emails with a {tone} tone.
-Always be helpful and provide clear next steps.`,
+Always be helpful and provide clear next steps.`
   ],
   [
     "human",
@@ -27,8 +27,8 @@ Customer: {customer_name}
 Issue Type: {issue_type}
 Details: {details}
 
-The email should be {tone} and address their concern appropriately.`,
-  ],
+The email should be {tone} and address their concern appropriately.`
+  ]
 ]);
 
 async function generateEmail(
@@ -52,7 +52,7 @@ async function generateEmail(
     customer_name: customerName,
     issue_type: issueType,
     details: details,
-    tone: tone,
+    tone: tone
   });
 
   console.log(result.content);
