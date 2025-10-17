@@ -383,6 +383,193 @@ Query: "Search for information about TypeScript"
 
 ---
 
+## 🌐 Connecting to MCP Servers
+
+### Example 3: Agent with MCP Server Integration (Context7)
+
+In this example, you'll see how to connect a LangChain.js agent to **Context7** - an MCP server that provides current, version-specific documentation for libraries and frameworks. This demonstrates using HTTP transport to connect to a real-world MCP service.
+
+**Code**: [`code/03-mcp-integration.ts`](./code/03-mcp-integration.ts)
+**Run**: `tsx 07-agents-mcp/code/03-mcp-integration.ts`
+
+**Prerequisites**:
+- Install MCP adapter: `npm install @langchain/mcp-adapters`
+- Optional: Context7 API key for higher rate limits (get at [context7.com](https://context7.com))
+
+**About Context7**:
+Context7 is a documentation MCP server that solves the problem of outdated training data by delivering current docs directly to your agent. It provides:
+- `resolve-library-id`: Converts library names (e.g., "React") to Context7 IDs
+- `get-library-docs`: Retrieves documentation with optional topic filtering
+
+This example demonstrates connecting to Context7 via HTTP transport:
+
+```typescript
+import { MultiServerMCPClient } from "@langchain/mcp-adapters";
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import "dotenv/config";
+
+// Create MCP client with HTTP transport to Context7
+const mcpClient = new MultiServerMCPClient({
+  context7: {
+    transport: "http",
+    url: "https://mcp.context7.com/mcp"  // Public Context7 endpoint
+    // Optional: Add API key for higher rate limits
+    // headers: { "Authorization": `Bearer ${process.env.CONTEXT7_API_KEY}` }
+  }
+});
+
+try {
+  // 1. Get all available tools from Context7
+  console.log("🔧 Fetching tools from Context7 MCP server...");
+  const tools = await mcpClient.getTools();
+
+  console.log(`✅ Retrieved ${tools.length} tools from Context7:`);
+  tools.forEach(tool => {
+    console.log(`   • ${tool.name}: ${tool.description}`);
+  });
+
+  // Create a map of tool names to tools for easy lookup
+  const toolsByName = new Map(tools.map(tool => [tool.name, tool]));
+
+  // 2. Create agent with Context7 documentation tools
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY
+  });
+
+  const modelWithTools = model.bindTools(tools);
+
+  // 3. Use the agent to get documentation
+  const query = "How do I use React useState hook? Get the latest documentation.";
+  console.log(`User: ${query}\n`);
+
+  let messages = [new HumanMessage(query)];
+  let iteration = 1;
+  const maxIterations = 5; // Context7 may need multiple calls
+
+  while (iteration <= maxIterations) {
+    console.log(`Iteration ${iteration}:`);
+
+    const response = await modelWithTools.invoke(messages);
+
+    if (!response.tool_calls || response.tool_calls.length === 0) {
+      console.log(`  Final Answer: ${response.content}\n`);
+      break;
+    }
+
+    // Execute Context7 tool
+    const toolCall = response.tool_calls[0];
+    console.log(`  Thought: I should use the ${toolCall.name} tool`);
+    console.log(`  Action: ${toolCall.name}(${JSON.stringify(toolCall.args)})`);
+
+    // Find the tool and invoke it directly
+    const tool = toolsByName.get(toolCall.name);
+    if (!tool) {
+      throw new Error(`Tool ${toolCall.name} not found`);
+    }
+
+    const toolResult = await tool.invoke(toolCall.args);
+    console.log(`  Observation: ${typeof toolResult === 'string' ? toolResult.substring(0, 150) + '...' : toolResult}\n`);
+
+    messages.push(
+      new AIMessage({ content: response.content, tool_calls: response.tool_calls }),
+      new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
+    );
+
+    iteration++;
+  }
+
+  console.log("💡 Key Concepts:");
+  console.log("   • MCP provides standardized access to external tools");
+  console.log("   • MultiServerMCPClient connects to one or more MCP servers");
+  console.log("   • HTTP transport works with remote servers like Context7");
+  console.log("   • Tools from MCP servers work like manually created tools");
+  console.log("   • Same agent pattern as Examples 1 & 2, different tool source");
+
+} catch (error) {
+  console.error("❌ Error connecting to Context7 MCP server:", error);
+} finally {
+  // Close the MCP client connection to allow the script to exit
+  await mcpClient.close();
+  console.log("\n✅ MCP client connection closed");
+}
+```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "How does MultiServerMCPClient differ from manually creating tools?"
+> - "What happens if the MCP server is unavailable?"
+> - "Can I connect to multiple MCP servers simultaneously?"
+
+### How It Works
+
+**What's Different from Examples 1 & 2**:
+1. **Tool Source**: Instead of creating tools manually, you get them from an MCP server
+2. **Tool Discovery**: `mcpClient.getTools()` fetches all available tools from the server
+3. **Tool Execution**: The MCP client handles communication with the remote server
+4. **Same Pattern**: The agent loop is identical to Example 1 - only the tool source changed!
+
+**Benefits of MCP Integration**:
+- ✅ **No custom integration code** - MCP handles the connection
+- ✅ **Dynamic tool discovery** - Server can add/remove tools without code changes
+- ✅ **Standard protocol** - Works with any MCP-compliant server
+- ✅ **Production-ready** - HTTP transport scales for remote deployments
+
+**Setting Up Context7**:
+
+To run this example with Context7, you have two options:
+
+1. **Use the Public Context7 Server** (Easiest):
+   - Public endpoint: `https://mcp.context7.com/mcp`
+   - No setup required - just uncomment the code and run!
+   - Free tier with rate limits
+   - For higher limits, get an API key at [context7.com](https://context7.com)
+
+2. **Run Context7 Locally**:
+   ```bash
+   # Run Context7 server on port 3000
+   npx -y @upstash/context7-mcp --transport http --port 3000
+   ```
+   Then use `http://localhost:3000` as your MCP URL
+
+**Configuration**:
+
+Add to your `.env` file:
+```bash
+# Use public endpoint (default)
+MCP_SERVER_URL=https://mcp.context7.com/mcp
+
+# Or use local endpoint
+# MCP_SERVER_URL=http://localhost:3000
+
+# Optional: Add API key for higher rate limits
+CONTEXT7_API_KEY=your_api_key_here
+```
+
+**Multiple Servers**:
+
+You can connect to multiple MCP servers simultaneously:
+```typescript
+const mcpClient = new MultiServerMCPClient({
+  context7: {
+    transport: "http",
+    url: "https://mcp.context7.com/mcp"
+  },
+  github: {
+    transport: "http",
+    url: "https://api.github.com/mcp"  // Example
+  }
+});
+```
+
+**Learn More**:
+- Context7 on GitHub: [mcp/upstash/context7](https://github.com/mcp/upstash/context7)
+- MCP Registry: [github.com/mcp](https://github.com/mcp)
+- MCP for Beginners: [microsoft/mcp-for-beginners](https://github.com/microsoft/mcp-for-beginners)
+
+---
+
 ## 🔗 From Manual Tools to MCP
 
 In Examples 1 and 2, you manually created tools (calculator, weather, search) by writing the implementation code yourself. This works great for learning and for custom tools specific to your application.
