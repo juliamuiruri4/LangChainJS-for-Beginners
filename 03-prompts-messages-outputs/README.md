@@ -266,6 +266,33 @@ The function built a 5-message array: 1 system message + 2 examples (4 messages)
 - Chapter 3: Building message arrays programmatically with functions
 - This approach enables agents to adapt their prompts based on context
 
+### Alternative Message Syntaxes
+
+While we use **message classes** throughout this course for clarity, LangChain also supports alternative syntaxes:
+
+**Dictionary Format** (more concise):
+```typescript
+const messages = [
+  { role: "system", content: "You are helpful" },
+  { role: "user", content: "Hello!" },
+  { role: "assistant", content: "Hi there!" }
+];
+```
+
+**String Shortcut** (for simple single messages):
+```typescript
+// These are equivalent:
+const response = await model.invoke("Hello!");
+const response = await model.invoke(new HumanMessage("Hello!"));
+```
+
+**When to use each:**
+- **Message classes** (`new HumanMessage()`): Most explicit and friendly for learning
+- **Dictionary format**: More concise, works identically to message classes
+- **String shortcut**: Quick for simple single-message calls
+
+> **💡 Note**: All three syntaxes work identically with LangChain. We use message classes in this course because they're explicit and friendly, but you can use whichever syntax you prefer in your own code!
+
 > **💡 Tip**: The actual code file [`02-message-construction.ts`](./code/02-message-construction.ts) includes additional patterns like message metadata and conversation builders. Run the file to see all variations!
 
 ---

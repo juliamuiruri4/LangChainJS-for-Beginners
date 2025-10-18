@@ -103,46 +103,27 @@ const response = await model.invoke(messages);
 
 ---
 
-### Creating Messages: Two Approaches
+### Creating Messages
 
-LangChain supports multiple ways to create messages:
-
-**1. Message Classes** (Recommended for this course - most explicit):
+In this course, we use **message classes** to create messages. This approach is explicit and beginner-friendly:
 
 ```typescript
 import { SystemMessage, HumanMessage, AIMessage } from "langchain";
 
 const messages = [
-  new SystemMessage("You are helpful"),
+  new SystemMessage("You are a helpful assistant"),
   new HumanMessage("Hello!")
 ];
 ```
 
-**2. Dictionary Format** (Alternative - more concise):
+**Why message classes?**
 
-```typescript
-const messages = [
-  { role: "system", content: "You are helpful" },
-  { role: "user", content: "Hello!" }
-];
-```
+- ✅ **Clear and explicit** - Easy to understand what each message represents
+- ✅ **Type safety** - TypeScript catches errors before runtime
+- ✅ **Better autocomplete** - Your editor helps you write code faster
+- ✅ **Consistent pattern** - Same approach used throughout the course
 
-**3. String Shortcut** (For single HumanMessage):
-
-```typescript
-// These are equivalent:
-const response = await model.invoke("Hello!");
-const response = await model.invoke(new HumanMessage("Hello!"));
-```
-
-**Why we use message classes in this course**:
-
-- ✅ More explicit and easier to understand
-- ✅ Better type safety and autocomplete
-- ✅ Clear which message type you're creating
-- ✅ Easier to add metadata later
-
-The dictionary format works identically but is less clear for learning. You can use either approach in your own code.
+> **💡 Other ways exist:** LangChain also supports dictionary format (`{ role: "system", content: "..." }`) and string shortcuts for simple cases. You'll learn about these alternative syntaxes and when to use each approach in [Chapter 3: Prompts, Messages, and Structured Outputs](../03-prompts-messages-outputs/README.md).
 
 ---
 
