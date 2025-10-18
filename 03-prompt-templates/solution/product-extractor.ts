@@ -5,7 +5,7 @@
 
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {
@@ -14,7 +14,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define product schema with validation
@@ -26,7 +26,7 @@ async function main() {
       .describe("Product category"),
     inStock: z.boolean().describe("Whether the product is currently available"),
     rating: z.number().min(1).max(5).describe("Customer rating from 1-5 stars"),
-    features: z.array(z.string()).describe("List of key product features or highlights")
+    features: z.array(z.string()).describe("List of key product features or highlights"),
   });
 
   // Create structured model
@@ -38,9 +38,9 @@ async function main() {
       "system",
       `Extract product information from the description.
       If a field is not explicitly mentioned, make a reasonable inference.
-      Ensure the category is one of: Electronics, Clothing, Food, Books, or Home.`
+      Ensure the category is one of: Electronics, Clothing, Food, Books, or Home.`,
     ],
-    ["human", "{description}"]
+    ["human", "{description}"],
   ]);
 
   // Combine template with structured output
@@ -51,28 +51,28 @@ async function main() {
     {
       name: "Tech Product",
       description: `MacBook Pro 16-inch with M3 chip, $2,499. Currently in stock.
-        Users rate it 4.8/5. Features: Liquid Retina display, 18-hour battery, 1TB SSD`
+        Users rate it 4.8/5. Features: Liquid Retina display, 18-hour battery, 1TB SSD`,
     },
     {
       name: "Clothing Item",
       description: `Cozy wool sweater, blue color, medium size. $89, available now!
-        Customers love it - 4.5 stars. Hand-washable, made in Ireland`
+        Customers love it - 4.5 stars. Hand-washable, made in Ireland`,
     },
     {
       name: "Book",
       description: `The Great Gatsby by F. Scott Fitzgerald. Classic novel, paperback edition for $12.99.
-        In stock. Rated 4.9 stars. 180 pages, published 1925`
+        In stock. Rated 4.9 stars. 180 pages, published 1925`,
     },
     {
       name: "Home Item",
       description: `Modern LED desk lamp with adjustable brightness. $45.99.
-        Available for immediate shipping. 4.6 star rating. USB charging, touch controls, energy efficient`
+        Available for immediate shipping. 4.6 star rating. USB charging, touch controls, energy efficient`,
     },
     {
       name: "Food Product",
       description: `Organic dark chocolate bar, 85% cacao. $5.99 each.
-        In stock! Rated 4.7 stars by health-conscious buyers. Fair trade, vegan, no added sugar`
-    }
+        In stock! Rated 4.7 stars by health-conscious buyers. Fair trade, vegan, no added sugar`,
+    },
   ];
 
   console.log("🧪 Extracting product data from descriptions:\n");

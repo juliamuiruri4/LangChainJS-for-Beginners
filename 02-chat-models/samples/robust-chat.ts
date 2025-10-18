@@ -1,5 +1,5 @@
 /**
- * Challenge 4 Solution: Robust Error Handler
+ * Challenge 4 Solution: Robust Error Handler with Built-In Retries
  * Run: npx tsx 02-chat-models/samples/robust-chat.ts
  */
 
@@ -16,55 +16,47 @@ async function robustChat(prompt: string, options: ChatOptions = {}): Promise<st
   const {
     maxRetries = 3,
     timeout = 30000,
-    fallbackResponse = "I apologize, but I'm having trouble connecting right now. Please try again later."
+    fallbackResponse = "I apologize, but I'm having trouble connecting right now. Please try again later.",
   } = options;
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      console.log(`🔄 Attempt ${attempt}/${maxRetries}...`);
+  // Use LangChain's built-in retry logic - automatically handles retries with exponential backoff
+  const modelWithRetry = model.withRetry({
+    stopAfterAttempt: maxRetries,
+  });
 
-      const response = await model.invoke(prompt);
-      console.log(`✅ Success on attempt ${attempt}!\n`);
+  try {
+    console.log(`🔄 Making call with automatic retry (max ${maxRetries} attempts)...`);
 
-      return response.content.toString();
-    } catch (error: any) {
-      console.error(`❌ Attempt ${attempt} failed: ${error.message}`);
+    const response = await modelWithRetry.invoke(prompt);
+    console.log(`✅ Success!\n`);
 
-      // Categorize the error
-      let errorType = "Unknown error";
-      if (error.message.includes("401") || error.message.includes("Unauthorized")) {
-        errorType = "Authentication failed (check API key)";
-      } else if (error.message.includes("429") || error.message.includes("rate limit")) {
-        errorType = "Rate limit exceeded";
-      } else if (error.message.includes("timeout")) {
-        errorType = "Request timeout";
-      } else if (error.message.includes("network")) {
-        errorType = "Network error";
-      }
+    return response.content.toString();
+  } catch (error: any) {
+    console.error(`❌ All ${maxRetries} attempts failed: ${error.message}`);
 
-      console.log(`📋 Error type: ${errorType}`);
-
-      // Last attempt - return fallback
-      if (attempt === maxRetries) {
-        console.error(`\n❌ All ${maxRetries} attempts failed`);
-        console.log(`💡 Returning fallback response\n`);
-        return fallbackResponse;
-      }
-
-      // Exponential backoff
-      const waitTime = Math.pow(2, attempt) * 1000;
-      console.log(`⏳ Waiting ${waitTime}ms before retry...\n`);
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
+    // Categorize the error
+    let errorType = "Unknown error";
+    if (error.message.includes("401") || error.message.includes("Unauthorized")) {
+      errorType = "Authentication failed (check API key)";
+    } else if (error.message.includes("429") || error.message.includes("rate limit")) {
+      errorType = "Rate limit exceeded";
+    } else if (error.message.includes("timeout")) {
+      errorType = "Request timeout";
+    } else if (error.message.includes("network")) {
+      errorType = "Network error";
     }
-  }
 
-  return fallbackResponse;
+    console.log(`📋 Error type: ${errorType}`);
+    console.log(`💡 Returning fallback response\n`);
+
+    return fallbackResponse;
+  }
 }
 
 async function testRobustChat() {
@@ -82,7 +74,7 @@ async function testRobustChat() {
 
   const response2 = await robustChat("Hello", {
     maxRetries: 2,
-    fallbackResponse: "Sorry, I'm having connection issues. Please try again."
+    fallbackResponse: "Sorry, I'm having connection issues. Please try again.",
   });
 
   console.log("Final response:", response2);
@@ -93,10 +85,14 @@ async function testRobustChat() {
   console.log("\n" + "=".repeat(80));
   console.log("\n✅ Error handling demonstration complete!");
   console.log("\n💡 Key Features Demonstrated:");
-  console.log("   - Automatic retry with exponential backoff");
-  console.log("   - Error categorization");
-  console.log("   - Graceful fallback responses");
+  console.log("   - Built-in withRetry() for automatic retries and exponential backoff");
+  console.log("   - Error categorization for different error types");
+  console.log("   - Graceful fallback responses when all retries fail");
   console.log("   - User-friendly error messages");
+  console.log("\n🎯 Benefits of withRetry():");
+  console.log("   - Less code (no manual retry loops)");
+  console.log("   - Production-tested retry logic");
+  console.log("   - Works with agents and RAG systems");
 }
 
 testRobustChat().catch(console.error);

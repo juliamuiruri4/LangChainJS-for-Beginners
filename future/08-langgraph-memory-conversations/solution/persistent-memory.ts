@@ -6,7 +6,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "langchain";
 import { promises as fs } from "fs";
 import * as path from "path";
 import * as readline from "readline";
@@ -25,14 +25,14 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Ensure memory directory exists
@@ -155,7 +155,7 @@ async function main() {
     const storedFormat: StoredMessage[] = messages.map((msg) => ({
       type: msg._getType() === "human" ? "human" : "ai",
       content: String(msg.content),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     }));
 
     await saveMemory(userId, storedFormat);
@@ -171,7 +171,7 @@ async function main() {
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     const askQuestion = () => {
@@ -183,7 +183,7 @@ async function main() {
           const storedFormat: StoredMessage[] = messages.map((msg) => ({
             type: msg._getType() === "human" ? "human" : "ai",
             content: String(msg.content),
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           }));
 
           await saveMemory(userId, storedFormat);
@@ -228,7 +228,7 @@ async function main() {
           const storedFormat: StoredMessage[] = messages.map((msg) => ({
             type: msg._getType() === "human" ? "human" : "ai",
             content: String(msg.content),
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           }));
 
           await saveMemory(userId, storedFormat);

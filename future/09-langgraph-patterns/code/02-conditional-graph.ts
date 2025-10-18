@@ -9,31 +9,31 @@ import "dotenv/config";
 const WorkflowState = Annotation.Root({
   question: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   category: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   answer: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
-  })
+    default: () => "",
+  }),
 });
 
 async function main() {
   console.log("🌿 Conditional Graph Example\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const workflow = new StateGraph(WorkflowState);
@@ -88,7 +88,7 @@ async function main() {
   workflow.addEdge("__start__" as any, "categorize" as any);
   workflow.addConditionalEdges("categorize" as any, route, {
     handleTechnical: "handleTechnical",
-    handleGeneral: "handleGeneral"
+    handleGeneral: "handleGeneral",
   } as any);
   workflow.addEdge("handleTechnical" as any, END);
   workflow.addEdge("handleGeneral" as any, END);
@@ -98,7 +98,7 @@ async function main() {
     "How do I implement binary search in Python?",
     "What's the weather like today?",
     "Explain quantum entanglement",
-    "What time is it?"
+    "What time is it?",
   ];
 
   for (const question of questions) {

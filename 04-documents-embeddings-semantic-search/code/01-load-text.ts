@@ -8,7 +8,7 @@
  * - "How can I load multiple text files from a directory at once?"
  */
 
-import { TextLoader } from "langchain/document_loaders/fs/text";
+import { TextLoader } from "@langchain/classic/document_loaders/fs/text";
 import { writeFileSync, mkdirSync } from "fs";
 
 async function main() {
@@ -34,7 +34,7 @@ Key Features:
 - Prompt Management: Create reusable, testable prompts with templates
 - Document Processing: Load, split, and manage documents efficiently
 - Vector Stores: Store and retrieve embeddings for semantic search
-- Chains: Combine multiple operations into cohesive workflows
+- Tools: Extend AI capabilities with custom functions and APIs
 - Agents: Build AI systems that can make decisions and use tools
 - Memory: Maintain conversation context across interactions
 

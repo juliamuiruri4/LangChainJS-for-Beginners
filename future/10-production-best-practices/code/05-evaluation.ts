@@ -11,14 +11,14 @@ async function main() {
 
   // Setup
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("=".repeat(80));
@@ -58,7 +58,7 @@ async function main() {
     const metrics = {
       length: lengthScore,
       relevance: relevanceScore,
-      speed: speedScore
+      speed: speedScore,
     };
 
     const passedTests = Object.values(metrics).filter(Boolean).length;
@@ -85,7 +85,7 @@ async function main() {
       answer,
       metrics,
       overallScore,
-      duration
+      duration,
     };
   }
 
@@ -95,7 +95,7 @@ async function main() {
     "JavaScript",
     "types",
     "static",
-    "compile"
+    "compile",
   ]);
 
   // Test Case 2: Complex Explanation Question
@@ -106,7 +106,7 @@ async function main() {
     "documents",
     "context",
     "embeddings",
-    "vector"
+    "vector",
   ]);
 
   // Test Case 3: Technical Comparison Question
@@ -116,7 +116,7 @@ async function main() {
     "chains",
     "agents",
     "graph",
-    "workflow"
+    "workflow",
   ]);
 
   console.log("\n💡 Evaluation Best Practices:\n");

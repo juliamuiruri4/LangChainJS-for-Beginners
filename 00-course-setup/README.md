@@ -40,26 +40,44 @@ The same applies to AI development. This setup chapter ensures you have:
 
 **Let's get your workshop ready!** In just 15 minutes, you'll be equipped to build powerful AI applications.
 
+## Setup Options
+
+Choose from one of the following options to set up your development environment:
+
+1. **GitHub Codespaces**: Use a cloud-based development environment.
+2. **Local Development**: Set up your environment on your machine.
+
 ---
 
-## Step 1: Install Node.js
+## GitHub Codespaces
+
+If you prefer not to set up your local environment, you can use **GitHub Codespaces** which is a cloud-based development environment that runs in your browser.
+ 
+1. **Create a Codespace**: Open the [langchainjs-for-beginners](https://github.com/danwahlin/langchainjs-for-beginners) on GitHub and click on the green "Code" button. Select "Open with Codespaces" and "New codespace".
+2. **Wait for Initialization**: It will take a few moments to set up your environment.
+3. **Access the Terminal**: Once ready, open the terminal in Codespaces (Terminal > New Terminal).
+
+---
+
+## Local Development
+
+### Step 1: Install Node.js
 
 You'll need **Node.js LTS (Long Term Support)** to run LangChain.js applications.
 
-### Check if Node.js is installed:
+#### Check if Node.js is installed:
 
 ```bash
 node --version
 ```
 
-If you see an LTS version number (visit [nodejs.org](https://nodejs.org/) to check), you're good! Skip to Step 2.
+If you see an LTS version number (visit [nodejs.org](https://nodejs.org/en/download) to check), you're good! Skip to Step 2.
 
-### Install Node.js:
+#### Install Node.js:
 
 1. Visit [nodejs.org](https://nodejs.org/)
-2. Download the **LTS (Long Term Support)** version (recommended)
-3. Run the installer
-4. Verify installation:
+2. Follow the install instructions for your operating system
+3. Verify installation:
 
 ```bash
 node --version  # Displays LTS version
@@ -75,7 +93,7 @@ npm --version # Displays npm version
 
 ---
 
-## Step 2: Clone the Repository
+### Step 2: Clone the Repository
 
 ```bash
 # Clone the course repository
@@ -98,7 +116,7 @@ This will install all required packages:
 - `langchain` - Main LangChain package
 - `dotenv` - Environment variable management
 
-### Why install tsx globally?
+#### Why install tsx globally?
 
 **tsx** is a TypeScript execution engine that lets you run `.ts` files directly without compiling them first.
 
@@ -126,11 +144,11 @@ Throughout this course, you'll run examples using `tsx filename.ts` - quick and 
 
 ---
 
-## Step 3: Create GitHub Personal Access Token
+### Step 3: Create GitHub Personal Access Token
 
 GitHub Models provides free access to powerful AI models—you just need a Personal Access Token.
 
-### Create Your Token:
+#### Create Your Token:
 
 1. **Visit**: https://github.com/settings/tokens/new
 2. **Token name**: `langchain-course` (or any name you prefer)
@@ -141,18 +159,18 @@ GitHub Models provides free access to powerful AI models—you just need a Perso
 5. **Click**: "Generate token"
 6. **⚠️ IMPORTANT**: Copy your token now and save it to a text file temporarily! You'll need it in the next step.
 
-### Why GitHub Models?
+#### Why GitHub Models?
 
 - ✅ **Free**: No credit card required
-- ✅ **Powerful**: Access to GPT-4o, GPT-4o-mini, and other models
+- ✅ **Powerful**: Access to GPT-5, GPT-5-mini, and other models
 - ✅ **Easy**: Use your existing GitHub account
 - ✅ **Learning**: Perfect for this course!
 
 ---
 
-## Step 4: Configure Environment Variables
+### Step 4: Configure Environment Variables
 
-### Create `.env` file:
+#### Create `.env` file:
 
 **Mac, Linux, WSL on Windows:**
 
@@ -170,7 +188,7 @@ copy .env.example .env
 Copy-Item .env.example .env
 ```
 
-### Edit `.env` file:
+#### Edit `.env` file:
 
 Open `.env` in your text editor and configure your AI provider.
 
@@ -179,7 +197,7 @@ Open `.env` in your text editor and configure your AI provider.
 ```bash
 AI_API_KEY=ghp_your_github_token_here
 AI_ENDPOINT=https://models.inference.ai.azure.com
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 ```
 
 **Replace `ghp_your_github_token_here` with your actual GitHub token!**
@@ -189,6 +207,8 @@ AI_MODEL=gpt-4o-mini
 If you have an Azure subscription, you can use Azure AI Foundry for production-grade AI applications with enterprise features.
 
 #### Step-by-Step Setup:
+
+You can follow the steps below to deploy models in Azure AI Foundry or visit the [Deploy an Azure OpenAI model quickstart](https://learn.microsoft.com/azure/ai-foundry/quickstarts/get-started-code?tabs=azure-ai-foundry) which will also walk you through the process.
 
 **1. Create an Azure AI Foundry Project**
 
@@ -206,18 +226,19 @@ If you have an Azure subscription, you can use Azure AI Foundry for production-g
 
 You'll need to deploy two models for this course:
 
-**Deploy GPT-4o-mini (Chat Model):**
+**Deploy gpt-5-mini & gpt-5 (Chat Model):**
 
 1. In your project, go to **Models + endpoints** in the left navigation
 2. Click **+ Deploy model** → **Deploy base model**
-3. Search for and select **gpt-4o-mini**
+3. Search for and select **gpt-5-mini**
 4. Click **Confirm**
 5. Configure deployment:
-   - **Deployment name**: `gpt-4o-mini` (keep this name for consistency)
+   - **Deployment name**: `gpt-5-mini` (keep this name for consistency)
    - **Model version**: Select the latest available
    - **Deployment type**: Global Standard
    - Click **Deploy**
 6. Wait for deployment to complete
+7. Follow the same process and deploy `gpt-5` as well
 
 **Deploy Text Embedding Model:**
 
@@ -255,7 +276,7 @@ AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
 
 **Important Notes:**
 
-- ✅ **Deployment names must match**: The course uses `gpt-4o-mini` and `text-embedding-3-small` as deployment names
+- ✅ **Deployment names must match**: The course uses `gpt-5-mini` and `text-embedding-3-small` as deployment names
 - ✅ **Keep your API key secure**: Never commit `.env` to version control
 - ✅ **Cost management**: Azure AI Foundry is a paid service. Set up cost alerts in the Azure portal
 - ✅ **Production ready**: Azure AI Foundry provides enterprise features like Responsible AI, monitoring, logging, and SLA guarantees
@@ -267,11 +288,11 @@ AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
 
 
 
-## Step 5: Test Your Setup
+### Step 5: Test Your Setup
 
 Let's verify everything works!
 
-### Run the test:
+#### Run the test:
 
 Run the following command in your terminal from the root of the project:
 
@@ -279,14 +300,14 @@ Run the following command in your terminal from the root of the project:
 tsx scripts/test-setup.ts
 ```
 
-### Expected output:
+#### Expected output:
 
 ```
 🚀 Testing AI provider connection...
 
 ✅ SUCCESS! Your AI provider is working!
    Provider: https://models.inference.ai.azure.com
-   Model: gpt-4o-mini
+   Model: gpt-5-mini
 
 Model response: Setup successful!
 
@@ -297,11 +318,11 @@ If you see this, you're all set! If not, check the troubleshooting section below
 
 ---
 
-## Step 6: Install VS Code (Recommended)
+### Step 6: Install VS Code (Recommended)
 
 While you can use any text editor, we recommend **Visual Studio Code** for the best experience.
 
-### Install VS Code:
+#### Install VS Code:
 
 1. Visit [code.visualstudio.com](https://code.visualstudio.com/)
 2. Download for your OS
@@ -322,7 +343,7 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 2. Check that `.env` contains all required variables:
    - `AI_API_KEY=your_key`
    - `AI_ENDPOINT=your_endpoint_url`
-   - `AI_MODEL=gpt-4o-mini`
+   - `AI_MODEL=gpt-5-mini`
 3. No quotes needed around the values
 4. No spaces before or after the `=`
 

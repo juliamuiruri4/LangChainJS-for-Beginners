@@ -8,7 +8,7 @@
  * - "How does overlap affect the total number of chunks created?"
  */
 
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 async function main() {
   console.log("🔄 Chunk Overlap Comparison\n");
@@ -33,7 +33,7 @@ glycolysis, the Krebs cycle, and the electron transport chain.
 
   const noOverlap = new RecursiveCharacterTextSplitter({
     chunkSize: 150,
-    chunkOverlap: 0
+    chunkOverlap: 0,
   });
 
   const chunks1 = await noOverlap.createDocuments([text]);
@@ -51,7 +51,7 @@ glycolysis, the Krebs cycle, and the electron transport chain.
 
   const withOverlap = new RecursiveCharacterTextSplitter({
     chunkSize: 150,
-    chunkOverlap: 30
+    chunkOverlap: 30,
   });
 
   const chunks2 = await withOverlap.createDocuments([text]);

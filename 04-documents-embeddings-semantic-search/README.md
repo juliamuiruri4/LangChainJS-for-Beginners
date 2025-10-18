@@ -22,6 +22,20 @@ By the end of this chapter, you'll be able to:
 
 ---
 
+## 📌 About the Code Examples
+
+The code snippets shown in this README are simplified for clarity and focus on core concepts. The actual code files in the `code/`, `solution/`, and `samples/` folders include:
+
+- ✨ **Enhanced console output** with emojis, separators, and detailed formatting
+- 📊 **Additional statistics** and metrics for better understanding
+- 🎯 **More comprehensive examples** with diverse datasets and multiple queries
+- 💡 **Extended educational content** with key insights and observations
+- 🛡️ **Robust error handling** with try-catch blocks and safe operations
+
+When you run the actual files, you'll see more detailed output than shown in the examples below. This is intentional - the README focuses on teaching concepts, while the code demonstrates production-quality practices.
+
+---
+
 ## 📖 The Smart Library System Analogy
 
 **Imagine you're building a modern, intelligent library system.**
@@ -62,7 +76,7 @@ LLMs have context limits which means they can only process so much text at once.
 
 ### Why Document Loaders?
 
-LLMs need text input, but your data comes in many formats:
+LLMs need text input, but your data comes in many formats ([Document Loader](../GLOSSARY.md#document-loader)):
 - Text files (.txt, .md)
 - PDFs
 - Websites
@@ -83,7 +97,7 @@ In this example, you'll learn how to load text files using TextLoader and access
 First, create a sample text file:
 
 ```typescript
-import { TextLoader } from "langchain/document_loaders/fs/text";
+import { TextLoader } from "@langchain/classic/document_loaders/fs/text";
 import { writeFileSync } from "fs";
 
 // Create sample data
@@ -166,7 +180,7 @@ Metadata: {
 - **Relevance**: Smaller chunks = more precise retrieval
 - **Cost**: Smaller inputs = lower API costs
 
-### Chunk Size Trade-offs
+### Chunk Size Trade-offs ([Chunking](../GLOSSARY.md#chunk--chunking))
 
 | Small Chunks (200-500 chars) | Large Chunks (1000-2000 chars) |
 |------------------------------|--------------------------------|
@@ -183,15 +197,15 @@ Here you'll split long documents into manageable chunks using RecursiveCharacter
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/02-splitting.ts`
 
 ```typescript
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 const text = `
 [Long article about AI and machine learning...]
 `;
 
 const splitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 500,      // Target size in characters
-  chunkOverlap: 50,    // Overlap between chunks
+  chunkSize: 300,      // Target size in characters
+  chunkOverlap: 50,    // Overlap between chunks (preserves context)
 });
 
 const docs = await splitter.createDocuments([text]);
@@ -232,16 +246,16 @@ Chunk 3:
 ### How It Works
 
 **What's happening**:
-1. **Create splitter**: Configure `RecursiveCharacterTextSplitter` with `chunkSize: 500` and `chunkOverlap: 50`
+1. **Create splitter**: Configure `RecursiveCharacterTextSplitter` with `chunkSize: 300` and `chunkOverlap: 50`
 2. **Split text**: `createDocuments()` splits the text into manageable pieces
-3. **Each chunk**: Has approximately 500 characters, with 50 characters overlapping with adjacent chunks
+3. **Each chunk**: Has approximately 300 characters, with 50 characters overlapping with adjacent chunks
 4. **Result**: Array of `Document` objects, each with a portion of the original text
 
 **Why these settings?**
-- `chunkSize: 500`: Small enough for focused retrieval, large enough for context
-- `chunkOverlap: 50`: 10% overlap preserves context between chunks
+- `chunkSize: 300`: Small enough for focused retrieval, large enough for context
+- `chunkOverlap: 50`: ~17% overlap preserves context between chunks
 
-**Splitter Types**:
+**Splitter Types ([Text Splitter](../GLOSSARY.md#text-splitter))**:
 
 1. **RecursiveCharacterTextSplitter** (recommended)
    - Splits on paragraphs, then sentences, then words
@@ -258,7 +272,7 @@ Chunk 3:
 
 ## 🔄 Chunk Overlap
 
-**Why overlap chunks?**
+**Why overlap chunks ([chunk overlap](../GLOSSARY.md#chunk-overlap))?**
 
 Without overlap:
 ```
@@ -282,7 +296,7 @@ This example compares document chunks with and without overlap to show you how o
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/03-overlap.ts`
 
 ```typescript
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 const text = "Your sample text here...";
 
@@ -345,7 +359,7 @@ With overlap:
 
 ## 🏷️ Document Metadata
 
-Metadata helps you:
+[Metadata](../GLOSSARY.md#metadata) helps you:
 - Track document source
 - Filter by category, date, author
 - Understand context
@@ -358,8 +372,8 @@ In this example, you'll learn how to add and preserve metadata (source, category
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/04-metadata.ts`
 
 ```typescript
-import { Document } from "langchain/document";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { Document } from "@langchain/core/documents";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 // Create documents with metadata
 const docs = [
@@ -463,7 +477,7 @@ Matches: Documents containing "cook" AND "pasta"
 Misses: "Preparing Italian noodles" (different words, same meaning!)
 ```
 
-**Semantic Search**:
+**[Semantic Search](../GLOSSARY.md#semantic-search)**:
 ```
 Query: "How do I cook pasta?"
 Understands: cooking = preparing, pasta = noodles
@@ -524,7 +538,7 @@ console.log(`First 10 values: ${embedding.slice(0, 10)}`);
 const similar = await embeddings.embedQuery("LangChain simplifies AI development");
 const different = await embeddings.embedQuery("I love pizza");
 
-// Calculate similarity (cosine similarity)
+// Calculate similarity ([cosine similarity](../GLOSSARY.md#cosine-similarity))
 function cosineSimilarity(a: number[], b: number[]): number {
   const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
   const magA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
@@ -535,6 +549,8 @@ function cosineSimilarity(a: number[], b: number[]): number {
 console.log("Similarity (LangChain vs LangChain):", cosineSimilarity(embedding, similar).toFixed(3));
 console.log("Similarity (LangChain vs pizza):", cosineSimilarity(embedding, different).toFixed(3));
 ```
+
+> **💡 Performance Tip**: The actual code file (`05-basic-embeddings.ts`) demonstrates **batch processing** using `embedDocuments()` to embed multiple texts at once, which is 5-10x faster than individual `embedQuery()` calls. See [Example 8](#-batch-processing) for detailed performance comparison!
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What is the cosineSimilarity function doing mathematically?"
@@ -572,7 +588,7 @@ Similarity (LangChain vs pizza): 0.124
 
 ## 🗄️ Vector Stores
 
-Vector stores are databases optimized for storing and searching embeddings.
+[Vector stores](../GLOSSARY.md#vector-store) are databases optimized for storing and searching embeddings.
 
 ### Popular Vector Stores
 
@@ -592,9 +608,9 @@ In this example, you'll build a vector store from documents and perform semantic
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/06-vector-store.ts`
 
 ```typescript
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { Document } from "langchain/document";
+import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
 const embeddings = new OpenAIEmbeddings({
@@ -639,6 +655,8 @@ Most similar documents:
 ```
 
 Notice: The search found "indoors" matches even though the word "indoors" doesn't appear in any document!
+
+> **📝 Note**: The actual code file (`06-vector-store.ts`) uses a more comprehensive dataset with 6 documents across programming, AI, and animal categories, and demonstrates 4 different search queries to show semantic search across diverse topics. The simplified example above focuses on teaching the core concept of semantic understanding.
 
 ### How It Works
 
@@ -725,7 +743,7 @@ Score: 0.623 - Dogs are loyal companions that enjoy playing fetch.
 
 ## ⚡ Batch Processing
 
-Creating embeddings one at a time is slow. Use batch processing!
+Creating embeddings one at a time is slow. Use [batch processing](../GLOSSARY.md#batch-processing)!
 
 ### Example 8: Batch Embeddings
 
@@ -865,12 +883,14 @@ The assignment includes:
 - [Vector Stores Guide](https://js.langchain.com/docs/modules/data_connection/vectorstores/)
 - [Understanding Embeddings](https://platform.openai.com/docs/guides/embeddings)
 
+**💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples including keyword vs semantic comparison, multilingual search, embedding visualization, chunking strategies, document organization, and web processing!
+
 ---
 
 ## 🗺️ Navigation
 
 - **Previous**: [03-prompt-templates](../03-prompt-templates/README.md)
-- **Next**: [05-function-calling-tooling](../05-function-calling-tooling/README.md)
+- **Next**: [05-function-calling-tools](../05-function-calling-tools/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---

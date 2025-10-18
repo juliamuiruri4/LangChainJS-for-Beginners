@@ -11,8 +11,8 @@ import "dotenv/config";
 const question = "Explain the difference between machine learning and deep learning.";
 
 const models = [
-  { name: "gpt-4o", description: "Most capable" },
-  { name: "gpt-4o-mini", description: "Fast and efficient" }
+  { name: "gpt-5", description: "Most capable" },
+  { name: "gpt-5-mini", description: "Fast and efficient" },
 ];
 
 interface ModelResult {
@@ -26,7 +26,7 @@ async function testModel(modelName: string): Promise<ModelResult> {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const startTime = Date.now();
@@ -37,7 +37,7 @@ async function testModel(modelName: string): Promise<ModelResult> {
     name: modelName,
     time: endTime - startTime,
     length: response.content.toString().length,
-    response: response.content.toString()
+    response: response.content.toString(),
   };
 }
 
@@ -107,8 +107,8 @@ async function compareModels() {
   console.log(`⚡ Fastest: ${fastest.name} (${fastest.time}ms)`);
   console.log(`📝 Most detailed: ${longest.name} (${longest.length} characters)`);
   console.log("\n🎯 Recommendations:");
-  console.log("   - Use gpt-4o for complex tasks needing detailed responses");
-  console.log("   - Use gpt-4o-mini for quick responses and cost efficiency");
+  console.log("   - Use gpt-5 for complex tasks needing detailed responses");
+  console.log("   - Use gpt-5-mini for quick responses and cost efficiency");
 }
 
 compareModels().catch(console.error);

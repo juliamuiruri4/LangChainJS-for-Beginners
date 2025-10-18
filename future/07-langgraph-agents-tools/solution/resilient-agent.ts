@@ -5,11 +5,11 @@
  * Run: npx tsx 07-langgraph-agents-tools/solution/resilient-agent.ts
  */
 
-import { tool } from "@langchain/core/tools";
+import { tool } from "langchain";
 import { ChatOpenAI } from "@langchain/openai";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { HumanMessage } from "@langchain/core/messages";
-import { z } from "zod";
+import { HumanMessage } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 let apiCallCount = 0;
@@ -19,15 +19,15 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Tool 1: Unreliable API (fails 30% of the time)
@@ -46,8 +46,8 @@ async function main() {
       name: "unreliable_api",
       description: "Call an API that sometimes fails. Use the retry tool if it fails.",
       schema: z.object({
-        query: z.string().describe("The query to send to the API")
-      })
+        query: z.string().describe("The query to send to the API"),
+      }),
     }
   );
 
@@ -87,8 +87,8 @@ async function main() {
       name: "retry_with_backoff",
       description: "Retry an operation with exponential backoff (up to 3 attempts)",
       schema: z.object({
-        operation: z.string().describe("Description of the operation to retry")
-      })
+        operation: z.string().describe("Description of the operation to retry"),
+      }),
     }
   );
 
@@ -99,7 +99,7 @@ async function main() {
       const fallbackData: Record<string, string> = {
         weather: "Cached: 72°F, Sunny (data may be outdated)",
         stock: "Cached: $150.25 (15 minutes delayed)",
-        news: "Cached: Latest headlines from 1 hour ago"
+        news: "Cached: Latest headlines from 1 hour ago",
       };
 
       const key = Object.keys(fallbackData).find((k) => input.query.toLowerCase().includes(k));
@@ -114,8 +114,8 @@ async function main() {
       name: "fallback_data",
       description: "Get data from fallback/cached source (always available but may be outdated)",
       schema: z.object({
-        query: z.string().describe("What data to retrieve from fallback")
-      })
+        query: z.string().describe("What data to retrieve from fallback"),
+      }),
     }
   );
 
@@ -141,14 +141,14 @@ async function main() {
       name: "validate_response",
       description: "Validate that a response is properly formatted and complete",
       schema: z.object({
-        response: z.string().describe("The response to validate")
-      })
+        response: z.string().describe("The response to validate"),
+      }),
     }
   );
 
   const agent = createReactAgent({
     llm: model,
-    tools: [unreliableTool, retryTool, fallbackTool, validateTool]
+    tools: [unreliableTool, retryTool, fallbackTool, validateTool],
   });
 
   console.log("🧪 Testing agent resilience with potentially failing operations\n");
@@ -157,7 +157,7 @@ async function main() {
   const queries = [
     "Try to get weather data from the unreliable API",
     "Get stock prices and retry if it fails",
-    "If the API fails, use the fallback data source for news"
+    "If the API fails, use the fallback data source for news",
   ];
 
   for (const query of queries) {
@@ -165,7 +165,7 @@ async function main() {
 
     try {
       const response = await agent.invoke({
-        messages: [new HumanMessage(query)]
+        messages: [new HumanMessage(query)],
       });
 
       const lastMessage = response.messages[response.messages.length - 1];

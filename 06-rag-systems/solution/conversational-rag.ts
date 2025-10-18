@@ -5,15 +5,13 @@
  * Run: npx tsx 06-rag-systems/solution/conversational-rag.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { createRetrievalChain } from "langchain/chains/retrieval";
-import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { createStuffDocumentsChain } from "@langchain/classic/chains/combine_documents";
+import { createRetrievalChain } from "@langchain/classic/chains/retrieval";
+import { HumanMessage, AIMessage } from "langchain";
 import * as readline from "readline";
 import "dotenv/config";
 
@@ -22,28 +20,28 @@ const knowledgeBase = [
   new Document({
     pageContent:
       "TypeScript is a strongly typed programming language that builds on JavaScript. It adds optional static typing to JavaScript, which can help catch errors early in development.",
-    metadata: { title: "TypeScript Overview", section: "Introduction" }
+    metadata: { title: "TypeScript Overview", section: "Introduction" },
   }),
   new Document({
     pageContent:
       "TypeScript's main benefits include better IDE support, early error detection, improved code maintainability, and enhanced refactoring capabilities. It helps teams build more robust applications.",
-    metadata: { title: "TypeScript Benefits", section: "Advantages" }
+    metadata: { title: "TypeScript Benefits", section: "Advantages" },
   }),
   new Document({
     pageContent:
       "TypeScript supports interfaces which define the shape of objects. Interfaces can include properties, methods, and index signatures. They enable type checking and serve as documentation.",
-    metadata: { title: "TypeScript Interfaces", section: "Type System" }
+    metadata: { title: "TypeScript Interfaces", section: "Type System" },
   }),
   new Document({
     pageContent:
       "Generics in TypeScript allow you to create reusable components that work with multiple types. They provide type safety while maintaining flexibility. Common examples include Array<T> and Promise<T>.",
-    metadata: { title: "TypeScript Generics", section: "Advanced Features" }
+    metadata: { title: "TypeScript Generics", section: "Advanced Features" },
   }),
   new Document({
     pageContent:
       "TypeScript enums allow you to define a set of named constants. They can be numeric or string-based and help make code more readable and less error-prone when working with sets of related values.",
-    metadata: { title: "TypeScript Enums", section: "Type System" }
-  })
+    metadata: { title: "TypeScript Enums", section: "Type System" },
+  }),
 ];
 
 async function main() {
@@ -51,15 +49,15 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("📝 Loading knowledge base into vector store...\n");
@@ -67,37 +65,21 @@ async function main() {
   const vectorStore = await MemoryVectorStore.fromDocuments(knowledgeBase, embeddings);
   const retriever = vectorStore.asRetriever({ k: 2 });
 
-  // Create a history-aware retriever that reformulates questions based on chat history
-  const historyAwarePrompt = ChatPromptTemplate.fromMessages([
-    new MessagesPlaceholder("chat_history"),
-    ["user", "{input}"],
-    [
-      "user",
-      "Given the conversation above, generate a search query to look up information relevant to the conversation"
-    ]
-  ]);
-
-  const historyAwareRetriever = await createHistoryAwareRetriever({
-    llm: model,
-    retriever,
-    rephrasePrompt: historyAwarePrompt
-  });
-
-  // Create the answer generation prompt
+  // Create the answer generation prompt with conversation history
   const answerPrompt = ChatPromptTemplate.fromMessages([
     ["system", "Answer the user's questions based on the below context:\n\n{context}"],
     new MessagesPlaceholder("chat_history"),
-    ["user", "{input}"]
+    ["user", "{input}"],
   ]);
 
   const combineDocsChain = await createStuffDocumentsChain({
     llm: model,
-    prompt: answerPrompt
+    prompt: answerPrompt,
   });
 
   const conversationalRagChain = await createRetrievalChain({
-    retriever: historyAwareRetriever,
-    combineDocsChain
+    retriever,
+    combineDocsChain,
   });
 
   // Store conversation history
@@ -124,7 +106,7 @@ async function main() {
       "What is TypeScript?",
       "What are its main benefits?",
       "Can you explain more about the type system?",
-      "What are generics?"
+      "What are generics?",
     ];
 
     for (const question of testConversation) {
@@ -132,7 +114,7 @@ async function main() {
 
       const response = await conversationalRagChain.invoke({
         input: question,
-        chat_history: chatHistory
+        chat_history: chatHistory,
       });
 
       console.log(`🤖 Assistant: ${response.answer}\n`);
@@ -152,7 +134,7 @@ async function main() {
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     const askQuestion = () => {
@@ -196,7 +178,7 @@ async function main() {
         try {
           const response = await conversationalRagChain.invoke({
             input: userInput,
-            chat_history: chatHistory
+            chat_history: chatHistory,
           });
 
           console.log(`\n🤖 Assistant: ${response.answer}\n`);

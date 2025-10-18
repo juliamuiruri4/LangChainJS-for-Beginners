@@ -15,7 +15,7 @@ async function trackTokenUsage() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("📊 Token Usage Tracking Example\n");
@@ -23,14 +23,14 @@ async function trackTokenUsage() {
   // Make a request
   const response = await model.invoke("Explain what TypeScript is in 2 sentences.");
 
-  // Extract token usage from metadata
-  const usage = response.response_metadata?.tokenUsage;
+  // Extract token usage from metadata (v1 uses usage_metadata)
+  const usage = response.usage_metadata;
 
   if (usage) {
     console.log("Token Breakdown:");
-    console.log(`  Prompt tokens:     ${usage.promptTokens}`);
-    console.log(`  Completion tokens: ${usage.completionTokens}`);
-    console.log(`  Total tokens:      ${usage.totalTokens}`);
+    console.log(`  Prompt tokens:     ${usage.input_tokens}`);
+    console.log(`  Completion tokens: ${usage.output_tokens}`);
+    console.log(`  Total tokens:      ${usage.total_tokens}`);
   } else {
     console.log("⚠️  Token usage information not available in response metadata.");
   }

@@ -1,13 +1,12 @@
 /**
  * Chapter 5 Assignment Solution: Weather Tool with Complete Execution Loop
  *
- * Run: npx tsx 05-function-calling-tooling/solution/weather-tool.ts
+ * Run: npx tsx 05-function-calling-tools/solution/weather-tool.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { ToolMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
-import { z } from "zod";
+import { AIMessage,HumanMessage,ToolMessage,tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Define weather tool with Zod schema
@@ -60,7 +59,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([weatherTool]);

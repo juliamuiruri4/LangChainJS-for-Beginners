@@ -1,12 +1,12 @@
 /**
  * Chapter 5 Assignment Solution: Multi-Tool Travel Assistant
  *
- * Run: npx tsx 05-function-calling-tooling/solution/travel-assistant.ts
+ * Run: npx tsx 05-function-calling-tools/solution/travel-assistant.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Tool 1: Currency Converter
@@ -45,12 +45,8 @@ const currencyConverter = tool(
       "Convert amounts between different currencies (USD, EUR, GBP, JPY, AUD, CAD). Use this when the user wants to convert money from one currency to another or asks about exchange rates.",
     schema: z.object({
       amount: z.number().describe("The amount to convert"),
-      from: z
-        .string()
-        .describe("Source currency code (e.g., 'USD', 'EUR', 'GBP')"),
-      to: z
-        .string()
-        .describe("Target currency code (e.g., 'USD', 'EUR', 'GBP')"),
+      from: z.string().describe("Source currency code (e.g., 'USD', 'EUR', 'GBP')"),
+      to: z.string().describe("Target currency code (e.g., 'USD', 'EUR', 'GBP')"),
     }),
   }
 );
@@ -141,9 +137,7 @@ const timeZoneTool = tool(
     description:
       "Get the current time in a specific city and its time zone information. Use this when the user asks what time it is somewhere, about time zones, or time differences between locations.",
     schema: z.object({
-      city: z
-        .string()
-        .describe("City name to get time for, e.g., 'Tokyo' or 'New York'"),
+      city: z.string().describe("City name to get time for, e.g., 'Tokyo' or 'New York'"),
     }),
   }
 );
@@ -155,7 +149,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([

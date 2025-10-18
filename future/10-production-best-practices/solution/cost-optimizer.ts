@@ -19,8 +19,8 @@ interface CostTracker {
 
 // Pricing per 1M tokens (approximate)
 const PRICING = {
-  "gpt-4o-mini": { input: 0.15, output: 0.6 },
-  "gpt-4o": { input: 2.5, output: 10.0 }
+  "gpt-5-mini": { input: 0.15, output: 0.6 },
+  "gpt-5": { input: 2.5, output: 10.0 },
 };
 
 const tracker: CostTracker = {
@@ -29,7 +29,7 @@ const tracker: CostTracker = {
   totalOutputTokens: 0,
   totalCost: 0,
   premiumCost: 0,
-  savings: 0
+  savings: 0,
 };
 
 function estimateTokens(text: string): number {
@@ -37,7 +37,7 @@ function estimateTokens(text: string): number {
 }
 
 function calculateCost(inputTokens: number, outputTokens: number, model: string): number {
-  const pricing = PRICING[model as keyof typeof PRICING] || PRICING["gpt-4o-mini"];
+  const pricing = PRICING[model as keyof typeof PRICING] || PRICING["gpt-5-mini"];
   return (inputTokens / 1_000_000) * pricing.input + (outputTokens / 1_000_000) * pricing.output;
 }
 
@@ -66,13 +66,13 @@ function selectModel(query: string): { model: string; reasoning: string } {
 
   if (complexity === "simple") {
     return {
-      model: "gpt-4o-mini",
-      reasoning: "Query is simple/short - using cost-effective model"
+      model: "gpt-5-mini",
+      reasoning: "Query is simple/short - using cost-effective model",
     };
   } else {
     return {
-      model: "gpt-4o",
-      reasoning: "Query is complex - using premium model for best results"
+      model: "gpt-5",
+      reasoning: "Query is complex - using premium model for best results",
     };
   }
 }
@@ -90,9 +90,9 @@ async function routeQuery(query: string): Promise<void> {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const response = await model.invoke(query);
@@ -103,7 +103,7 @@ async function routeQuery(query: string): Promise<void> {
 
   // Calculate costs
   const actualCost = calculateCost(inputTokens, outputTokens, selection.model);
-  const premiumCost = calculateCost(inputTokens, outputTokens, "gpt-4o");
+  const premiumCost = calculateCost(inputTokens, outputTokens, "gpt-5");
 
   // Update tracker
   tracker.requestCount++;
@@ -156,7 +156,7 @@ async function main() {
     "Analyze and compare the architectural differences between microservices and monolithic applications", // Complex
     "What is Docker?", // Simple
     "Discuss the trade-offs between SQL and NoSQL databases in detail", // Complex
-    "Who created JavaScript?" // Simple
+    "Who created JavaScript?", // Simple
   ];
 
   for (let i = 0; i < queries.length; i++) {

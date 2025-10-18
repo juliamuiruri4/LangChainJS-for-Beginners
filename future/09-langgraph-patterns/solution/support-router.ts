@@ -12,24 +12,24 @@ import "dotenv/config";
 const TicketState = Annotation.Root({
   ticket: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   category: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   priority: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   assignedTeam: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
+    default: () => "",
   }),
   response: Annotation<string>({
     reducer: (_, right) => right,
-    default: () => ""
-  })
+    default: () => "",
+  }),
 });
 
 async function main() {
@@ -37,15 +37,15 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Create workflow
@@ -145,7 +145,7 @@ Provide a brief, professional response (2-3 sentences).`;
   workflow.addConditionalEdges("classify" as any, routeByCategory, {
     engineering: "engineering",
     finance: "finance",
-    customer_service: "customer_service"
+    customer_service: "customer_service",
   } as any);
 
   workflow.addEdge("engineering" as any, "prioritize" as any);
@@ -163,7 +163,7 @@ Provide a brief, professional response (2-3 sentences).`;
     "I have a question about my invoice from last month",
     "How do I reset my password?",
     "The application keeps crashing - urgent!",
-    "Can you explain your pricing plans?"
+    "Can you explain your pricing plans?",
   ];
 
   for (const ticket of tickets) {
@@ -176,7 +176,7 @@ Provide a brief, professional response (2-3 sentences).`;
       category: "",
       priority: "",
       assignedTeam: "",
-      response: ""
+      response: "",
     });
 
     console.log("✅ Ticket Processing Complete:");

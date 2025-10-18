@@ -51,6 +51,115 @@ Chat models don't actually "remember" previous messages. Instead, you send the e
 
 **Think of it like this**: Every time you send a message, you're showing the AI the entire conversation thread so far.
 
+---
+
+### Message Types in LangChain
+
+LangChain provides four message types for building conversations. Each type serves a specific purpose:
+
+#### 1. SystemMessage - Setting the AI's Behavior
+
+Establishes initial instructions that shape how the model responds throughout the conversation.
+
+```typescript
+const systemMsg = new SystemMessage("You are a helpful coding tutor who gives clear, concise explanations.");
+```
+
+**Use for**: Setting tone, defining roles, establishing response guidelines
+
+---
+
+#### 2. HumanMessage - User Input
+
+Represents messages from the user. This is your input to the AI.
+
+```typescript
+const userMsg = new HumanMessage("What is TypeScript?");
+```
+
+**Use for**: User questions, requests, conversation input
+
+---
+
+#### 3. AIMessage - Model Responses
+
+Represents the AI's responses. Contains the response text plus useful metadata.
+
+```typescript
+const response = await model.invoke(messages);
+// response is an AIMessage with these key fields:
+// - content: The actual text response
+// - usage_metadata: Token usage information (see Example 6)
+// - id: Unique message identifier
+// - tool_calls: Tool invocations (empty array if none - see Chapter 5)
+```
+
+**Use for**: Storing AI responses in conversation history
+
+---
+
+#### 4. ToolMessage - Tool Results
+
+Represents results from tool execution. You'll learn about this in Chapter 5.
+
+```typescript
+const toolResult = new ToolMessage({
+  content: "Result from tool",
+  tool_call_id: "call_123"
+});
+```
+
+**Use for**: Feeding tool execution results back to the AI (covered in Chapter 5)
+
+---
+
+**In this chapter**, you'll primarily work with **SystemMessage**, **HumanMessage**, and **AIMessage** to build multi-turn conversations.
+
+---
+
+### Creating Messages: Two Approaches
+
+LangChain supports multiple ways to create messages:
+
+**1. Message Classes** (Recommended for this course - most explicit):
+
+```typescript
+import { SystemMessage, HumanMessage, AIMessage } from "langchain";
+
+const messages = [
+  new SystemMessage("You are helpful"),
+  new HumanMessage("Hello!")
+];
+```
+
+**2. Dictionary Format** (Alternative - more concise):
+
+```typescript
+const messages = [
+  { role: "system", content: "You are helpful" },
+  { role: "user", content: "Hello!" }
+];
+```
+
+**3. String Shortcut** (For single HumanMessage):
+
+```typescript
+// These are equivalent:
+const response = await model.invoke("Hello!");
+const response = await model.invoke(new HumanMessage("Hello!"));
+```
+
+**Why we use message classes in this course**:
+
+- ✅ More explicit and easier to understand
+- ✅ Better type safety and autocomplete
+- ✅ Clear which message type you're creating
+- ✅ Easier to add metadata later
+
+The dictionary format works identically but is less clear for learning. You can use either approach in your own code.
+
+---
+
 ### Example 1: Multi-Turn Conversation
 
 The following example shows you how to maintain conversation context across multiple exchanges by storing message history and referencing previous interactions.
@@ -60,33 +169,48 @@ The following example shows you how to maintain conversation context across mult
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage, SystemMessage, type BaseMessage } from "langchain";
 import "dotenv/config";
 
 async function main() {
+  console.log("💬 Multi-Turn Conversation Example\n");
+
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
-  // Conversation history
-  const messages = [
-    new SystemMessage("You are a helpful coding tutor."),
+  // Start with system message and first question
+  const messages: BaseMessage[] = [
+    new SystemMessage("You are a helpful coding tutor who gives clear, concise explanations."),
     new HumanMessage("What is TypeScript?"),
   ];
 
+  console.log("👤 User: What is TypeScript?");
+
   // First exchange
   const response1 = await model.invoke(messages);
-  console.log("AI:", response1.content);
+  console.log("\n🤖 AI:", response1.content);
+  messages.push(new AIMessage(String(response1.content)));
 
-  // Add AI response to history
-  messages.push(new AIMessage(response1.content));
-
-  // Second exchange - AI remembers context
+  // Second exchange - AI remembers the context
+  console.log("\n👤 User: Can you show me a simple example?");
   messages.push(new HumanMessage("Can you show me a simple example?"));
+
   const response2 = await model.invoke(messages);
-  console.log("\nAI:", response2.content);
+  console.log("\n🤖 AI:", response2.content);
+
+  // Third exchange - AI still remembers everything
+  console.log("\n👤 User: What are the benefits compared to JavaScript?");
+  messages.push(new AIMessage(String(response2.content)));
+  messages.push(new HumanMessage("What are the benefits compared to JavaScript?"));
+
+  const response3 = await model.invoke(messages);
+  console.log("\n🤖 AI:", response3.content);
+
+  console.log("\n\n✅ Notice how the AI maintains context throughout the conversation!");
+  console.log(`📊 Total messages in history: ${messages.length}`);
 }
 
 main().catch(console.error);
@@ -99,16 +223,28 @@ main().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 02-chat-models/code/01-multi-turn.ts`, you'll see:
+When you run this example with `tsx 02-chat-models/code/01-multi-turn.ts`, you'll see a three-exchange conversation:
 
 ```
-AI: TypeScript is a superset of JavaScript that adds static typing to the language. It was developed by Microsoft and helps catch errors during development rather than at runtime. TypeScript code compiles down to plain JavaScript that can run in any JavaScript environment.
+💬 Multi-Turn Conversation Example
 
-AI: Sure! Here's a simple TypeScript example:
-[TypeScript code showing interface definition and usage]
+👤 User: What is TypeScript?
+
+🤖 AI: [Detailed explanation of TypeScript]
+
+👤 User: Can you show me a simple example?
+
+🤖 AI: [TypeScript code example with explanation]
+
+👤 User: What are the benefits compared to JavaScript?
+
+🤖 AI: [Explanation of TypeScript benefits]
+
+✅ Notice how the AI maintains context throughout the conversation!
+📊 Total messages in history: 6
 ```
 
-Notice how the second response references "TypeScript" from the first exchange and provides a relevant example!
+Notice how each response references the previous context - the AI "remembers" because we send the full message history with each call!
 
 ### How It Works
 
@@ -124,7 +260,7 @@ Notice how the second response references "TypeScript" from the first exchange a
 
 ## ⚡ Streaming Responses
 
-When you ask a complex question, waiting for the entire response can feel slow. Streaming sends the response word-by-word as it's generated.
+When you ask a complex question, waiting for the entire response can feel slow. [Streaming](../GLOSSARY.md#streaming) sends the response word-by-word as it's generated.
 
 **Like watching a friend think out loud** instead of waiting for them to finish their entire thought.
 
@@ -207,6 +343,8 @@ You'll notice the text appears progressively, word by word, rather than all at o
 
 > [!NOTE]
 > The actual file [`02-streaming.ts`](./code/02-streaming.ts) includes additional timing measurements and a comparison between streaming and non-streaming approaches to demonstrate the performance benefits. The code above shows the core streaming concept for clarity.
+
+> **💡 Advanced**: To track token usage with streaming, some providers support `streamOptions: { includeUsage: true }` which includes usage metadata in the final chunk. This is provider-dependent - check your provider's documentation for availability.
 
 ---
 
@@ -319,20 +457,20 @@ Notice how temperature 0 is straightforward, temperature 1 is more interesting, 
 
 ---
 
-## 🛡️ Error Handling
+## 🛡️ Error Handling with Built-In Retries
 
-APIs can fail. Networks drop. Rate limits hit. Good error handling is essential.
+API calls can fail due to rate limits, network issues, or temporary service problems. LangChain provides built-in retry logic with exponential backoff.
 
-### Common Errors
+### Common Errors You'll Encounter
 
+- **429 Too Many Requests**: [Rate limit](../GLOSSARY.md#rate-limit) exceeded (most common for free tiers)
 - **401 Unauthorized**: Invalid API key
-- **429 Too Many Requests**: Rate limit exceeded
-- **500 Server Error**: Provider issues
+- **500 Server Error**: Temporary provider issues
 - **Network timeout**: Connection problems
 
-### Example 5: Error Handling
+### Using Built-In Retry Logic
 
-Here you'll implement robust error handling with retry logic and exponential backoff to handle API failures, rate limits, and network issues.
+Instead of implementing manual retry logic, use LangChain's `withRetry()` method which handles exponential backoff automatically:
 
 **Code**: [`code/05-error-handling.ts`](./code/05-error-handling.ts)
 **Run**: `tsx 02-chat-models/code/05-error-handling.ts`
@@ -341,106 +479,66 @@ Here you'll implement robust error handling with retry logic and exponential bac
 import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
-async function robustCall(prompt: string, maxRetries = 3): Promise<string> {
+async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      console.log(`Attempt ${attempt}...`);
-      const response = await model.invoke(prompt);
-      return response.content;
-    } catch (error: any) {
-      console.error(`❌ Attempt ${attempt} failed: ${error.message}`);
+  // Use built-in retry logic - automatically handles 429 errors
+  const modelWithRetry = model.withRetry({
+    stopAfterAttempt: 3,  // Max retry attempts
+  });
 
-      // Check if we should retry
-      if (attempt === maxRetries) {
-        throw new Error(`Failed after ${maxRetries} attempts`);
-      }
+  try {
+    console.log("Making API call with automatic retry...\n");
+    const response = await modelWithRetry.invoke("What is LangChain.js?");
+    console.log("✅ Success!");
+    console.log(response.content);
+  } catch (error: any) {
+    console.error("❌ Error:", error.message);
 
-      // Wait before retrying (exponential backoff)
-      const waitTime = Math.pow(2, attempt) * 1000;
-      console.log(`⏳ Waiting ${waitTime}ms before retry...`);
-      await new Promise((resolve) => setTimeout(resolve, waitTime));
+    // Handle specific error types
+    if (error.message.includes("429")) {
+      console.log("\n💡 Rate limit hit. Try again in a few moments.");
+    } else if (error.message.includes("401")) {
+      console.log("\n💡 Check your API key in .env file");
     }
   }
 }
 
-async function main() {
-  try {
-    const response = await robustCall("What is LangChain.js?");
-    console.log("\n✅ Success!");
-    console.log(response);
-  } catch (error: any) {
-    console.error("\n❌ All retries failed:", error.message);
-  }
-}
-
-main();
+main().catch(console.error);
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "Explain how the exponential backoff calculation works in this retry logic"
-> - "How can I add different error handling for rate limit vs network errors?"
-> - "What's the purpose of the setTimeout with Promise in the retry logic?"
-
-### Expected Output
-
-When you run this example with `tsx 02-chat-models/code/05-error-handling.ts`, you'll see:
-
-**Success case** (API works normally):
-```
-Attempt 1...
-
-✅ Success!
-LangChain.js is a JavaScript framework for building applications powered by large language models (LLMs). It provides tools and abstractions to easily integrate LLMs into your applications.
-```
-
-**Error case** (simulated API failure):
-```
-Attempt 1...
-❌ Attempt 1 failed: Network timeout
-⏳ Waiting 2000ms before retry...
-
-Attempt 2...
-❌ Attempt 2 failed: Network timeout
-⏳ Waiting 4000ms before retry...
-
-Attempt 3...
-
-✅ Success!
-LangChain.js is a JavaScript framework...
-```
+> - "How does withRetry() implement exponential backoff?"
+> - "What's the difference between withRetry() and manual retry logic?"
+> - "Can I customize the retry delay with withRetry()?"
 
 ### How It Works
 
+**Built-in Retry Benefits**:
+- ✅ **Automatic exponential backoff**: Waits longer between each retry (1s, 2s, 4s...)
+- ✅ **Works with all LangChain components**: Compatible with agents, RAG, and chains
+- ✅ **Handles 429 errors gracefully**: Automatically retries rate limit errors
+- ✅ **Less code**: No manual retry loop needed
+
 **What's happening**:
-1. **Retry loop**: We wrap the API call in a loop that tries up to `maxRetries` times (default 3)
-2. **Try-catch**: Each attempt is wrapped in try-catch to catch any errors
-3. **Exponential backoff**: Wait time doubles after each failure (2s, 4s, 8s, etc.)
-4. **Error logging**: Each failure is logged with details for debugging
-5. **Final failure**: If all retries fail, we throw an error
+1. `withRetry()` wraps the model with retry logic
+2. If a request fails (429, 500, timeout), it automatically retries
+3. Exponential backoff increases wait time between retries
+4. After max attempts, it throws the error for you to handle
 
-**Exponential Backoff Formula**:
-```typescript
-waitTime = 2^attempt * 1000ms
-// Attempt 1: 2^1 * 1000 = 2000ms (2 seconds)
-// Attempt 2: 2^2 * 1000 = 4000ms (4 seconds)
-// Attempt 3: 2^3 * 1000 = 8000ms (8 seconds)
-```
+**Why use built-in retries?**
+- Simpler code - no manual loops
+- Production-tested - handles edge cases
+- Works seamlessly when you advance to agents and RAG in later chapters
+- Standardized across LangChain ecosystem
 
-**Why exponential backoff?** If the API is overloaded, waiting longer each time gives it more time to recover. Immediate retries can make the problem worse.
+> **💡 Advanced**: LangGraph provides even more sophisticated retry policies with `retryPolicy` for complex agent workflows. You'll learn about this in advanced courses.
 
-**Error Handling Best Practices**:
-1. Always wrap API calls in try-catch
-2. Implement exponential backoff for retries (don't retry immediately)
-3. Log errors for debugging and monitoring
-4. Provide helpful error messages to users (not raw error objects)
-5. Have fallback behavior (e.g., use cached data, different model, or graceful degradation)
-6. Set reasonable retry limits to avoid infinite loops
+> **⚠️ Known Limitation**: `withRetry()` currently has issues with streaming (`.stream()`). Retry logic works correctly with `.invoke()` but may not execute with `.stream()`. For critical operations requiring retry logic, use `.invoke()` instead of `.stream()`.
 
 ---
 
@@ -473,14 +571,14 @@ async function trackTokenUsage() {
     "Explain what TypeScript is in 2 sentences."
   );
 
-  // Extract token usage from metadata
-  const usage = response.response_metadata?.tokenUsage;
+  // Extract token usage from metadata (v1 uses usage_metadata)
+  const usage = response.usage_metadata;
 
   if (usage) {
     console.log("Token Breakdown:");
-    console.log(`  Prompt tokens:     ${usage.promptTokens}`);
-    console.log(`  Completion tokens: ${usage.completionTokens}`);
-    console.log(`  Total tokens:      ${usage.totalTokens}`);
+    console.log(`  Prompt tokens:     ${usage.input_tokens}`);
+    console.log(`  Completion tokens: ${usage.output_tokens}`);
+    console.log(`  Total tokens:      ${usage.total_tokens}`);
   }
 
   console.log("\n📝 Response:");
@@ -503,19 +601,23 @@ When you run this example with `tsx 02-chat-models/code/06-token-tracking.ts`, y
 📊 Token Usage Tracking Example
 
 Token Breakdown:
-  Prompt tokens:     12
-  Completion tokens: 45
-  Total tokens:      57
+  Prompt tokens:     16
+  Completion tokens: 216
+  Total tokens:      232
 
 📝 Response:
-TypeScript is a superset of JavaScript that adds static typing to help catch errors during development. It compiles to plain JavaScript and runs in any JavaScript environment.
+TypeScript is a typed superset of JavaScript that adds optional static types, interfaces,
+enums, and modern language features, and is compiled (transpiled) to plain JavaScript that
+runs in browsers and Node.js. By enabling compile-time type checking and richer tooling
+(auto-complete, refactoring), it helps catch bugs earlier and makes large codebases easier
+to read and maintain.
 ```
 
 ### How It Works
 
 **What's happening**:
 1. **Make API call**: Send a prompt to the model
-2. **Extract metadata**: Get `response.response_metadata.tokenUsage`
+2. **Extract metadata**: Get `response.usage_metadata`
 3. **Calculate costs**: Multiply tokens by provider rates
 4. **Track spending**: Monitor costs per request
 
@@ -580,7 +682,7 @@ const prompt = `Summarize each of these articles:
 
 ### Why Costs Matter
 
-- **Models have limits**: Most models have token limits (4K-128K tokens)
+- **Models have limits**: Most models have [context window](../GLOSSARY.md#context-window) limits (4K-128K tokens)
 - **Speed impact**: More tokens = longer processing time
 - **Budget planning**: Understand costs before going to production
 - **Efficiency**: Optimize prompts to reduce unnecessary tokens
@@ -633,6 +735,8 @@ The assignment includes:
 - [Streaming Guide](https://js.langchain.com/docs/how_to/streaming/)
 - [Model Parameters](https://platform.openai.com/docs/api-reference/chat/create)
 
+**💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples including streaming responses, error handling, and token tracking!
+
 ---
 
 ## 🗺️ Navigation
@@ -683,7 +787,7 @@ import { initChatModel } from "langchain/chat_models/universal";
 import { ChatOpenAI } from "@langchain/openai";
 
 // Switching between different provider types (conceptual)
-const openaiModel = await initChatModel("gpt-4o-mini", {
+const openaiModel = await initChatModel("gpt-5-mini", {
   modelProvider: "openai",
   apiKey: process.env.OPENAI_API_KEY,
 });

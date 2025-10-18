@@ -6,7 +6,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "langchain";
 import * as readline from "readline";
 import "dotenv/config";
 
@@ -23,14 +23,14 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   let messages: any[] = [];
@@ -119,7 +119,7 @@ async function main() {
     const stats: MemoryStats = {
       messageCount: messages.length,
       estimatedTokens: getTotalTokens(),
-      memoryType: currentMemoryType
+      memoryType: currentMemoryType,
     };
 
     console.log("\n📊 Memory Statistics:");
@@ -162,7 +162,7 @@ async function main() {
       "What are best practices?",
       "How do I choose the right memory type?", // Should switch to window
       "What's my name?",
-      "Tell me more about optimizing memory"
+      "Tell me more about optimizing memory",
     ];
 
     for (let i = 0; i < testMessages.length; i++) {
@@ -189,7 +189,7 @@ async function main() {
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     const askQuestion = () => {

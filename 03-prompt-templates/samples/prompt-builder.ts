@@ -12,7 +12,7 @@ import "dotenv/config";
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
   configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
+  apiKey: process.env.AI_API_KEY,
 });
 
 // Modular components for composing prompts
@@ -20,21 +20,21 @@ const rolePrompts = {
   Teacher: "You are a patient teacher who explains concepts clearly to students.",
   Expert: "You are a domain expert with deep technical knowledge.",
   Friend: "You are a friendly peer having a casual conversation.",
-  Professional: "You are a professional consultant providing formal advice."
+  Professional: "You are a professional consultant providing formal advice.",
 };
 
 const stylePrompts = {
   Concise: "Keep your explanation brief and to the point (2-3 sentences).",
   Detailed: "Provide a comprehensive, detailed explanation with examples.",
   Creative: "Use analogies, metaphors, and creative explanations.",
-  Technical: "Use precise technical terminology and scientific accuracy."
+  Technical: "Use precise technical terminology and scientific accuracy.",
 };
 
 const formatPrompts = {
   "Bullet points": "Format your response as bullet points.",
   Paragraph: "Format your response as flowing paragraphs.",
   "Step-by-step": "Format your response as numbered steps.",
-  "Q&A": "Format your response as questions and answers."
+  "Q&A": "Format your response as questions and answers.",
 };
 
 function buildTemplate(
@@ -48,7 +48,7 @@ ${formatPrompts[format]}`;
 
   return ChatPromptTemplate.fromMessages([
     ["system", systemMessage],
-    ["human", "{question}"]
+    ["human", "{question}"],
   ]);
 }
 

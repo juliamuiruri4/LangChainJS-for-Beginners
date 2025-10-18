@@ -10,8 +10,8 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 const calculatorTool = tool(
@@ -22,7 +22,7 @@ const calculatorTool = tool(
   {
     name: "calculator",
     description: "Perform mathematical calculations",
-    schema: z.object({ expression: z.string() })
+    schema: z.object({ expression: z.string() }),
   }
 );
 
@@ -31,14 +31,14 @@ const weatherTool = tool(
     const weather = {
       Seattle: "62°F, cloudy",
       Paris: "18°C, sunny",
-      Tokyo: "24°C, rainy"
+      Tokyo: "24°C, rainy",
     };
     return weather[input.city as keyof typeof weather] || "Weather data unavailable";
   },
   {
     name: "getWeather",
     description: "Get current weather for a city",
-    schema: z.object({ city: z.string() })
+    schema: z.object({ city: z.string() }),
   }
 );
 
@@ -47,7 +47,7 @@ const searchTool = tool(
   {
     name: "search",
     description: "Search for information on the web",
-    schema: z.object({ query: z.string() })
+    schema: z.object({ query: z.string() }),
   }
 );
 
@@ -58,7 +58,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([calculatorTool, weatherTool, searchTool]);
@@ -66,7 +66,7 @@ async function main() {
   const queries = [
     "What is 50 * 25?",
     "What's the weather in Tokyo?",
-    "Search for information about TypeScript"
+    "Search for information about TypeScript",
   ];
 
   for (const query of queries) {

@@ -1,5 +1,5 @@
 /**
- * Chapter 7 Example 3: Agent with MCP Server Integration
+ * Chapter 7 Example 4: Agent with MCP Server Integration
  *
  * This example shows how to connect to Context7 MCP server - a documentation
  * provider that delivers current, version-specific docs directly to your agent.
@@ -12,7 +12,7 @@
  * 1. Install @langchain/mcp-adapters: npm install @langchain/mcp-adapters
  * 2. Optional: Get a Context7 API key for higher rate limits (https://context7.com)
  *
- * Run: npx tsx 07-agents-mcp/code/03-mcp-integration.ts
+ * Run: npx tsx 07-agents-mcp/code/04-mcp-integration.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does MultiServerMCPClient differ from manually creating tools?"
@@ -21,12 +21,9 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import { createAgent, HumanMessage } from "langchain";
 import "dotenv/config";
 import { MultiServerMCPClient } from "@langchain/mcp-adapters";
-
-// Note: Uncomment when @langchain/mcp-adapters is installed
-// import { MultiServerMCPClient } from "@langchain/mcp-adapters";
 
 async function main() {
   console.log("🔌 MCP Integration Demo - Context7 Documentation Server\n");
@@ -43,12 +40,12 @@ async function main() {
   const mcpClient = new MultiServerMCPClient({
     context7: {
       transport: "http",
-      url: MCP_SERVER_URL
+      url: MCP_SERVER_URL,
       // Optional: Add Context7 API key for higher rate limits
       // headers: {
       //   "Authorization": `Bearer ${process.env.CONTEXT7_API_KEY}`
       // }
-    }
+    },
   });
 
   try {
@@ -62,73 +59,37 @@ async function main() {
     });
     console.log();
 
-    // Create a map of tool names to tools for easy lookup
-    const toolsByName = new Map(tools.map((tool) => [tool.name, tool]));
-
-    // 3. Create agent with Context7 documentation tools
+    // 3. Create model
     const model = new ChatOpenAI({
       model: process.env.AI_MODEL,
       configuration: { baseURL: process.env.AI_ENDPOINT },
-      apiKey: process.env.AI_API_KEY
+      apiKey: process.env.AI_API_KEY,
     });
 
-    const modelWithTools = model.bindTools(tools);
+    // 4. Create agent with MCP tools - uses same createAgent() pattern as Examples 1-3!
+    console.log("🤖 Creating agent with MCP tools...\n");
+    const agent = createAgent({
+      model,
+      tools, // Tools from MCP server - that's the only difference!
+    });
 
-    // 4. Use the agent to get documentation
+    // 5. Use the agent to get documentation
     const query = "How do I use React useState hook? Get the latest documentation.";
-    console.log(`User: ${query}\n`);
+    console.log(`👤 User: ${query}\n`);
 
-    let messages: any[] = [new HumanMessage(query)];
-    let iteration = 1;
-    const maxIterations = 5; // Context7 may need multiple calls (resolve ID, then get docs)
+    const response = await agent.invoke({ messages: [new HumanMessage(query)] });
+    const lastMessage = response.messages[response.messages.length - 1];
 
-    while (iteration <= maxIterations) {
-      console.log(`Iteration ${iteration}:`);
-
-      const response = await modelWithTools.invoke(messages);
-
-      if (!response.tool_calls || response.tool_calls.length === 0) {
-        console.log(`  Final Answer: ${response.content}\n`);
-        break;
-      }
-
-      // Execute Context7 tool
-      const toolCall = response.tool_calls[0];
-      console.log(`  Thought: I should use the ${toolCall.name} tool`);
-      console.log(`  Action: ${toolCall.name}(${JSON.stringify(toolCall.args)})`);
-
-      // Find the tool and invoke it directly
-      const tool = toolsByName.get(toolCall.name);
-      if (!tool) {
-        throw new Error(`Tool ${toolCall.name} not found`);
-      }
-
-      const toolResult = await tool.invoke(toolCall.args);
-      console.log(
-        `  Observation: ${typeof toolResult === "string" ? toolResult.substring(0, 150) + "..." : toolResult}\n`
-      );
-
-      messages.push(
-        new AIMessage({
-          content: response.content,
-          tool_calls: response.tool_calls
-        }),
-        new ToolMessage({
-          content: String(toolResult),
-          tool_call_id: toolCall.id || ""
-        })
-      );
-
-      iteration++;
-    }
+    console.log(`🤖 Agent: ${lastMessage.content}\n`);
 
     console.log("=".repeat(80) + "\n");
     console.log("💡 Key Concepts:");
     console.log("   • MCP provides standardized access to external tools");
     console.log("   • MultiServerMCPClient connects to one or more MCP servers");
     console.log("   • HTTP transport works with remote servers like Context7");
-    console.log("   • Tools from MCP servers work like manually created tools");
-    console.log("   • Same agent pattern as Examples 1 & 2, different tool source");
+    console.log("   • Tools from MCP servers work seamlessly with createAgent()");
+    console.log("   • Same createAgent() pattern as Examples 1-3, different tool source!");
+    console.log("   • No manual loop needed - createAgent() handles the ReAct pattern");
   } catch (error) {
     console.error("❌ Error connecting to Context7 MCP server:", error);
   } finally {

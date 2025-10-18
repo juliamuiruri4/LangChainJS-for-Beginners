@@ -5,9 +5,8 @@
  * Run: npx tsx 06-rag-systems/solution/hybrid-search-rag.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
@@ -16,28 +15,28 @@ const knowledgeBase = [
   new Document({
     pageContent:
       "Python is a high-level, interpreted programming language known for its simplicity and readability. It supports multiple programming paradigms including procedural, object-oriented, and functional programming.",
-    metadata: { id: "doc1", title: "Python Overview" }
+    metadata: { id: "doc1", title: "Python Overview" },
   }),
   new Document({
     pageContent:
       "JavaScript is a versatile programming language primarily used for web development. It runs in browsers and on servers via Node.js. JavaScript is dynamically typed and supports event-driven programming.",
-    metadata: { id: "doc2", title: "JavaScript Basics" }
+    metadata: { id: "doc2", title: "JavaScript Basics" },
   }),
   new Document({
     pageContent:
       "Rust is a systems programming language focused on safety, speed, and concurrency. It prevents memory errors without using a garbage collector, making it ideal for performance-critical applications.",
-    metadata: { id: "doc3", title: "Rust Language" }
+    metadata: { id: "doc3", title: "Rust Language" },
   }),
   new Document({
     pageContent:
       "Go (Golang) is a statically typed language designed for simplicity and efficiency. It features built-in concurrency support through goroutines and channels, making it excellent for network services.",
-    metadata: { id: "doc4", title: "Go Programming" }
+    metadata: { id: "doc4", title: "Go Programming" },
   }),
   new Document({
     pageContent:
       "TypeScript extends JavaScript by adding static type definitions. Types provide a way to describe the shape of objects, enabling better tooling and catching errors at compile time instead of runtime.",
-    metadata: { id: "doc5", title: "TypeScript Features" }
-  })
+    metadata: { id: "doc5", title: "TypeScript Features" },
+  }),
 ];
 
 // Simple BM25-like keyword scoring
@@ -93,7 +92,7 @@ function fuseResults(
     scoreMap.set(id, {
       keywordRank: index + 1,
       semanticRank: 0,
-      doc: result.doc
+      doc: result.doc,
     });
   });
 
@@ -108,7 +107,7 @@ function fuseResults(
       scoreMap.set(id, {
         keywordRank: 0,
         semanticRank: index + 1,
-        doc: result[0]
+        doc: result[0],
       });
     }
   });
@@ -123,7 +122,7 @@ function fuseResults(
       doc: data.doc,
       fusedScore,
       keywordScore: keywordRRF,
-      semanticScore: semanticRRF
+      semanticScore: semanticRRF,
     };
   });
 
@@ -136,15 +135,15 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("📚 Loading knowledge base...\n");
@@ -156,7 +155,7 @@ async function main() {
   const queries = [
     "What is TypeScript?", // Exact keyword match
     "Tell me about languages with static typing", // Semantic match
-    "Which language is best for system programming?" // Mixed
+    "Which language is best for system programming?", // Mixed
   ];
 
   for (const query of queries) {

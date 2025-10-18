@@ -42,35 +42,35 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     temperature: 0.7,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
     apiKey: process.env.AI_API_KEY,
     // Custom tags and metadata for LangSmith
-    tags: ["production", "demo"]
+    tags: ["production", "demo"],
   });
 
   const scenarios = [
     {
       query: "What is TypeScript?",
       tags: ["basic", "typescript"],
-      metadata: { category: "programming", difficulty: "beginner" }
+      metadata: { category: "programming", difficulty: "beginner" },
     },
     {
       query: "Explain async/await in JavaScript",
       tags: ["intermediate", "javascript"],
-      metadata: { category: "programming", difficulty: "intermediate" }
+      metadata: { category: "programming", difficulty: "intermediate" },
     },
     {
       query: "Compare microservices vs monolithic architecture",
       tags: ["advanced", "architecture"],
-      metadata: { category: "architecture", difficulty: "advanced" }
-    }
+      metadata: { category: "architecture", difficulty: "advanced" },
+    },
   ];
 
   for (const scenario of scenarios) {
@@ -84,7 +84,7 @@ async function main() {
       // When LangSmith is enabled, this will automatically create a trace
       const response = await model.invoke(scenario.query, {
         tags: scenario.tags,
-        metadata: scenario.metadata
+        metadata: scenario.metadata,
       });
 
       const latency = Date.now() - startTime;

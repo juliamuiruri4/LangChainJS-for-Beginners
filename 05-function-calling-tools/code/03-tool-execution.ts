@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Example 3: Complete Tool Execution Loop
  *
- * Run: npx tsx 05-function-calling-tooling/code/03-tool-execution.ts
+ * Run: npx tsx 05-function-calling-tools/code/03-tool-execution.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "Why do we need to send tool results back to the LLM in step 3?"
@@ -10,9 +10,8 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { ToolMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
-import { z } from "zod";
+import { AIMessage, HumanMessage, tool, ToolMessage } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 const weatherTool = tool(
@@ -38,7 +37,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([weatherTool]);

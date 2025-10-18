@@ -5,13 +5,12 @@
  * Run: npx tsx 06-rag-systems/solution/multi-source-rag.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { createRetrievalChain } from "langchain/chains/retrieval";
+import { createStuffDocumentsChain } from "@langchain/classic/chains/combine_documents";
+import { createRetrievalChain } from "@langchain/classic/chains/retrieval";
 import readline from "readline";
 import "dotenv/config";
 
@@ -19,11 +18,11 @@ const documents = [
   // Text sources
   new Document({
     pageContent: "LangChain simplifies building AI applications with modular components",
-    metadata: { source_type: "text", source: "article.txt", date: "2024-01-15" }
+    metadata: { source_type: "text", source: "article.txt", date: "2024-01-15" },
   }),
   new Document({
     pageContent: "Vector databases store embeddings for semantic search capabilities",
-    metadata: { source_type: "text", source: "notes.txt", date: "2024-01-20" }
+    metadata: { source_type: "text", source: "notes.txt", date: "2024-01-20" },
   }),
   // Markdown sources
   new Document({
@@ -31,16 +30,16 @@ const documents = [
     metadata: {
       source_type: "markdown",
       source: "README.md",
-      date: "2024-02-01"
-    }
+      date: "2024-02-01",
+    },
   }),
   new Document({
     pageContent: "## Best Practices\n\nAlways validate user input before processing",
     metadata: {
       source_type: "markdown",
       source: "GUIDE.md",
-      date: "2024-02-05"
-    }
+      date: "2024-02-05",
+    },
   }),
   // Web sources
   new Document({
@@ -48,30 +47,30 @@ const documents = [
     metadata: {
       source_type: "web",
       source: "https://js.langchain.com",
-      date: "2024-02-10"
-    }
+      date: "2024-02-10",
+    },
   }),
   new Document({
     pageContent: "RAG combines retrieval with generation for accurate AI responses",
     metadata: {
       source_type: "web",
       source: "https://docs.langchain.com/rag",
-      date: "2024-02-15"
-    }
-  })
+      date: "2024-02-15",
+    },
+  }),
 ];
 
 async function createRAGSystem() {
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const vectorStore = await MemoryVectorStore.fromDocuments(documents, embeddings);
@@ -86,7 +85,7 @@ async function query(question: string, sourceType?: string) {
   if (sourceType) {
     retriever = vectorStore.asRetriever({
       k: 3,
-      filter: (doc: Document) => doc.metadata.source_type === sourceType
+      filter: (doc: Document) => doc.metadata.source_type === sourceType,
     });
   } else {
     retriever = vectorStore.asRetriever({ k: 3 });
@@ -103,12 +102,12 @@ Answer:`);
 
   const combineDocsChain = await createStuffDocumentsChain({
     llm: model,
-    prompt
+    prompt,
   });
 
   const ragChain = await createRetrievalChain({
     retriever,
-    combineDocsChain
+    combineDocsChain,
   });
 
   return await ragChain.invoke({ input: question });
@@ -140,7 +139,7 @@ async function main() {
   // Interactive mode
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   });
 
   function ask(prompt: string): Promise<string> {

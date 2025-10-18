@@ -22,24 +22,24 @@ function createModel(config: ModelConfig) {
           baseURL: process.env.AI_ENDPOINT,
           defaultQuery: process.env.AI_API_VERSION
             ? { "api-version": process.env.AI_API_VERSION }
-            : undefined
+            : undefined,
         },
-        apiKey: config.apiKey || process.env.AI_API_KEY
+        apiKey: config.apiKey || process.env.AI_API_KEY,
       });
 
     case "azure":
       return new ChatOpenAI({
         model: config.model,
         configuration: {
-          baseURL: config.baseURL || process.env.AI_ENDPOINT
+          baseURL: config.baseURL || process.env.AI_ENDPOINT,
         },
-        apiKey: config.apiKey || process.env.AI_API_KEY
+        apiKey: config.apiKey || process.env.AI_API_KEY,
       });
 
     case "openai":
       return new ChatOpenAI({
         model: config.model,
-        apiKey: config.apiKey || process.env.OPENAI_API_KEY
+        apiKey: config.apiKey || process.env.OPENAI_API_KEY,
       });
 
     default:
@@ -53,14 +53,14 @@ async function main() {
 
   // Configuration from environment
   const provider = (process.env.AI_PROVIDER as any) || "github";
-  const modelName = process.env.AI_MODEL || "gpt-4o-mini";
+  const modelName = process.env.AI_MODEL || "gpt-5-mini";
 
   console.log(`\nUsing provider: ${provider}`);
   console.log(`Using model: ${modelName}\n`);
 
   const config: ModelConfig = {
     provider,
-    model: modelName
+    model: modelName,
   };
 
   const model = createModel(config);
@@ -74,7 +74,7 @@ async function main() {
   console.log("=".repeat(80));
   console.log("\n💡 To switch providers:");
   console.log('   export AI_PROVIDER="azure"');
-  console.log('   export AI_MODEL="gpt-4o"');
+  console.log('   export AI_MODEL="gpt-5"');
   console.log("\n   Your code stays exactly the same!");
 
   console.log("\n✅ Benefits:");

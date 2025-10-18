@@ -25,7 +25,7 @@ class TokenTracker {
   private calls: CallRecord[] = [];
   private callCount: number = 0;
 
-  // Pricing per 1M tokens (approximate for gpt-4o-mini)
+  // Pricing per 1M tokens (approximate for gpt-5-mini)
   private readonly INPUT_COST_PER_MILLION = 0.15; // $0.15 per 1M input tokens
   private readonly OUTPUT_COST_PER_MILLION = 0.6; // $0.60 per 1M output tokens
   private readonly WARNING_THRESHOLD = 10000; // Warn at 10k tokens
@@ -63,8 +63,8 @@ class TokenTracker {
         promptTokens,
         completionTokens,
         totalTokens,
-        cost
-      }
+        cost,
+      },
     };
 
     this.calls.push(callRecord);
@@ -159,7 +159,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const tracker = new TokenTracker();
@@ -169,7 +169,7 @@ async function main() {
     "Explain async/await in JavaScript in detail",
     "Write a short example of a Node.js HTTP server",
     "What are the benefits of using React hooks?",
-    "Explain the difference between SQL and NoSQL databases"
+    "Explain the difference between SQL and NoSQL databases",
   ];
 
   console.log("🚀 Running test queries...");
@@ -195,7 +195,7 @@ async function main() {
   console.log();
 
   console.log("💰 Cost Optimization Tips:");
-  console.log("   • Use gpt-4o-mini for simple tasks");
+  console.log("   • Use gpt-5-mini for simple tasks");
   console.log("   • Keep prompts concise");
   console.log("   • Use streaming for better UX without extra cost");
   console.log("   • Cache responses when possible");

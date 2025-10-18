@@ -19,6 +19,20 @@ By the end of this chapter, you'll be able to:
 
 ---
 
+## 📌 About the Code Examples
+
+The code snippets in this README are simplified for clarity. The actual code files in `code/` and `solution/` folders include:
+
+- ✨ **Enhanced error handling** with comprehensive try-catch blocks
+- 🎨 **Detailed console output** with step-by-step explanations and formatting
+- 🔒 **Security best practices** including input sanitization and validation
+- 💡 **Educational comments** explaining the three-step execution pattern
+- 📊 **Additional examples** demonstrating edge cases and best practices
+
+When you run the files, expect more detailed output and additional safeguards than shown in the simplified snippets below.
+
+---
+
 ## 📖 The Restaurant Staff Analogy
 
 **Imagine you're a restaurant manager coordinating your team.**
@@ -47,7 +61,7 @@ The key: The LLM doesn't *do* the actions—it *describes* which functions to ca
 
 ## 🎯 What is Function Calling?
 
-Function calling is a breakthrough that transforms LLMs from text generators into action coordinators. Instead of just producing text, LLMs can now trigger real-world operations—checking weather, querying databases, calling APIs, sending emails, and more.
+[Function calling](../GLOSSARY.md#function-calling) is a breakthrough that transforms LLMs from text generators into action coordinators. Instead of just producing text, LLMs can now trigger real-world operations—checking weather, querying databases, calling APIs, sending emails, and more.
 
 ### The Paradigm Shift
 
@@ -223,7 +237,7 @@ const messages = [
 
 ## 🛠️ Creating Tools with Zod
 
-In LangChain.js, tools are created using the `tool()` function with Zod schemas for type safety.
+In LangChain.js, [tools](../GLOSSARY.md#tool) are created using the `tool()` function with Zod schemas for type safety.
 
 If you're new to Zod, it's a TypeScript-first schema validation library that lets you define the shape and constraints of your data. Think of it as a way to describe what valid input looks like—for example, "this parameter must be a string" or "this number must be between 1 and 100." Zod validates data at runtime and provides excellent TypeScript type inference, making your code both safer and more maintainable. [Learn more about Zod](https://zod.dev/).
 
@@ -232,11 +246,11 @@ If you're new to Zod, it's a TypeScript-first schema validation library that let
 In this example, you'll create a basic calculator tool using Zod schema to define parameters and learn tool creation fundamentals.
 
 **Code**: [`code/01-simple-tool.ts`](./code/01-simple-tool.ts)
-**Run**: `tsx 05-function-calling-tooling/code/01-simple-tool.ts`
+**Run**: `tsx 05-function-calling-tools/code/01-simple-tool.ts`
 
 ```typescript
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Define calculator tool
@@ -244,8 +258,12 @@ const calculatorTool = tool(
   async (input) => {
     // Implement the actual function
     const sanitized = input.expression.replace(/[^0-9+\-*/().\s]/g, "");
-    const result = Function(`"use strict"; return (${sanitized})`)();
-    return `The result is: ${result}`;
+    try {
+      const result = Function(`"use strict"; return (${sanitized})`)();
+      return `The result is: ${result}`;
+    } catch (error) {
+      return `Error evaluating expression: ${error instanceof Error ? error.message : String(error)}`;
+    }
   },
   {
     name: "calculator",
@@ -267,7 +285,7 @@ console.log("Schema:", calculatorTool.schema);
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/01-simple-tool.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/01-simple-tool.ts`, you'll see:
 
 ```
 Tool created: calculator
@@ -305,17 +323,20 @@ Use `bindTools()` to make tools available to the LLM.
 Here you'll bind tools to a model and see how the LLM generates structured tool calls with arguments.
 
 **Code**: [`code/02-tool-calling.ts`](./code/02-tool-calling.ts)
-**Run**: `tsx 05-function-calling-tooling/code/02-tool-calling.ts`
+**Run**: `tsx 05-function-calling-tools/code/02-tool-calling.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 const calculatorTool = tool(
   async (input) => {
-    const result = eval(input.expression);
+    // Sanitize input - only allow safe characters (numbers, operators, parentheses)
+    const sanitized = input.expression.replace(/[^0-9+\-*/().\s]/g, "");
+    // Use Function constructor (safer than eval) with strict mode
+    const result = Function(`"use strict"; return (${sanitized})`)();
     return `${result}`;
   },
   {
@@ -360,7 +381,7 @@ console.log("\nTool calls:", response.tool_calls);
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/02-tool-calling.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/02-tool-calling.ts`, you'll see:
 
 ```
 🤖 Asking: What is 25 * 17?
@@ -399,7 +420,7 @@ Tool calls: [
 In this example, you'll see the complete flow: LLM generates tool call, your code executes the tool, and results return to LLM for the final response.
 
 **Code**: [`code/03-tool-execution.ts`](./code/03-tool-execution.ts)
-**Run**: `tsx 05-function-calling-tooling/code/03-tool-execution.ts`
+**Run**: `tsx 05-function-calling-tools/code/03-tool-execution.ts`
 
 ```typescript
 const weatherTool = tool(
@@ -447,7 +468,7 @@ console.log("Final answer:", finalResponse.content);
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/03-tool-execution.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/03-tool-execution.ts`, you'll see:
 
 ```
 User: What's the weather in Seattle?
@@ -492,7 +513,7 @@ LLMs can choose from multiple tools based on the query.
 Here you'll build a system with multiple tools (calculator, search, weather) where the LLM automatically selects the appropriate tool for each query.
 
 **Code**: [`code/04-multiple-tools.ts`](./code/04-multiple-tools.ts)
-**Run**: `tsx 05-function-calling-tooling/code/04-multiple-tools.ts`
+**Run**: `tsx 05-function-calling-tools/code/04-multiple-tools.ts`
 
 ```typescript
 const calculatorTool = tool(
@@ -553,20 +574,20 @@ for (const query of queries) {
 
 ### Expected Output
 
-When you run this example with `tsx 05-function-calling-tooling/code/04-multiple-tools.ts`, you'll see:
+When you run this example with `tsx 05-function-calling-tools/code/04-multiple-tools.ts`, you'll see:
+
+> **⚠️ Note on Tool Calling Behavior:** Tool calling is probabilistic and varies by model. Some models may respond directly for simple queries (like math) instead of calling tools. The weather tool typically calls most consistently. To improve reliability, use more explicit prompts like "Use the calculator tool to compute..." or consider the `tool_choice` parameter.
 
 ```
-Query: What is 125 * 8?
-Chose tool: calculator
-Args: { expression: '125 * 8' }
+Query: "What is 125 * 8?"
+  ℹ️ May respond directly or call calculator tool
 
-Query: What's the capital of France?
-Chose tool: search
-Args: { query: 'capital of France' }
+Query: "What's the capital of France?"
+  ℹ️ May respond directly or call search tool
 
-Query: What's the weather in Tokyo?
-Chose tool: getWeather
-Args: { city: 'Tokyo' }
+Query: "What's the weather in Tokyo?"
+  ✓ Chose tool: getWeather
+  ✓ Args: { city: 'Tokyo' }
 ```
 
 ### How It Works

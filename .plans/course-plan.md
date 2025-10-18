@@ -176,7 +176,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 async function main() {
   const model = new ChatOpenAI({
-    model: "gpt-4o", // ✅ correct property is model, not modelName
+    model: "gpt-5", // ✅ correct property is model, not modelName
     configuration: {
       baseURL: "https://models.inference.ai.azure.com",
     },
@@ -200,7 +200,7 @@ main().catch(console.error);
 1. **Setup Challenge**: Install all required packages and verify your GitHub Models access
 2. **First Interaction**: Create a program that asks the LLM to explain three programming concepts
 3. **Message Types**: Experiment with SystemMessage, HumanMessage, and observe how system prompts affect responses
-4. **Model Comparison**: Call the same prompt with different models (gpt-4o, gpt-4o-mini) and compare outputs
+4. **Model Comparison**: Call the same prompt with different models (gpt-5, gpt-5-mini) and compare outputs
 
 **Key Takeaways**:
 - LangChain.js provides abstraction over different LLM providers
@@ -262,7 +262,7 @@ console.log(response2.content);
 import { ChatOpenAI } from "@langchain/openai";
 
 const streamingModel = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   streaming: true,
   configuration: {
     baseURL: "https://models.inference.ai.azure.com",
@@ -280,7 +280,7 @@ for await (const chunk of stream) {
 import { ChatOpenAI } from "@langchain/openai";
 
 const robustModel = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   maxRetries: 3,
   timeout: 10000,
   configuration: {
@@ -723,7 +723,7 @@ const retriever = vectorStore.asRetriever({ k: 2 });
 
 // 2. Create the RAG chain
 const model = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   configuration: { baseURL: "https://models.inference.ai.azure.com" },
   apiKey: process.env.GITHUB_TOKEN,
 });
@@ -902,7 +902,7 @@ import { pull } from "langchain/hub";
 const tools = [calculatorTool];
 
 const model = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   temperature: 0,
   configuration: { baseURL: "https://models.inference.ai.azure.com" },
   apiKey: process.env.GITHUB_TOKEN,
@@ -1046,7 +1046,7 @@ import { ConversationChain } from "langchain/chains";
 import { ChatOpenAI } from "@langchain/openai";
 
 const model = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   configuration: { baseURL: "https://models.inference.ai.azure.com" },
   apiKey: process.env.GITHUB_TOKEN,
 });
@@ -1244,7 +1244,7 @@ function createModel(config: ModelConfig) {
 // Configuration from environment
 const modelConfig: ModelConfig = {
   provider: process.env.AI_PROVIDER as any,
-  modelName: process.env.MODEL_NAME || "gpt-4o",
+  modelName: process.env.MODEL_NAME || "gpt-5",
   apiKey: process.env.API_KEY!,
   baseURL: process.env.BASE_URL,
 };
@@ -1261,7 +1261,7 @@ import { AzureChatOpenAI } from "@langchain/openai";
 const azureModel = new AzureChatOpenAI({
   azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
   azureOpenAIApiInstanceName: process.env.AZURE_INSTANCE_NAME,
-  azureOpenAIApiDeploymentName: "gpt-4o",
+  azureOpenAIApiDeploymentName: "gpt-5",
   azureOpenAIApiVersion: "2024-02-15-preview",
 });
 
@@ -1315,7 +1315,7 @@ process.env.LANGCHAIN_API_KEY = process.env.LANGSMITH_API_KEY;
 process.env.LANGCHAIN_PROJECT = "my-production-app";
 
 const tracedModel = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   configuration: { baseURL: "https://models.inference.ai.azure.com" },
   apiKey: process.env.GITHUB_TOKEN,
 });
@@ -1333,7 +1333,7 @@ import { InMemoryCache } from "@langchain/core/caches";
 const cache = new InMemoryCache();
 
 const cachedModel = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   cache,
   configuration: { baseURL: "https://models.inference.ai.azure.com" },
   apiKey: process.env.GITHUB_TOKEN,
@@ -1467,7 +1467,7 @@ interface ResearchState {
 }
 
 const model = new ChatOpenAI({
-  modelName: "gpt-4o",
+  modelName: "gpt-5",
   configuration: { baseURL: "https://models.inference.ai.azure.com" },
   apiKey: process.env.GITHUB_TOKEN,
 });

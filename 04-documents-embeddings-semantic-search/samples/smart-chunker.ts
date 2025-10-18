@@ -2,10 +2,10 @@
  * Chapter 4 Assignment Solution: Bonus Challenge
  * Smart Document Chunker
  *
- * Run: npx tsx 04-working-with-documents/solution/smart-chunker.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/samples/smart-chunker.ts
  */
 
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
@@ -60,11 +60,11 @@ LangChain provides prompt templates that make it easy to create reusable, parame
 
 ## Chapter 4: Advanced Topics
 
-### Chains
+### Tools
 
-Chains allow you to combine multiple operations into a single workflow. This is essential for building complex AI applications that require multiple steps.
+Tools extend AI capabilities by providing access to external functions and APIs. This allows AI models to interact with the real world and perform actions beyond text generation.
 
-You can chain together models, prompts, and other operations to create sophisticated processing pipelines.
+You can create custom tools for specific tasks like database queries, web searches, or calculations that the AI can use when needed.
 
 ### Agents
 
@@ -103,8 +103,8 @@ function parseStructure(content: string): SmartChunk[] {
           subsection: currentSubsection || undefined,
           subsubsection: currentSubsubsection || undefined,
           level: level,
-          chunkIndex: chunkIndex++
-        }
+          chunkIndex: chunkIndex++,
+        },
       });
       currentContent = [];
     }
@@ -149,7 +149,7 @@ async function naiveChunking(content: string) {
 
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 500,
-    chunkOverlap: 50
+    chunkOverlap: 50,
   });
 
   const chunks = await splitter.createDocuments([content]);

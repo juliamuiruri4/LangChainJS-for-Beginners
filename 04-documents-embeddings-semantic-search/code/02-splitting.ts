@@ -8,7 +8,7 @@
  * - "What happens if chunkSize is smaller than a single sentence?"
  */
 
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 async function main() {
   console.log("✂️  Text Splitting Example\n");
@@ -52,7 +52,7 @@ with new architectures and techniques emerging regularly.
   // Create splitter with specific configuration
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 300,
-    chunkOverlap: 50
+    chunkOverlap: 50,
   });
 
   const docs = await splitter.createDocuments([longText]);

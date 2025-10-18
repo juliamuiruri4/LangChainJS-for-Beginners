@@ -16,31 +16,31 @@ async function invokeWithFallback(input: string, maxRetries: number = 2): Promis
     {
       name: "GitHub Models (Primary)",
       model: new ChatOpenAI({
-        model: process.env.AI_MODEL || "gpt-4o-mini",
+        model: process.env.AI_MODEL || "gpt-5-mini",
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
           defaultQuery: process.env.AI_API_VERSION
             ? { "api-version": process.env.AI_API_VERSION }
-            : undefined
+            : undefined,
         },
         apiKey: process.env.AI_API_KEY,
-        timeout: 5000
-      })
+        timeout: 5000,
+      }),
     },
     {
       name: "GitHub Models Backup",
       model: new ChatOpenAI({
-        model: process.env.AI_MODEL || "gpt-4o",
+        model: process.env.AI_MODEL || "gpt-5",
         configuration: {
           baseURL: process.env.AI_ENDPOINT,
           defaultQuery: process.env.AI_API_VERSION
             ? { "api-version": process.env.AI_API_VERSION }
-            : undefined
+            : undefined,
         },
         apiKey: process.env.AI_API_KEY,
-        timeout: 10000
-      })
-    }
+        timeout: 10000,
+      }),
+    },
   ];
 
   let lastError: Error | null = null;
@@ -80,7 +80,7 @@ async function main() {
     : [
         "What is TypeScript?",
         "Explain async/await in JavaScript",
-        "What are the benefits of LangChain.js?"
+        "What are the benefits of LangChain.js?",
       ];
 
   for (const question of questions) {

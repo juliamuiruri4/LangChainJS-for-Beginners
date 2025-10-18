@@ -49,35 +49,19 @@ import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 // 2. Create model with temperature 0 for consistent formatting
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY,
-  temperature: 0
-});
 
-// 3. Define teaching examples
-const examples = [
-  {
-    input: "Product description",
-    output: JSON.stringify({ name: "...", price: "...", category: "...", highlight: "..." }, null, 2)
-  }
-];
+// 3. Define your teaching examples array with input/output pairs
+//    - Each example should show a product description as input
+//    - And the corresponding JSON format as output
 
-// 4. Create few-shot template
-const exampleTemplate = ChatPromptTemplate.fromMessages([
-  ["human", "{input}"],
-  ["ai", "{output}"]
-]);
+// 4. Create an example template using ChatPromptTemplate.fromMessages
+//    with ["human", "{input}"] and ["ai", "{output}"]
 
-const fewShotTemplate = new FewShotChatMessagePromptTemplate({
-  examplePrompt: exampleTemplate,
-  examples: examples,
-  inputVariables: [],
-});
+// 5. Create a FewShotChatMessagePromptTemplate with your examples
 
-// 5. Validate JSON output
-const parsed = JSON.parse(result.content.toString());
+// 6. Build a final prompt that includes the few-shot template
+
+// 7. Test with new product descriptions and parse the JSON output
 ```
 
 ---
@@ -127,37 +111,24 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { z } from "zod";
 import "dotenv/config";
 
-// 2. Create model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 2. Create the ChatOpenAI model
 
-// 3. Define Zod schema for validation
-const ProductSchema = z.object({
-  name: z.string().describe("Product name"),
-  price: z.number().describe("Price in USD"),
-  category: z.enum(["Electronics", "Clothing", "Food", "Books", "Home"]),
-  inStock: z.boolean(),
-  rating: z.number().min(1).max(5),
-  features: z.array(z.string())
-});
+// 3. Define a Zod schema with all required fields:
+//    - name (string)
+//    - price (number)
+//    - category (enum with 5 categories)
+//    - inStock (boolean)
+//    - rating (number, 1-5)
+//    - features (array of strings)
+//    Use .describe() to add descriptions for each field
 
-// 4. Create structured output model
-const structuredModel = model.withStructuredOutput(ProductSchema);
+// 4. Create a structured output model using model.withStructuredOutput()
 
-// 5. Create prompt template and chain
-const template = ChatPromptTemplate.fromMessages([
-  ["system", "Extract product information from the description."],
-  ["human", "{description}"]
-]);
+// 5. Create a prompt template asking to extract product information
 
-const chain = template.pipe(structuredModel);
+// 6. Create a chain by piping template.pipe(structuredModel)
 
-// 6. Invoke with description
-const result = await chain.invoke({ description: "Your product description" });
-// Result is now fully typed!
+// 7. Test with various product descriptions and handle edge cases
 ```
 
 ---

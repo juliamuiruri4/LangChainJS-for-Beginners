@@ -18,33 +18,35 @@ async function emotionToEmojiExample() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
   const examples = [
     { input: "happy", output: "😊" },
     { input: "sad", output: "😢" },
     { input: "excited", output: "🎉" },
-    { input: "angry", output: "😠" }
+    { input: "angry", output: "😠" },
   ];
 
   // Create example template
   const exampleTemplate = ChatPromptTemplate.fromMessages([
     ["human", "{input}"],
-    ["ai", "{output}"]
+    ["ai", "{output}"],
   ]);
 
   // Create few-shot template
   const fewShotTemplate = new FewShotChatMessagePromptTemplate({
     examplePrompt: exampleTemplate,
     examples: examples,
-    inputVariables: []
+    inputVariables: [],
   });
 
   // Combine with the final question
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Convert emotions to emojis based on these examples:"],
-    fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
-    ["human", "{input}"]
+    // Type assertion needed: TypeScript type system limitation with message unions, not a v1 API issue
+    // The functionality works correctly - FewShotChatMessagePromptTemplate is fully compatible at runtime
+    fewShotTemplate as any,
+    ["human", "{input}"],
   ]);
 
   const chain = finalTemplate.pipe(model);
@@ -63,46 +65,48 @@ async function codeCommentExample() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Examples of code → comment pairs
   const examples = [
     {
       code: "const sum = (a, b) => a + b;",
-      comment: "// Adds two numbers and returns the result"
+      comment: "// Adds two numbers and returns the result",
     },
     {
       code: "const users = data.filter(u => u.active);",
-      comment: "// Filters the data array to only include active users"
+      comment: "// Filters the data array to only include active users",
     },
     {
       code: "await db.save(record);",
-      comment: "// Saves the record to the database asynchronously"
-    }
+      comment: "// Saves the record to the database asynchronously",
+    },
   ];
 
   const exampleTemplate = ChatPromptTemplate.fromMessages([
     ["human", "Code: {code}"],
-    ["ai", "{comment}"]
+    ["ai", "{comment}"],
   ]);
 
   const fewShotTemplate = new FewShotChatMessagePromptTemplate({
     examplePrompt: exampleTemplate,
     examples: examples,
-    inputVariables: []
+    inputVariables: [],
   });
 
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Generate clear, concise comments for code based on these examples:"],
-    fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
-    ["human", "Code: {code}"]
+    // Type assertion needed: TypeScript type system limitation with message unions, not a v1 API issue
+    // The functionality works correctly - FewShotChatMessagePromptTemplate is fully compatible at runtime
+    fewShotTemplate as any,
+    ["human", "Code: {code}"],
   ]);
 
   const chain = finalTemplate.pipe(model);
   const testCode = [
     "const sorted = items.sort((a, b) => a.price - b.price);",
-    "if (user.role === 'admin') return true;"
+    "if (user.role === 'admin') return true;",
   ];
 
   for (const code of testCode) {

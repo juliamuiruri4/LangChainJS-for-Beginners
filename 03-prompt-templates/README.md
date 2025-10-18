@@ -19,6 +19,21 @@ By the end of this chapter, you'll be able to:
 
 ---
 
+## 📌 About the Code Examples
+
+The code snippets in this README are simplified for clarity and focus on core concepts. The actual code files in `code/`, `solution/`, and `samples/` folders include:
+
+- ✨ **Additional examples** demonstrating edge cases and variations
+- 🎨 **Enhanced console output** with emoji and formatting for better visibility
+- 🏗️ **Multiple functions** organized for clarity and testing
+- 💡 **Extended explanations** in comments for deeper learning
+
+**This is intentional!** The README teaches core concepts, while actual files provide comprehensive exploration. When you run the code, expect to see more detail than shown here.
+
+> **💡 Tip:** Each example section includes a note highlighting what additional content the actual file contains. Run the files to see the complete picture!
+
+---
+
 ## 📖 The Mail Merge Analogy
 
 **Imagine you need to send 100 personalized emails.**
@@ -92,7 +107,7 @@ const template = ChatPromptTemplate.fromMessages([
 
 ### Example 1: Simple Translation Template
 
-In this example, you'll create a reusable translation template with variables for input language, output language, and text to be translated.
+In this example, you'll create a reusable translation template ([Prompt Template](../GLOSSARY.md#prompt-template)) with variables for input language, output language, and text to be translated.
 
 **Code**: [`code/01-basic-template.ts`](./code/01-basic-template.ts)
 **Run**: `tsx 03-prompt-templates/code/01-basic-template.ts`
@@ -168,6 +183,8 @@ Spanish: Hola, ¿cómo estás?
 - We get translations without having to write separate prompts
 
 **Benefits**: If you want to change how translations work (e.g., add "Be formal" to the system message), you update ONE place and it affects all translations.
+
+> **💡 Tip**: The actual code file [`01-basic-template.ts`](./code/01-basic-template.ts) includes an additional translation example (Japanese) for deeper learning. Run the file to see all variations!
 
 ---
 
@@ -299,11 +316,13 @@ But we still love you, I swear!
 - Use `ChatPromptTemplate` when you need system messages or multi-turn conversations
 - Use `PromptTemplate` for simple, single-shot prompts without roles
 
+> **💡 Tip**: The actual code file [`02-template-formats.ts`](./code/02-template-formats.ts) includes a complex multi-variable template example for deeper learning. Run the file to see all variations!
+
 ---
 
 ## 💡 Few-Shot Prompting
 
-Few-shot prompting means teaching the AI by showing examples.
+[Few-shot prompting](../GLOSSARY.md#few-shot-prompting) means teaching the AI by showing examples.
 
 **Think of it like training a new employee**: Instead of just telling them what to do, you show them examples of good work.
 
@@ -409,6 +428,8 @@ angry → 😠
 - Great for structured outputs and consistent formatting
 - Reduces need for fine-tuning for many tasks
 
+> **💡 Tip**: The actual code file [`03-few-shot.ts`](./code/03-few-shot.ts) includes an additional code comment generator example demonstrating few-shot learning with different patterns. Run the file to see all variations!
+
 ---
 
 ## 🔗 Prompt Composition
@@ -508,11 +529,44 @@ Closures are a fundamental concept where a function retains access to variables 
 
 **Real-world use**: Build a library of prompt components (tone, context, task) and compose them based on user needs or application state.
 
+> **💡 Tip**: The actual code file [`04-composition.ts`](./code/04-composition.ts) includes additional examples demonstrating customer service scenarios and partial templates. Run the file to see all variations!
+
 ---
 
 ## 📋 Structured Outputs
 
 So far, we've been getting text responses from AI models. But what if you need **structured data** - like JSON objects with specific fields?
+
+### What is Zod?
+
+Before we dive into structured outputs, let's understand the tool we'll be using: **[Zod](../GLOSSARY.md#zod-schema)**.
+
+**[Zod](https://zod.dev/) is a TypeScript-first schema validation library** that lets you define the structure and rules for your data. Think of it as a blueprint that describes exactly what shape your data should have.
+
+**Why use Zod?**
+- ✅ **Type Safety**: Automatically generates TypeScript types from your schema
+- ✅ **Runtime Validation**: Checks data is valid when your code runs (not just at compile time)
+- ✅ **Clear Descriptions**: You can add `.describe()` to help the AI understand each field
+- ✅ **Easy to Use**: Simple, readable syntax for defining data structures
+
+**Quick example**:
+```typescript
+import * as z from "zod";
+
+// Define a schema
+const PersonSchema = z.object({
+  name: z.string().describe("Person's full name"),
+  age: z.number().describe("Age in years"),
+  email: z.string().email().describe("Email address"),
+});
+
+// TypeScript automatically knows the type!
+// type Person = { name: string; age: number; email: string; }
+```
+
+With LangChain, Zod schemas tell the AI **exactly what format to return data in** - ensuring you always get structured, validated data instead of free text that you have to parse.
+
+Now let's see how to use Zod with AI models to get structured outputs!
 
 ### The Form Analogy
 
@@ -553,7 +607,7 @@ Here you'll use Zod schemas to get typed, structured data from AI instead of fre
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {
@@ -639,6 +693,8 @@ When you run this example with `tsx 03-prompt-templates/code/05-structured-outpu
 
 **Why this is powerful**: No more parsing free text with regex or string splitting. The AI does the extraction and formatting for you!
 
+> **💡 Tip**: The actual code file [`05-structured-output.ts`](./code/05-structured-output.ts) demonstrates the versatility of structured outputs by working with multiple different input formats and edge cases. Run the file to see all variations!
+
 ### Example 6: Complex Structured Data
 
 In this example, you'll extract complex nested company information from text using Zod schemas with arrays, nested objects, and various data types.
@@ -649,7 +705,7 @@ In this example, you'll extract complex nested company information from text usi
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {
@@ -785,6 +841,8 @@ CompanySchema = {
 - 🎯 **Form filling** from natural language
 - ✅ **Classification tasks** with predefined categories
 
+> **💡 Tip**: The actual code file [`06-zod-schemas.ts`](./code/06-zod-schemas.ts) includes additional examples extracting data for SpaceX and Netflix, demonstrating schema flexibility with different data structures. Run the file to see all variations!
+
 ---
 
 ## 🗺️ Concept Map
@@ -831,7 +889,8 @@ The assignment includes:
 
 - [Prompt Templates Documentation](https://js.langchain.com/docs/modules/prompts/)
 - [Few-Shot Prompting Guide](https://js.langchain.com/docs/modules/prompts/few_shot/)
-- [LCEL Piping](https://js.langchain.com/docs/expression_language/)
+
+**💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples including email generation, translation systems, dynamic prompt builders, and template libraries!
 
 ---
 

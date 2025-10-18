@@ -66,7 +66,7 @@ The course supports multiple AI providers (no code changes needed - just update 
 ```bash
 AI_API_KEY=your_github_personal_access_token
 AI_ENDPOINT=https://models.inference.ai.azure.com
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 AI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
@@ -74,7 +74,7 @@ AI_EMBEDDING_MODEL=text-embedding-3-small
 ```bash
 AI_API_KEY=your_azure_openai_api_key
 AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 AI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
@@ -82,7 +82,7 @@ AI_EMBEDDING_MODEL=text-embedding-3-small
 ```bash
 AI_API_KEY=your_openai_api_key
 AI_ENDPOINT=https://api.openai.com/v1
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 AI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
@@ -377,7 +377,7 @@ const apiKey = process.env.AI_API_KEY;
 # Ensure .env file exists and contains:
 AI_API_KEY=your_key
 AI_ENDPOINT=your_endpoint
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 AI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 

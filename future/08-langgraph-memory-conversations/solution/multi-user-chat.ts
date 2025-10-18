@@ -7,7 +7,7 @@
 
 import { ChatOpenAI } from "@langchain/openai";
 import { StateGraph, START, END, MemorySaver, MessagesAnnotation } from "@langchain/langgraph";
-import { HumanMessage } from "@langchain/core/messages";
+import { HumanMessage } from "langchain";
 import * as readline from "readline";
 import "dotenv/config";
 
@@ -16,14 +16,14 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const callModel = async (state: typeof MessagesAnnotation.State) => {
@@ -61,14 +61,14 @@ async function main() {
       { user: "Alice", message: "What's my favorite color?" },
       { user: "Bob", message: "What do I love?" },
       { user: "Charlie", message: "Hi! I'm new here" },
-      { user: "Alice", message: "Do you remember me?" }
+      { user: "Alice", message: "Do you remember me?" },
     ];
 
     for (const { user, message } of testScenario) {
       console.log(`👤 ${user}: ${message}\n`);
 
       const config = {
-        configurable: { thread_id: `user-${user.toLowerCase()}` }
+        configurable: { thread_id: `user-${user.toLowerCase()}` },
       };
       const response = await app.invoke({ messages: [new HumanMessage(message)] }, config);
 
@@ -87,7 +87,7 @@ async function main() {
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     console.log(`📍 Current user: ${currentUser}\n`);
@@ -117,7 +117,7 @@ async function main() {
 
         if (userInput.toLowerCase() === "/users") {
           const state = await app.getState({
-            configurable: { thread_id: `user-${currentUser.toLowerCase()}` }
+            configurable: { thread_id: `user-${currentUser.toLowerCase()}` },
           });
           console.log(`\n👥 Current user: ${currentUser}`);
           console.log(`   Messages in history: ${state.values.messages.length}\n`);
@@ -134,7 +134,7 @@ async function main() {
 
         try {
           const config = {
-            configurable: { thread_id: `user-${currentUser.toLowerCase()}` }
+            configurable: { thread_id: `user-${currentUser.toLowerCase()}` },
           };
           const response = await app.invoke({ messages: [new HumanMessage(userInput)] }, config);
 

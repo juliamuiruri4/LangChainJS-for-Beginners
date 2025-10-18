@@ -9,7 +9,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {
@@ -18,7 +18,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define the structure using Zod schema
@@ -26,7 +26,7 @@ async function main() {
     name: z.string().describe("The person's full name"),
     age: z.number().describe("The person's age in years"),
     email: z.string().email().describe("The person's email address"),
-    occupation: z.string().describe("The person's job or profession")
+    occupation: z.string().describe("The person's job or profession"),
   });
 
   // Create a model that returns structured output

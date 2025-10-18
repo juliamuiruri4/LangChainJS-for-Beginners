@@ -8,7 +8,7 @@ Practice building Retrieval Augmented Generation systems that combine document r
 
 - Completed [Chapter 6](./README.md)
 - Run all code examples
-- Understand RAG architecture and LCEL
+- Understand RAG architecture
 
 ---
 
@@ -47,46 +47,26 @@ import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 import { createRetrievalChain } from "langchain/chains/retrieval";
 import "dotenv/config";
 
-// 2. Create embeddings and model
-const embeddings = new OpenAIEmbeddings({
-  model: process.env.AI_EMBEDDING_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 2. Create OpenAIEmbeddings and ChatOpenAI instances
 
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 3. Create an array of Document objects:
+//    - Use your own content as pageContent
+//    - Add metadata (title, source, etc.)
 
-// 3. Create documents with metadata
-const docs = [
-  new Document({
-    pageContent: "Your content here",
-    metadata: { title: "Doc Title", source: "my-notes" }
-  })
-];
+// 4. Create a MemoryVectorStore from your documents
 
-// 4. Create vector store and retriever
-const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
-const retriever = vectorStore.asRetriever({ k: 2 });
+// 5. Create a retriever from the vector store (use asRetriever with k parameter)
 
-// 5. Create prompt template
-const prompt = ChatPromptTemplate.fromTemplate(`
-Answer based on context: {context}
-Question: {input}
-Answer with source attribution.
-`);
+// 6. Create a ChatPromptTemplate that:
+//    - Uses {context} for retrieved documents
+//    - Uses {input} for the question
+//    - Asks for source attribution
 
-// 6. Create RAG chain
-const combineDocsChain = await createStuffDocumentsChain({ llm: model, prompt });
-const ragChain = await createRetrievalChain({ retriever, combineDocsChain });
+// 7. Create the RAG chain:
+//    - Use createStuffDocumentsChain with model and prompt
+//    - Use createRetrievalChain with retriever and combineDocsChain
 
-// 7. Query the chain
-const response = await ragChain.invoke({ input: "Your question" });
-console.log(response.answer);
-console.log(response.context); // Retrieved documents
+// 8. Test with multiple questions and display answers with sources
 ```
 
 ---
@@ -115,50 +95,32 @@ console.log(response.context); // Retrieved documents
 
 **Hints**:
 ```typescript
-// 1. Import required modules (in addition to basic RAG imports)
+// 1. Import additional modules for conversational RAG
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
 import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
-// 2. Create history-aware retriever
-const historyAwarePrompt = ChatPromptTemplate.fromMessages([
-  new MessagesPlaceholder("chat_history"),
-  ["user", "{input}"],
-  ["user", "Generate a search query based on the conversation above"]
-]);
+// 2. Create a history-aware retriever:
+//    - Build a prompt with MessagesPlaceholder for chat_history
+//    - Use createHistoryAwareRetriever with model, retriever, and prompt
 
-const historyAwareRetriever = await createHistoryAwareRetriever({
-  llm: model,
-  retriever,
-  rephrasePrompt: historyAwarePrompt,
-});
+// 3. Create an answer prompt that includes:
+//    - System message with {context} placeholder
+//    - MessagesPlaceholder for chat_history
+//    - User message with {input} placeholder
 
-// 3. Create answer prompt with history placeholder
-const answerPrompt = ChatPromptTemplate.fromMessages([
-  ["system", "Answer based on context: {context}"],
-  new MessagesPlaceholder("chat_history"),
-  ["user", "{input}"]
-]);
+// 4. Build the conversational RAG chain:
+//    - Create combineDocsChain with the answer prompt
+//    - Create retrieval chain with history-aware retriever
 
-// 4. Create conversational RAG chain
-const combineDocsChain = await createStuffDocumentsChain({ llm: model, prompt: answerPrompt });
-const conversationalRagChain = await createRetrievalChain({
-  retriever: historyAwareRetriever,
-  combineDocsChain,
-});
+// 5. Initialize an empty chat history array
 
-// 5. Maintain chat history array
-const chatHistory: (HumanMessage | AIMessage)[] = [];
+// 6. For each user question:
+//    - Invoke the chain with input and chat_history
+//    - Display the answer
+//    - Add HumanMessage and AIMessage to chat_history
 
-// 6. Invoke with history
-const response = await conversationalRagChain.invoke({
-  input: userQuestion,
-  chat_history: chatHistory
-});
-
-// 7. Update history after each exchange
-chatHistory.push(new HumanMessage(userQuestion));
-chatHistory.push(new AIMessage(response.answer));
+// 7. Allow user to reset conversation or exit
 ```
 
 ---
@@ -183,8 +145,7 @@ Solutions available in [`solution/`](./solution/) folder. Try on your own first!
 ## Need Help?
 
 - **RAG basics**: Review example 1
-- **LCEL syntax**: Check example 2
-- **Metadata**: See example 3
+- **Retrieval strategies**: Check example 2
 - **Still stuck**: Join our [Discord community](https://aka.ms/foundry/discord)
 
 ---

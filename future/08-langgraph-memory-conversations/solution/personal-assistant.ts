@@ -7,7 +7,7 @@
 
 import { ChatOpenAI } from "@langchain/openai";
 import { StateGraph, START, END, MemorySaver, MessagesAnnotation } from "@langchain/langgraph";
-import { HumanMessage } from "@langchain/core/messages";
+import { HumanMessage } from "langchain";
 import * as readline from "readline";
 import "dotenv/config";
 
@@ -16,14 +16,14 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // System prompt for the assistant
@@ -64,7 +64,7 @@ Be friendly and refer back to information they've told you. If they mention pref
       "Hi! My name is Alex",
       "I prefer concise answers",
       "What's my name?",
-      "Can you help me with a quick question about TypeScript?"
+      "Can you help me with a quick question about TypeScript?",
     ];
 
     for (const msg of testMessages) {
@@ -85,7 +85,7 @@ Be friendly and refer back to information they've told you. If they mention pref
     // Interactive mode
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout
+      output: process.stdout,
     });
 
     const askQuestion = () => {

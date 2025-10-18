@@ -17,7 +17,7 @@ Practice creating type-safe tools with Zod schemas, implementing the complete to
 **Goal**: Build a weather tool and implement the complete 3-step execution pattern (generate → execute → respond).
 
 **Tasks**:
-1. Create `weather-tool.ts` in the `05-function-calling-tooling/code/` folder
+1. Create `weather-tool.ts` in the `05-function-calling-tools/code/` folder
 2. Build a weather tool with Zod schema that accepts:
    - `city` (string, required) - The city name
    - `units` (enum: "celsius" or "fahrenheit", optional, default: "fahrenheit") - Temperature unit
@@ -49,37 +49,21 @@ import { ToolMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import "dotenv/config";
 
-// 2. Create the model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 2. Create the ChatOpenAI model
 
-// 3. Define tool with Zod schema
-const weatherTool = tool(
-  async (input) => {
-    // Your tool implementation
-    return `Current weather in ${input.city}: ...`;
-  },
-  {
-    // Tool metadata
-  }
-);
+// 3. Create a weather tool using the tool() function:
+//    - Define Zod schema with city (string) and units (enum) parameters
+//    - Use .describe() on each parameter
+//    - Implement function to return simulated weather data
+//    - Add name and description metadata
 
-// 4. Bind tool to model
-const modelWithTools = model.bindTools([weatherTool]);
+// 4. Bind the tool to the model using model.bindTools()
 
-// 5. Execute 3-step pattern
-// Step 1: Get tool call from LLM
-
-// Step 2: Execute the tool
-
-// Step 3: Send result back to LLM
-const messages = [
-  // Add messages here
-];
-const finalResponse = await model.invoke(messages);
+// 5. Implement the 3-step execution pattern:
+//    Step 1: Invoke model with user query, check for tool_calls
+//    Step 2: Execute the tool with the tool call arguments
+//    Step 3: Create messages array with HumanMessage, AIMessage, and ToolMessage
+//            Then invoke model again for final natural language response
 ```
 
 ---
@@ -120,33 +104,22 @@ import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import "dotenv/config";
 
-// 2. Create model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
-});
+// 2. Create the ChatOpenAI model
 
-// 3. Define multiple tools
-const currencyConverter = tool(
-  async (input) => {
-    // Tool implementation
-  }
-);
+// 3. Create three tools:
+//    Currency Converter - with amount, from, and to parameters
+//    Distance Calculator - with from, to, and units parameters
+//    Time Zone Tool - with city parameter
+//    Make sure each has:
+//    - Clear, descriptive name and description
+//    - Proper Zod schema with .describe() on parameters
+//    - Simulated implementation returning appropriate data
 
-// Define other tools (distanceCalculator, timeZoneTool) similarly...
+// 4. Bind all three tools to the model
 
-// 4. Bind all tools to model
-const modelWithTools = model.bindTools([
-  currencyConverter,
-  distanceCalculator,
-  timeZoneTool
-]);
+// 5. Test with different queries and observe which tool the LLM selects
 
-// 5. LLM automatically selects the right tool
-const response = await modelWithTools.invoke(query);
-const toolCall = response.tool_calls[0];
-console.log(`LLM chose: ${toolCall.name}`);
+// 6. Display tool name, arguments, and result for each query
 ```
 
 **Advanced Feature** (Optional):

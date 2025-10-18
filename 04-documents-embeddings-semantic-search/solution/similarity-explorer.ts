@@ -25,7 +25,7 @@ const sentences = [
   "Cats are independent animals",
   "Pets bring joy to families",
   "The weather is sunny today",
-  "It's raining outside"
+  "It's raining outside",
 ];
 
 async function main() {
@@ -33,9 +33,9 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("📝 Creating embeddings for 10 sentences...\n");
@@ -62,7 +62,7 @@ async function main() {
         pair: `"${sentences[i]}" <-> "${sentences[j]}"`,
         score,
         i,
-        j
+        j,
       });
     }
   }

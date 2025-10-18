@@ -391,7 +391,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 
 const prompt = ChatPromptTemplate.fromTemplate("Tell me a joke about {topic}");
-const model = new ChatOpenAI({ modelName: "gpt-4o" });
+const model = new ChatOpenAI({ modelName: "gpt-5" });
 const parser = new StringOutputParser();
 
 // Chain them together with LCEL

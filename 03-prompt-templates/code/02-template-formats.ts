@@ -19,7 +19,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Format 1: ChatPromptTemplate (structured messages)
@@ -27,7 +27,7 @@ async function main() {
 
   const chatTemplate = ChatPromptTemplate.fromMessages([
     ["system", "You are a {role} who speaks in {style} style."],
-    ["human", "{question}"]
+    ["human", "{question}"],
   ]);
 
   const chain1 = chatTemplate.pipe(model);
@@ -35,7 +35,7 @@ async function main() {
   const result1 = await chain1.invoke({
     role: "pirate captain",
     style: "dramatic and adventurous",
-    question: "What is TypeScript?"
+    question: "What is TypeScript?",
   });
 
   console.log("Pirate response:");
@@ -51,7 +51,7 @@ async function main() {
   const formattedPrompt = await stringTemplate.format({
     adjective: "funny",
     item: "limerick",
-    topic: "JavaScript developers"
+    topic: "JavaScript developers",
   });
 
   console.log("Generated prompt:", formattedPrompt);
@@ -66,7 +66,7 @@ async function main() {
 
   const complexTemplate = ChatPromptTemplate.fromMessages([
     ["system", "You are a {job_title} at {company} writing to a {recipient_role}."],
-    ["human", "Write a {message_type} about {topic}. Tone: {tone}"]
+    ["human", "Write a {message_type} about {topic}. Tone: {tone}"],
   ]);
 
   const chain3 = complexTemplate.pipe(model);
@@ -77,7 +77,7 @@ async function main() {
     recipient_role: "Product Manager",
     message_type: "brief update",
     topic: "API migration progress",
-    tone: "professional but friendly"
+    tone: "professional but friendly",
   });
 
   console.log(result3.content);

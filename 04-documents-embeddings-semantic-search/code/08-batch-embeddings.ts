@@ -15,9 +15,9 @@ async function main() {
   console.log("⚡ Batch Embeddings Example\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const texts = [
@@ -28,7 +28,7 @@ async function main() {
     "Reinforcement learning trains agents through rewards and penalties",
     "Supervised learning uses labeled training data",
     "Unsupervised learning finds patterns in unlabeled data",
-    "Transfer learning applies knowledge from one task to another"
+    "Transfer learning applies knowledge from one task to another",
   ];
 
   console.log(`📝 Processing ${texts.length} texts...\n`);

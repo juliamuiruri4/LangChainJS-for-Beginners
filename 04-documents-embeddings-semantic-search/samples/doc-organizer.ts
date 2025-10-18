@@ -2,7 +2,7 @@
  * Chapter 4 Assignment Solution: Challenge 3
  * Document Organization System
  *
- * Run: npx tsx 04-working-with-documents/solution/doc-organizer.ts
+ * Run: npx tsx 04-documents-embeddings-semantic-search/samples/doc-organizer.ts
  */
 
 import { Document } from "@langchain/core/documents";
@@ -17,8 +17,8 @@ const documents: Document[] = [
       category: "AI",
       date: "2024-01-15",
       author: "Dr. Sarah Chen",
-      tags: ["ML", "algorithms"]
-    }
+      tags: ["ML", "algorithms"],
+    },
   }),
   new Document({
     pageContent: "Understanding neural networks and deep learning fundamentals for beginners.",
@@ -26,8 +26,8 @@ const documents: Document[] = [
       category: "AI",
       date: "2024-01-20",
       author: "Prof. Mike Rodriguez",
-      tags: ["deep-learning", "neural-nets"]
-    }
+      tags: ["deep-learning", "neural-nets"],
+    },
   }),
   new Document({
     pageContent: "Building RESTful APIs with Node.js and Express framework best practices.",
@@ -35,8 +35,8 @@ const documents: Document[] = [
       category: "Programming",
       date: "2024-02-01",
       author: "Jane Developer",
-      tags: ["nodejs", "API", "backend"]
-    }
+      tags: ["nodejs", "API", "backend"],
+    },
   }),
   new Document({
     pageContent: "React hooks: useState, useEffect, and custom hooks explained with examples.",
@@ -44,8 +44,8 @@ const documents: Document[] = [
       category: "Programming",
       date: "2024-02-10",
       author: "Alex Frontend",
-      tags: ["react", "hooks", "frontend"]
-    }
+      tags: ["react", "hooks", "frontend"],
+    },
   }),
   new Document({
     pageContent: "Database design principles: normalization, indexing, and query optimization.",
@@ -53,8 +53,8 @@ const documents: Document[] = [
       category: "Database",
       date: "2024-01-25",
       author: "Emma Database",
-      tags: ["sql", "design", "optimization"]
-    }
+      tags: ["sql", "design", "optimization"],
+    },
   }),
   new Document({
     pageContent: "Introduction to NoSQL databases: MongoDB, Cassandra, and Redis comparison.",
@@ -62,8 +62,8 @@ const documents: Document[] = [
       category: "Database",
       date: "2024-02-15",
       author: "David NoSQL",
-      tags: ["nosql", "mongodb", "redis"]
-    }
+      tags: ["nosql", "mongodb", "redis"],
+    },
   }),
   new Document({
     pageContent:
@@ -72,8 +72,8 @@ const documents: Document[] = [
       category: "AI",
       date: "2024-01-30",
       author: "Dr. Sarah Chen",
-      tags: ["NLP", "sentiment", "text"]
-    }
+      tags: ["NLP", "sentiment", "text"],
+    },
   }),
   new Document({
     pageContent:
@@ -82,8 +82,8 @@ const documents: Document[] = [
       category: "Programming",
       date: "2024-02-20",
       author: "Tom TypeScript",
-      tags: ["typescript", "types", "advanced"]
-    }
+      tags: ["typescript", "types", "advanced"],
+    },
   }),
   new Document({
     pageContent: "Docker containerization and Kubernetes orchestration for modern applications.",
@@ -91,8 +91,8 @@ const documents: Document[] = [
       category: "DevOps",
       date: "2024-02-05",
       author: "Lisa DevOps",
-      tags: ["docker", "kubernetes", "containers"]
-    }
+      tags: ["docker", "kubernetes", "containers"],
+    },
   }),
   new Document({
     pageContent:
@@ -101,8 +101,8 @@ const documents: Document[] = [
       category: "DevOps",
       date: "2024-02-12",
       author: "Chris Pipeline",
-      tags: ["ci-cd", "github-actions", "automation"]
-    }
+      tags: ["ci-cd", "github-actions", "automation"],
+    },
   }),
   new Document({
     pageContent: "Reinforcement learning basics: Q-learning, policy gradients, and applications.",
@@ -110,8 +110,8 @@ const documents: Document[] = [
       category: "AI",
       date: "2024-02-18",
       author: "Prof. Mike Rodriguez",
-      tags: ["RL", "Q-learning", "algorithms"]
-    }
+      tags: ["RL", "Q-learning", "algorithms"],
+    },
   }),
   new Document({
     pageContent:
@@ -120,9 +120,9 @@ const documents: Document[] = [
       category: "Programming",
       date: "2024-02-25",
       author: "Jane Developer",
-      tags: ["graphql", "API", "schema"]
-    }
-  })
+      tags: ["graphql", "API", "schema"],
+    },
+  }),
 ];
 
 function listAllDocuments() {
@@ -234,7 +234,7 @@ function sortDocuments(field: "date" | "category" | "author") {
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 function question(prompt: string): Promise<string> {

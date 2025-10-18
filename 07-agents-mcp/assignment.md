@@ -59,60 +59,28 @@ import { z } from "zod";
 import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
-// 2. Create model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL || "gpt-4o-mini",
-  configuration: {
-    baseURL: process.env.AI_ENDPOINT,
-    defaultQuery: process.env.AI_API_VERSION
-      ? { "api-version": process.env.AI_API_VERSION }
-      : undefined,
-  },
-  apiKey: process.env.AI_API_KEY,
-});
+// 2. Create the ChatOpenAI model
 
-// 3. Define tools
-const searchTool = tool(
-  async (input) => {
-    // Simulated search
-    return "Tokyo has a population of approximately 14 million";
-  },
-  {
-    name: "search",
-    description: "Find factual information.",
-    schema: z.object({ query: z.string() })
-  }
-);
+// 3. Define your two tools:
+//    Search Tool - returns simulated search results for common queries
+//    Calculator Tool - performs mathematical calculations
+//    Each with proper Zod schema, name, and description
 
-// 4. Bind tools to model
-const modelWithTools = model.bindTools([searchTool, calculatorTool]);
+// 4. Bind both tools to the model
 
-// 5. Implement agent loop
-let messages: any[] = [new HumanMessage(query)];
-let iteration = 1;
-const maxIterations = 5;
+// 5. Implement the agent loop:
+//    - Initialize messages array with HumanMessage
+//    - Set maxIterations to 5
+//    - Create while loop for iterations
+//    - Each iteration:
+//      a) Invoke model with messages
+//      b) Check if tool_calls exist (if not, agent is done)
+//      c) Execute the tool with the arguments
+//      d) Add AIMessage and ToolMessage to messages array
+//      e) Display iteration info (Thought, Action, Observation)
+//    - Display final answer when done
 
-while (iteration <= maxIterations) {
-  const response = await modelWithTools.invoke(messages);
-
-  // Check if done (no more tool calls)
-  if (!response.tool_calls || response.tool_calls.length === 0) {
-    console.log(`Final Answer: ${response.content}`);
-    break;
-  }
-
-  // Execute tool
-  const toolCall = response.tool_calls[0];
-  const toolResult = await searchTool.invoke(toolCall.args);
-
-  // Add to conversation history
-  messages.push(
-    new AIMessage({ content: response.content, tool_calls: response.tool_calls }),
-    new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
-  );
-
-  iteration++;
-}
+// 6. Test with multi-step queries
 ```
 
 **Expected Console Output**:
@@ -188,61 +156,28 @@ import { z } from "zod";
 import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
 import "dotenv/config";
 
-// 2. Create model (same as challenge)
+// 2. Create the ChatOpenAI model
 
-// 3. Define four specialized tools
-const searchTool = tool(/* ... */);
-const calculatorTool = tool(/* ... */);
-const unitConverter = tool(
-  async (input) => {
-    // Convert between units
-    const result = input.value * conversionRate;
-    return `${input.value} ${input.from} equals ${result} ${input.to}`;
-  },
-  {
-    name: "unitConverter",
-    description: "Convert between units (km/miles, USD/EUR).",
-    schema: z.object({
-      value: z.number(),
-      from: z.string(),
-      to: z.string()
-    })
-  }
-);
+// 3. Define four specialized tools:
+//    - Search Tool: Find factual information
+//    - Calculator Tool: Perform calculations
+//    - Unit Converter: Convert between units (value, from, to parameters)
+//    - Comparison Tool: Compare values (value1, value2, operation parameters)
+//    Each with clear names, descriptions, and Zod schemas
 
-const comparisonTool = tool(
-  async (input) => {
-    if (input.operation === "less") {
-      return input.value1 < input.value2
-        ? `${input.value1} is less than ${input.value2}`
-        : `${input.value1} is not less than ${input.value2}`;
-    }
-    // Handle other operations...
-  },
-  {
-    name: "comparisonTool",
-    description: "Compare two values.",
-    schema: z.object({
-      value1: z.number(),
-      value2: z.number(),
-      operation: z.enum(["less", "greater", "equal", "difference"])
-    })
-  }
-);
+// 4. Bind all four tools to the model
 
-// 4. Bind all tools
-const modelWithTools = model.bindTools([
-  searchTool, calculatorTool, unitConverter, comparisonTool
-]);
+// 5. Implement the agent loop (similar to main challenge)
+//    - Track tools used in an array
+//    - Add formatted console output with emojis (optional)
+//    - Display iteration details clearly
 
-// 5. Track tools used
-const toolsUsed: string[] = [];
-toolsUsed.push(toolCall.name);
+// 6. After loop completes, display a summary showing:
+//    - Total iterations
+//    - Tools that were used
+//    - Success status
 
-// 6. Display summary at end
-console.log("📊 Agent Summary:");
-console.log(`   • Total iterations: ${iteration - 1}`);
-console.log(`   • Tools used: ${[...new Set(toolsUsed)].join(", ")}`);
+// 7. Test with complex multi-step queries requiring 3+ tool calls
 ```
 
 **Advanced Features** (Optional):
@@ -317,7 +252,7 @@ You've learned:
 - ✅ Prompt engineering with templates
 - ✅ Documents, embeddings, and semantic search
 - ✅ Function calling and tooling
-- ✅ RAG systems with LCEL
+- ✅ RAG systems
 - ✅ Autonomous agents with ReAct pattern
 
 ### Continue Your Learning:

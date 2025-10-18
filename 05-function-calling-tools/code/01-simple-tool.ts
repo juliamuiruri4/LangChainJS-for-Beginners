@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Example 1: Simple Calculator Tool
  *
- * Run: npx tsx 05-function-calling-tooling/code/01-simple-tool.ts
+ * Run: npx tsx 05-function-calling-tools/code/01-simple-tool.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "Why do we use Zod schemas to define tool parameters?"
@@ -9,8 +9,8 @@
  * - "What security considerations should I have when using Function() to evaluate expressions?"
  */
 
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Define calculator tool
@@ -30,9 +30,7 @@ const calculatorTool = tool(
     description:
       "Useful for performing mathematical calculations. Use this when you need to compute numbers.",
     schema: z.object({
-      expression: z
-        .string()
-        .describe("The mathematical expression to evaluate, e.g., '25 * 4'"),
+      expression: z.string().describe("The mathematical expression to evaluate, e.g., '25 * 4'"),
     }),
   }
 );

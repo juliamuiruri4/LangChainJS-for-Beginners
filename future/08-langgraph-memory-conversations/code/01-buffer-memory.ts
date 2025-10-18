@@ -5,21 +5,21 @@
 
 import { ChatOpenAI } from "@langchain/openai";
 import { StateGraph, START, END, MemorySaver, MessagesAnnotation } from "@langchain/langgraph";
-import { HumanMessage } from "@langchain/core/messages";
+import { HumanMessage } from "langchain";
 import "dotenv/config";
 
 async function main() {
   console.log("💾 Buffer Memory Example\n");
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define the chatbot node
@@ -48,7 +48,7 @@ async function main() {
 
   const response1 = await app.invoke(
     {
-      messages: [new HumanMessage("My name is Alex and I'm a TypeScript developer.")]
+      messages: [new HumanMessage("My name is Alex and I'm a TypeScript developer.")],
     },
     config
   );

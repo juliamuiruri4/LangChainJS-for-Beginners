@@ -5,9 +5,8 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
-import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import { AIMessage,HumanMessage,ToolMessage,tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Tool 1: Search
@@ -18,7 +17,7 @@ const searchTool = tool(
       "population of new york": "New York City has a population of approximately 8.3 million",
       "distance london to paris": "The distance is approximately 343 kilometers",
       "capital of france": "Paris",
-      "capital of japan": "Tokyo"
+      "capital of japan": "Tokyo",
     };
 
     const queryLower = input.query.toLowerCase();
@@ -34,8 +33,8 @@ const searchTool = tool(
     description:
       "Find factual information including populations, distances, capitals, and general knowledge. Use this first when you need facts.",
     schema: z.object({
-      query: z.string().describe("Search query")
-    })
+      query: z.string().describe("Search query"),
+    }),
   }
 );
 
@@ -55,8 +54,8 @@ const calculatorTool = tool(
     description:
       "Perform mathematical calculations including arithmetic, percentages, and expressions. Use when you need to compute numbers.",
     schema: z.object({
-      expression: z.string().describe("Math expression, e.g., '343 * 0.621371'")
-    })
+      expression: z.string().describe("Math expression, e.g., '343 * 0.621371'"),
+    }),
   }
 );
 
@@ -66,20 +65,20 @@ const unitConverter = tool(
     const conversions: Record<string, Record<string, { rate: number; unit: string }>> = {
       km: {
         miles: { rate: 0.621371, unit: "miles" },
-        meters: { rate: 1000, unit: "meters" }
+        meters: { rate: 1000, unit: "meters" },
       },
       miles: {
         km: { rate: 1.60934, unit: "kilometers" },
-        meters: { rate: 1609.34, unit: "meters" }
+        meters: { rate: 1609.34, unit: "meters" },
       },
       usd: {
         eur: { rate: 0.92, unit: "EUR" },
-        gbp: { rate: 0.79, unit: "GBP" }
+        gbp: { rate: 0.79, unit: "GBP" },
       },
       eur: {
         usd: { rate: 1.09, unit: "USD" },
-        gbp: { rate: 0.86, unit: "GBP" }
-      }
+        gbp: { rate: 0.86, unit: "GBP" },
+      },
     };
 
     const fromUnit = input.from.toLowerCase();
@@ -101,8 +100,8 @@ const unitConverter = tool(
     schema: z.object({
       value: z.number().describe("The numeric value to convert"),
       from: z.string().describe("Source unit, e.g., 'km', 'miles', 'USD'"),
-      to: z.string().describe("Target unit, e.g., 'km', 'miles', 'EUR'")
-    })
+      to: z.string().describe("Target unit, e.g., 'km', 'miles', 'EUR'"),
+    }),
   }
 );
 
@@ -134,8 +133,8 @@ const comparisonTool = tool(
       value2: z.number().describe("Second value to compare"),
       operation: z
         .enum(["less", "greater", "equal", "difference"])
-        .describe("Comparison operation to perform")
-    })
+        .describe("Comparison operation to perform"),
+    }),
   }
 );
 
@@ -146,14 +145,14 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([
     searchTool,
     calculatorTool,
     unitConverter,
-    comparisonTool
+    comparisonTool,
   ]);
 
   // Complex test query
@@ -209,11 +208,11 @@ async function main() {
     messages.push(
       new AIMessage({
         content: response.content,
-        tool_calls: response.tool_calls
+        tool_calls: response.tool_calls,
       }),
       new ToolMessage({
         content: String(toolResult),
-        tool_call_id: toolCall.id || ""
+        tool_call_id: toolCall.id || "",
       })
     );
 

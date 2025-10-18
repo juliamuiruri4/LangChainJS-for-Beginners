@@ -2,11 +2,11 @@
  * Run: npx tsx 07-langgraph-agents-tools/code/03-multi-tool-agent.ts
  */
 
-import { tool } from "@langchain/core/tools";
+import { tool } from "langchain";
 import { ChatOpenAI } from "@langchain/openai";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { HumanMessage } from "@langchain/core/messages";
-import { z } from "zod";
+import { HumanMessage } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {
@@ -28,8 +28,8 @@ async function main() {
       name: "calculator",
       description: "Perform mathematical calculations. Input: math expression",
       schema: z.object({
-        expression: z.string().describe("The mathematical expression to evaluate")
-      })
+        expression: z.string().describe("The mathematical expression to evaluate"),
+      }),
     }
   );
 
@@ -42,8 +42,8 @@ async function main() {
       name: "string_reverser",
       description: "Reverse a string. Input: text to reverse",
       schema: z.object({
-        text: z.string().describe("The text to reverse")
-      })
+        text: z.string().describe("The text to reverse"),
+      }),
     }
   );
 
@@ -57,8 +57,8 @@ async function main() {
       name: "word_counter",
       description: "Count words in a text. Input: text to count",
       schema: z.object({
-        text: z.string().describe("The text to count words in")
-      })
+        text: z.string().describe("The text to count words in"),
+      }),
     }
   );
 
@@ -70,7 +70,7 @@ async function main() {
         "capital of France": "Paris",
         "largest ocean": "Pacific Ocean",
         "speed of light": "299,792,458 meters per second",
-        "inventor of telephone": "Alexander Graham Bell"
+        "inventor of telephone": "Alexander Graham Bell",
       };
 
       const lowerInput = input.query.toLowerCase();
@@ -86,26 +86,26 @@ async function main() {
       name: "search",
       description: "Search for information. Input: search query",
       schema: z.object({
-        query: z.string().describe("The search query")
-      })
+        query: z.string().describe("The search query"),
+      }),
     }
   );
 
   const model = new ChatOpenAI({
-    model: process.env.AI_MODEL || "gpt-4o-mini",
+    model: process.env.AI_MODEL || "gpt-5-mini",
     temperature: 0,
     configuration: {
       baseURL: process.env.AI_ENDPOINT,
       defaultQuery: process.env.AI_API_VERSION
         ? { "api-version": process.env.AI_API_VERSION }
-        : undefined
+        : undefined,
     },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const agent = createReactAgent({
     llm: model,
-    tools: [calculatorTool, reverserTool, wordCounterTool, searchTool]
+    tools: [calculatorTool, reverserTool, wordCounterTool, searchTool],
   });
 
   // Complex multi-step questions
@@ -113,7 +113,7 @@ async function main() {
     "What is 25 * 4, and then reverse the result as a string?",
     "Search for the capital of France, then count the words in the result",
     "Calculate 100 + 50, reverse it, then count how many characters are in the reversed string",
-    "What's the largest ocean? Count the words in your answer."
+    "What's the largest ocean? Count the words in your answer.",
   ];
 
   for (const question of questions) {
@@ -121,7 +121,7 @@ async function main() {
     console.log(`\n❓ ${question}\n`);
 
     const response = await agent.invoke({
-      messages: [new HumanMessage(question)]
+      messages: [new HumanMessage(question)],
     });
 
     const lastMessage = response.messages[response.messages.length - 1];

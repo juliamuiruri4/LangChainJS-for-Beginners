@@ -5,9 +5,8 @@
  * Run: npx tsx 06-rag-systems/solution/citation-rag.ts
  */
 
-import { ChatOpenAI } from "@langchain/openai";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
@@ -22,8 +21,8 @@ const knowledgeBase = [
       title: "Introduction to Machine Learning",
       section: "Chapter 1",
       page: 12,
-      author: "AI Research Team"
-    }
+      author: "AI Research Team",
+    },
   }),
   new Document({
     pageContent:
@@ -32,8 +31,8 @@ const knowledgeBase = [
       title: "Supervised Learning Fundamentals",
       section: "Chapter 2",
       page: 34,
-      author: "AI Research Team"
-    }
+      author: "AI Research Team",
+    },
   }),
   new Document({
     pageContent:
@@ -42,8 +41,8 @@ const knowledgeBase = [
       title: "Neural Networks Explained",
       section: "Chapter 3",
       page: 56,
-      author: "Deep Learning Group"
-    }
+      author: "Deep Learning Group",
+    },
   }),
   new Document({
     pageContent:
@@ -52,8 +51,8 @@ const knowledgeBase = [
       title: "Natural Language Processing",
       section: "Chapter 5",
       page: 89,
-      author: "NLP Research Lab"
-    }
+      author: "NLP Research Lab",
+    },
   }),
   new Document({
     pageContent:
@@ -62,9 +61,9 @@ const knowledgeBase = [
       title: "Transfer Learning Techniques",
       section: "Chapter 7",
       page: 134,
-      author: "AI Research Team"
-    }
-  })
+      author: "AI Research Team",
+    },
+  }),
 ];
 
 interface RetrievalResult {
@@ -77,15 +76,15 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   console.log("📚 Loading knowledge base with rich metadata...\n");
@@ -99,7 +98,7 @@ async function main() {
   const questions = [
     "What is machine learning?",
     "Explain neural networks and deep learning",
-    "What is NLP and what can it do?"
+    "What is NLP and what can it do?",
   ];
 
   for (const question of questions) {
@@ -131,10 +130,10 @@ Provide a comprehensive answer with inline citations like [1] or [2] where you r
     const chain = RunnableSequence.from([
       {
         context: () => contextWithCitations,
-        question: (input: { question: string }) => input.question
+        question: (input: { question: string }) => input.question,
       },
       prompt,
-      model
+      model,
     ]);
 
     const response = await chain.invoke({ question });

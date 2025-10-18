@@ -10,7 +10,7 @@ import "dotenv/config";
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
   configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
+  apiKey: process.env.AI_API_KEY,
 });
 
 // Teaching examples
@@ -22,11 +22,11 @@ const examples = [
         name: "Premium Wireless Headphones",
         price: "$199.00",
         category: "Electronics",
-        highlight: "Noise cancellation"
+        highlight: "Noise cancellation",
       },
       null,
       2
-    )
+    ),
   },
   {
     input: "Organic cotton t-shirt in blue, comfortable fit, $29.99",
@@ -35,11 +35,11 @@ const examples = [
         name: "Organic Cotton T-Shirt",
         price: "$29.99",
         category: "Clothing",
-        highlight: "Organic cotton, comfortable fit"
+        highlight: "Organic cotton, comfortable fit",
       },
       null,
       2
-    )
+    ),
   },
   {
     input: "Gaming laptop with RTX 4070, 32GB RAM, $1,499",
@@ -48,35 +48,35 @@ const examples = [
         name: "Gaming Laptop",
         price: "$1,499.00",
         category: "Computers",
-        highlight: "RTX 4070, 32GB RAM"
+        highlight: "RTX 4070, 32GB RAM",
       },
       null,
       2
-    )
-  }
+    ),
+  },
 ];
 
 // Create example template
 const exampleTemplate = ChatPromptTemplate.fromMessages([
   ["human", "{input}"],
-  ["ai", "{output}"]
+  ["ai", "{output}"],
 ]);
 
 // Create few-shot template
 const fewShotTemplate = new FewShotChatMessagePromptTemplate({
   examplePrompt: exampleTemplate,
   examples: examples,
-  inputVariables: []
+  inputVariables: [],
 });
 
 // Final template
 const finalTemplate = ChatPromptTemplate.fromMessages([
   [
     "system",
-    "Convert product descriptions into JSON format. Follow the examples exactly. Output ONLY valid JSON, no additional text."
+    "Convert product descriptions into JSON format. Follow the examples exactly. Output ONLY valid JSON, no additional text.",
   ],
   fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
-  ["human", "{input}"]
+  ["human", "{input}"],
 ]);
 
 async function convertProduct(description: string) {
@@ -114,7 +114,7 @@ async function main() {
     "Stainless steel water bottle, keeps drinks cold for 24 hours, $24.99",
     "Leather messenger bag with laptop compartment, handcrafted, $149",
     "Smart watch with heart rate monitor and GPS, waterproof, $299.99",
-    "Ergonomic office chair with lumbar support, adjustable height, $399"
+    "Ergonomic office chair with lumbar support, adjustable height, $399",
   ];
 
   for (const product of testProducts) {

@@ -20,21 +20,18 @@ async function testSetup() {
 
   try {
     const model = new ChatOpenAI({
-      model: process.env.AI_MODEL || "gpt-4o-mini",
+      model: process.env.AI_MODEL || "gpt-5-mini",
       configuration: {
         baseURL: process.env.AI_ENDPOINT,
-        defaultQuery: process.env.AI_API_VERSION
-          ? { "api-version": process.env.AI_API_VERSION }
-          : undefined
       },
-      apiKey: process.env.AI_API_KEY
+      apiKey: process.env.AI_API_KEY,
     });
 
     const response = await model.invoke("Say 'Setup successful!' if you can read this.");
 
     console.log("✅ SUCCESS! Your AI provider is working!");
     console.log(`   Provider: ${process.env.AI_ENDPOINT}`);
-    console.log(`   Model: ${process.env.AI_MODEL || "gpt-4o-mini"}`);
+    console.log(`   Model: ${process.env.AI_MODEL || "gpt-5-mini"}`);
     console.log("\nModel response:", response.content);
     console.log("\n🎉 You're ready to start the course!");
   } catch (error) {
@@ -43,8 +40,7 @@ async function testSetup() {
     console.log("1. Check your AI_API_KEY in .env file");
     console.log("2. Verify the AI_ENDPOINT is correct");
     console.log("3. Ensure the AI_MODEL is valid for your provider");
-    console.log("4. For Azure AI Foundry: Verify AI_API_VERSION is set");
-    console.log("5. Verify the token/key has no extra spaces");
+    console.log("4. Verify the token/key has no extra spaces");
   }
 }
 

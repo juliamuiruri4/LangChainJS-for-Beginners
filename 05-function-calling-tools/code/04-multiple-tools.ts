@@ -1,7 +1,7 @@
 /**
  * Chapter 5 Example 4: Multiple Tools
  *
- * Run: npx tsx 05-function-calling-tooling/code/04-multiple-tools.ts
+ * Run: npx tsx 05-function-calling-tools/code/04-multiple-tools.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does the LLM decide which tool to use for a given query?"
@@ -10,8 +10,8 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 const calculatorTool = tool(
@@ -59,7 +59,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   const modelWithTools = model.bindTools([calculatorTool, searchTool, weatherTool]);
