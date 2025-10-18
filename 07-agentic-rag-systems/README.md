@@ -697,6 +697,102 @@ See the [LangChain.js documentation](https://js.langchain.com/docs/modules/data_
 
 ---
 
+## 🌐 RAG as an MCP Service
+
+**Location:** [`samples/mcp-rag-server/`](./samples/mcp-rag-server/)
+
+This advanced example combines **everything you've learned** from the course:
+
+- **Chapter 4**: Function calling and tools
+- **Chapter 5**: Model Context Protocol (MCP)
+- **Chapter 6**: Vector embeddings and semantic search
+- **Chapter 7**: Agentic RAG decision-making
+
+### What You'll Build
+
+Instead of embedding RAG logic in each agent, you'll expose your knowledge base as an **MCP server** that multiple agents can access:
+
+```
+┌─────────────┐
+│  Agent 1    │──┐
+└─────────────┘  │
+                 │    ┌──────────────────┐
+┌─────────────┐  ├───▶│  MCP RAG Server  │
+│  Agent 2    │──┘    │  (Shared Vector  │
+└─────────────┘       │   Store)         │
+                      └──────────────────┘
+```
+
+### Key Benefits
+
+- **🔄 Shared Knowledge Base**: Multiple agents use the same data
+- **🎯 Separation of Concerns**: RAG logic separate from agent logic
+- **📈 Scalable Architecture**: Scale RAG server independently
+- **🔐 Centralized Control**: Manage access and data in one place
+- **🔄 Easy Updates**: Modify knowledge base without changing agents
+
+### What's Included
+
+**Files:**
+1. **`mcp-rag-server.ts`** - HTTP streamable MCP server exposing RAG tools
+2. **`mcp-rag-agent.ts`** - Agent that connects to and uses the MCP RAG server
+3. **`README.md`** - Complete setup guide and architecture explanation
+
+**Tools Exposed:**
+- `searchDocuments` - Search the shared knowledge base
+- `addDocument` - Add documents to the knowledge base
+
+### Quick Start
+
+```bash
+# Run the agent (auto-starts server)
+npx tsx 07-agentic-rag-systems/samples/mcp-rag-server/mcp-rag-agent.ts
+```
+
+### What You'll Learn
+
+✓ How to build an HTTP streamable MCP server
+✓ Exposing RAG capabilities as reusable MCP tools
+✓ Connecting agents to remote RAG services
+✓ Enterprise pattern: centralized knowledge management
+✓ How multiple agents can share a knowledge base
+
+> [!WARNING]
+> **🔐 Security Considerations**
+>
+> This example focuses on the core MCP RAG architecture and **does not implement authentication or authorization**. For production and enterprise scenarios, you should implement proper security measures:
+>
+> - **Authentication**: Verify client identity before allowing MCP connections
+> - **Authorization**: Control which agents/users can access which documents
+> - **Rate Limiting**: Prevent abuse and ensure fair resource usage
+> - **Input Validation**: Sanitize queries and document content
+> - **Audit Logging**: Track who accesses what data and when
+>
+> Learn more about MCP security best practices: [MCP Security Documentation](https://modelcontextprotocol.io/docs/tutorials/security/authorization)
+>
+> **When to prioritize security:**
+> - Exposing MCP servers over public networks
+> - Handling sensitive or proprietary company data
+> - Multi-tenant environments where data isolation is critical
+> - Compliance requirements (GDPR, HIPAA, SOC 2, etc.)
+
+### When to Use This Pattern
+
+**Use RAG as MCP Service when:**
+- Multiple agents need access to the same knowledge base
+- You want to centralize knowledge management
+- You need to update knowledge without redeploying agents
+- Different teams/apps share common documentation
+
+**Use Embedded RAG when:**
+- Single agent with private knowledge base
+- No need for sharing across applications
+- Simpler deployment requirements
+
+**👉 Perfect for:** Teams building multiple AI agents that need access to shared company knowledge!
+
+---
+
 ## 🗺️ Concept Map
 
 This chapter taught you how to build **Agentic RAG** systems:

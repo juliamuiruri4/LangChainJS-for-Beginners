@@ -4,9 +4,10 @@
 
 This is **LangChain.js for Beginners** - a comprehensive educational course teaching AI application development with LangChain.js and TypeScript. The repository contains 8 sections (00-07) covering everything from basic chat models to autonomous agents, RAG systems, and Model Context Protocol (MCP) integration.
 
-**Architecture**: Educational course structure with 85+ runnable TypeScript examples organized by topic
-**Key Technologies**: LangChain.js, TypeScript, tsx, Node.js >=22.0.0 (LTS), LangGraph, MCP, OpenAI/Azure AI/Anthropic
-**Purpose**: Teaching developers how to build AI-powered applications with LangChain.js
+**Architecture**: Educational course structure with 71+ runnable TypeScript examples organized by topic
+**Key Technologies**: LangChain.js, TypeScript, tsx, Node.js >=22.0.0 (LTS), MCP, OpenAI/Azure AI/Anthropic
+**Purpose**: Teaching developers how to build AI-powered applications using an agent-first philosophy
+**Teaching Approach**: Agent-first (Tools → Agents → Documents → Agentic RAG)
 
 ## Repository Structure
 
@@ -15,24 +16,20 @@ LangChainJS-for-Beginners/
 ├── 00-course-setup/          # Initial setup and configuration
 ├── 01-introduction/          # LangChain.js basics
 ├── 02-chat-models/           # Chat models and interactions
-├── 03-prompt-templates/      # Dynamic prompts and structured outputs
-├── 04-documents-embeddings-semantic-search/ # Document processing, embeddings, and semantic search
-├── 05-function-calling-tooling/ # Function calling and tool integration
-├── 06-rag-systems/           # RAG and advanced LCEL patterns
-├── 07-agents-mcp/            # Autonomous agents and Model Context Protocol
+├── 03-prompts-messages-outputs/ # Dynamic prompts, messages, and structured outputs
+├── 04-function-calling-tools/   # Function calling and tool integration (Agent-first: Step 1)
+├── 05-agents-mcp/            # Autonomous agents and Model Context Protocol (Agent-first: Step 2)
+├── 06-documents-embeddings-semantic-search/ # Document processing, embeddings, semantic search (Agent-first: Step 3)
+├── 07-agentic-rag-systems/   # Agentic RAG where agents decide when to search (Agent-first: Step 4)
+│   └── samples/
+│       └── mcp-rag-server/   # RAG as an MCP service (capstone example)
 ├── data/                     # Sample data files
-│   ├── memory-data/          # Persistent memory data
-│   └── metrics-exports/      # Monitoring metrics
-├── future/                   # Advanced content (LangGraph patterns)
-│   ├── 07-langgraph-agents-tools/
-│   ├── 08-langgraph-memory-conversations/
-│   ├── 09-langgraph-patterns/
-│   └── 10-production-best-practices/
 ├── scripts/                  # Build and validation scripts
 │   ├── build-check.ts        # TypeScript compilation validator
 │   ├── test-setup.ts         # Environment setup tester
 │   └── validate-examples.ts  # Code example test runner
 ├── .env.example              # Environment configuration template
+├── GLOSSARY.md               # Comprehensive course glossary
 └── TESTING.md                # Comprehensive testing guide
 ```
 
@@ -124,7 +121,7 @@ When working on course content or examples:
 npm run build
 ```
 
-This compiles 106 TypeScript files to check for:
+This compiles 71 TypeScript files to check for:
 - ✅ Type errors
 - ✅ Syntax errors
 - ✅ Import issues
@@ -418,13 +415,57 @@ This is an educational repository optimized for learning:
 - Advanced/future content clearly marked as optional
 - Deep dive sections available for those wanting more depth
 
+### Agent-First Teaching Philosophy
+
+Unlike traditional LangChain tutorials that teach document search first, this course follows a **modern, agent-first approach**:
+
+1. **Chapter 4: Function Calling & Tools** - Learn to give AI the ability to use tools
+2. **Chapter 5: Agents & MCP** - Build autonomous agents that reason and make decisions
+3. **Chapter 6: Documents & Embeddings** - Learn document processing and semantic search
+4. **Chapter 7: Agentic RAG** - Combine agents with retrieval for intelligent systems
+
+**Why Agent-First?**
+- Mirrors how production AI systems work (agents with multiple capabilities)
+- Teaches autonomous decision-making before retrieval patterns
+- Enables students to build **Agentic RAG** where agents decide when to search
+- More efficient than traditional "always-search" RAG patterns
+
+**Key Differentiator**: Students learn to build RAG systems where agents intelligently decide when retrieval is necessary vs answering directly from general knowledge.
+
+### MCP RAG Server (Advanced Example)
+
+The course includes a capstone example that combines all learned concepts:
+
+**Location**: `07-agentic-rag-systems/samples/mcp-rag-server/`
+
+**What it demonstrates**:
+- Building an HTTP streamable MCP server that exposes RAG as a service
+- Multiple agents sharing a centralized knowledge base
+- Agentic decision-making (when to search vs answer directly)
+- Enterprise architecture pattern for scalable AI systems
+
+**Files**:
+- `mcp-rag-server.ts` - MCP server exposing searchDocuments and addDocument tools
+- `mcp-rag-agent.ts` - Agent client that connects to and uses the MCP RAG server
+- `README.md` - Complete architecture explanation and setup guide
+
+**Security Note**: Example is for educational purposes and does not implement authentication/authorization. See [MCP Security Documentation](https://modelcontextprotocol.io/docs/tutorials/security/authorization) for production guidelines.
+
+**Run the example**:
+```bash
+npx tsx 07-agentic-rag-systems/samples/mcp-rag-server/mcp-rag-agent.ts
+```
+
 ### Working with Chapters
 
 - Start with `00-course-setup` for environment configuration
 - Each chapter has learning objectives in its README.md
+- Follow the agent-first progression (Chapters 4 → 5 → 6 → 7)
 - Try the assignments before looking at solutions
 - Examples in `code/` directory demonstrate concepts
 - Solutions in `solution/` directory show complete implementations
+- Consult `GLOSSARY.md` for definitions of all course terms
+- Advanced samples in chapter `samples/` folders show real-world patterns
 
 ### Provider Flexibility
 
@@ -468,8 +509,10 @@ git commit -m "Your message validate-examples"  # Triggers GitHub Actions
 ## Resources
 
 - [LangChain.js Documentation](https://js.langchain.com/)
-- [LangGraph Documentation](https://langchain-ai.github.io/langgraphjs/)
+- [Model Context Protocol (MCP) Documentation](https://modelcontextprotocol.io/)
+- [MCP Security Best Practices](https://modelcontextprotocol.io/docs/tutorials/security/authorization)
 - [Course README](./README.md)
+- [Course Glossary](./GLOSSARY.md)
 - [Testing Guide](./TESTING.md)
 - [GitHub Models](https://github.com/marketplace/models)
 - [Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/)
