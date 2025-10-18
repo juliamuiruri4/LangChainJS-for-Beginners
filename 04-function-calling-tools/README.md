@@ -243,9 +243,11 @@ In LangChain.js, [tools](../GLOSSARY.md#tool) are created using the `tool()` fun
 
 If you're new to Zod, it's a TypeScript-first schema validation library that lets you define the shape and constraints of your data. Think of it as a way to describe what valid input looks like—for example, "this parameter must be a string" or "this number must be between 1 and 100." Zod validates data at runtime and provides excellent TypeScript type inference, making your code both safer and more maintainable. [Learn more about Zod](https://zod.dev/).
 
+**You want to give your AI real-time calculator capabilities.** Without tools, the AI can only guess at calculations or say "I can't do math." With a calculator tool, the AI can recognize when a calculation is needed and request execution of the actual computation.
+
 ### Example 1: Simple Calculator Tool
 
-In this example, you'll create a basic calculator tool using Zod schema to define parameters and learn tool creation fundamentals.
+Let's see how to create a tool using the `tool()` function with a Zod `schema` for type-safe parameters.
 
 **Code**: [`code/01-simple-tool.ts`](./code/01-simple-tool.ts)
 **Run**: `tsx 04-function-calling-tools/code/01-simple-tool.ts`
@@ -322,9 +324,11 @@ Schema: ZodObject {
 
 Use `bindTools()` to make tools available to the LLM.
 
+**You've created a calculator tool, but how does the AI know it exists?** The tool sits in your code, disconnected from the AI. You need to tell the AI "here are the tools you can use" and let the AI decide when to call them. That's where `.bindTools()` comes in—it connects tools to the model so the AI can intelligently choose when to use them.
+
 ### Example 2: Binding and Invoking Tools
 
-Here you'll bind tools to a model and see how the LLM generates structured tool calls with arguments.
+Let's see how to use `.bindTools()` to make tools available and observe how the AI generates structured `tool_calls`.
 
 **Code**: [`code/02-tool-calling.ts`](./code/02-tool-calling.ts)
 **Run**: `tsx 04-function-calling-tools/code/02-tool-calling.ts`
@@ -512,9 +516,11 @@ Final answer: The current temperature in Seattle is 62°F and it's partly cloudy
 
 LLMs can choose from multiple tools based on the query.
 
+**You're building an AI assistant that needs different capabilities—math calculations, web searches, and weather lookups.** Instead of creating separate AI instances or complex routing logic, you want one AI that intelligently chooses the right tool for each task. The AI should automatically pick the calculator for "What is 25 * 4?", search for "What's the capital of France?", and weather for "How's the weather in Tokyo?"
+
 ### Example 4: Multi-Tool System
 
-Here you'll build a system with multiple tools (calculator, search, weather) where the LLM automatically selects the appropriate tool for each query.
+Let's see how to bind multiple tools using `.bindTools([tool1, tool2, tool3])` and let the AI choose which one to call.
 
 **Code**: [`code/04-multiple-tools.ts`](./code/04-multiple-tools.ts)
 **Run**: `tsx 04-function-calling-tools/code/04-multiple-tools.ts`

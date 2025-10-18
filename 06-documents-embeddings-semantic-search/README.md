@@ -89,9 +89,11 @@ LLMs need text input, but your data comes in many formats ([Document Loader](../
 
 > **📦 Import Path Note**: LangChain.js document loader imports have evolved over time. This course uses the current recommended import paths from `@langchain/classic` (e.g., `@langchain/classic/document_loaders/fs/text`, `@langchain/classic/vectorstores/memory`). If you see older tutorials using different paths (e.g., `@langchain/community` or bare `langchain/` imports), the `@langchain/classic` imports shown here are the modern, correct approach.
 
+**You're building an AI that needs to answer questions about your company's documentation.** Your docs are stored as text files, PDFs, and markdown—hundreds of files totaling thousands of pages. You can't send all that to an AI at once (context limits!), so you need to load the files, split them into manageable chunks with overlap to preserve context, and track which file each chunk came from.
+
 ### Example 1: Loading Text Files
 
-In this example, you'll learn how to load text files using TextLoader and access document content and metadata.
+Let's see how to use `TextLoader` to read text files and access `pageContent` and `metadata`.
 
 **Code**: [`code/01-load-text.ts`](./code/01-load-text.ts)
 **Run**: `tsx 06-documents-embeddings-semantic-search/code/01-load-text.ts`
@@ -548,9 +550,11 @@ Let's see embeddings in action with hands-on examples!
 
 ## 💻 Creating Embeddings
 
+**You want to search your documentation by meaning, not just keywords.** When someone searches "how to configure authentication," you want to find documents about "setting up user login" even though they use different words. To do this, you need to convert text into numerical vectors (embeddings) where similar meanings produce similar numbers.
+
 ### Example 5: Basic Embeddings
 
-Here you'll create text embeddings and calculate cosine similarity to see how similar text produces similar vector representations.
+Let's see how to use `OpenAIEmbeddings` to create vector embeddings and measure similarity with cosine similarity.
 
 **Code**: [`code/05-basic-embeddings.ts`](./code/05-basic-embeddings.ts)
 **Run**: `tsx 06-documents-embeddings-semantic-search/code/05-basic-embeddings.ts`
@@ -638,9 +642,11 @@ Similarity (LangChain vs pizza): 0.124
 | Weaviate | Self-hosted production | Medium |
 | Qdrant | High performance | Medium |
 
+**You've created embeddings for your documents, but how do you store thousands of them and find the most similar ones quickly?** You need a database optimized for vector similarity search—a vector store. It automatically embeds your documents, stores the vectors, and lets you search by meaning using `similaritySearch()`.
+
 ### Example 6: In-Memory Vector Store
 
-In this example, you'll build a vector store from documents and perform semantic similarity search to find relevant content based on meaning.
+Let's see how to use `MemoryVectorStore.fromDocuments()` to create a searchable knowledge base and perform semantic `similaritySearch()`.
 
 **Code**: [`code/06-vector-store.ts`](./code/06-vector-store.ts)
 **Run**: `tsx 06-documents-embeddings-semantic-search/code/06-vector-store.ts`

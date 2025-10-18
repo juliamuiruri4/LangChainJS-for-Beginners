@@ -379,9 +379,13 @@ const template = ChatPromptTemplate.fromMessages([
 
 ---
 
+**You're building a translation service that needs to handle hundreds of translation requests daily.** You could write a new prompt for each language pair ("Translate to French", "Translate to Spanish", etc.), but that's repetitive and hard to maintain. What if you want to change the translation instructions? You'd have to update hundreds of places.
+
+**That's where `ChatPromptTemplate` comes in.** Create one template with `{variables}`, then reuse it with different values each time—just like mail merge for prompts.
+
 ### Example 3: Basic Templates
 
-In this example, you'll create a reusable translation template with variables for input language, output language, and text to be translated.
+Let's see how to create a reusable template using `ChatPromptTemplate.fromMessages()` with template variables.
 
 **Code**: [`code/03-basic-template.ts`](./code/03-basic-template.ts)
 **Run**: `tsx 03-prompts-messages-outputs/code/03-basic-template.ts`
@@ -669,9 +673,13 @@ angry → 😠
 
 ---
 
+**You're building a system that generates personalized educational content.** You have reusable prompt pieces (system role, context, task) that you want to mix and match for different scenarios—beginner vs advanced, programming vs math, high school vs college. Instead of creating separate templates for every combination, you want to compose them dynamically.
+
+**That's where template composition comes in.** Build a library of reusable prompt components and combine them as needed, like LEGO blocks for prompts.
+
 ### Example 6: Template Composition
 
-In this example, you'll learn how to combine multiple template pieces together to create complex, reusable prompts for different educational contexts.
+Let's see how to combine multiple template pieces using string concatenation and `ChatPromptTemplate`.
 
 **Code**: [`code/06-composition.ts`](./code/06-composition.ts)
 **Run**: `tsx 03-prompts-messages-outputs/code/06-composition.ts`
@@ -834,9 +842,13 @@ City: [____]
 
 ---
 
+**You're building a system that extracts customer information from support emails.** With free text responses, you'd get messy output like "Name is John, email john@example, he's 25" which requires complex regex parsing and is error-prone. You need reliable, typed data you can store in a database.
+
+**That's where `.withStructuredOutput()` and Zod schemas come in.** Define the exact structure you want (name, age, email) and the AI extracts and formats the data automatically—no manual parsing needed.
+
 ### Example 7: Basic Structured Output
 
-Here you'll use Zod schemas to get typed, structured data from AI instead of free text, ensuring type safety and validation.
+Let's see how to use `z.object()` to define a schema and `.withStructuredOutput()` to get typed, validated data.
 
 **Code**: [`code/07-structured-output.ts`](./code/07-structured-output.ts)
 **Run**: `tsx 03-prompts-messages-outputs/code/07-structured-output.ts`

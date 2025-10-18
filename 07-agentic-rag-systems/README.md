@@ -449,9 +449,11 @@ This example demonstrates the **decision framework** and shows how each approach
 
 ---
 
+**You've learned about agentic RAG, but what exactly does "traditional RAG" look like?** Before building intelligent systems, let's see the traditional pattern—a simple chain that searches documents for every single query, even "What is 2+2?". This helps you understand the inefficiency that agents solve.
+
 ### Example 1a: Traditional RAG (Always-Search Pattern)
 
-Before we build an agentic RAG system, let's understand the **traditional RAG pattern** to see what agents improve upon. Traditional RAG uses a simple chain that **always searches** documents for every query - even when it's not necessary.
+Let's see how `createRetrievalChain()` implements traditional RAG that always searches, regardless of whether it's needed.
 
 **Code**: [`code/01a-traditional-rag.ts`](./code/01a-traditional-rag.ts)
 **Run**: `tsx 07-agentic-rag-systems/code/01a-traditional-rag.ts`
@@ -479,9 +481,11 @@ This example demonstrates:
 
 ---
 
+**Traditional RAG wastes time searching for every question, even general knowledge ones.** How do you build a system that's smart enough to only search when needed—answering "What is 2+2?" directly but searching documents for "What was our Q3 revenue?" That's agentic RAG: wrap your vector store in a tool and let the agent decide when to use it.
+
 ### Example 2: Agentic RAG with Retrieval Tool
 
-Now let's build an **agentic RAG system** where the agent intelligently decides when to search your documents vs answering directly. This demonstrates the core pattern: creating a retrieval tool from a vector store and letting the agent choose when to use it.
+Let's see how to create a `retrievalTool` from a vector store using `tool()` and give it to `createAgent()` for intelligent decision-making.
 
 **Code**: [`code/02-agentic-rag.ts`](./code/02-agentic-rag.ts)
 **Run**: `tsx 07-agentic-rag-systems/code/02-agentic-rag.ts`
@@ -699,9 +703,11 @@ See the [LangChain.js documentation](https://js.langchain.com/docs/modules/data_
 
 ## 🌐 RAG as an MCP Service
 
+**You've built agents with embedded RAG, but what if multiple agents need access to the same knowledge base?** Instead of duplicating RAG logic in every agent, expose your knowledge base as a shared MCP server. This is the enterprise pattern: centralized knowledge management where multiple agents connect to one authoritative source.
+
 **Location:** [`samples/mcp-rag-server/`](./samples/mcp-rag-server/)
 
-This advanced example combines **everything you've learned** from the course:
+This capstone example combines **everything you've learned** from the course:
 
 - **Chapter 4**: Function calling and tools
 - **Chapter 5**: Model Context Protocol (MCP)

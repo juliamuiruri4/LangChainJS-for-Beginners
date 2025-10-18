@@ -122,9 +122,11 @@ Let's build agents using `createAgent()`!
 
 ---
 
+**You've built tools in Chapter 4, but they require manual orchestration—you decide when to call them.** What if you want the AI to autonomously decide when to use a tool, try multiple approaches if one fails, and iterate until it solves the problem? That's what agents do! They reason, choose tools, and act independently.
+
 ### Example 1: Basic Agent with createAgent()
 
-In this example, you'll build a simple agent that can perform calculations using a calculator tool. The agent uses `createAgent()` to handle all the complexity of the ReAct loop automatically.
+Let's see how to use `createAgent()` to create an autonomous agent that handles the ReAct loop (Thought → Action → Observation) automatically.
 
 **Code**: [`code/01-create-agent-basic.ts`](./code/01-create-agent-basic.ts)
 **Run**: `tsx 05-agents-mcp/code/01-create-agent-basic.ts`
@@ -224,9 +226,11 @@ When you run `tsx 05-agents-mcp/code/01-create-agent-basic.ts`:
 
 ---
 
+**You've built a single-tool agent, but real-world assistants need multiple capabilities.** How do you build an agent that can do math, check weather, and search information—automatically choosing the right tool for each query without manual routing code? Give the agent multiple tools and let it decide.
+
 ### Example 2: createAgent() with Multiple Tools
 
-This example demonstrates how `createAgent()` automatically selects the correct tool from a set of available tools (calculator, weather, search) for each different query.
+Let's see how to give an agent multiple tools using `tools: [tool1, tool2, tool3]` and observe how it autonomously selects the right one.
 
 **Code**: [`code/02-create-agent-multi-tool.ts`](./code/02-create-agent-multi-tool.ts)
 **Run**: `tsx 05-agents-mcp/code/02-create-agent-multi-tool.ts`
@@ -505,9 +509,11 @@ Agent Response
 
 ## 🌐 Connecting to MCP Servers
 
+**You've built agents with manually created tools, but what about connecting to external services?** You could write custom integrations for GitHub, Teams, databases, etc., but that's tedious. What if services exposed their capabilities through a standard protocol, like USB-C? That's what MCP (Model Context Protocol) provides—a standardized way for agents to connect to external tools.
+
 ### Example 4: Agent with MCP Server Integration (Context7)
 
-In this example, you'll see how to connect a LangChain.js agent to **Context7** - an [MCP server](../GLOSSARY.md#mcp-server) that provides current, version-specific documentation for libraries and frameworks. This demonstrates using HTTP transport to connect to a real-world MCP service.
+Let's see how to use `MultiServerMCPClient` to connect to an MCP server and use its tools with `createAgent()`—same pattern as Examples 1-3, but tools come from an external service.
 
 **Code**: [`code/04-mcp-integration.ts`](./code/04-mcp-integration.ts)
 **Run**: `tsx 05-agents-mcp/code/04-mcp-integration.ts`

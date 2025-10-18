@@ -127,9 +127,13 @@ const messages = [
 
 ---
 
+**You're building a coding tutor chatbot.** When a student asks "What is TypeScript?", then follows up with "Can you show me an example?", the AI needs to remember they're talking about TypeScript. Without conversation history, the AI wouldn't know what "it" or "an example" refers to.
+
+**That's where maintaining message history comes in.** By storing all previous messages (system, human, and AI) in an array and sending the full history with each request, the AI can reference earlier parts of the conversation and provide contextually relevant responses.
+
 ### Example 1: Multi-Turn Conversation
 
-The following example shows you how to maintain conversation context across multiple exchanges by storing message history and referencing previous interactions.
+Let's see how to maintain conversation context using a `messages` array with `SystemMessage`, `HumanMessage`, and `AIMessage`.
 
 **Code**: [`code/01-multi-turn.ts`](./code/01-multi-turn.ts)
 **Run**: `tsx 02-chat-models/code/01-multi-turn.ts`
@@ -231,9 +235,11 @@ When you ask a complex question, waiting for the entire response can feel slow. 
 
 **Like watching a friend think out loud** instead of waiting for them to finish their entire thought.
 
+**You're building a chatbot where users ask complex questions.** With regular responses, users stare at a blank screen for 5-10 seconds wondering if anything is happening. With streaming, they see words appearing immediately—just like ChatGPT—which feels much more responsive even if the total time is the same.
+
 ### Example 2: Streaming
 
-In this example, you'll learn how to stream AI responses in real-time, displaying words as they're generated instead of waiting for the complete response.
+Let's see how to use `.stream()` instead of `.invoke()` to display responses as they're generated.
 
 **Code**: [`code/02-streaming.ts`](./code/02-streaming.ts)
 **Run**: `tsx 02-chat-models/code/02-streaming.ts`
@@ -342,9 +348,11 @@ Limits response length:
 - Setting `maxTokens: 100` limits the response to approximately 75 words
 - Prevents runaway costs by capping output length
 
+**You need to generate creative story openings, but you're not sure what `temperature` value to use.** Should you use 0 (deterministic), 1 (balanced), or 2 (creative)? The best way to understand is to test the same prompt at different temperatures and see how the responses change.
+
 ### Example 3: Model Parameters
 
-This sample compares AI responses at different temperature settings (0, 1, 2) to help you understand how parameters control creativity and randomness.
+Let's see how to control creativity by adjusting the `temperature` parameter in `ChatOpenAI`.
 
 **Code**: [`code/03-parameters.ts`](./code/03-parameters.ts)
 **Run**: `tsx 02-chat-models/code/03-parameters.ts`

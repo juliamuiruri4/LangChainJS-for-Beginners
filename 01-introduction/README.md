@@ -203,9 +203,17 @@ We read these values from environment variables (`AI_MODEL`, `AI_ENDPOINT`, `AI_
 
 LLMs work best with structured conversations. LangChain.js provides message types for this.
 
+**Imagine you're building a customer support chatbot.** You need the AI to be helpful and professional, but when you just send "Help me with my password", the AI might respond in any tone—casual, technical, or even overly formal. How do you control the AI's personality and behavior?
+
+**That's where message types come in.** Instead of sending plain text, you send structured messages that separate:
+- **System instructions**: `SystemMessage` (set the AI's personality: "You are a helpful support agent")
+- **User input**: `HumanMessage` (the actual question: "Help me with my password")
+
+This gives you precise control over how the AI responds.
+
 ### Example 2: Message Types
 
-This example shows you how to use structured message types (SystemMessage and HumanMessage) to control AI behavior and maintain conversation context.
+Let's see how to use SystemMessage and HumanMessage to control AI behavior and set the tone of responses.
 
 **Code**: [`code/02-message-types.ts`](./code/02-message-types.ts)
 **Run**: `tsx 01-introduction/code/02-message-types.ts`
@@ -276,9 +284,11 @@ When you run this example with `tsx 01-introduction/code/02-message-types.ts`, y
 
 GitHub Models gives you access to multiple AI models. Let's compare them!
 
+**You're building an app and need to choose which model to use.** Should you use `gpt-5` (more capable but costlier) or `gpt-5-mini` (faster and cheaper)? The best way to decide is to test both with your actual prompts and compare their responses.
+
 ### Example 3: Model Comparison
 
-Here you'll compare responses from different AI models (gpt-5 vs gpt-5-mini) to understand their capabilities, speed, and output quality differences.
+Let's see how to programmatically compare different models side-by-side.
 
 **Code**: [`code/03-model-comparison.ts`](./code/03-model-comparison.ts)
 **Run**: `tsx 01-introduction/code/03-model-comparison.ts`
