@@ -46,7 +46,11 @@ async function main() {
   console.log("\n" + "=".repeat(80) + "\n");
 
   // Test the tool directly
-  const testExpressions = ["25 * 17", "(100 + 50) / 2", "Math.sqrt(144)"];
+  const testExpressions = [
+    "25 * 17",
+    "(100 + 50) / 2",
+    "Math.sqrt(144)",
+  ];
 
   for (const expr of testExpressions) {
     console.log(`\nExpression: ${expr}`);
