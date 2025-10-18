@@ -22,10 +22,11 @@ Think of building an AI application like cooking a gourmet meal. You could sourc
 
 This course takes you from zero to building robust AI applications. Here's your journey:
 
-**🤖 Interactive AI Chatbots**
-- Build chatbots that remember your conversation (like ChatGPT)
-- See AI responses appear word-by-word as they're generated
-- Create AI assistants with different personalities and expertise
+**🤖 Conversational AI Foundations**
+- Build AI that maintains conversation context across multiple exchanges
+- Stream responses in real-time for better user experience
+- Control AI behavior with temperature, system messages, and parameters
+- Create AI assistants with different personalities and specialized expertise
 
 **🔍 Intelligent Document Search**
 - Build search that understands meaning, not just keywords
@@ -40,11 +41,36 @@ This course takes you from zero to building robust AI applications. Here's your 
   - Turn "Call John at 555-0123 tomorrow" into `{name: "John", phone: "555-0123", date: "tomorrow"}`
 
 **🚀 Autonomous AI Agents**
-- Build AI that makes decisions and solves multi-step problems on its own
-  - "Find the cheapest flight to Tokyo and book a hotel nearby" → AI searches, compares, and plans automatically
-- Connect AI to your favorite tools and services using modern standards
+- Build agents that reason about problems and make intelligent decisions
+- Implement the ReAct pattern (Reasoning + Acting) for multi-step problem solving
+- Create agents that autonomously choose which tools to use for each task
+- Build production-ready agents with error handling and middleware
+
+**🌐 Modern Tool Integration with MCP**
+- Learn the Model Context Protocol (MCP) - an emerging standard for connecting AI to tools
+- Connect to MCP servers providing GitHub, database, calendar, and documentation access
+- Build agents that work with any MCP-compatible service using a universal protocol
+- Future-proof your AI applications with industry-standard tool integration
+
+**🎯 Agentic RAG Systems**
+- Build intelligent question-answering systems where agents decide when to search documents
+  - General knowledge: "What's the capital of France?" → Agent answers directly (no search needed)
+  - Company data: "What was our Q3 revenue?" → Agent searches your knowledge base
+- Combine agent autonomy with document retrieval for efficient, accurate answers
+- Understand the difference between traditional "always-search" RAG and intelligent agentic RAG
 
 **By the end**, you'll have a solid understanding of LangChain.js and understand how to build real AI applications you can deploy!
+
+> [!TIP]
+> **🎯 Why This Course is Different: Agent-First Philosophy**
+>
+> Most LangChain tutorials teach document search first, then basic RAG systems. This course takes a **modern, agent-first approach**:
+>
+> 1. **First**, you'll build autonomous agents that can reason and use tools (Chapters 4-5)
+> 2. **Then**, you'll learn document processing and semantic search (Chapter 6)
+> 3. **Finally**, you'll combine them into **Agentic RAG** - where agents intelligently decide when to search your knowledge base (Chapter 7)
+>
+> This approach mirrors how production AI systems work: intelligent agents that use retrieval as one of many capabilities, not as the only capability.
 
 ### Why LangChain.js?
 
@@ -74,7 +100,7 @@ This course contains **8 chapters** (setup + 7 chapters), each building on the p
 | 4 | [Function Calling & Tools](./04-function-calling-tools/README.md) | Extending AI capabilities with function calling and tools | Zod schemas, tool binding, type safety |
 | 5 | [Getting Started with Agents & MCP](./05-agents-mcp/README.md) | Building autonomous agents and integrating Model Context Protocol | ReAct pattern, agent loops, MCP |
 | 6 | [Documents, Embeddings & Semantic Search](./06-documents-embeddings-semantic-search/README.md) | Loading documents, creating embeddings, and building semantic search | Vector embeddings, similarity search |
-| 7 | [Building Agentic RAG Systems](./07-agentic-rag-systems/README.md) | Combining agents, tools, and retrieval to build intelligent RAG systems | Agentic RAG, retrieval tools, agent-controlled search |
+| 7 | [Building Agentic RAG Systems](./07-agentic-rag-systems/README.md) | Building RAG systems where agents intelligently decide when to search documents | Agentic RAG (agents decide when to search), retrieval tools, intelligent Q&A |
 
 Each chapter includes:
 - 📖 **Conceptual explanations** with real-world analogies
