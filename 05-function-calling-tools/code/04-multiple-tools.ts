@@ -43,11 +43,14 @@ const searchTool = tool(
   }
 );
 
-const weatherTool = tool(async (input) => `Weather in ${input.city}: 72°F, sunny`, {
-  name: "getWeather",
-  description: "Get current weather for a city",
-  schema: z.object({ city: z.string() }),
-});
+const weatherTool = tool(
+  async (input) => `Weather in ${input.city}: 72°F, sunny`,
+  {
+    name: "getWeather",
+    description: "Get current weather for a city",
+    schema: z.object({ city: z.string() }),
+  }
+);
 
 async function main() {
   console.log("🎛️ Multiple Tools Demo\n");

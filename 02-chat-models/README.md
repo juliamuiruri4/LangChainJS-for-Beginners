@@ -323,7 +323,7 @@ You'll notice the text appears progressively, word by word, rather than all at o
 
 **What's happening**:
 1. We call `model.stream()` instead of `model.invoke()`
-2. This returns an async iterable that yields chunks as they're generated
+2. This returns an [async iterable](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols) that yields chunks as they're generated
 3. We loop through each chunk with `for await...of`
 4. Each chunk contains a piece of the response (usually a few words)
 5. We use `process.stdout.write()` to display text without newlines, creating the streaming effect
@@ -341,7 +341,8 @@ You'll notice the text appears progressively, word by word, rather than all at o
 - ✅ When you want to display progress to users
 - ❌ When you need the full response first (parsing, validation, post-processing)
 
-> **💡 Note**: The actual file [`02-streaming.ts`](./code/02-streaming.ts) includes additional timing measurements and a comparison between streaming and non-streaming approaches to demonstrate the performance benefits. The code above shows the core streaming concept for clarity.
+> [!NOTE]
+> The actual file [`02-streaming.ts`](./code/02-streaming.ts) includes additional timing measurements and a comparison between streaming and non-streaming approaches to demonstrate the performance benefits. The code above shows the core streaming concept for clarity.
 
 > **💡 Advanced**: To track token usage with streaming, some providers support `streamOptions: { includeUsage: true }` which includes usage metadata in the final chunk. This is provider-dependent - check your provider's documentation for availability.
 

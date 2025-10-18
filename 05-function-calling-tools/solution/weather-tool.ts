@@ -13,7 +13,10 @@ import "dotenv/config";
 const weatherTool = tool(
   async (input) => {
     // Simulated weather data for various cities
-    const weatherData: Record<string, { temp_f: number; temp_c: number; condition: string }> = {
+    const weatherData: Record<
+      string,
+      { temp_f: number; temp_c: number; condition: string }
+    > = {
       Tokyo: { temp_f: 75, temp_c: 24, condition: "partly cloudy" },
       Paris: { temp_f: 64, temp_c: 18, condition: "sunny" },
       London: { temp_f: 59, temp_c: 15, condition: "rainy" },
