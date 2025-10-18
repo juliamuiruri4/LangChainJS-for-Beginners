@@ -22,6 +22,20 @@ By the end of this chapter, you'll be able to:
 
 ---
 
+## 📌 About the Code Examples
+
+The code snippets shown in this README are simplified for clarity and focus on core concepts. The actual code files in the `code/`, `solution/`, and `samples/` folders include:
+
+- ✨ **Enhanced console output** with emojis, separators, and detailed formatting
+- 📊 **Additional statistics** and metrics for better understanding
+- 🎯 **More comprehensive examples** with diverse datasets and multiple queries
+- 💡 **Extended educational content** with key insights and observations
+- 🛡️ **Robust error handling** with try-catch blocks and safe operations
+
+When you run the actual files, you'll see more detailed output than shown in the examples below. This is intentional - the README focuses on teaching concepts, while the code demonstrates production-quality practices.
+
+---
+
 ## 📖 The Smart Library System Analogy
 
 **Imagine you're building a modern, intelligent library system.**
@@ -190,8 +204,8 @@ const text = `
 `;
 
 const splitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 500,      // Target size in characters
-  chunkOverlap: 50,    // Overlap between chunks
+  chunkSize: 300,      // Target size in characters
+  chunkOverlap: 50,    // Overlap between chunks (preserves context)
 });
 
 const docs = await splitter.createDocuments([text]);
@@ -232,14 +246,14 @@ Chunk 3:
 ### How It Works
 
 **What's happening**:
-1. **Create splitter**: Configure `RecursiveCharacterTextSplitter` with `chunkSize: 500` and `chunkOverlap: 50`
+1. **Create splitter**: Configure `RecursiveCharacterTextSplitter` with `chunkSize: 300` and `chunkOverlap: 50`
 2. **Split text**: `createDocuments()` splits the text into manageable pieces
-3. **Each chunk**: Has approximately 500 characters, with 50 characters overlapping with adjacent chunks
+3. **Each chunk**: Has approximately 300 characters, with 50 characters overlapping with adjacent chunks
 4. **Result**: Array of `Document` objects, each with a portion of the original text
 
 **Why these settings?**
-- `chunkSize: 500`: Small enough for focused retrieval, large enough for context
-- `chunkOverlap: 50`: 10% overlap preserves context between chunks
+- `chunkSize: 300`: Small enough for focused retrieval, large enough for context
+- `chunkOverlap: 50`: ~17% overlap preserves context between chunks
 
 **Splitter Types ([Text Splitter](../GLOSSARY.md#text-splitter))**:
 
@@ -536,6 +550,8 @@ console.log("Similarity (LangChain vs LangChain):", cosineSimilarity(embedding, 
 console.log("Similarity (LangChain vs pizza):", cosineSimilarity(embedding, different).toFixed(3));
 ```
 
+> **💡 Performance Tip**: The actual code file (`05-basic-embeddings.ts`) demonstrates **batch processing** using `embedDocuments()` to embed multiple texts at once, which is 5-10x faster than individual `embedQuery()` calls. See [Example 8](#-batch-processing) for detailed performance comparison!
+
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What is the cosineSimilarity function doing mathematically?"
 > - "How does the embedding.length of 1536 dimensions capture text meaning?"
@@ -639,6 +655,8 @@ Most similar documents:
 ```
 
 Notice: The search found "indoors" matches even though the word "indoors" doesn't appear in any document!
+
+> **📝 Note**: The actual code file (`06-vector-store.ts`) uses a more comprehensive dataset with 6 documents across programming, AI, and animal categories, and demonstrates 4 different search queries to show semantic search across diverse topics. The simplified example above focuses on teaching the core concept of semantic understanding.
 
 ### How It Works
 

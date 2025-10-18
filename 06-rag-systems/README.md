@@ -340,6 +340,8 @@ In this example, you'll build a complete RAG system that retrieves relevant docu
 **Code**: [`code/02-simple-rag.ts`](./code/02-simple-rag.ts)
 **Run**: `tsx 06-rag-systems/code/02-simple-rag.ts`
 
+> **📝 Note**: The code snippet below is simplified for clarity. The actual code file includes 4 documents with rich metadata (vs 2 shown here), tests 4 different questions including edge cases, and provides comprehensive console output with formatting. When you run the file, you'll see a more detailed demonstration!
+
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -408,7 +410,7 @@ console.log("Source docs:", response.context.length);
 When you run this example with `tsx 06-rag-systems/code/02-simple-rag.ts`, you'll see:
 
 ```
-Answer: LangChain.js was released in 2022.
+Answer: LangChain.js was released in 2023.
 Source docs: 2
 ```
 

@@ -19,6 +19,21 @@ By the end of this chapter, you'll be able to:
 
 ---
 
+## 📌 About the Code Examples
+
+The code snippets in this README are simplified for clarity and focus on core concepts. The actual code files in `code/`, `solution/`, and `samples/` folders include:
+
+- ✨ **Additional examples** demonstrating edge cases and variations
+- 🎨 **Enhanced console output** with emoji and formatting for better visibility
+- 🏗️ **Multiple functions** organized for clarity and testing
+- 💡 **Extended explanations** in comments for deeper learning
+
+**This is intentional!** The README teaches core concepts, while actual files provide comprehensive exploration. When you run the code, expect to see more detail than shown here.
+
+> **💡 Tip:** Each example section includes a note highlighting what additional content the actual file contains. Run the files to see the complete picture!
+
+---
+
 ## 📖 The Mail Merge Analogy
 
 **Imagine you need to send 100 personalized emails.**
