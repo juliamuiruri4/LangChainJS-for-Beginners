@@ -169,6 +169,8 @@ Spanish: Hola, ¿cómo estás?
 
 **Benefits**: If you want to change how translations work (e.g., add "Be formal" to the system message), you update ONE place and it affects all translations.
 
+> **💡 Tip**: The actual code file [`01-basic-template.ts`](./code/01-basic-template.ts) includes an additional translation example (Japanese) for deeper learning. Run the file to see all variations!
+
 ---
 
 ## 🎨 Different Template Formats
@@ -299,6 +301,8 @@ But we still love you, I swear!
 - Use `ChatPromptTemplate` when you need system messages or multi-turn conversations
 - Use `PromptTemplate` for simple, single-shot prompts without roles
 
+> **💡 Tip**: The actual code file [`02-template-formats.ts`](./code/02-template-formats.ts) includes a complex multi-variable template example for deeper learning. Run the file to see all variations!
+
 ---
 
 ## 💡 Few-Shot Prompting
@@ -409,6 +413,8 @@ angry → 😠
 - Great for structured outputs and consistent formatting
 - Reduces need for fine-tuning for many tasks
 
+> **💡 Tip**: The actual code file [`03-few-shot.ts`](./code/03-few-shot.ts) includes an additional code comment generator example demonstrating few-shot learning with different patterns. Run the file to see all variations!
+
 ---
 
 ## 🔗 Prompt Composition
@@ -507,6 +513,8 @@ Closures are a fundamental concept where a function retains access to variables 
 - **Maintainability**: Update shared pieces in one place
 
 **Real-world use**: Build a library of prompt components (tone, context, task) and compose them based on user needs or application state.
+
+> **💡 Tip**: The actual code file [`04-composition.ts`](./code/04-composition.ts) includes additional examples demonstrating customer service scenarios and partial templates. Run the file to see all variations!
 
 ---
 
@@ -670,6 +678,8 @@ When you run this example with `tsx 03-prompt-templates/code/05-structured-outpu
 
 **Why this is powerful**: No more parsing free text with regex or string splitting. The AI does the extraction and formatting for you!
 
+> **💡 Tip**: The actual code file [`05-structured-output.ts`](./code/05-structured-output.ts) demonstrates the versatility of structured outputs by working with multiple different input formats and edge cases. Run the file to see all variations!
+
 ### Example 6: Complex Structured Data
 
 In this example, you'll extract complex nested company information from text using Zod schemas with arrays, nested objects, and various data types.
@@ -815,6 +825,8 @@ CompanySchema = {
 - 🔄 **API responses** with guaranteed format
 - 🎯 **Form filling** from natural language
 - ✅ **Classification tasks** with predefined categories
+
+> **💡 Tip**: The actual code file [`06-zod-schemas.ts`](./code/06-zod-schemas.ts) includes additional examples extracting data for SpaceX and Netflix, demonstrating schema flexibility with different data structures. Run the file to see all variations!
 
 ---
 

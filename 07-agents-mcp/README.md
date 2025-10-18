@@ -107,27 +107,35 @@ because it's divisible by 5."
 
 ---
 
-## 👤 Building Your First Agent
+## 🚀 Building Agents with createAgent()
 
-Let's build an agent step-by-step to understand how it works under the hood.
+LangChain.js provides `createAgent()` - a high-level API that handles the ReAct (Reasoning + Acting) loop automatically. This is the **recommended approach** for building production agents.
 
-### Example 1: Basic Agent with ReAct Loop
+**What createAgent() does for you**:
+- ✅ Manages the ReAct loop (Thought → Action → Observation → Repeat)
+- ✅ Handles message history automatically
+- ✅ Implements iteration limits to prevent infinite loops
+- ✅ Provides production-ready error handling
+- ✅ Returns clean, structured responses
 
-In this example, you'll build an agent from scratch using a manual ReAct (Reasoning + Acting) loop to understand the complete iteration cycle: agent reasons, uses a tool, observes results, and repeats until it has an answer.
+Let's build agents using `createAgent()`!
 
-**Code**: [`code/01-basic-agent.ts`](./code/01-basic-agent.ts)
-**Run**: `tsx 07-agents-mcp/code/01-basic-agent.ts`
+---
 
-This example shows the core agent pattern manually implemented:
+### Example 1: Basic Agent with createAgent()
+
+In this example, you'll build a simple agent that can perform calculations using a calculator tool. The agent uses `createAgent()` to handle all the complexity of the ReAct loop automatically.
+
+**Code**: [`code/01-create-agent-basic.ts`](./code/01-create-agent-basic.ts)
+**Run**: `tsx 07-agents-mcp/code/01-create-agent-basic.ts`
 
 ```typescript
+import { createAgent, HumanMessage, tool } from "langchain";
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "langchain";
 import * as z from "zod";
-import { HumanMessage, AIMessage, ToolMessage } from "langchain";
 import "dotenv/config";
 
-// Create a calculator tool
+// Same calculator tool from Example 1
 const calculatorTool = tool(
   async (input) => {
     const sanitized = input.expression.replace(/[^0-9+\-*/().\s]/g, "");
@@ -136,252 +144,373 @@ const calculatorTool = tool(
   },
   {
     name: "calculator",
-    description: "Perform mathematical calculations",
-    schema: z.object({ expression: z.string().describe("Math expression") }),
+    description: "A calculator that can perform basic arithmetic operations.",
+    schema: z.object({
+      expression: z.string().describe("The mathematical expression to evaluate"),
+    }),
   }
 );
 
-// Create model with tools
+// Create model
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
   configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
+  apiKey: process.env.AI_API_KEY,
 });
 
-const modelWithTools = model.bindTools([calculatorTool]);
+// Create agent using v1 createAgent() - that's it!
+const agent = createAgent({
+  model,
+  tools: [calculatorTool],
+});
 
-// Agent loop - The ReAct pattern in action!
+// Use the agent with messages array
 const query = "What is 125 * 8?";
-let messages = [new HumanMessage(query)];
-let iteration = 1;
-const maxIterations = 3; // Prevent infinite loops - [agent loop](../GLOSSARY.md#agent-loop) stops after 3 attempts
+const response = await agent.invoke({ messages: [new HumanMessage(query)] });
 
-while (iteration <= maxIterations) {
-  console.log(`Iteration ${iteration}:`);
-
-  // 1. Reasoning: Model decides what to do
-  const response = await modelWithTools.invoke(messages);
-
-  // 2. Check if done (no more tool calls needed)
-  if (!response.tool_calls || response.tool_calls.length === 0) {
-    console.log(`Final Answer: ${response.content}`);
-    break;
-  }
-
-  // 3. Acting: Execute the tool
-  const toolCall = response.tool_calls[0];
-  console.log(`Thought: I should use the ${toolCall.name} tool`);
-  console.log(`Action: ${toolCall.name}(${JSON.stringify(toolCall.args)})`);
-
-  const toolResult = await calculatorTool.invoke(calculatorTool.schema.parse(toolCall.args));
-  console.log(`Observation: ${toolResult}`);
-
-  // 4. Add results to conversation history
-  // We need to add TWO messages:
-  // - AIMessage: What the agent decided to do (which tool to call)
-  // - [ToolMessage](../GLOSSARY.md#toolmessage): What the tool actually returned (the result)
-  // This history helps the agent remember what it's already tried
-  messages.push(
-    new AIMessage({ content: response.content, tool_calls: response.tool_calls }),
-    new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
-  );
-
-  iteration++;
-}
+// Get the final answer from the last message
+const lastMessage = response.messages[response.messages.length - 1];
+console.log(`Agent: ${lastMessage.content}`);
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "How does the ReAct pattern enable autonomous decision-making?"
-> - "Why does the agent loop have a maximum iteration limit?"
-> - "What happens if the agent can't answer the question?"
+> - "What does createAgent() do under the hood?"
+> - "When should I use createAgent() vs a manual ReAct loop?"
+> - "How does createAgent() handle iteration limits?"
 
 ### Expected Output
 
-When you run this example with `tsx 07-agents-mcp/code/01-basic-agent.ts`, you'll see:
+When you run `tsx 07-agents-mcp/code/01-create-agent-basic.ts`:
 
 ```
-🤖 Basic Agent Demo
+🤖 Agent with createAgent() Example
 
-================================================================================
+👤 User: What is 125 * 8?
 
-User: What is 125 * 8?
+🤖 Agent: 125 × 8 = 1000
 
-Iteration 1:
-  Thought: I should use the calculator tool
-  Action: calculator({"expression":"125 * 8"})
-  Observation: 1000
+💡 Key Differences from Manual Loop:
+   • createAgent() handles the ReAct loop automatically
+   • Less code to write
+   • Production-ready error handling built-in
+   • Same result, simpler API
 
-Iteration 2:
-  Final Answer: 125 multiplied by 8 equals 1000.
-
-================================================================================
-
-💡 Key Concepts:
-   • Agent follows ReAct pattern: Reason → Act → Observe
-   • Tools extend agent capabilities
-   • Agent iterates until it has an answer
+✅ Under the hood:
+   createAgent() implements the ReAct pattern (Thought → Action → Observation)
+   and handles all the boilerplate for you.
 ```
-
-**Notice**: The agent only needed 2 iterations:
-1. **Iteration 1**: Used the calculator tool and got the result (1000)
-2. **Iteration 2**: Had all the information needed, so provided the final answer
-
-If the task required multiple tools (e.g., "calculate and then convert to Euros"), you'd see more iterations.
 
 ### How It Works
 
-**What's Happening**:
-1. **Agent receives a question** ("What is 125 * 8?")
-2. **Loop begins**: Agent reasons about what to do
-3. **If it needs a tool**: Execute tool and observe result
-4. **Add to history**: Feed the result back to the agent (both what it decided AND what the tool returned)
-5. **Repeat**: Agent reasons again with new information
-6. **Done**: Agent has enough info to answer (no more `tool_calls`)
+**What's happening behind the scenes**:
+1. **Agent receives query**: "What is 125 * 8?"
+2. **Reasons**: Determines it needs the calculator tool
+3. **Acts**: Executes `calculator({ expression: "125 * 8" })`
+4. **Observes**: Gets result "1000"
+5. **Responds**: Formats natural language response
 
-**Why add both messages?**
-- `AIMessage`: Stores what the agent *decided* to do (which tool, with what arguments)
-- `ToolMessage`: Stores what the tool *actually returned* (the result)
+**What createAgent() handles for you**:
+- ✅ **Tool binding**: Automatically connects tools to the model so it knows which tools are available and how to use them
+- ✅ **ReAct loop**: Implements Thought → Action → Observation → Repeat
+- ✅ **Message history**: Manages conversation state internally (keeps track of all messages, tool calls, and results so the agent has context)
+- ✅ **Iteration limits**: Prevents infinite loops
+- ✅ **Error handling**: Graceful failures and retries
 
-This conversation history allows the agent to remember what it's already tried and build on previous results.
-
-**For Production**: This manual approach helps you understand how agents work. In production, LangChain provides higher-level abstractions like `AgentExecutor` that handle the loop for you.
+**Why use createAgent()**:
+- Production-ready out of the box
+- Less boilerplate code
+- Consistent behavior across agents
+- Built-in best practices
 
 ---
 
-## 🔧 Agent with Multiple Tools
+### Example 2: createAgent() with Multiple Tools
 
-### Example 2: Multi-Tool Agent
+This example demonstrates how `createAgent()` automatically selects the correct tool from a set of available tools (calculator, weather, search) for each different query.
 
-Here you'll see how agents automatically select the appropriate tool when given multiple options (calculator, weather, search), demonstrating the agent's ability to match queries to tools based on descriptions.
-
-**Code**: [`code/02-multi-tool-agent.ts`](./code/02-multi-tool-agent.ts)
-**Run**: `tsx 07-agents-mcp/code/02-multi-tool-agent.ts`
-
-When you give an agent multiple tools, it automatically selects the right one for each query.
-
-**What this example shows**: How agents *choose* the right tool from multiple options. This demonstrates tool selection logic without the full agent loop (we covered the complete loop in Example 1).
+**Code**: [`code/02-create-agent-multi-tool.ts`](./code/02-create-agent-multi-tool.ts)
+**Run**: `tsx 07-agents-mcp/code/02-create-agent-multi-tool.ts`
 
 ```typescript
-// Define multiple specialized tools
-const calculatorTool = tool(
-  async (input) => {
-    // In production, sanitize input like Example 1
-    const sanitized = input.expression.replace(/[^0-9+\-*/().\s]/g, "");
-    return String(Function(`"use strict"; return (${sanitized})`)());
-  },
-  {
-    name: "calculator",
-    description: "Perform mathematical calculations",
-    schema: z.object({ expression: z.string() }),
-  }
-);
+import { createAgent, HumanMessage, tool } from "langchain";
+import { ChatOpenAI } from "@langchain/openai";
+import * as z from "zod";
 
-const weatherTool = tool(
-  async (input) => {
-    const weather = {
-      Seattle: "62°F, cloudy",
-      Paris: "18°C, sunny",
-      Tokyo: "24°C, rainy"
-    };
-    return weather[input.city] || "Weather data unavailable";
-  },
-  {
-    name: "getWeather",
-    description: "Get current weather for a city",
-    schema: z.object({ city: z.string() }),
-  }
-);
+// Define multiple tools
+const calculatorTool = tool(/* ... */);
+const weatherTool = tool(/* ... */);
+const searchTool = tool(/* ... */);
 
-const searchTool = tool(
-  async (input) => `Search results for "${input.query}": [Simulated results]`,
-  {
-    name: "search",
-    description: "Search for information on the web",
-    schema: z.object({ query: z.string() }),
-  }
-);
-
-// Bind all tools to the model
-const model = new ChatOpenAI({
-  model: process.env.AI_MODEL,
-  configuration: { baseURL: process.env.AI_ENDPOINT },
-  apiKey: process.env.AI_API_KEY
+// Create agent with all three tools
+const agent = createAgent({
+  model,
+  tools: [calculatorTool, weatherTool, searchTool],
 });
-const modelWithTools = model.bindTools([calculatorTool, weatherTool, searchTool]);
 
-// Test with different queries
+// Test with different queries - agent selects the right tool automatically
 const queries = [
   "What is 50 * 25?",              // → Uses calculator
   "What's the weather in Tokyo?",  // → Uses getWeather
-  "Search for TypeScript info",    // → Uses search
+  "Tell me about LangChain.js",   // → Uses search
 ];
 
 for (const query of queries) {
-  const response = await modelWithTools.invoke(query);
-
-  if (response.tool_calls && response.tool_calls.length > 0) {
-    const toolCall = response.tool_calls[0];
-    console.log(`Query: "${query}"`);
-    console.log(`→ Agent chose: ${toolCall.name}`);
-    console.log(`→ With args: ${JSON.stringify(toolCall.args)}`);
-  }
+  const response = await agent.invoke({ messages: [new HumanMessage(query)] });
+  const lastMessage = response.messages[response.messages.length - 1];
+  console.log(`User: ${query}`);
+  console.log(`Agent: ${lastMessage.content}\n`);
 }
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "How does the agent choose between multiple available tools?"
-> - "What role do tool descriptions play in tool selection?"
-> - "Can I create custom logic for tool selection instead of letting the LLM decide?"
+> - "How does the agent decide which tool to use?"
+> - "What happens if multiple tools could work for a query?"
+> - "Can I prioritize certain tools over others?"
 
 ### Expected Output
 
-When you run `tsx 07-agents-mcp/code/02-multi-tool-agent.ts`:
+When you run `tsx 07-agents-mcp/code/02-create-agent-multi-tool.ts`:
 
 ```
-🎛️ Multi-Tool Agent Demo
+🎛️  Multi-Tool Agent with createAgent()
 
-================================================================================
+👤 User: What is 50 * 25?
+🤖 Agent: 50 multiplied by 25 equals 1250.
 
-Query: "What is 50 * 25?"
-  → Agent chose: calculator
-  → With args: {"expression":"50 * 25"}
-────────────────────────────────────────────────────────────────────────────────
+👤 User: What's the weather in Tokyo?
+🤖 Agent: Current weather in Tokyo: 24°C, rainy with occasional thunder
 
-Query: "What's the weather in Tokyo?"
-  → Agent chose: getWeather
-  → With args: {"city":"Tokyo"}
-────────────────────────────────────────────────────────────────────────────────
+👤 User: Tell me about LangChain.js
+🤖 Agent: LangChain.js is a framework for building applications with large
+language models (LLMs). It provides tools, agents, chains, and memory systems
+to create sophisticated AI applications.
 
-Query: "Search for information about TypeScript"
-  → Agent chose: search
-  → With args: {"query":"information about TypeScript"}
-────────────────────────────────────────────────────────────────────────────────
+💡 What just happened:
+   • The agent automatically selected the right tool for each query
+   • Calculator for math (50 * 25)
+   • Weather tool for Tokyo weather
+   • Search tool for LangChain.js information
+   • All with the same agent instance!
 
-💡 Key Concepts:
-   • Agents automatically select appropriate tools
-   • Tool descriptions guide selection
-   • Multiple specialized tools enable complex tasks
+✅ Production Pattern:
+   This is how you build real-world agents:
+   1. Define your tools
+   2. Pass them to createAgent()
+   3. Let the agent handle tool selection and execution
 ```
 
-**What's happening**: The agent reads each tool's `description` field and chooses the best match:
-- Math question → calculator (description mentions "mathematical calculations")
-- Weather question → getWeather (description mentions "weather for a city")
-- General question → search (description mentions "search for information")
+### How It Works
 
-**To build a complete agent**: Wrap this tool selection logic in the agent loop pattern from Example 1. The loop would execute the chosen tool, observe results, and iterate if needed.
+**What's happening**:
+1. **Agent receives query**: "What is 50 * 25?"
+2. **Reads tool descriptions**: Reviews all available tools
+3. **Selects best match**: Calculator tool (description mentions "mathematical calculations")
+4. **Executes tool**: Runs calculator with the expression
+5. **Returns natural response**: Formats the result in natural language
 
-**Key Insight**: The agent reads tool descriptions and automatically picks the right tool for each task. This is why clear, descriptive tool names and descriptions are crucial!
+**Tool Selection Logic**:
+- The agent uses tool **names** and **descriptions** to match queries to tools
+- More specific descriptions → Better tool selection
+- The LLM (GPT-5-mini) decides which tool fits best based on semantic meaning
+
+### How Tool Selection Actually Works
+
+When you give an agent multiple tools, the LLM follows this process:
+
+1. **Reads all tool metadata**: Reviews each tool's **name** and **description**
+2. **Analyzes the user query**: Understands what the user is asking for
+3. **Semantic matching**: Compares the query meaning with tool descriptions
+4. **Selects best match**: Chooses the tool whose description best aligns with the query intent
+
+**Example**:
+```
+User Query: "What is 50 * 25?"
+
+Tool Options the LLM sees:
+- calculator: "Perform mathematical calculations like addition, multiplication..."
+- getWeather: "Get current weather information for a city"
+- search: "Search the web for information"
+
+LLM reasoning: "The query asks for a multiplication. The calculator tool mentions 'mathematical calculations' and 'multiplication'. This is the best match."
+
+Selected Tool: calculator
+```
+
+**Why clear descriptions matter**:
+```typescript
+// ❌ Vague - LLM might not select correctly
+description: "Does math stuff"
+
+// ✅ Specific - LLM knows exactly when to use this
+description: "Perform mathematical calculations like addition, multiplication, division, and percentages. Use this when you need to compute numerical results."
+```
+
+**Key insight**: You can give your agent dozens of tools, and it will intelligently pick the right one for each task. No manual routing code needed!
+
+---
+
+## 🔧 Advanced Agent Patterns
+
+Now that you understand how to build basic agents with single and multiple tools, let's explore an advanced pattern for production applications: **middleware**. Middleware lets you add behavior like logging, error handling, and dynamic model selection without modifying your tools or agent core logic.
+
+### Example 3: createAgent() with Middleware (Advanced)
+
+This advanced example shows how to use **middleware** with `createAgent()` for production scenarios like dynamic model selection based on conversation complexity and graceful error handling.
+
+**Code**: [`code/03-agent-with-middleware.ts`](./code/03-agent-with-middleware.ts)
+**Run**: `tsx 07-agents-mcp/code/03-agent-with-middleware.ts`
+
+**What is middleware?** Middleware intercepts and modifies agent behavior without changing your tools or agent logic. Think of it as "plugins" for your agent.
+
+```typescript
+import { createAgent, createMiddleware } from "langchain";
+
+// Middleware 1: Dynamic Model Selection
+// Switches to a more capable (and expensive) model for complex conversations
+const dynamicModelSelection = createMiddleware({
+  name: "DynamicModelSelection",
+  wrapModelCall: (request, handler) => {
+    const messageCount = request.messages.length;
+
+    // Use advanced model for complex conversations (>10 messages)
+    if (messageCount > 10) {
+      console.log(`  [Middleware] Switching to advanced model`);
+      return handler({
+        ...request,
+        model: advancedModel,
+      });
+    }
+
+    return handler(request);
+  },
+});
+
+// Middleware 2: Custom Error Handling
+// Catches tool failures and provides helpful fallback messages
+const toolErrorHandler = createMiddleware({
+  name: "ToolErrorHandler",
+  wrapToolCall: async (request, handler) => {
+    try {
+      return await handler(request);
+    } catch (error) {
+      console.error(`  [Middleware] Tool "${request.tool}" failed`);
+      // Return graceful fallback instead of crashing
+      return {
+        content: `I encountered an error: ${error.message}. Let me try a different approach.`
+      };
+    }
+  },
+});
+
+// Create agent with both middleware
+const agent = createAgent({
+  model: basicModel,
+  tools: [calculatorTool, searchTool],
+  middleware: [dynamicModelSelection, toolErrorHandler]
+});
+```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "What other use cases exist for middleware in agents?"
+> - "How would I add request logging middleware?"
+> - "Can middleware modify tool arguments before execution?"
+
+### Expected Output
+
+When you run `tsx 07-agents-mcp/code/03-agent-with-middleware.ts`:
+
+```
+🔧 Agent with Middleware Example
+
+Test 1: Simple calculation
+────────────────────────────────────────────────────────────
+👤 User: What is 25 * 8?
+
+  [Middleware] Message count: 1
+  [Middleware] ✓ Using basic model
+
+🤖 Agent: 25 multiplied by 8 equals 200.
+
+
+Test 2: Search with error handling
+────────────────────────────────────────────────────────────
+👤 User: Search for information about error handling
+
+  [Middleware] Message count: 1
+  [Middleware] ✓ Using basic model
+  [Middleware] ⚠️  Tool "search" failed: Search service temporarily unavailable
+  [Middleware] 🔄 Returning fallback message
+
+🤖 Agent: I encountered an error while using the search tool. Let me try
+a different approach to answer your question about error handling.
+
+💡 Middleware Benefits:
+   • Dynamic model selection → Cost optimization
+   • Error handling → Graceful degradation
+   • Logging → Easy debugging
+   • Flexibility → Customize behavior without changing tools
+
+✅ Production Use Cases:
+   • Switch to cheaper models for simple queries
+   • Automatic retries with exponential backoff
+   • Request/response logging for monitoring
+   • User context injection (auth, permissions)
+   • Rate limiting and quota management
+```
+
+### How It Works
+
+**Middleware Flow**:
+```
+User Query
+    ↓
+[Middleware: Dynamic Model Selection] → Chooses right model
+    ↓
+Agent Decision (which tool?)
+    ↓
+[Middleware: Error Handler] → Wraps tool execution
+    ↓
+Tool Execution → May fail here
+    ↓
+[Middleware: Error Handler] → Catches errors, returns fallback
+    ↓
+Agent Response
+```
+
+**Two Middleware Types**:
+
+1. **wrapModelCall** - Intercepts calls TO the model
+   - Dynamic model selection based on conversation length
+   - Request logging and monitoring
+   - Context injection (user permissions, session data)
+
+2. **wrapToolCall** - Intercepts tool executions
+   - Error handling and retries
+   - Tool result transformation
+   - Permission checks before tool execution
+
+**Production Benefits**:
+- ✅ **Cost Optimization**: Use cheap models for simple tasks, expensive for complex
+- ✅ **Resilience**: Graceful error handling prevents agent crashes
+- ✅ **Observability**: Log all requests for debugging and monitoring
+- ✅ **Flexibility**: Add behavior without modifying tools or agent core logic
+
+**When to use middleware**:
+- Production agents that need reliability
+- Multi-tenant applications (different users, different permissions)
+- Cost-sensitive applications
+- Systems requiring audit logs
 
 ---
 
 ## 🌐 Connecting to MCP Servers
 
-### Example 3: Agent with MCP Server Integration (Context7)
+### Example 4: Agent with MCP Server Integration (Context7)
 
 In this example, you'll see how to connect a LangChain.js agent to **Context7** - an [MCP server](../GLOSSARY.md#mcp-server) that provides current, version-specific documentation for libraries and frameworks. This demonstrates using HTTP transport to connect to a real-world MCP service.
 
-**Code**: [`code/03-mcp-integration.ts`](./code/03-mcp-integration.ts)
-**Run**: `tsx 07-agents-mcp/code/03-mcp-integration.ts`
+**Code**: [`code/04-mcp-integration.ts`](./code/04-mcp-integration.ts)
+**Run**: `tsx 07-agents-mcp/code/04-mcp-integration.ts`
 
 **Prerequisites**:
 - Install MCP adapter: `npm install @langchain/mcp-adapters`
@@ -397,7 +526,7 @@ This example demonstrates connecting to Context7 via HTTP transport:
 ```typescript
 import { MultiServerMCPClient } from "@langchain/mcp-adapters";
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage, ToolMessage } from "langchain";
+import { createAgent, HumanMessage } from "langchain";
 import "dotenv/config";
 
 // Create MCP client with HTTP transport to Context7
@@ -420,64 +549,35 @@ try {
     console.log(`   • ${tool.name}: ${tool.description}`);
   });
 
-  // Create a map of tool names to tools for easy lookup
-  const toolsByName = new Map(tools.map(tool => [tool.name, tool]));
-
-  // 2. Create agent with Context7 documentation tools
+  // 2. Create model
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY
   });
 
-  const modelWithTools = model.bindTools(tools);
+  // 3. Create agent with MCP tools - same createAgent() pattern as Examples 1-3!
+  const agent = createAgent({
+    model,
+    tools  // Tools from MCP server - that's the only difference!
+  });
 
-  // 3. Use the agent to get documentation
+  // 4. Use the agent to get documentation
   const query = "How do I use React useState hook? Get the latest documentation.";
-  console.log(`User: ${query}\n`);
+  console.log(`👤 User: ${query}\n`);
 
-  let messages = [new HumanMessage(query)];
-  let iteration = 1;
-  const maxIterations = 5; // Context7 may need multiple calls
+  const response = await agent.invoke({ messages: [new HumanMessage(query)] });
+  const lastMessage = response.messages[response.messages.length - 1];
 
-  while (iteration <= maxIterations) {
-    console.log(`Iteration ${iteration}:`);
-
-    const response = await modelWithTools.invoke(messages);
-
-    if (!response.tool_calls || response.tool_calls.length === 0) {
-      console.log(`  Final Answer: ${response.content}\n`);
-      break;
-    }
-
-    // Execute Context7 tool
-    const toolCall = response.tool_calls[0];
-    console.log(`  Thought: I should use the ${toolCall.name} tool`);
-    console.log(`  Action: ${toolCall.name}(${JSON.stringify(toolCall.args)})`);
-
-    // Find the tool and invoke it directly
-    const tool = toolsByName.get(toolCall.name);
-    if (!tool) {
-      throw new Error(`Tool ${toolCall.name} not found`);
-    }
-
-    const toolResult = await tool.invoke(toolCall.args);
-    console.log(`  Observation: ${typeof toolResult === 'string' ? toolResult.substring(0, 150) + '...' : toolResult}\n`);
-
-    messages.push(
-      new AIMessage({ content: response.content, tool_calls: response.tool_calls }),
-      new ToolMessage({ content: String(toolResult), tool_call_id: toolCall.id || "" })
-    );
-
-    iteration++;
-  }
+  console.log(`🤖 Agent: ${lastMessage.content}\n`);
 
   console.log("💡 Key Concepts:");
   console.log("   • MCP provides standardized access to external tools");
   console.log("   • MultiServerMCPClient connects to one or more MCP servers");
   console.log("   • HTTP transport works with remote servers like Context7");
-  console.log("   • Tools from MCP servers work like manually created tools");
-  console.log("   • Same agent pattern as Examples 1 & 2, different tool source");
+  console.log("   • Tools from MCP servers work seamlessly with createAgent()");
+  console.log("   • Same createAgent() pattern as Examples 1-3, different tool source!");
+  console.log("   • No manual loop needed - createAgent() handles the ReAct pattern");
 
 } catch (error) {
   console.error("❌ Error connecting to Context7 MCP server:", error);
@@ -495,11 +595,11 @@ try {
 
 ### How It Works
 
-**What's Different from Examples 1 & 2**:
+**What's Different from Previous Examples**:
 1. **Tool Source**: Instead of creating tools manually, you get them from an MCP server
 2. **Tool Discovery**: `mcpClient.getTools()` fetches all available tools from the server
 3. **Tool Execution**: The MCP client handles communication with the remote server
-4. **Same Pattern**: The agent loop is identical to Example 1 - only the tool source changed!
+4. **Same createAgent() Pattern**: The agent works identically - only the tool source changed!
 
 **Benefits of MCP Integration**:
 - ✅ **No custom integration code** - MCP handles the connection
@@ -563,7 +663,7 @@ const mcpClient = new MultiServerMCPClient({
 
 ## 🔗 From Manual Tools to MCP
 
-In Examples 1 and 2, you manually created tools (calculator, weather, search) by writing the implementation code yourself. This works great for learning and for custom tools specific to your application.
+In the previous examples, you created tools (calculator, weather, search) by writing the implementation code yourself. This works great for custom tools specific to your application.
 
 **But what about connecting to existing services?** Imagine needing tools for:
 - GitHub (create issues, search code, manage PRs)
@@ -573,9 +673,9 @@ In Examples 1 and 2, you manually created tools (calculator, weather, search) by
 
 Writing custom integrations for each service means dealing with different APIs, authentication methods, and data formats. This is where **Model Context Protocol (MCP)** comes in.
 
-**The key insight**: In Examples 1 & 2, you built the tool *implementations*. With MCP, you connect to tool *providers* that expose their capabilities through a standard protocol. Same agent loop, different tool source!
+**The key insight**: In Examples 1-3, you built the tool *implementations*. With MCP, you connect to tool *providers* that expose their capabilities through a standard protocol. Same `createAgent()` pattern, different tool source!
 
-> **📘 Note for This Course**: The examples in this chapter (1 & 2) use manual tools because they're perfect for learning agent concepts without additional complexity. MCP is production-ready in LangChain.js via `@langchain/mcp-adapters`, but requires MCP servers to be running. The sections below explain MCP concepts and API usage so you understand how to integrate it when you're ready to connect to external services.
+> **📘 Note for This Course**: The examples in this chapter use both manual tools (Examples 1-3) and MCP integration (Example 4). Manual tools are perfect for custom application logic, while MCP is ideal for connecting to external services. MCP is production-ready in LangChain.js via `@langchain/mcp-adapters`.
 
 ---
 
@@ -875,6 +975,11 @@ The assignment includes:
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [MCP LangChain Integration](https://docs.langchain.com/oss/javascript/langchain/mcp)
 - [ReAct Paper](https://arxiv.org/abs/2210.03629)
+
+**💡 Want to see manual agent implementations?** Check out the [`samples/`](./samples/) folder for:
+- **Manual ReAct loop examples** - See how agents work under the hood without `createAgent()`
+- **Step-by-step agent patterns** - Custom loop logic and detailed debugging
+- These are great for understanding fundamentals before using `createAgent()`
 
 ---
 

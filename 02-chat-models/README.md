@@ -51,6 +51,115 @@ Chat models don't actually "remember" previous messages. Instead, you send the e
 
 **Think of it like this**: Every time you send a message, you're showing the AI the entire conversation thread so far.
 
+---
+
+### Message Types in LangChain
+
+LangChain provides four message types for building conversations. Each type serves a specific purpose:
+
+#### 1. SystemMessage - Setting the AI's Behavior
+
+Establishes initial instructions that shape how the model responds throughout the conversation.
+
+```typescript
+const systemMsg = new SystemMessage("You are a helpful coding tutor who gives clear, concise explanations.");
+```
+
+**Use for**: Setting tone, defining roles, establishing response guidelines
+
+---
+
+#### 2. HumanMessage - User Input
+
+Represents messages from the user. This is your input to the AI.
+
+```typescript
+const userMsg = new HumanMessage("What is TypeScript?");
+```
+
+**Use for**: User questions, requests, conversation input
+
+---
+
+#### 3. AIMessage - Model Responses
+
+Represents the AI's responses. Contains the response text plus useful metadata.
+
+```typescript
+const response = await model.invoke(messages);
+// response is an AIMessage with these key fields:
+// - content: The actual text response
+// - usage_metadata: Token usage information (see Example 6)
+// - id: Unique message identifier
+// - tool_calls: Tool invocations (empty array if none - see Chapter 5)
+```
+
+**Use for**: Storing AI responses in conversation history
+
+---
+
+#### 4. ToolMessage - Tool Results
+
+Represents results from tool execution. You'll learn about this in Chapter 5.
+
+```typescript
+const toolResult = new ToolMessage({
+  content: "Result from tool",
+  tool_call_id: "call_123"
+});
+```
+
+**Use for**: Feeding tool execution results back to the AI (covered in Chapter 5)
+
+---
+
+**In this chapter**, you'll primarily work with **SystemMessage**, **HumanMessage**, and **AIMessage** to build multi-turn conversations.
+
+---
+
+### Creating Messages: Two Approaches
+
+LangChain supports multiple ways to create messages:
+
+**1. Message Classes** (Recommended for this course - most explicit):
+
+```typescript
+import { SystemMessage, HumanMessage, AIMessage } from "langchain";
+
+const messages = [
+  new SystemMessage("You are helpful"),
+  new HumanMessage("Hello!")
+];
+```
+
+**2. Dictionary Format** (Alternative - more concise):
+
+```typescript
+const messages = [
+  { role: "system", content: "You are helpful" },
+  { role: "user", content: "Hello!" }
+];
+```
+
+**3. String Shortcut** (For single HumanMessage):
+
+```typescript
+// These are equivalent:
+const response = await model.invoke("Hello!");
+const response = await model.invoke(new HumanMessage("Hello!"));
+```
+
+**Why we use message classes in this course**:
+
+- ✅ More explicit and easier to understand
+- ✅ Better type safety and autocomplete
+- ✅ Clear which message type you're creating
+- ✅ Easier to add metadata later
+
+The dictionary format works identically but is less clear for learning. You can use either approach in your own code.
+
+---
+
 ### Example 1: Multi-Turn Conversation
 
 The following example shows you how to maintain conversation context across multiple exchanges by storing message history and referencing previous interactions.
@@ -233,6 +342,8 @@ You'll notice the text appears progressively, word by word, rather than all at o
 - ❌ When you need the full response first (parsing, validation, post-processing)
 
 > **💡 Note**: The actual file [`02-streaming.ts`](./code/02-streaming.ts) includes additional timing measurements and a comparison between streaming and non-streaming approaches to demonstrate the performance benefits. The code above shows the core streaming concept for clarity.
+
+> **💡 Advanced**: To track token usage with streaming, some providers support `streamOptions: { includeUsage: true }` which includes usage metadata in the final chunk. This is provider-dependent - check your provider's documentation for availability.
 
 ---
 
@@ -425,6 +536,8 @@ main().catch(console.error);
 - Standardized across LangChain ecosystem
 
 > **💡 Advanced**: LangGraph provides even more sophisticated retry policies with `retryPolicy` for complex agent workflows. You'll learn about this in advanced courses.
+
+> **⚠️ Known Limitation**: `withRetry()` currently has issues with streaming (`.stream()`). Retry logic works correctly with `.invoke()` but may not execute with `.stream()`. For critical operations requiring retry logic, use `.invoke()` instead of `.stream()`.
 
 ---
 

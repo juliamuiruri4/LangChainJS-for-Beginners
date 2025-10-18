@@ -14,9 +14,8 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "langchain";
+import { AIMessage,HumanMessage,ToolMessage,tool } from "langchain";
 import * as z from "zod";
-import { HumanMessage, AIMessage, ToolMessage } from "langchain";
 import "dotenv/config";
 
 // Create a calculator tool

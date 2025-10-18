@@ -43,7 +43,9 @@ async function emotionToEmojiExample() {
   // Combine with the final question
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Convert emotions to emojis based on these examples:"],
-    fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
+    // Type assertion needed: TypeScript type system limitation with message unions, not a v1 API issue
+    // The functionality works correctly - FewShotChatMessagePromptTemplate is fully compatible at runtime
+    fewShotTemplate as any,
     ["human", "{input}"],
   ]);
 
@@ -95,7 +97,9 @@ async function codeCommentExample() {
 
   const finalTemplate = ChatPromptTemplate.fromMessages([
     ["system", "Generate clear, concise comments for code based on these examples:"],
-    fewShotTemplate as any, // Type assertion due to FewShotChatMessagePromptTemplate type compatibility issue
+    // Type assertion needed: TypeScript type system limitation with message unions, not a v1 API issue
+    // The functionality works correctly - FewShotChatMessagePromptTemplate is fully compatible at runtime
+    fewShotTemplate as any,
     ["human", "Code: {code}"],
   ]);
 
