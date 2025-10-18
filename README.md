@@ -71,10 +71,10 @@ This course contains **8 chapters** (setup + 7 chapters), each building on the p
 | 1 | [Introduction to LangChain.js](./01-introduction/README.md) | Understanding the framework and core concepts | LangChain fundamentals, first LLM call |
 | 2 | [Chat Models & Basic Interactions](./02-chat-models/README.md) | Chat models, messages, and conversations | Message types, streaming, callbacks |
 | 3 | [Prompts, Messages, and Structured Outputs](./03-prompts-messages-outputs/README.md) | Working with prompts, message arrays, and type-safe outputs | Messages, templates, Zod schemas |
-| 4 | [Documents, Embeddings & Semantic Search](./04-documents-embeddings-semantic-search/README.md) | Loading documents, creating embeddings, and building semantic search | Vector embeddings, similarity search |
-| 5 | [Function Calling & Tools](./05-function-calling-tools/README.md) | Extending AI capabilities with function calling and tools | Zod schemas, tool binding, type safety |
-| 6 | [Building RAG Systems](./06-rag-systems/README.md) | Combining retrieval with generation using LCEL | RAG pattern, LCEL chains, retrieval |
-| 7 | [Getting Started with Agents & MCP](./07-agents-mcp/README.md) | Building autonomous agents and integrating Model Context Protocol | ReAct pattern, agent loops, MCP |
+| 4 | [Function Calling & Tools](./04-function-calling-tools/README.md) | Extending AI capabilities with function calling and tools | Zod schemas, tool binding, type safety |
+| 5 | [Getting Started with Agents & MCP](./05-agents-mcp/README.md) | Building autonomous agents and integrating Model Context Protocol | ReAct pattern, agent loops, MCP |
+| 6 | [Documents, Embeddings & Semantic Search](./06-documents-embeddings-semantic-search/README.md) | Loading documents, creating embeddings, and building semantic search | Vector embeddings, similarity search |
+| 7 | [Building Agentic RAG Systems](./07-agentic-rag-systems/README.md) | Combining agents, tools, and retrieval to build intelligent RAG systems | Agentic RAG, retrieval tools, agent-controlled search |
 
 Each chapter includes:
 - 📖 **Conceptual explanations** with real-world analogies
