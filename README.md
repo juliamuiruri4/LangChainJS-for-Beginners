@@ -64,7 +64,7 @@ This course takes you from zero to building robust AI applications. Here's your 
 > [!TIP]
 > **🎯 Why This Course is Different: Agent-First Philosophy**
 >
-> Most LangChain tutorials teach document search first, then basic RAG systems. This course takes a **modern, agent-first approach**:
+> This course takes a **modern, agent-first approach**:
 >
 > 1. **First**, you'll build autonomous agents that can reason and use tools (Chapters 4-5)
 > 2. **Then**, you'll learn document processing and semantic search (Chapter 6)
@@ -79,7 +79,7 @@ This course takes you from zero to building robust AI applications. Here's your 
 - 🔌 **Switch AI providers in seconds** - Start with free GitHub Models, move to Azure for production. Same code, just change one line!
 - 🧩 **Don't reinvent the wheel** - Get pre-built solutions for common patterns (chatbots, document search, agents). Focus on your unique features.
 - 🐛 **Catch errors before production** - TypeScript support means your editor catches mistakes as you type. No more "undefined is not a function" surprises.
-- 👥 **Learn from thousands of developers** - Active community, extensive documentation, and countless examples. When you're stuck, help is available.
+- 👥 **Learn from thousands of developers** - Active community, [extensive documentation](https://docs.langchain.com/oss/javascript/langchain/overview), and countless examples. When you're stuck, help is available.
 - ⚡ **Ship faster** - Get a working prototype in hours, not weeks. Templates and examples help you start strong.
 
 > [!TIP]
