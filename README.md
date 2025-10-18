@@ -134,9 +134,12 @@ You'll need access to an AI provider. We recommend:
 
 ---
 
-## 📖 Course Resources
+## 📖 Course Resources and Additional Samples
 
 - **[Glossary](./GLOSSARY.md)** - Comprehensive definitions of all terms used throughout the course
+- **[LangChain.js Documentation](https://docs.langchain.com/oss/javascript/langchain/overview)** - Official LangChain.js docs for deeper dives
+- **[AI Agent with MCP tools Sample](https://github.com/microsoft/ai-agents-for-beginners-sample)** - Learn how to build a complete burger ordering system with a serverless API, web interfaces, and an MCP server that enables AI agents to browse menus, place orders, and track order status.
+- **[AI Travel Agents Sample](https://github.com/Azure-Samples/azure-ai-travel-agents)** - Learn how to orchestrate multiple AI agents to create a travel planning application using Azure AI services.
 
 ---
 
