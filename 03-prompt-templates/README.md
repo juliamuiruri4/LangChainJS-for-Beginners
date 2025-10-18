@@ -528,7 +528,7 @@ Before we dive into structured outputs, let's understand the tool we'll be using
 
 **Quick example**:
 ```typescript
-import { z } from "zod";
+import * as z from "zod";
 
 // Define a schema
 const PersonSchema = z.object({
@@ -584,7 +584,7 @@ Here you'll use Zod schemas to get typed, structured data from AI instead of fre
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {
@@ -680,7 +680,7 @@ In this example, you'll extract complex nested company information from text usi
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {

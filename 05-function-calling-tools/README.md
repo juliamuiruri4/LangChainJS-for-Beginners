@@ -235,8 +235,8 @@ In this example, you'll create a basic calculator tool using Zod schema to defin
 **Run**: `tsx 05-function-calling-tools/code/01-simple-tool.ts`
 
 ```typescript
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Define calculator tool
@@ -309,8 +309,8 @@ Here you'll bind tools to a model and see how the LLM generates structured tool 
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 const calculatorTool = tool(

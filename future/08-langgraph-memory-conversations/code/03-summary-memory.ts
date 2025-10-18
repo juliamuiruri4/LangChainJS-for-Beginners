@@ -5,7 +5,7 @@
 
 import { ChatOpenAI } from "@langchain/openai";
 import { StateGraph, START, END, MemorySaver, Annotation } from "@langchain/langgraph";
-import { HumanMessage, SystemMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
+import { HumanMessage, SystemMessage, AIMessage, BaseMessage } from "langchain";
 import "dotenv/config";
 
 const ConversationState = Annotation.Root({

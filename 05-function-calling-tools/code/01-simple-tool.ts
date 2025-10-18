@@ -9,8 +9,8 @@
  * - "What security considerations should I have when using Function() to evaluate expressions?"
  */
 
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
+import { tool } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Define calculator tool

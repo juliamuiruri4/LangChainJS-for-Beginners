@@ -5,9 +5,9 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { ToolMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
-import { z } from "zod";
+import { tool } from "langchain";
+import { ToolMessage, HumanMessage, AIMessage } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Define weather tool with Zod schema

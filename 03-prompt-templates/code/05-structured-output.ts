@@ -9,7 +9,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function main() {

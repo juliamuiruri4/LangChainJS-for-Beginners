@@ -7,13 +7,12 @@
 
 import { ChatOpenAI } from "@langchain/openai";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-import { createRetrievalChain } from "langchain/chains/retrieval";
-import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { createStuffDocumentsChain } from "@langchain/classic/chains/combine_documents";
+import { createRetrievalChain } from "@langchain/classic/chains/retrieval";
+import { HumanMessage, AIMessage } from "langchain";
 import * as readline from "readline";
 import "dotenv/config";
 
@@ -51,7 +50,7 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
   });
@@ -67,23 +66,7 @@ async function main() {
   const vectorStore = await MemoryVectorStore.fromDocuments(knowledgeBase, embeddings);
   const retriever = vectorStore.asRetriever({ k: 2 });
 
-  // Create a history-aware retriever that reformulates questions based on chat history
-  const historyAwarePrompt = ChatPromptTemplate.fromMessages([
-    new MessagesPlaceholder("chat_history"),
-    ["user", "{input}"],
-    [
-      "user",
-      "Given the conversation above, generate a search query to look up information relevant to the conversation",
-    ],
-  ]);
-
-  const historyAwareRetriever = await createHistoryAwareRetriever({
-    llm: model,
-    retriever,
-    rephrasePrompt: historyAwarePrompt,
-  });
-
-  // Create the answer generation prompt
+  // Create the answer generation prompt with conversation history
   const answerPrompt = ChatPromptTemplate.fromMessages([
     ["system", "Answer the user's questions based on the below context:\n\n{context}"],
     new MessagesPlaceholder("chat_history"),
@@ -96,7 +79,7 @@ async function main() {
   });
 
   const conversationalRagChain = await createRetrievalChain({
-    retriever: historyAwareRetriever,
+    retriever,
     combineDocsChain,
   });
 

@@ -6,7 +6,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "langchain";
 import * as readline from "readline";
 import "dotenv/config";
 

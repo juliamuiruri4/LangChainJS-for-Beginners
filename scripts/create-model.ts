@@ -41,7 +41,7 @@ export function createChatModel(options?: ConstructorParameters<typeof ChatOpenA
  */
 export function createEmbeddingsModel(options?: ConstructorParameters<typeof OpenAIEmbeddings>[0]) {
   return new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
     ...options, // Allow overriding any defaults

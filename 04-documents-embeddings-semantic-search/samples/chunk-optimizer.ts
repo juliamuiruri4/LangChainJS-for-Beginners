@@ -5,7 +5,7 @@
  * Run: npx tsx 04-documents-embeddings-semantic-search/samples/chunk-optimizer.ts
  */
 
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import "dotenv/config";
 
 const longDocument = `

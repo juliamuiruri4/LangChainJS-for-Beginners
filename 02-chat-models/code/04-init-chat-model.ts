@@ -16,7 +16,7 @@
 
 import { initChatModel } from "langchain/chat_models/universal";
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage } from "@langchain/core/messages";
+import { HumanMessage } from "langchain";
 import "dotenv/config";
 
 async function standardOpenAIExample() {

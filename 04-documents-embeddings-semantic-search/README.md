@@ -83,7 +83,7 @@ In this example, you'll learn how to load text files using TextLoader and access
 First, create a sample text file:
 
 ```typescript
-import { TextLoader } from "langchain/document_loaders/fs/text";
+import { TextLoader } from "@langchain/classic/document_loaders/fs/text";
 import { writeFileSync } from "fs";
 
 // Create sample data
@@ -183,7 +183,7 @@ Here you'll split long documents into manageable chunks using RecursiveCharacter
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/02-splitting.ts`
 
 ```typescript
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 const text = `
 [Long article about AI and machine learning...]
@@ -282,7 +282,7 @@ This example compares document chunks with and without overlap to show you how o
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/03-overlap.ts`
 
 ```typescript
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 const text = "Your sample text here...";
 
@@ -358,8 +358,8 @@ In this example, you'll learn how to add and preserve metadata (source, category
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/04-metadata.ts`
 
 ```typescript
-import { Document } from "langchain/document";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { Document } from "@langchain/core/documents";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 // Create documents with metadata
 const docs = [
@@ -592,9 +592,9 @@ In this example, you'll build a vector store from documents and perform semantic
 **Run**: `tsx 04-documents-embeddings-semantic-search/code/06-vector-store.ts`
 
 ```typescript
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { Document } from "langchain/document";
+import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
 const embeddings = new OpenAIEmbeddings({

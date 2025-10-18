@@ -21,7 +21,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage, ToolMessage } from "langchain";
 import "dotenv/config";
 import { MultiServerMCPClient } from "@langchain/mcp-adapters";
 

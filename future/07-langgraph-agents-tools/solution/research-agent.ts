@@ -5,11 +5,11 @@
  * Run: npx tsx 07-langgraph-agents-tools/solution/research-agent.ts
  */
 
-import { tool } from "@langchain/core/tools";
+import { tool } from "langchain";
 import { ChatOpenAI } from "@langchain/openai";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { HumanMessage } from "@langchain/core/messages";
-import { z } from "zod";
+import { HumanMessage } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Simulated knowledge base for research

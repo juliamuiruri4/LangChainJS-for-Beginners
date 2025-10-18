@@ -8,16 +8,16 @@
  * - "When would I use a persistent vector store instead of MemoryVectorStore?"
  */
 
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { Document } from "langchain/document";
+import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 
 async function main() {
   console.log("🗄️  Vector Store and Semantic Search\n");
 
   const embeddings = new OpenAIEmbeddings({
-    model: process.env.AI_EMBEDDING_MODEL,
+    model: process.env.AI_EMBEDDING_MODEL || "text-embedding-3-small",
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
   });

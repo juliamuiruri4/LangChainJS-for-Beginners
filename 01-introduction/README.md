@@ -212,7 +212,7 @@ This example shows you how to use structured message types (SystemMessage and Hu
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+import { HumanMessage, SystemMessage } from "langchain";
 import "dotenv/config";
 
 async function main() {

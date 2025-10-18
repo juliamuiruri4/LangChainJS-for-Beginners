@@ -6,7 +6,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "langchain";
 import { promises as fs } from "fs";
 import * as path from "path";
 import * as readline from "readline";

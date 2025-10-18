@@ -4,7 +4,7 @@
  */
 
 import { StateGraph, END, Annotation } from "@langchain/langgraph";
-import { BaseMessage } from "@langchain/core/messages";
+import { BaseMessage } from "langchain";
 const AgentState = Annotation.Root({
   messages: Annotation<BaseMessage[]>({
     reducer: (left, right) => left.concat(right),

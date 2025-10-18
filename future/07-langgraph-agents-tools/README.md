@@ -83,11 +83,11 @@ In modern LangChain.js, we use the `tool()` function with Zod schemas for type-s
 **Code**: [`code/01-simple-tool.ts`](./code/01-simple-tool.ts)
 
 ```typescript
-import { tool } from "@langchain/core/tools";
+import { tool } from "langchain";
 import { ChatOpenAI } from "@langchain/openai";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { HumanMessage } from "@langchain/core/messages";
-import { z } from "zod";
+import { HumanMessage } from "langchain";
+import * as z from "zod";
 import "dotenv/config";
 
 // Create a calculator tool with schema validation

@@ -380,7 +380,7 @@ Use another LLM to evaluate responses!
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { z } from "zod";
+import * as z from "zod";
 import "dotenv/config";
 
 async function evaluateWithLLM(question: string, answer: string) {

@@ -7,7 +7,7 @@
 
 import { ChatOpenAI } from "@langchain/openai";
 import { StateGraph, START, END, MemorySaver, MessagesAnnotation } from "@langchain/langgraph";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "langchain";
 import "dotenv/config";
 
 async function main() {

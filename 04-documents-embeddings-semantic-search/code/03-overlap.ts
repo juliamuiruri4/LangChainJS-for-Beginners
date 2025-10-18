@@ -8,7 +8,7 @@
  * - "How does overlap affect the total number of chunks created?"
  */
 
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 async function main() {
   console.log("🔄 Chunk Overlap Comparison\n");

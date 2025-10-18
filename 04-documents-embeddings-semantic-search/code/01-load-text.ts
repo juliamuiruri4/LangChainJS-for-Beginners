@@ -8,7 +8,7 @@
  * - "How can I load multiple text files from a directory at once?"
  */
 
-import { TextLoader } from "langchain/document_loaders/fs/text";
+import { TextLoader } from "@langchain/classic/document_loaders/fs/text";
 import { writeFileSync, mkdirSync } from "fs";
 
 async function main() {

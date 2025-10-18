@@ -122,9 +122,9 @@ This example shows the core agent pattern manually implemented:
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
-import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import { tool } from "langchain";
+import * as z from "zod";
+import { HumanMessage, AIMessage, ToolMessage } from "langchain";
 import "dotenv/config";
 
 // Create a calculator tool
@@ -397,7 +397,7 @@ This example demonstrates connecting to Context7 via HTTP transport:
 ```typescript
 import { MultiServerMCPClient } from "@langchain/mcp-adapters";
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage, ToolMessage } from "langchain";
 import "dotenv/config";
 
 // Create MCP client with HTTP transport to Context7

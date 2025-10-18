@@ -5,7 +5,7 @@
  * Run: npx tsx 04-documents-embeddings-semantic-search/samples/smart-chunker.ts
  */
 
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { Document } from "@langchain/core/documents";
 import "dotenv/config";
 

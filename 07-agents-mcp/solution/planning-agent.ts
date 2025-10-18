@@ -5,9 +5,9 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { tool } from "@langchain/core/tools";
-import { z } from "zod";
-import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+import { tool } from "langchain";
+import * as z from "zod";
+import { HumanMessage, AIMessage, ToolMessage } from "langchain";
 import "dotenv/config";
 
 // Tool 1: Search

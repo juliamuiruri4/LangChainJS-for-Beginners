@@ -8,8 +8,8 @@
  * - "How would I use metadata to filter search results in a vector store?"
  */
 
-import { Document } from "langchain/document";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { Document } from "@langchain/core/documents";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 async function main() {
   console.log("🏷️  Document Metadata Example\n");

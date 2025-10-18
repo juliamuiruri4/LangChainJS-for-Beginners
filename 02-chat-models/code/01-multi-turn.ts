@@ -9,7 +9,7 @@
  */
 
 import { ChatOpenAI } from "@langchain/openai";
-import { HumanMessage, AIMessage, SystemMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage, SystemMessage, type BaseMessage } from "langchain";
 import "dotenv/config";
 
 async function main() {
@@ -22,7 +22,7 @@ async function main() {
   });
 
   // Start with system message and first question
-  const messages = [
+  const messages: BaseMessage[] = [
     new SystemMessage("You are a helpful coding tutor who gives clear, concise explanations."),
     new HumanMessage("What is TypeScript?"),
   ];
