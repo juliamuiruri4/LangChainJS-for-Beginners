@@ -32,7 +32,7 @@ const INTERACTIVE_FILES = [
 ];
 
 // Timeout for all examples (generous to handle API calls and complex examples)
-const TIMEOUT_MS = 60000; // 60 seconds
+const TIMEOUT_MS = 90000; // 90 seconds
 
 async function findCodeFiles(dir: string): Promise<string[]> {
   const files: string[] = [];
