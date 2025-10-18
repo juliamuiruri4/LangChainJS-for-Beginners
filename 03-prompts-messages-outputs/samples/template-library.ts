@@ -2,7 +2,7 @@
  * Chapter 3 Assignment Solution: Bonus Challenge
  * Prompt Template Library
  *
- * Run: npx tsx 03-prompt-templates/solution/template-library.ts
+ * Run: npx tsx 03-prompts-messages-outputs/solution/template-library.ts
  */
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";

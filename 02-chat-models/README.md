@@ -55,7 +55,7 @@ Chat models don't actually "remember" previous messages. Instead, you send the e
 
 ### Message Types in LangChain
 
-LangChain provides four message types for building conversations. Each type serves a specific purpose:
+LangChain provides three core message types for building conversations. Each type serves a specific purpose:
 
 #### 1. SystemMessage - Setting the AI's Behavior
 
@@ -91,29 +91,15 @@ const response = await model.invoke(messages);
 // - content: The actual text response
 // - usage_metadata: Token usage information (see Example 6)
 // - id: Unique message identifier
-// - tool_calls: Tool invocations (empty array if none - see Chapter 5)
 ```
 
 **Use for**: Storing AI responses in conversation history
 
 ---
 
-#### 4. ToolMessage - Tool Results
+**In this chapter**, you'll work with **SystemMessage**, **HumanMessage**, and **AIMessage** to build multi-turn conversations.
 
-Represents results from tool execution. You'll learn about this in Chapter 5.
-
-```typescript
-const toolResult = new ToolMessage({
-  content: "Result from tool",
-  tool_call_id: "call_123"
-});
-```
-
-**Use for**: Feeding tool execution results back to the AI (covered in Chapter 5)
-
----
-
-**In this chapter**, you'll primarily work with **SystemMessage**, **HumanMessage**, and **AIMessage** to build multi-turn conversations.
+> **💡 Looking ahead:** In [Chapter 3: Prompts, Messages, and Structured Outputs](../03-prompts-messages-outputs/README.md), you'll learn when to use messages vs templates, how to build dynamic message arrays, and additional message construction patterns that prepare you for building agents in Chapter 7.
 
 ---
 
@@ -741,7 +727,7 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [01-introduction](../01-introduction/README.md)
-- **Next**: [03-prompt-templates](../03-prompt-templates/README.md)
+- **Next**: [03-prompts-messages-outputs](../03-prompts-messages-outputs/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---

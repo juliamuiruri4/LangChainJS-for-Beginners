@@ -4,7 +4,7 @@ In this chapter, you'll learn the complete pipeline for working with documents i
 
 ## Prerequisites
 
-- Completed [Chapter 3](../03-prompt-templates/README.md)
+- Completed [Chapter 3](../03-prompts-messages-outputs/README.md)
 
 ## 🎯 Learning Objectives
 
@@ -889,7 +889,7 @@ The assignment includes:
 
 ## 🗺️ Navigation
 
-- **Previous**: [03-prompt-templates](../03-prompt-templates/README.md)
+- **Previous**: [03-prompts-messages-outputs](../03-prompts-messages-outputs/README.md)
 - **Next**: [05-function-calling-tools](../05-function-calling-tools/README.md)
 - **Home**: [Course Home](../README.md)
 

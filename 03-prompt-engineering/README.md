@@ -1,6 +1,8 @@
-# Chapter 3: Prompt Engineering with Templates
+# Chapter 3: Prompts, Messages, and Structured Outputs
 
-In this chapter, you'll learn how to create reusable, maintainable prompts using templates instead of hardcoding prompts throughout your application. You'll discover how to use variables and dynamic content, implement few-shot prompting to teach AI by example, and compose multiple templates together for complex use cases. Templates make your AI applications more consistent, testable, and easy to maintain.
+In this chapter, you'll learn the TWO fundamental approaches to prompt engineering in LangChain.js: **message-based prompting** (used by agents) and **template-based prompting** (used by RAG systems). Understanding both paradigms is important because modern LangChain.js applications use different approaches depending on the use case. Agents work with message arrays for dynamic tool-calling workflows, while RAG systems use templates for consistent document processing.
+
+This chapter prepares you for both **Chapter 6 (RAG Systems)** and **Chapter 7 (Agents & MCP)**.
 
 ## Prerequisites
 
@@ -10,12 +12,14 @@ In this chapter, you'll learn how to create reusable, maintainable prompts using
 
 By the end of this chapter, you'll be able to:
 
-- ✅ Create reusable prompt templates
+- ✅ Understand when to use messages vs templates
+- ✅ Construct message arrays for agent workflows
+- ✅ Create reusable prompt templates for RAG systems
 - ✅ Use variables and dynamic content in prompts
 - ✅ Implement few-shot prompting (teaching by example)
 - ✅ Combine multiple prompts together
 - ✅ Generate structured outputs with Zod schemas
-- ✅ Understand when and why to use templates
+- ✅ Choose the right approach for your use case
 
 ---
 
@@ -34,7 +38,274 @@ The code snippets in this README are simplified for clarity and focus on core co
 
 ---
 
-## 📖 The Mail Merge Analogy
+## 🎯 Decision Framework: Messages vs Templates
+
+**This is the most important section of this chapter!** Before diving into the details, understand when to use each approach:
+
+### ✅ Use MESSAGE ARRAYS when:
+- **Building agents** with `createAgent()` (Chapter 7)
+- Working with **middleware** for request/response processing
+- Handling **multi-step reasoning** and tool calls
+- Integrating **MCP tools** (Model Context Protocol)
+- Need **full control** over message flow and conversation state
+- Building **dynamic, conversational** workflows
+
+**Example use cases**: Customer support agents, task automation agents, research assistants with tools
+
+**Links forward to**: [Chapter 7: Agents & MCP](../07-agents-mcp/README.md)
+
+### ✅ Use TEMPLATES when:
+- Building **RAG systems** with `createStuffDocumentsChain()`
+- Need **reusable prompt patterns** across your application
+- Want **variable substitution** in prompts
+- Creating **chains** for document processing
+- Ensuring **consistent prompts** across different calls
+- Working with **static or semi-static** prompts
+
+**Example use cases**: Document Q&A, content generation, translation systems, data extraction
+
+**Links forward to**: [Chapter 6: RAG Systems](../06-rag/README.md)
+
+### 📚 Modern LangChain.js v1 Pattern
+
+The modern approach is **"agent-first"** but you still need templates:
+- **Agents (message-based)**: Use message arrays + middleware for dynamic workflows
+- **RAG (template-based)**: Use templates for document processing and retrieval
+- **Both are essential** - learn when to use each!
+
+---
+
+## PART 1: Message-Based Prompting (Agent-First)
+
+Message arrays are the foundation of agent systems in LangChain.js v1. When you use `createAgent()`, it expects message arrays as input and output.
+
+### 📖 The Conversation Analogy
+
+**Think about a real conversation with context:**
+
+```
+System: "You are a helpful coding assistant."
+You: "What is a variable?"
+AI: "A variable is a container for storing data..."
+You: "Can you show me an example?"
+AI: "Sure! Here's an example: let name = 'John';"
+```
+
+**Each line is a message** with a role (system, human, AI). Message arrays preserve this conversational structure, which is exactly what agents need for multi-step reasoning and tool use.
+
+### Example 0: Messages vs Templates - The Big Picture
+
+This foundational example compares both approaches side-by-side and explains when to use each.
+
+**Code**: [`code/00-messages-vs-templates.ts`](./code/00-messages-vs-templates.ts)
+**Run**: `tsx 03-prompt-engineering/code/00-messages-vs-templates.ts`
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import { HumanMessage, SystemMessage } from "langchain";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import "dotenv/config";
+
+async function main() {
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY,
+  });
+
+  // APPROACH 1: Messages (Agent-First)
+  console.log("APPROACH 1: Message Arrays (Used by Agents)\n");
+
+  const messages = [
+    new SystemMessage("You are a helpful translator."),
+    new HumanMessage("Translate 'Hello, world!' to French"),
+  ];
+
+  const messageResponse = await model.invoke(messages);
+  console.log("Response:", messageResponse.content);
+
+  // APPROACH 2: Templates (RAG-First)
+  console.log("\nAPPROACH 2: Templates (Used by RAG Systems)\n");
+
+  const template = ChatPromptTemplate.fromMessages([
+    ["system", "You are a helpful translator."],
+    ["human", "Translate '{text}' to {language}"],
+  ]);
+
+  const templateChain = template.pipe(model);
+  const templateResponse = await templateChain.invoke({
+    text: "Hello, world!",
+    language: "French",
+  });
+
+  console.log("Response:", templateResponse.content);
+}
+
+main().catch(console.error);
+```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "When should I use messages vs templates in LangChain.js?"
+> - "How do agents use messages differently from RAG systems?"
+> - "Can I convert between message arrays and templates?"
+
+### Expected Output
+
+When you run this example with `tsx 03-prompt-engineering/code/00-messages-vs-templates.ts`, you'll see both approaches produce the same translation, but they work differently under the hood.
+
+### How It Works
+
+**Message Arrays**:
+- Direct construction using `new SystemMessage()` and `new HumanMessage()`
+- Passed directly to `model.invoke(messages)`
+- No templating or variable substitution
+- Used by `createAgent()` in LangChain v1
+
+**Templates**:
+- Created with `ChatPromptTemplate.fromMessages()`
+- Uses variables like `{text}` and `{language}`
+- Piped to model: `template.pipe(model)`
+- Required by `createStuffDocumentsChain()` for RAG
+
+> **💡 Tip**: The actual code file [`00-messages-vs-templates.ts`](./code/00-messages-vs-templates.ts) includes comprehensive explanations of when to use each approach and how they integrate with different LangChain systems. Run the file to see the complete decision framework!
+
+---
+
+### Example 1: Message Construction Patterns
+
+In this example, you'll learn the building blocks of message arrays: SystemMessage, HumanMessage, AIMessage, and ToolMessage, plus how to construct dynamic conversations.
+
+**Code**: [`code/01-message-construction.ts`](./code/01-message-construction.ts)
+**Run**: `tsx 03-prompt-engineering/code/01-message-construction.ts`
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+import {
+  HumanMessage,
+  SystemMessage,
+  AIMessage,
+} from "langchain";
+import "dotenv/config";
+
+async function main() {
+  const model = new ChatOpenAI({
+    model: process.env.AI_MODEL,
+    configuration: { baseURL: process.env.AI_ENDPOINT },
+    apiKey: process.env.AI_API_KEY,
+  });
+
+  // PATTERN 1: Basic Message Types
+  const systemMsg = new SystemMessage("You are a helpful programming assistant.");
+  const humanMsg = new HumanMessage("What is a variable?");
+
+  const response1 = await model.invoke([systemMsg, humanMsg]);
+  console.log("AI Response:", response1.content);
+
+  // PATTERN 2: Multi-Turn Conversations
+  const conversationMessages = [
+    new SystemMessage("You are a math tutor for beginners."),
+    new HumanMessage("What is 5 + 3?"),
+    new AIMessage("5 + 3 equals 8!"),
+    new HumanMessage("Now what is 8 * 2?"),
+  ];
+
+  const response2 = await model.invoke(conversationMessages);
+  console.log("AI Response:", response2.content);
+
+  // PATTERN 3: Dynamic Message Construction
+  function createConversation(
+    role: string,
+    examples: Array<{ question: string; answer: string }>,
+    newQuestion: string,
+  ) {
+    const messages = [new SystemMessage(`You are a ${role}.`)];
+
+    // Add examples (few-shot pattern using messages)
+    examples.forEach(({ question, answer }) => {
+      messages.push(new HumanMessage(question));
+      messages.push(new AIMessage(answer));
+    });
+
+    // Add the new question
+    messages.push(new HumanMessage(newQuestion));
+
+    return messages;
+  }
+
+  const emojiMessages = createConversation(
+    "emoji translator",
+    [
+      { question: "happy", answer: "😊" },
+      { question: "sad", answer: "😢" },
+    ],
+    "surprised",
+  );
+
+  const response3 = await model.invoke(emojiMessages);
+  console.log("AI Response:", response3.content);
+}
+
+main().catch(console.error);
+```
+
+> **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
+> - "What are all the message types available in LangChain.js?"
+> - "How do I build a multi-turn conversation with message arrays?"
+> - "Can I serialize and deserialize message arrays for storage?"
+
+### Expected Output
+
+When you run this example with `tsx 03-prompt-engineering/code/01-message-construction.ts`, you'll see:
+
+```
+AI Response: A variable is a container for storing data values...
+
+AI Response: 8 * 2 equals 16!
+
+AI Response: 😮
+```
+
+### How It Works
+
+**Key Message Types**:
+1. **SystemMessage**: Sets the AI's role and behavior (always first)
+2. **HumanMessage**: Represents user input
+3. **AIMessage**: Represents previous AI responses (for conversation context)
+4. **ToolMessage**: Contains tool call results (used in Chapter 7)
+
+**Why This Matters for Agents**:
+- Agents need to track conversation state across multiple turns
+- Tool calls are added as ToolMessage to the conversation
+- Middleware can inspect/modify message arrays
+- Full control over message flow enables complex reasoning
+
+**Dynamic Construction**:
+- You can build message arrays programmatically
+- Useful for few-shot prompting with messages
+- Great for loading conversation history from databases
+- Foundation for stateful agent systems
+
+> **💡 Tip**: The actual code file [`01-message-construction.ts`](./code/01-message-construction.ts) includes advanced patterns like message metadata, conversation builders, and detailed explanations of how agents use messages. Run the file to see all variations!
+
+---
+
+### 🔗 Link Forward to Chapter 7
+
+**Everything you've learned about messages prepares you for:**
+- [Chapter 7: Agents & MCP](../07-agents-mcp/README.md) - Build agents using `createAgent()` with message arrays
+- Working with Model Context Protocol (MCP) tools
+- Implementing middleware for request/response processing
+- Creating stateful, multi-step reasoning systems
+
+**Messages are the foundation of modern agent systems in LangChain.js v1!**
+
+---
+
+## PART 2: Template-Based Prompting (RAG-First)
+
+Templates allow you to create reusable, maintainable prompts with variables. They're essential for RAG systems where you need consistent prompt structures for document processing.
+
+### 📖 The Mail Merge Analogy
 
 **Imagine you need to send 100 personalized emails.**
 
@@ -56,19 +327,16 @@ Your order #{orderId} is ready for pickup...
 **Prompt templates work exactly the same way!**
 
 Instead of writing similar prompts over and over, you:
-
 - Create a template once with placeholders
 - Fill in the specifics each time you use it
 - Ensure consistency across your application
 - Make testing and updates easier
 
-This chapter teaches you how to create reusable, maintainable prompts.
-
 ---
 
-## 🤔 Why Use Prompt Templates?
+### 🤔 Why Use Prompt Templates?
 
-### The Problem Without Templates
+#### The Problem Without Templates
 
 ```typescript
 // Hardcoded prompts everywhere - hard to maintain!
@@ -83,7 +351,7 @@ await model.invoke("Translate this English text to German: Hello");
 - Difficult to test
 - Inconsistent formatting
 
-### The Solution With Templates
+#### The Solution With Templates
 
 ```typescript
 // Create once, reuse everywhere!
@@ -94,23 +362,21 @@ const template = ChatPromptTemplate.fromMessages([
 ```
 
 **Benefits**:
-
 - ✅ **Consistency**: Same prompt structure everywhere
 - ✅ **Maintainability**: Update once, changes everywhere
 - ✅ **Testability**: Easy to test with different inputs
 - ✅ **Version control**: Track prompt changes over time
 - ✅ **Separation of concerns**: Logic separate from prompts
+- ✅ **Required for RAG**: `createStuffDocumentsChain()` expects templates
 
 ---
 
-## 📝 Creating Basic Templates
+### Example 2: Basic Templates
 
-### Example 1: Simple Translation Template
+In this example, you'll create a reusable translation template with variables for input language, output language, and text to be translated.
 
-In this example, you'll create a reusable translation template ([Prompt Template](../GLOSSARY.md#prompt-template)) with variables for input language, output language, and text to be translated.
-
-**Code**: [`code/01-basic-template.ts`](./code/01-basic-template.ts)
-**Run**: `tsx 03-prompt-templates/code/01-basic-template.ts`
+**Code**: [`code/02-basic-template.ts`](./code/02-basic-template.ts)
+**Run**: `tsx 03-prompt-engineering/code/02-basic-template.ts`
 
 ```typescript
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -127,7 +393,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Use the template multiple times with different values
@@ -160,7 +426,7 @@ main().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 03-prompt-templates/code/01-basic-template.ts`, you'll see:
+When you run this example with `tsx 03-prompt-engineering/code/02-basic-template.ts`, you'll see:
 
 ```
 French: Bonjour, comment allez-vous ?
@@ -184,41 +450,16 @@ Spanish: Hola, ¿cómo estás?
 
 **Benefits**: If you want to change how translations work (e.g., add "Be formal" to the system message), you update ONE place and it affects all translations.
 
-> **💡 Tip**: The actual code file [`01-basic-template.ts`](./code/01-basic-template.ts) includes an additional translation example (Japanese) for deeper learning. Run the file to see all variations!
+> **💡 Tip**: The actual code file [`02-basic-template.ts`](./code/02-basic-template.ts) includes an additional translation example (Japanese) for deeper learning. Run the file to see all variations!
 
 ---
 
-## 🎨 Different Template Formats
-
-### Message Templates
-
-The most common format uses message arrays:
-
-```typescript
-const template = ChatPromptTemplate.fromMessages([
-  ["system", "You are a {role}."],
-  ["human", "{input}"],
-]);
-```
-
-### String Templates
-
-For simpler use cases:
-
-```typescript
-import { PromptTemplate } from "@langchain/core/prompts";
-
-const template = PromptTemplate.fromTemplate(
-  "Tell me a {adjective} joke about {topic}."
-);
-```
-
-### Example 2: Multiple Template Formats
+### Example 3: Template Formats
 
 This example compares different template formats (ChatPromptTemplate vs PromptTemplate) and shows you when to use each approach.
 
-**Code**: [`code/02-template-formats.ts`](./code/02-template-formats.ts)
-**Run**: `tsx 03-prompt-templates/code/02-template-formats.ts`
+**Code**: [`code/03-template-formats.ts`](./code/03-template-formats.ts)
+**Run**: `tsx 03-prompt-engineering/code/03-template-formats.ts`
 
 ```typescript
 import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
@@ -229,7 +470,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Format 1: ChatPromptTemplate (for chat models)
@@ -277,12 +518,12 @@ main().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 03-prompt-templates/code/02-template-formats.ts`, you'll see:
+When you run this example with `tsx 03-prompt-engineering/code/03-template-formats.ts`, you'll see:
 
 ```
 1️⃣  ChatPromptTemplate:
 
-Arr matey! TypeScript be a mighty tool forged by Microsoft, ye see! It be JavaScript with types, helpin' ye catch errors before yer ship sets sail! With TypeScript, ye define the shape of yer data like a treasure map, and the compiler checks if ye be followin' it correctly. No more surprises when yer code runs - it's all verified beforehand! Savvy?
+Arr matey! TypeScript be a mighty tool forged by Microsoft...
 
 2️⃣  PromptTemplate:
 
@@ -290,10 +531,7 @@ Generated prompt: Write a funny poem about JavaScript.
 
 Response:
 JavaScript, oh JavaScript,
-You're quirky and you're quick,
-With "undefined" and "null" to spare,
-You drive us up the wall sometimes,
-But we still love you, I swear!
+You're quirky and you're quick...
 ```
 
 ### How It Works
@@ -305,6 +543,7 @@ But we still love you, I swear!
    - Supports system messages to set AI personality
    - Best for chat models and conversations
    - Pipes directly to the model
+   - **Required for RAG systems**
 
 2. **PromptTemplate** (for simple text):
    - Uses plain string templates
@@ -313,25 +552,23 @@ But we still love you, I swear!
    - Then pass the formatted string to the model
 
 **When to use each**:
-- Use `ChatPromptTemplate` when you need system messages or multi-turn conversations
+- Use `ChatPromptTemplate` when you need system messages, multi-turn conversations, or RAG systems
 - Use `PromptTemplate` for simple, single-shot prompts without roles
 
-> **💡 Tip**: The actual code file [`02-template-formats.ts`](./code/02-template-formats.ts) includes a complex multi-variable template example for deeper learning. Run the file to see all variations!
+> **💡 Tip**: The actual code file [`03-template-formats.ts`](./code/03-template-formats.ts) includes a complex multi-variable template example for deeper learning. Run the file to see all variations!
 
 ---
 
-## 💡 Few-Shot Prompting
+### Example 4: Few-Shot Prompting with Templates
+
+Here you'll learn how to teach the AI by example using few-shot prompting to convert emotions to emojis based on provided examples.
+
+**Code**: [`code/04-few-shot.ts`](./code/04-few-shot.ts)
+**Run**: `tsx 03-prompt-engineering/code/04-few-shot.ts`
 
 [Few-shot prompting](../GLOSSARY.md#few-shot-prompting) means teaching the AI by showing examples.
 
 **Think of it like training a new employee**: Instead of just telling them what to do, you show them examples of good work.
-
-### Example 3: Few-Shot Prompting
-
-Here you'll learn how to teach the AI by example using few-shot prompting to convert emotions to emojis based on provided examples.
-
-**Code**: [`code/03-few-shot.ts`](./code/03-few-shot.ts)
-**Run**: `tsx 03-prompt-templates/code/03-few-shot.ts`
 
 ```typescript
 import { ChatPromptTemplate, FewShotChatMessagePromptTemplate } from "@langchain/core/prompts";
@@ -342,23 +579,14 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define examples to teach the model
   const examples = [
-    {
-      input: "happy",
-      output: "😊",
-    },
-    {
-      input: "sad",
-      output: "😢",
-    },
-    {
-      input: "excited",
-      output: "🎉",
-    },
+    { input: "happy", output: "😊" },
+    { input: "sad", output: "😢" },
+    { input: "excited", output: "🎉" },
   ];
 
   // Create example template
@@ -401,7 +629,7 @@ main().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 03-prompt-templates/code/03-few-shot.ts`, you'll see:
+When you run this example with `tsx 03-prompt-engineering/code/04-few-shot.ts`, you'll see:
 
 ```
 surprised → 😮
@@ -427,21 +655,18 @@ angry → 😠
 - More reliable than just instructions alone
 - Great for structured outputs and consistent formatting
 - Reduces need for fine-tuning for many tasks
+- **Essential for RAG systems** to guide response formatting
 
-> **💡 Tip**: The actual code file [`03-few-shot.ts`](./code/03-few-shot.ts) includes an additional code comment generator example demonstrating few-shot learning with different patterns. Run the file to see all variations!
+> **💡 Tip**: The actual code file [`04-few-shot.ts`](./code/04-few-shot.ts) includes an additional code comment generator example demonstrating few-shot learning with different patterns. Run the file to see all variations!
 
 ---
 
-## 🔗 Prompt Composition
-
-You can combine multiple templates to create complex prompts.
-
-### Example 4: Composing Templates
+### Example 5: Template Composition
 
 In this example, you'll learn how to combine multiple template pieces together to create complex, reusable prompts for different educational contexts.
 
-**Code**: [`code/04-composition.ts`](./code/04-composition.ts)
-**Run**: `tsx 03-prompt-templates/code/04-composition.ts`
+**Code**: [`code/05-composition.ts`](./code/05-composition.ts)
+**Run**: `tsx 03-prompt-engineering/code/05-composition.ts`
 
 ```typescript
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -452,7 +677,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Create reusable prompt pieces
@@ -500,17 +725,17 @@ main().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 03-prompt-templates/code/04-composition.ts`, you'll see:
+When you run this example with `tsx 03-prompt-engineering/code/05-composition.ts`, you'll see:
 
 ```
 🎓 Beginner explanation:
 
-Think of a variable as a labeled box where you can store information! Just like you might have a box labeled "toys" or "books," in programming, you create variables with names like "score" or "playerName." You can put different types of information in these boxes - numbers, words, or yes/no answers - and use them whenever you need that information in your program.
+Think of a variable as a labeled box where you can store information...
 
 
 🎓 Intermediate explanation:
 
-Closures are a fundamental concept where a function retains access to variables from its outer scope, even after the outer function has finished executing. This happens because JavaScript functions create a "closure" over the environment in which they were defined. For example, if an inner function references a variable from its parent function, that variable remains accessible to the inner function even after the parent function returns. This is particularly useful for data privacy, creating factory functions, and maintaining state in functional programming patterns.
+Closures are a fundamental concept where a function retains access to variables from its outer scope...
 ```
 
 ### How It Works
@@ -526,14 +751,15 @@ Closures are a fundamental concept where a function retains access to variables 
 - **Consistency**: Same structure across similar prompts
 - **Flexibility**: Different combinations for different needs
 - **Maintainability**: Update shared pieces in one place
+- **Critical for RAG**: Build document processing templates from reusable components
 
 **Real-world use**: Build a library of prompt components (tone, context, task) and compose them based on user needs or application state.
 
-> **💡 Tip**: The actual code file [`04-composition.ts`](./code/04-composition.ts) includes additional examples demonstrating customer service scenarios and partial templates. Run the file to see all variations!
+> **💡 Tip**: The actual code file [`05-composition.ts`](./code/05-composition.ts) includes additional examples demonstrating customer service scenarios and partial templates. Run the file to see all variations!
 
 ---
 
-## 📋 Structured Outputs
+## 📋 Structured Outputs with Zod
 
 So far, we've been getting text responses from AI models. But what if you need **structured data** - like JSON objects with specific fields?
 
@@ -566,7 +792,7 @@ const PersonSchema = z.object({
 
 With LangChain, Zod schemas tell the AI **exactly what format to return data in** - ensuring you always get structured, validated data instead of free text that you have to parse.
 
-Now let's see how to use Zod with AI models to get structured outputs!
+---
 
 ### The Form Analogy
 
@@ -576,8 +802,7 @@ Now let's see how to use Zod with AI models to get structured outputs!
 ```
 "Tell me about yourself"
 Response: "Well, I'm John, I live somewhere in Seattle,
-my email is... let me think... john@something.com, and my phone
-number is... hmm, I think it's 555-1234"
+my email is... let me think... john@something.com"
 ```
 
 ✅ **With structure** (a form):
@@ -597,13 +822,16 @@ City: [____]
 - **Parsing**: No need to parse free text
 - **Consistency**: Always get the same format
 - **Integration**: Easy to use with databases, APIs, etc.
+- **Essential for RAG**: Extract structured data from documents
 
-### Example 5: Basic Structured Output
+---
+
+### Example 6: Basic Structured Output
 
 Here you'll use Zod schemas to get typed, structured data from AI instead of free text, ensuring type safety and validation.
 
-**Code**: [`code/05-structured-output.ts`](./code/05-structured-output.ts)
-**Run**: `tsx 03-prompt-templates/code/05-structured-output.ts`
+**Code**: [`code/06-structured-output.ts`](./code/06-structured-output.ts)
+**Run**: `tsx 03-prompt-engineering/code/06-structured-output.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -616,7 +844,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define the structure using Zod schema
@@ -654,7 +882,7 @@ main().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 03-prompt-templates/code/05-structured-output.ts`, you'll see:
+When you run this example with `tsx 03-prompt-engineering/code/06-structured-output.ts`, you'll see:
 
 ```
 📋 Structured Output Example
@@ -693,14 +921,16 @@ When you run this example with `tsx 03-prompt-templates/code/05-structured-outpu
 
 **Why this is powerful**: No more parsing free text with regex or string splitting. The AI does the extraction and formatting for you!
 
-> **💡 Tip**: The actual code file [`05-structured-output.ts`](./code/05-structured-output.ts) demonstrates the versatility of structured outputs by working with multiple different input formats and edge cases. Run the file to see all variations!
+> **💡 Tip**: The actual code file [`06-structured-output.ts`](./code/06-structured-output.ts) demonstrates the versatility of structured outputs by working with multiple different input formats and edge cases. Run the file to see all variations!
 
-### Example 6: Complex Structured Data
+---
+
+### Example 7: Complex Nested Schemas
 
 In this example, you'll extract complex nested company information from text using Zod schemas with arrays, nested objects, and various data types.
 
-**Code**: [`code/06-zod-schemas.ts`](./code/06-zod-schemas.ts)
-**Run**: `tsx 03-prompt-templates/code/06-zod-schemas.ts`
+**Code**: [`code/07-zod-schemas.ts`](./code/07-zod-schemas.ts)
+**Run**: `tsx 03-prompt-engineering/code/07-zod-schemas.ts`
 
 ```typescript
 import { ChatOpenAI } from "@langchain/openai";
@@ -714,7 +944,7 @@ async function main() {
   const model = new ChatOpenAI({
     model: process.env.AI_MODEL,
     configuration: { baseURL: process.env.AI_ENDPOINT },
-    apiKey: process.env.AI_API_KEY
+    apiKey: process.env.AI_API_KEY,
   });
 
   // Define a complex nested schema
@@ -771,7 +1001,7 @@ main().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 03-prompt-templates/code/06-zod-schemas.ts`, you'll see:
+When you run this example with `tsx 03-prompt-engineering/code/07-zod-schemas.ts`, you'll see:
 
 ```
 🏢 Complex Structured Output Example
@@ -831,38 +1061,72 @@ CompanySchema = {
 - Extract contact info from emails into structured database records
 - Parse resumes into standardized candidate profiles
 - Convert natural language forms into API payloads
-- Build data pipelines that transform unstructured content into structured databases
+- **Build RAG systems** that extract structured data from documents
+- Transform unstructured content into structured databases
 
 **When to Use Structured Outputs**:
-
-- 📊 **Data extraction** from text
+- 📊 **Data extraction** from text or documents
 - 🗂️ **Database inserts** with validated data
 - 🔄 **API responses** with guaranteed format
 - 🎯 **Form filling** from natural language
 - ✅ **Classification tasks** with predefined categories
+- **RAG systems** that need structured document metadata
 
-> **💡 Tip**: The actual code file [`06-zod-schemas.ts`](./code/06-zod-schemas.ts) includes additional examples extracting data for SpaceX and Netflix, demonstrating schema flexibility with different data structures. Run the file to see all variations!
+> **💡 Tip**: The actual code file [`07-zod-schemas.ts`](./code/07-zod-schemas.ts) includes additional examples extracting data for SpaceX and Netflix, demonstrating schema flexibility with different data structures. Run the file to see all variations!
+
+---
+
+### 🔗 Link Forward to Chapter 6
+
+**Everything you've learned about templates and structured outputs prepares you for:**
+- [Chapter 6: RAG Systems](../06-rag/README.md) - Build RAG systems using `createStuffDocumentsChain()` with templates
+- Processing documents with consistent prompts
+- Extracting structured metadata from documents
+- Creating reusable RAG patterns
+
+**Templates are the foundation of RAG systems in LangChain.js v1!**
 
 ---
 
 ## 🗺️ Concept Map
 
-This chapter taught you how to create maintainable, reusable prompts with templates:
+This chapter taught you the TWO approaches to prompt engineering in LangChain.js v1:
 
 ```mermaid
-graph LR
-    A[Prompt Templates] --> B[Variables]
-    A --> C[Few-Shot]
-    A --> D[Composition]
-    A --> E[Structured Output]
+graph TB
+    A[Prompt Engineering] --> B[Messages]
+    A --> C[Templates]
+
+    B --> D[SystemMessage]
+    B --> E[HumanMessage]
+    B --> F[AIMessage]
+    B --> G[ToolMessage]
+    B --> H[Agents Ch7]
+
+    C --> I[Variables]
+    C --> J[Few-Shot]
+    C --> K[Composition]
+    C --> L[Structured Output]
+    C --> M[RAG Systems Ch6]
+
+    L --> N[Zod Schemas]
+    L --> O[Type Safety]
 ```
 
-*Templates make your prompts testable, maintainable, and consistent across your application.*
+*Choose messages for agents, templates for RAG - both are essential for modern LangChain.js applications.*
 
 ---
 
 ## 🎓 Key Takeaways
 
+### Messages (Agent-First)
+- **Direct message construction** - Build conversations programmatically
+- **SystemMessage, HumanMessage, AIMessage** - Core message types
+- **Multi-turn conversations** - Maintain conversation state
+- **Used by createAgent()** - Foundation for agent systems
+- **Prepares you for Chapter 7** - Agents & MCP
+
+### Templates (RAG-First)
 - **Templates reduce code duplication** - Write once, use everywhere
 - **Variables with `{name}` syntax** - Create dynamic prompts
 - **ChatPromptTemplate for chat models** - Works with message arrays
@@ -871,7 +1135,14 @@ graph LR
 - **Composition** - Combine templates for complex prompts
 - **Structured outputs with Zod** - Get typed data, not just text
 - **Type safety** - Validate AI responses match your schema
+- **Required for RAG** - Used by `createStuffDocumentsChain()`
+- **Prepares you for Chapter 6** - RAG Systems
+
+### The Big Picture
+- **Know when to use each approach** - Messages for agents, templates for RAG
+- **Both are essential** - Modern LangChain.js uses both paradigms
 - **Maintainability** - Update prompts in one place
+- **Type safety** - Leverage TypeScript throughout
 
 ---
 
@@ -889,6 +1160,8 @@ The assignment includes:
 
 - [Prompt Templates Documentation](https://js.langchain.com/docs/modules/prompts/)
 - [Few-Shot Prompting Guide](https://js.langchain.com/docs/modules/prompts/few_shot/)
+- [Messages Documentation](https://js.langchain.com/docs/concepts/messages)
+- [Zod Documentation](https://zod.dev/)
 
 **💡 Want more examples?** Check out the [`samples/`](./samples/) folder for additional code examples including email generation, translation systems, dynamic prompt builders, and template libraries!
 
@@ -897,7 +1170,8 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [02-chat-models](../02-chat-models/README.md)
-- **Next**: [04-documents-embeddings-semantic-search](../04-documents-embeddings-semantic-search/README.md)
+- **Next (Templates)**: [06-rag](../06-rag/README.md) - RAG Systems (uses templates)
+- **Next (Messages)**: [07-agents-mcp](../07-agents-mcp/README.md) - Agents & MCP (uses messages)
 - **Home**: [Course Home](../README.md)
 
 ---

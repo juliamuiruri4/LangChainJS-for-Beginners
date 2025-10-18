@@ -1,6 +1,6 @@
 /**
  * Basic Prompt Template
- * Run: npx tsx 03-prompt-templates/code/01-basic-template.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/01-basic-template.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does template.pipe(model) create a chain that can be invoked?"

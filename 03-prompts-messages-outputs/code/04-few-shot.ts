@@ -1,6 +1,6 @@
 /**
  * Few-Shot Prompting
- * Run: npx tsx 03-prompt-templates/code/03-few-shot.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/03-few-shot.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does FewShotChatMessagePromptTemplate use the examples array?"

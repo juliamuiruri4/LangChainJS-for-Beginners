@@ -80,7 +80,7 @@ You'll start using models in this chapter and use them throughout the course.
 
 **Simple example**: `"Translate {text} from {source_lang} to {target_lang}"` - Define once, reuse with different values.
 
-You'll learn prompt engineering and templates in [Chapter 3](../03-prompt-templates/README.md).
+You'll learn prompt engineering and templates in [Chapter 3](../03-prompts-messages-outputs/README.md).
 
 ### 3. Tools
 

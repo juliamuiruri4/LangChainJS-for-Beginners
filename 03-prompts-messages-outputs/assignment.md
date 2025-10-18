@@ -1,8 +1,8 @@
-# Chapter 3 Assignment: Prompt Engineering with Templates
+# Chapter 3 Assignment: Prompts, Messages, and Structured Outputs
 
 ## Overview
 
-Practice creating reusable, maintainable prompts using templates, few-shot learning, and structured output techniques.
+Practice creating reusable, maintainable prompts using templates, few-shot learning, and structured output techniques. This assignment focuses on **templates and structured outputs** (Parts 2 and 3 of the chapter).
 
 ## Prerequisites
 
@@ -147,6 +147,8 @@ Before moving to Chapter 4, make sure you've completed:
 Solutions for all challenges are available in the [`solution/`](./solution/) folder. Try to complete the challenges on your own first!
 
 **Additional Examples**: Check out the [`samples/`](./samples/) folder for more examples including email generation, translation systems, dynamic prompt builders, and template libraries!
+
+> **💡 Note**: This assignment focuses on templates (Part 2 of Chapter 3). For message-based patterns (Part 1), practice building agents in Chapter 7!
 
 ---
 

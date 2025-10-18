@@ -2,7 +2,7 @@
  * Chapter 3 Assignment Solution: Challenge 3
  * Multi-Language Translation System
  *
- * Run: npx tsx 03-prompt-templates/samples/translator.ts
+ * Run: npx tsx 03-prompts-messages-outputs/samples/translator.ts
  */
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";

@@ -69,7 +69,7 @@ This course contains **8 chapters** (setup + 7 chapters), each building on the p
 | 0 | [Course Setup](./00-course-setup/README.md) | Get your development environment ready | Environment setup, AI provider configuration |
 | 1 | [Introduction to LangChain.js](./01-introduction/README.md) | Understanding the framework and core concepts | LangChain fundamentals, first LLM call |
 | 2 | [Chat Models & Basic Interactions](./02-chat-models/README.md) | Chat models, messages, and conversations | Message types, streaming, callbacks |
-| 3 | [Prompt Engineering with Templates](./03-prompt-templates/README.md) | Creating dynamic, reusable prompts | Prompt templates, few-shot prompting |
+| 3 | [Prompts, Messages, and Structured Outputs](./03-prompts-messages-outputs/README.md) | Working with prompts, message arrays, and type-safe outputs | Messages, templates, Zod schemas |
 | 4 | [Documents, Embeddings & Semantic Search](./04-documents-embeddings-semantic-search/README.md) | Loading documents, creating embeddings, and building semantic search | Vector embeddings, similarity search |
 | 5 | [Function Calling & Tooling](./05-function-calling-tooling/README.md) | Extending AI capabilities with function calling and tools | Zod schemas, tool binding, type safety |
 | 6 | [Building RAG Systems](./06-rag-systems/README.md) | Combining retrieval with generation using LCEL | RAG pattern, LCEL chains, retrieval |

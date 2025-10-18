@@ -162,6 +162,6 @@ Solutions for all challenges are available in the [`solution/`](./solution/) fol
 
 Once you've completed these challenges, you're ready for:
 
-**[Chapter 3: Prompt Engineering with Templates](../03-prompt-templates/README.md)**
+**[Chapter 3: Prompts, Messages, and Structured Outputs](../03-prompts-messages-outputs/README.md)**
 
 You're making great progress! 🚀

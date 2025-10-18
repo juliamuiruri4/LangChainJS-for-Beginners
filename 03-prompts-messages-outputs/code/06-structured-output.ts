@@ -1,6 +1,6 @@
 /**
  * Structured Output Example
- * Run: npx tsx 03-prompt-templates/code/05-structured-output.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/06-structured-output.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does withStructuredOutput() ensure the response matches the schema?"

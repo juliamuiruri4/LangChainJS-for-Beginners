@@ -1,6 +1,6 @@
 /**
  * Product Data Extractor with Structured Outputs
- * Run: npx tsx 03-prompt-templates/solution/product-extractor.ts
+ * Run: npx tsx 03-prompts-messages-outputs/solution/product-extractor.ts
  */
 
 import { ChatOpenAI } from "@langchain/openai";

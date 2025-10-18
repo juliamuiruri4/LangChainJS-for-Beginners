@@ -159,7 +159,7 @@ A technique where you teach the AI by providing examples in the prompt. Instead 
 - Faster and cheaper than fine-tuning
 - Easy to update and test
 
-**See**: [Chapter 3: Few-Shot Prompting](./03-prompt-templates/README.md#-few-shot-prompting)
+**See**: [Chapter 3: Few-Shot Prompting](./03-prompts-messages-outputs/README.md#-few-shot-prompting)
 
 ### Fine-Tuning
 
@@ -291,7 +291,7 @@ The AI "brain" that processes inputs and generates outputs. In LangChain, models
 
 A component that transforms raw LLM output into structured data formats (JSON, lists, custom objects). Output parsers make it easier to work with AI responses programmatically.
 
-**See**: [Chapter 3: Structured Outputs](./03-prompt-templates/README.md)
+**See**: [Chapter 3: Structured Outputs](./03-prompts-messages-outputs/README.md)
 
 ---
 
@@ -309,7 +309,7 @@ A reusable prompt structure with placeholders (variables) that can be filled in 
 
 **Example**: `"Translate {text} from {source_lang} to {target_lang}"`
 
-**See**: [Chapter 3: Prompt Templates](./03-prompt-templates/README.md)
+**See**: [Chapter 3: Prompts, Messages, and Structured Outputs](./03-prompts-messages-outputs/README.md)
 
 ### Provider
 
@@ -502,7 +502,7 @@ const schema = z.object({
 - ✅ Composable schemas (reuse and extend)
 - ✅ LLM-friendly descriptions (helps AI understand parameters)
 
-**See**: [Chapter 3: Structured Outputs](./03-prompt-templates/README.md#-structured-outputs), [Chapter 5: Creating Tools](./05-function-calling-tools/README.md)
+**See**: [Chapter 3: Structured Outputs](./03-prompts-messages-outputs/README.md#-structured-outputs), [Chapter 5: Creating Tools](./05-function-calling-tools/README.md)
 
 ---
 

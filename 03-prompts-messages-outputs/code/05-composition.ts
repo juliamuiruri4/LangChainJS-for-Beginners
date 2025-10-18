@@ -1,6 +1,6 @@
 /**
  * Prompt Composition
- * Run: npx tsx 03-prompt-templates/code/04-composition.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/04-composition.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does template.partial() work and when would I use it?"

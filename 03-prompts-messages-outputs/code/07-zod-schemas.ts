@@ -1,6 +1,6 @@
 /**
  * Complex Structured Data with Zod Schemas
- * Run: npx tsx 03-prompt-templates/code/06-zod-schemas.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/07-zod-schemas.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How do I add validation constraints like min/max to Zod schema fields?"
