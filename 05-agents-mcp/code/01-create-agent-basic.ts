@@ -4,19 +4,19 @@ import * as z from "zod";
 import "dotenv/config";
 
 /**
- * Example 2: Using createAgent() (V1 Recommended Approach)
+ * Example 1: Using createAgent() (Recommended Approach)
  *
- * In Example 1, we built an agent using a manual ReAct loop.
- * Now let's solve the same problem using createAgent(), the v1 recommended approach.
+ * This example demonstrates building an agent using createAgent(), the recommended approach.
+ * For comparison, see samples/basic-agent-manual-loop.ts which shows manual ReAct loop implementation.
  *
- * Key Differences:
- * - createAgent() handles the ReAct loop automatically
+ * Key Benefits of createAgent():
+ * - Handles the ReAct loop automatically
  * - Less boilerplate code
  * - Production-ready error handling built-in
- * - Same result, simpler API
+ * - Cleaner, more maintainable
  */
 
-// Define the same calculator tool from Example 1
+// Define a calculator tool for the agent
 const calculatorTool = tool(
   async (input) => {
     // Sanitize the expression to prevent code injection

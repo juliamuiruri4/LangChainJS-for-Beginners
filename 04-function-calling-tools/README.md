@@ -303,8 +303,10 @@ Schema: ZodObject {
 **What's happening**:
 1. **Define the tool implementation**: The async function that performs the calculation
 2. **Sanitize input**: Remove potentially dangerous characters
-3. **Execute calculation**: Use `Function()` to evaluate the expression safely
+3. **Execute calculation**: Use the mathjs library's `evaluate()` function to safely compute mathematical expressions
 4. **Return result**: String describing the result
+
+> **Security Note**: The code examples use the `mathjs` library instead of JavaScript's `Function()` constructor. The mathjs `evaluate()` function is specifically designed for mathematical expressions and provides better security by preventing arbitrary code execution.
 
 **Key Components**:
 - **Implementation function**: What the tool actually does (`async (input) => {...}`)

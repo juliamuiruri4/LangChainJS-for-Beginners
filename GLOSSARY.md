@@ -12,7 +12,7 @@ An AI system that can reason about problems, decide which actions to take, and w
 
 **Example**: An agent that can search the web, perform calculations, and query databases to answer complex questions.
 
-**See**: [Chapter 7: Agents & MCP](./07-agents-mcp/README.md)
+**See**: [Chapter 5: Agents & MCP](./05-agents-mcp/README.md)
 
 ### Agent Loop
 
@@ -25,7 +25,7 @@ The iterative process where an agent repeatedly thinks, acts, and observes until
 4. **Repeat**: Continue until problem is solved
 5. **Answer**: Provide final response
 
-**See**: [Chapter 7: Building Your First Agent](./07-agents-mcp/README.md#-building-your-first-agent)
+**See**: [Chapter 5: Building Your First Agent](./05-agents-mcp/README.md#-building-your-first-agent)
 
 ### AIMessage
 
@@ -51,7 +51,7 @@ Processing multiple items together in a single operation instead of one at a tim
 
 **Example**: `embeddings.embedDocuments([text1, text2, text3])` instead of three separate calls.
 
-**See**: [Chapter 4: Batch Processing](./04-documents-embeddings-semantic-search/README.md#-batch-processing)
+**See**: [Chapter 6: Batch Processing](./06-documents-embeddings-semantic-search/README.md#-batch-processing)
 
 ---
 
@@ -63,7 +63,7 @@ A sequence of operations connected together where the output of one step becomes
 
 **Example**: `prompt | model | outputParser`
 
-**See**: [Chapter 6: RAG Systems](./06-rag-systems/README.md)
+**See**: [Chapter 7: Agentic RAG Systems](./07-agentic-rag-systems/README.md)
 
 ### Chunk / Chunking
 
@@ -73,7 +73,7 @@ The process of splitting long documents into smaller, manageable pieces. Chunkin
 - Small chunks (200-500 chars): More precise but less context
 - Large chunks (1000-2000 chars): More context but less precise
 
-**See**: [Chapter 4: Splitting Documents](./04-documents-embeddings-semantic-search/README.md#%EF%B8%8F-splitting-documents)
+**See**: [Chapter 6: Splitting Documents](./06-documents-embeddings-semantic-search/README.md#%EF%B8%8F-splitting-documents)
 
 ### Chunk Overlap
 
@@ -81,7 +81,7 @@ The number of characters that overlap between adjacent chunks when splitting doc
 
 **Recommended**: 10-20% of chunk size
 
-**See**: [Chapter 4: Chunk Overlap](./04-documents-embeddings-semantic-search/README.md#-chunk-overlap)
+**See**: [Chapter 6: Chunk Overlap](./06-documents-embeddings-semantic-search/README.md#-chunk-overlap)
 
 ### Context Window
 
@@ -106,7 +106,7 @@ A measure of similarity between two vectors (embeddings) that calculates the ang
 - 0.6-0.8 = Somewhat similar
 - <0.6 = Different topics
 
-**See**: [Chapter 4: Similarity Metrics](./04-documents-embeddings-semantic-search/README.md#-similarity-metrics)
+**See**: [Chapter 6: Similarity Metrics](./06-documents-embeddings-semantic-search/README.md#-similarity-metrics)
 
 ---
 
@@ -116,7 +116,7 @@ A measure of similarity between two vectors (embeddings) that calculates the ang
 
 In LangChain, a Document is an object with two main properties: `pageContent` (the actual text) and `metadata` (information about the document like source, date, author). Documents are the fundamental unit for working with text in LangChain.
 
-**See**: [Chapter 4: Working with Documents](./04-documents-embeddings-semantic-search/README.md#-part-1-working-with-documents)
+**See**: [Chapter 6: Working with Documents](./06-documents-embeddings-semantic-search/README.md#-part-1-working-with-documents)
 
 ### Document Loader
 
@@ -124,7 +124,7 @@ A component that reads files in various formats (text, PDF, web pages, JSON, CSV
 
 **Example**: `TextLoader`, `PDFLoader`, `WebBaseLoader`
 
-**See**: [Chapter 4: Document Loaders](./04-documents-embeddings-semantic-search/README.md#-part-1-working-with-documents)
+**See**: [Chapter 6: Document Loaders](./06-documents-embeddings-semantic-search/README.md#-part-1-working-with-documents)
 
 ---
 
@@ -136,13 +136,13 @@ A numerical representation of text as a vector (array of numbers) that captures 
 
 **Example**: "cat" and "dog" have similar embeddings (both animals), while "cat" and "pizza" have very different embeddings.
 
-**See**: [Chapter 4: Embeddings](./04-documents-embeddings-semantic-search/README.md#what-are-embeddings)
+**See**: [Chapter 6: Embeddings](./06-documents-embeddings-semantic-search/README.md#what-are-embeddings)
 
 ### Embedding Model
 
 An AI model that converts text into embeddings (vectors). Common models include `text-embedding-3-small` (1536 dimensions) and `text-embedding-3-large` (3072 dimensions).
 
-**See**: [Chapter 4: Creating Embeddings](./04-documents-embeddings-semantic-search/README.md#-creating-embeddings)
+**See**: [Chapter 6: Creating Embeddings](./06-documents-embeddings-semantic-search/README.md#-creating-embeddings)
 
 ---
 
@@ -178,13 +178,13 @@ The process of training a pre-trained LLM on custom data to specialize its behav
 - ❌ Static knowledge (doesn't update easily)
 - ❌ Requires significant training data
 
-**See**: [Chapter 6: When to Use RAG vs Fine-Tuning](./06-rag-systems/README.md#when-to-use-rag-vs-fine-tuning-vs-prompt-engineering)
+**See**: [Chapter 7: When to Use RAG vs Fine-Tuning](./07-agentic-rag-systems/README.md#when-to-use-rag-vs-fine-tuning-vs-prompt-engineering)
 
 ### Function Calling
 
 A feature that allows LLMs to generate structured outputs in the form of function calls with specific parameters. The LLM decides when to call a function and what arguments to pass, but doesn't execute the function itself.
 
-**See**: [Chapter 5: Function Calling & Tooling](./05-function-calling-tooling/README.md)
+**See**: [Chapter 4: Function Calling & Tools](./04-function-calling-tools/README.md)
 
 ---
 
@@ -206,7 +206,7 @@ LangChain's syntax for building chains using the pipe operator (`|`). LCEL allow
 
 **Example**: `const chain = prompt | model | outputParser;`
 
-**See**: [Chapter 6: RAG Systems](./06-rag-systems/README.md)
+**See**: [Chapter 7: Agentic RAG Systems](./07-agentic-rag-systems/README.md)
 
 ### LLM (Large Language Model)
 
@@ -230,7 +230,7 @@ A parameter that limits the length of the AI's response by capping the maximum n
 
 An emerging open standard that lets AI applications connect to external tools and data sources through a universal interface. Think of it as "USB-C for AI" - one protocol that works with many services.
 
-**See**: [Chapter 7: Model Context Protocol](./07-agents-mcp/README.md#-model-context-protocol-mcp)
+**See**: [Chapter 5: Model Context Protocol](./05-agents-mcp/README.md#-model-context-protocol-mcp)
 
 ### MCP Server
 
@@ -247,7 +247,7 @@ A program that exposes tools and capabilities through the Model Context Protocol
 - No custom integration code needed
 - Standard protocol for tool discovery and execution
 
-**See**: [Chapter 7: Model Context Protocol](./07-agents-mcp/README.md#-model-context-protocol-mcp)
+**See**: [Chapter 5: Model Context Protocol](./05-agents-mcp/README.md#-model-context-protocol-mcp)
 
 ### Memory
 
@@ -259,7 +259,7 @@ The ability of an AI application to remember context across multiple interaction
 
 Additional information attached to documents (source, category, date, author, etc.) that helps with filtering, tracking, and organizing content. Metadata is preserved when documents are split into chunks.
 
-**See**: [Chapter 4: Document Metadata](./04-documents-embeddings-semantic-search/README.md#%EF%B8%8F-document-metadata)
+**See**: [Chapter 6: Document Metadata](./06-documents-embeddings-semantic-search/README.md#%EF%B8%8F-document-metadata)
 
 ### MMR (Maximum Marginal Relevance)
 
@@ -275,7 +275,7 @@ A retrieval strategy that balances relevance with diversity. Instead of just ret
 - To avoid redundant information in RAG responses
 - When your knowledge base has many similar documents
 
-**See**: [Chapter 6: Advanced RAG Patterns](./06-rag-systems/README.md#-advanced-rag-patterns-optional)
+**See**: [Chapter 7: Advanced RAG Patterns](./07-agentic-rag-systems/README.md#-advanced-rag-patterns-optional)
 
 ### Model
 
@@ -327,7 +327,7 @@ A pattern where you retrieve relevant documents from a knowledge base and provid
 
 **Flow**: Query → Retrieve Relevant Docs → Format as Context → LLM Generates Answer
 
-**See**: [Chapter 6: RAG Systems](./06-rag-systems/README.md)
+**See**: [Chapter 7: Agentic RAG Systems](./07-agentic-rag-systems/README.md)
 
 ### Rate Limit
 
@@ -350,7 +350,7 @@ A restriction imposed by AI providers on how many API requests you can make with
 
 A reasoning pattern for agents: **Rea**soning + **Act**ing. The agent follows an iterative loop: Think (reason about what to do) → Act (use a tool) → Observe (see the result) → Repeat until solved → Respond.
 
-**See**: [Chapter 7: The ReAct Pattern](./07-agents-mcp/README.md#-the-react-pattern)
+**See**: [Chapter 5: The ReAct Pattern](./05-agents-mcp/README.md#-the-react-pattern)
 
 ### Retriever
 
@@ -368,7 +368,7 @@ A component that searches a vector store and returns the most relevant documents
 - Works seamlessly with RAG chains
 - Supports advanced features like multi-query and ensemble retrieval
 
-**See**: [Chapter 6: RAG Systems](./06-rag-systems/README.md)
+**See**: [Chapter 7: Agentic RAG Systems](./07-agentic-rag-systems/README.md)
 
 ---
 
@@ -380,7 +380,7 @@ A search method that finds results based on meaning and context rather than exac
 
 **Contrast with**: Keyword search (only finds exact word matches)
 
-**See**: [Chapter 4: Semantic Search](./04-documents-embeddings-semantic-search/README.md#traditional-search-vs-semantic-search)
+**See**: [Chapter 6: Semantic Search](./06-documents-embeddings-semantic-search/README.md#traditional-search-vs-semantic-search)
 
 ### Streaming
 
@@ -428,13 +428,13 @@ A function that an agent or LLM can use to perform specific actions (calculation
 
 **Example**: A calculator tool that performs mathematical operations.
 
-**See**: [Chapter 5: Function Calling & Tooling](./05-function-calling-tooling/README.md), [Chapter 7: Agents](./07-agents-mcp/README.md)
+**See**: [Chapter 4: Function Calling & Tools](./04-function-calling-tools/README.md), [Chapter 5: Agents](./05-agents-mcp/README.md)
 
 ### ToolMessage
 
 A message type that contains the result returned by a tool after execution. ToolMessages are added to conversation history so the agent knows what the tool returned.
 
-**See**: [Chapter 7: Building Agents](./07-agents-mcp/README.md#-building-your-first-agent)
+**See**: [Chapter 5: Building Agents](./05-agents-mcp/README.md#-building-your-first-agent)
 
 ### Text Splitter
 
@@ -451,7 +451,7 @@ A component that breaks long documents into smaller chunks for processing. Diffe
 
 **Why it matters**: Good chunking strategy significantly impacts RAG system quality by ensuring each chunk contains complete, meaningful information.
 
-**See**: [Chapter 4: Splitting Documents](./04-documents-embeddings-semantic-search/README.md#%EF%B8%8F-splitting-documents)
+**See**: [Chapter 6: Splitting Documents](./06-documents-embeddings-semantic-search/README.md#%EF%B8%8F-splitting-documents)
 
 ---
 
@@ -463,7 +463,7 @@ An array of numbers (typically 1536 or 3072 dimensions) that represents the sema
 
 **Example**: `[0.23, -0.41, 0.87, ..., 0.15]` (1536 numbers)
 
-**See**: [Chapter 4: Embeddings](./04-documents-embeddings-semantic-search/README.md#what-are-embeddings)
+**See**: [Chapter 6: Embeddings](./06-documents-embeddings-semantic-search/README.md#what-are-embeddings)
 
 ### Vector Store
 
@@ -471,7 +471,7 @@ A specialized database optimized for storing and searching embeddings (vectors).
 
 **Examples**: MemoryVectorStore (in-memory), Chroma (local), Pinecone (cloud), Weaviate, Qdrant
 
-**See**: [Chapter 4: Vector Stores](./04-documents-embeddings-semantic-search/README.md#%EF%B8%8F-vector-stores)
+**See**: [Chapter 6: Vector Stores](./06-documents-embeddings-semantic-search/README.md#%EF%B8%8F-vector-stores)
 
 ---
 
@@ -502,7 +502,7 @@ const schema = z.object({
 - ✅ Composable schemas (reuse and extend)
 - ✅ LLM-friendly descriptions (helps AI understand parameters)
 
-**See**: [Chapter 3: Structured Outputs](./03-prompts-messages-outputs/README.md#-structured-outputs), [Chapter 5: Creating Tools](./05-function-calling-tools/README.md)
+**See**: [Chapter 3: Structured Outputs](./03-prompts-messages-outputs/README.md#-structured-outputs), [Chapter 4: Creating Tools](./04-function-calling-tools/README.md)
 
 ---
 

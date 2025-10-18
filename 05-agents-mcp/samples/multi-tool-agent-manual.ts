@@ -1,7 +1,7 @@
 /**
- * Chapter 7 Example 2: Agent with Multiple Tools
+ * Chapter 5 Example: Multi-Tool Agent with Manual Loop
  *
- * Run: npx tsx 07-agents-mcp/code/02-multi-tool-agent.ts
+ * Run: npx tsx 05-agents-mcp/samples/multi-tool-agent-manual.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does the agent decide which tool to use at each step?"

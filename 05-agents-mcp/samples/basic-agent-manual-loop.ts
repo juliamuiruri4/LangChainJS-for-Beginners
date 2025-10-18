@@ -1,11 +1,11 @@
 /**
- * Chapter 7 Example 1: Basic Agent with createAgent()
+ * Chapter 5 Example: Basic Agent with Manual Loop
  *
- * NOTE: This example demonstrates the agent pattern. The createAgent() function
- * is a simplified example showing the agent concepts. In production, you would
- * use the actual LangChain agent implementation.
+ * NOTE: This example demonstrates the agent pattern using a manual loop implementation.
+ * Compare this to the simplified createAgent() approach in the main code examples.
+ * In production, you would use LangChain's built-in agent implementation.
  *
- * Run: npx tsx 07-agents-mcp/code/01-basic-agent.ts
+ * Run: npx tsx 05-agents-mcp/samples/basic-agent-manual-loop.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does an agent differ from a simple chain?"

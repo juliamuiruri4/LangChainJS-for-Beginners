@@ -87,7 +87,7 @@ LLMs need text input, but your data comes in many formats ([Document Loader](../
 
 **Document loaders handle the complexity of reading different formats.**
 
-> **📦 Import Path Note**: LangChain.js document loader imports have evolved over time. This course uses the current recommended import paths like `langchain/document_loaders/fs/text` and `langchain/document`. If you see older tutorials using different paths (e.g., `@langchain/community`), the imports shown here are the modern, correct approach.
+> **📦 Import Path Note**: LangChain.js document loader imports have evolved over time. This course uses the current recommended import paths from `@langchain/classic` (e.g., `@langchain/classic/document_loaders/fs/text`, `@langchain/classic/vectorstores/memory`). If you see older tutorials using different paths (e.g., `@langchain/community` or bare `langchain/` imports), the `@langchain/classic` imports shown here are the modern, correct approach.
 
 ### Example 1: Loading Text Files
 
