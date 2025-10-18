@@ -38,7 +38,6 @@ import {
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { Document } from "@langchain/core/documents";
-import * as http from "http";
 import "dotenv/config";
 
 // Initialize embeddings and vector store
@@ -48,12 +47,15 @@ const embeddings = new OpenAIEmbeddings({
   apiKey: process.env.AI_API_KEY,
 });
 
-// Create a vector store with initial documents
+// Create a vector store - will be initialized before server starts
 let vectorStore: MemoryVectorStore;
 
-async function initializeVectorStore() {
+async function initializeVectorStore(): Promise<MemoryVectorStore> {
   console.log("🔧 Initializing vector store with sample documents...\n");
 
+  // NOTE: Using MemoryVectorStore for educational simplicity
+  // For production, use persistent storage like Pinecone, Chroma, or Weaviate
+  // to preserve data across server restarts
   const initialDocs = [
     new Document({
       pageContent:
@@ -77,8 +79,10 @@ async function initializeVectorStore() {
     }),
   ];
 
-  vectorStore = await MemoryVectorStore.fromDocuments(initialDocs, embeddings);
+  const store = await MemoryVectorStore.fromDocuments(initialDocs, embeddings);
   console.log(`✅ Vector store initialized with ${initialDocs.length} documents\n`);
+
+  return store;
 }
 
 // Create MCP Server
@@ -150,13 +154,38 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     if (name === "searchDocuments") {
+      // Validate required arguments
       if (!args) {
         throw new Error("Missing arguments for searchDocuments");
       }
-      const query = args.query as string;
-      const k = (args.k as number) || 2;
+
+      if (!args.query || typeof args.query !== "string") {
+        throw new Error("Missing or invalid 'query' parameter (must be a non-empty string)");
+      }
+
+      if (args.query.trim().length === 0) {
+        throw new Error("Query cannot be empty");
+      }
+
+      const query = args.query;
+
+      // Validate and set k parameter
+      const DEFAULT_SEARCH_RESULTS = 2;
+      let k = DEFAULT_SEARCH_RESULTS;
+
+      if (args.k !== undefined) {
+        if (typeof args.k !== "number" || args.k < 1 || args.k > 10) {
+          throw new Error("Parameter 'k' must be a number between 1 and 10");
+        }
+        k = args.k;
+      }
 
       console.log(`🔍 Searching for: "${query}" (returning ${k} results)`);
+
+      // Ensure vector store is initialized
+      if (!vectorStore) {
+        throw new Error("Vector store not initialized. Server may still be starting up.");
+      }
 
       const results = await vectorStore.similaritySearch(query, k);
 
@@ -181,12 +210,31 @@ Content: ${doc.pageContent}
         ],
       };
     } else if (name === "addDocument") {
+      // Validate required arguments
       if (!args) {
         throw new Error("Missing arguments for addDocument");
       }
-      const content = args.content as string;
-      const source = args.source as string;
+
+      if (!args.content || typeof args.content !== "string") {
+        throw new Error("Missing or invalid 'content' parameter (must be a non-empty string)");
+      }
+
+      if (args.content.trim().length === 0) {
+        throw new Error("Document content cannot be empty");
+      }
+
+      if (!args.source || typeof args.source !== "string") {
+        throw new Error("Missing or invalid 'source' parameter (must be a non-empty string)");
+      }
+
+      const content = args.content;
+      const source = args.source;
       const category = (args.category as string) || "general";
+
+      // Ensure vector store is initialized
+      if (!vectorStore) {
+        throw new Error("Vector store not initialized. Server may still be starting up.");
+      }
 
       console.log(`📝 Adding document from source: ${source}`);
 
@@ -226,74 +274,30 @@ Content: ${doc.pageContent}
   }
 });
 
-// Create HTTP Server for remote connections
-function createHttpServer() {
-  const PORT = process.env.MCP_PORT || 3000;
-
-  const httpServer = http.createServer((req, res) => {
-    if (req.method === "POST" && req.url === "/mcp") {
-      let body = "";
-
-      req.on("data", (chunk) => {
-        body += chunk.toString();
-      });
-
-      req.on("end", async () => {
-        try {
-          const request = JSON.parse(body);
-
-          // Handle MCP requests through the server
-          // This is a simplified example - production would use proper MCP transport
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ status: "ok", request }));
-        } catch (error) {
-          res.writeHead(400, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "Invalid request" }));
-        }
-      });
-    } else if (req.method === "GET" && req.url === "/health") {
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ status: "healthy", server: "rag-mcp-server" }));
-    } else {
-      res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Not found" }));
-    }
-  });
-
-  httpServer.listen(PORT, () => {
-    console.log(`🚀 MCP RAG Server running on http://localhost:${PORT}`);
-    console.log(`📡 Health check: http://localhost:${PORT}/health`);
-    console.log(`🔧 MCP Endpoint: http://localhost:${PORT}/mcp\n`);
-    console.log("=" .repeat(70));
-    console.log("\n💡 The server is ready to accept connections from agents!");
-    console.log("   Run the agent client in another terminal:\n");
-    console.log("   npx tsx 07-agentic-rag-systems/samples/mcp-rag-server/mcp-rag-agent.ts\n");
-    console.log("=" .repeat(70) + "\n");
-  });
-
-  return httpServer;
-}
-
 // Start the server
 async function main() {
   console.log("🤖 MCP RAG Server - Exposing RAG as a Service\n");
   console.log("=" .repeat(70) + "\n");
 
-  // Initialize vector store
-  await initializeVectorStore();
+  // Initialize vector store BEFORE starting server
+  // This ensures tools can't be called before data is ready
+  vectorStore = await initializeVectorStore();
 
-  // Start MCP server with stdio transport (for direct connections)
+  // Start MCP server with stdio transport
+  // NOTE: This example uses stdio (stdin/stdout) for MCP communication
+  // The client process spawns this server as a subprocess
   const transport = new StdioServerTransport();
   await server.connect(transport);
 
-  console.log("✅ MCP Server initialized (stdio transport)\n");
-
-  // Also create HTTP server for remote connections
-  createHttpServer();
+  console.log("✅ MCP Server initialized and ready for connections\n");
+  console.log("💡 Run the agent client to connect:\n");
+  console.log("   npx tsx 07-agentic-rag-systems/samples/mcp-rag-server/mcp-rag-agent.ts\n");
+  console.log("=" .repeat(70) + "\n");
 
   // Handle graceful shutdown
-  process.on("SIGINT", () => {
+  process.on("SIGINT", async () => {
     console.log("\n\n🛑 Shutting down MCP RAG Server...");
+    await server.close();
     process.exit(0);
   });
 }

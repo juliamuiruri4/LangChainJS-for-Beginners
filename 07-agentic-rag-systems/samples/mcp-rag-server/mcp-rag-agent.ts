@@ -28,7 +28,6 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import { createAgent, HumanMessage, tool } from "langchain";
 import { ChatOpenAI } from "@langchain/openai";
 import * as z from "zod";
-import { spawn } from "child_process";
 import "dotenv/config";
 
 // Initialize the LLM
@@ -45,12 +44,6 @@ let mcpClient: Client;
 async function initializeMCPClient() {
   console.log("🔌 Connecting to MCP RAG Server...\n");
 
-  // Spawn the MCP server process
-  const serverProcess = spawn("npx", [
-    "tsx",
-    "07-agentic-rag-systems/samples/mcp-rag-server/mcp-rag-server.ts",
-  ]);
-
   // Create MCP client
   mcpClient = new Client(
     {
@@ -63,6 +56,7 @@ async function initializeMCPClient() {
   );
 
   // Connect using stdio transport
+  // NOTE: StdioClientTransport automatically spawns and manages the server subprocess
   const transport = new StdioClientTransport({
     command: "npx",
     args: ["tsx", "07-agentic-rag-systems/samples/mcp-rag-server/mcp-rag-server.ts"],
@@ -80,7 +74,8 @@ async function initializeMCPClient() {
   });
   console.log();
 
-  return serverProcess;
+  // Return transport for proper cleanup
+  return transport;
 }
 
 // Create a tool wrapper that calls the MCP server's searchDocuments tool
@@ -98,7 +93,15 @@ const searchDocumentsTool = tool(
         },
       });
 
-      // Extract text from result
+      // Check for error response from MCP server
+      if (result.isError) {
+        const contents = (result.content || []) as Array<{ type: string; text: string }>;
+        const errorText = contents[0]?.text || "Unknown error from MCP server";
+        console.error(`   ❌ MCP server returned error: ${errorText}\n`);
+        return `Error from knowledge base: ${errorText}`;
+      }
+
+      // Extract text from successful result
       const contents = (result.content || []) as Array<{ type: string; text: string }>;
       const content = contents
         .filter((item) => item.type === "text")
@@ -107,10 +110,21 @@ const searchDocumentsTool = tool(
 
       console.log(`   ✅ Received ${contents.length} results from MCP server\n`);
 
-      return content;
+      return content || "No relevant documents found.";
     } catch (error) {
-      console.error("   ❌ Error calling MCP server:", error);
-      return "Error: Could not retrieve documents from knowledge base";
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("   ❌ Error calling MCP server:", errorMessage, "\n");
+
+      // Provide helpful context for common errors
+      if (errorMessage.includes("ECONNREFUSED")) {
+        return "Error: Could not connect to MCP RAG server. Please ensure the server is running.";
+      }
+
+      if (errorMessage.includes("timeout")) {
+        return "Error: MCP server request timed out. The server may be overloaded.";
+      }
+
+      return `Error retrieving documents: ${errorMessage}`;
     }
   },
   {
@@ -142,10 +156,9 @@ async function main() {
   console.log("=" .repeat(70) + "\n");
 
   // Initialize MCP connection
-  const serverProcess = await initializeMCPClient();
-
-  // Give the server a moment to fully initialize
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  // The transport is returned but we don't need to manage it directly
+  // as the MCP client handles cleanup when we call mcpClient.close()
+  await initializeMCPClient();
 
   // Create agent
   const agent = await createRAGAgent();
@@ -206,7 +219,7 @@ async function main() {
   // Cleanup
   console.log("🛑 Shutting down...");
   await mcpClient.close();
-  serverProcess.kill();
+  // Transport automatically handles subprocess termination
   process.exit(0);
 }
 
