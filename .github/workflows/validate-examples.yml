@@ -49,7 +49,7 @@ jobs:
           AI_MODEL: ${{ secrets.AI_MODEL || 'gpt-5-mini' }}
           AI_EMBEDDING_MODEL: ${{ secrets.AI_EMBEDDING_MODEL || 'text-embedding-3-small' }}
           AI_API_VERSION: ${{ secrets.AI_API_VERSION || '2025-01-01-preview' }}
-        run: npm test
+        run: npm test:parallel
 
       - name: Upload test results
         if: always()
