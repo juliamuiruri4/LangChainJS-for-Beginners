@@ -77,12 +77,12 @@ const documents: Document[] = [
   }),
   new Document({
     pageContent:
-      "TypeScript advanced types: generics, utility types, and conditional types explained.",
+      "TypeScript type features: generics, utility types, and conditional types explained.",
     metadata: {
       category: "Programming",
       date: "2024-02-20",
       author: "Tom TypeScript",
-      tags: ["typescript", "types", "advanced"],
+      tags: ["typescript", "types", "extended"],
     },
   }),
   new Document({

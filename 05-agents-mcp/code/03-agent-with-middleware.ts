@@ -4,7 +4,7 @@ import * as z from "zod";
 import "dotenv/config";
 
 /**
- * Example 3: createAgent() with Middleware (Advanced)
+ * Example 3: createAgent() with Middleware
  *
  * Middleware allows you to intercept and modify agent behavior.
  * This example shows two powerful middleware patterns:
@@ -56,14 +56,14 @@ const searchTool = tool(
 async function main() {
   console.log("🔧 Agent with Middleware Example\n");
 
-  // Create two models: basic (cheaper) and advanced (more capable)
+  // Create two models: basic (cheaper) and capable (more powerful)
   const basicModel = new ChatOpenAI({
     model: process.env.AI_MODEL, // e.g., gpt-4o-mini
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
   });
 
-  const advancedModel = new ChatOpenAI({
+  const capableModel = new ChatOpenAI({
     model: process.env.AI_MODEL, // In production, use a more capable model
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
@@ -71,19 +71,19 @@ async function main() {
   });
 
   // Middleware 1: Dynamic Model Selection
-  // Switches to advanced model for long conversations
+  // Switches to more capable model for long conversations
   const dynamicModelSelection = createMiddleware({
     name: "DynamicModelSelection",
     wrapModelCall: (request, handler) => {
       const messageCount = request.messages.length;
       console.log(`  [Middleware] Message count: ${messageCount}`);
 
-      // Use advanced model for complex conversations (>10 messages)
+      // Use more capable model for complex conversations (>10 messages)
       if (messageCount > 10) {
-        console.log(`  [Middleware] 🔄 Switching to advanced model\n`);
+        console.log(`  [Middleware] 🔄 Switching to more capable model\n`);
         return handler({
           ...request,
-          model: advancedModel,
+          model: capableModel,
         });
       }
 

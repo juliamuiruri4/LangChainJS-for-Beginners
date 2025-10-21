@@ -275,7 +275,7 @@ A retrieval strategy that balances relevance with diversity. Instead of just ret
 - To avoid redundant information in RAG responses
 - When your knowledge base has many similar documents
 
-**See**: [Chapter 7: Advanced RAG Patterns](./07-agentic-rag-systems/README.md#-advanced-rag-patterns-optional)
+**See**: [Chapter 7: Building Agentic RAG Systems](./07-agentic-rag-systems/README.md#-additional-rag-patterns-optional)
 
 ### Model
 
@@ -366,9 +366,9 @@ A component that searches a vector store and returns the most relevant documents
 - Consistent interface across different search methods
 - Easy to swap strategies (similarity → MMR)
 - Works seamlessly with RAG chains
-- Supports advanced features like multi-query and ensemble retrieval
+- Supports additional features like multi-query and ensemble retrieval
 
-**See**: [Chapter 7: Agentic RAG Systems](./07-agentic-rag-systems/README.md)
+**See**: [Chapter 7: Building Agentic RAG Systems](./07-agentic-rag-systems/README.md)
 
 ---
 

@@ -58,7 +58,7 @@ Prompts are how you communicate with AI models. Effective prompt engineering can
 
 LangChain provides prompt templates that make it easy to create reusable, parameterized prompts for your applications.
 
-## Chapter 4: Advanced Topics
+## Chapter 4: Additional Topics
 
 ### Tools
 

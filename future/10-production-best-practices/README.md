@@ -86,11 +86,11 @@ AI_MODEL=gpt-5-mini
 
 **Zero code changes needed!** 🎉
 
-### Example 1: Advanced Provider Patterns
+### Example 1: Extended Provider Patterns
 
 **Code**: [`code/01-model-switching.ts`](./code/01-model-switching.ts)
 
-This example shows advanced patterns like:
+This example shows extended patterns like:
 - Runtime provider selection
 - Provider-specific configurations
 - Fallback strategies

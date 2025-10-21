@@ -213,7 +213,7 @@ Practice building stateful AI workflows with LangGraph for complex multi-step ag
 4. Agents can communicate via shared state
 5. Supports parallel execution where possible
 
-**Advanced Features**:
+**Key Features**:
 - Agent coordination
 - Parallel task execution
 - Result aggregation
@@ -265,7 +265,7 @@ You've completed the **LangChain.js for Beginners** course!
 - Build your own AI application
 - Contribute to open source
 - Join our [Discord community](https://aka.ms/foundry/discord)
-- Explore advanced LangChain patterns
+- Explore additional LangChain patterns
 - Share what you've built!
 
 ### Need Help?

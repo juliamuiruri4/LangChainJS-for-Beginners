@@ -353,13 +353,13 @@ description: "Perform mathematical calculations like addition, multiplication, d
 
 ---
 
-## 🔧 Advanced Agent Patterns
+## 🔧 Additional Agent Patterns
 
-Now that you understand how to build basic agents with single and multiple tools, let's explore an advanced pattern for production applications: **middleware**. Middleware lets you add behavior like logging, error handling, and dynamic model selection without modifying your tools or agent core logic.
+Now that you understand how to build basic agents with single and multiple tools, let's explore an additional pattern for production applications: **middleware**. Middleware lets you add behavior like logging, error handling, and dynamic model selection without modifying your tools or agent core logic.
 
-### Example 3: createAgent() with Middleware (Advanced)
+### Example 3: createAgent() with Middleware
 
-This advanced example shows how to use **middleware** with `createAgent()` for production scenarios like dynamic model selection based on conversation complexity and graceful error handling.
+This example shows how to use **middleware** with `createAgent()` for production scenarios like dynamic model selection based on conversation complexity and graceful error handling.
 
 **Code**: [`code/03-agent-with-middleware.ts`](./code/03-agent-with-middleware.ts)
 **Run**: `tsx 05-agents-mcp/code/03-agent-with-middleware.ts`
@@ -376,12 +376,12 @@ const dynamicModelSelection = createMiddleware({
   wrapModelCall: (request, handler) => {
     const messageCount = request.messages.length;
 
-    // Use advanced model for complex conversations (>10 messages)
+    // Option for complex conversations (>10 messages)
     if (messageCount > 10) {
-      console.log(`  [Middleware] Switching to advanced model`);
+      console.log(`  [Middleware] Switching to more capable model`);
       return handler({
         ...request,
-        model: advancedModel,
+        model: capableModel,
       });
     }
 

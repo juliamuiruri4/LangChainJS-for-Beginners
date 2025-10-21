@@ -375,7 +375,7 @@ Response: Recursion is when a function calls itself to solve a problem by breaki
 
 - **Production-ready**: Enterprise-grade infrastructure and SLAs
 - **Higher limits**: More requests per minute than free tiers
-- **Advanced features**: Private endpoints, content filtering, monitoring
+- **Additional features**: Private endpoints, content filtering, monitoring
 - **Azure integration**: Works seamlessly with other Azure services
 
 ### How to Switch

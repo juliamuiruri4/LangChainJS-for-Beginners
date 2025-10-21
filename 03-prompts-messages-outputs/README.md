@@ -673,7 +673,7 @@ angry → 😠
 
 ---
 
-**You're building a system that generates personalized educational content.** You have reusable prompt pieces (system role, context, task) that you want to mix and match for different scenarios—beginner vs advanced, programming vs math, high school vs college. Instead of creating separate templates for every combination, you want to compose them dynamically.
+**You're building a system that generates personalized educational content.** You have reusable prompt pieces (system role, context, task) that you want to mix and match for different scenarios—beginner vs intermediate, programming vs math, high school vs college. Instead of creating separate templates for every combination, you want to compose them dynamically.
 
 **That's where template composition comes in.** Build a library of reusable prompt components and combine them as needed, like LEGO blocks for prompts.
 

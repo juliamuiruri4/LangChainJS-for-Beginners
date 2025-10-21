@@ -242,4 +242,4 @@ You're now building production-grade AI applications! 🚀
 **What's next?**
 - Build your own AI project
 - Share your work with the community
-- Explore advanced LangChain.js patterns
+- Explore additional LangChain.js patterns

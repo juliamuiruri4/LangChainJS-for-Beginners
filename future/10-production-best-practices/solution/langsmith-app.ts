@@ -68,8 +68,8 @@ async function main() {
     },
     {
       query: "Compare microservices vs monolithic architecture",
-      tags: ["advanced", "architecture"],
-      metadata: { category: "architecture", difficulty: "advanced" },
+      tags: ["extended", "architecture"],
+      metadata: { category: "architecture", difficulty: "extended" },
     },
   ];
 
@@ -122,7 +122,7 @@ async function main() {
   console.log("   - Cost optimization opportunities");
   console.log();
 
-  console.log("Advanced Features:");
+  console.log("Additional Features:");
   console.log("   - Prompt comparison (A/B testing)");
   console.log("   - Chain visualization");
   console.log("   - Custom feedback collection");

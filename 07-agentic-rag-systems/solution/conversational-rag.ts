@@ -33,7 +33,7 @@ const knowledgeBase = [
   new Document({
     pageContent:
       "Generics in TypeScript allow you to create reusable components that work with multiple types. They provide type safety while maintaining flexibility. Common examples include Array<T> and Promise<T>.",
-    metadata: { title: "TypeScript Generics", section: "Advanced Features" },
+    metadata: { title: "TypeScript Generics", section: "Additional Features" },
   }),
   new Document({
     pageContent:

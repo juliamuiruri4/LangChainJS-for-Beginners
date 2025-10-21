@@ -317,7 +317,7 @@ You'll notice the text appears progressively, word by word, rather than all at o
 > [!NOTE]
 > The actual file [`02-streaming.ts`](./code/02-streaming.ts) includes additional timing measurements and a comparison between streaming and non-streaming approaches to demonstrate the performance benefits. The code above shows the core streaming concept for clarity.
 
-> **💡 Advanced**: To track token usage with streaming, some providers support `streamOptions: { includeUsage: true }` which includes usage metadata in the final chunk. This is provider-dependent - check your provider's documentation for availability.
+> **💡 Bonus**: To track token usage with streaming, some providers support `streamOptions: { includeUsage: true }` which includes usage metadata in the final chunk. This is provider-dependent - check your provider's documentation for availability.
 
 ---
 
@@ -510,8 +510,6 @@ main().catch(console.error);
 - Production-tested - handles edge cases
 - Works seamlessly when you advance to agents and RAG in later chapters
 - Standardized across LangChain ecosystem
-
-> **💡 Advanced**: LangGraph provides even more sophisticated retry policies with `retryPolicy` for complex agent workflows. You'll learn about this in advanced courses.
 
 > **⚠️ Known Limitation**: `withRetry()` currently has issues with streaming (`.stream()`). Retry logic works correctly with `.invoke()` but may not execute with `.stream()`. For critical operations requiring retry logic, use `.invoke()` instead of `.stream()`.
 

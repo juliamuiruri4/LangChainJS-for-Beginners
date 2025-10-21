@@ -430,7 +430,7 @@ const docs = [
     pageContent: "RAG systems combine retrieval with generation...",
     metadata: {
       source: "rag-explained.md",
-      category: "advanced",
+      category: "extended",
       date: "2024-02-20",
     },
   }),
@@ -483,7 +483,7 @@ Chunk 3:
 Content: RAG systems combine retrieval with generation...
 Metadata: {
   source: 'rag-explained.md',
-  category: 'advanced',
+  category: 'extended',
   date: '2024-02-20'
 }
 ```

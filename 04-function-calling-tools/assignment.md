@@ -123,7 +123,7 @@ import "dotenv/config";
 // 6. Display tool name, arguments, and result for each query
 ```
 
-**Advanced Feature** (Optional):
+**Additional Feature** (Optional):
 Add error handling that returns helpful error messages when:
 - Invalid currency code provided
 - Unknown city name

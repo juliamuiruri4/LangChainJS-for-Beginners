@@ -177,7 +177,7 @@ You now know how to:
 - Explore [LangChain.js Documentation](https://js.langchain.com/)
 - Build your own agentic applications
 - Experiment with different vector stores (Pinecone, Chroma, Weaviate)
-- Try advanced agent patterns and multi-agent systems
+- Try extended agent patterns and multi-agent systems
 - Integrate MCP servers for extended capabilities
 - Deploy your agents to production
 

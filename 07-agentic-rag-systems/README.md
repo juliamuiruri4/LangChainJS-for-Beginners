@@ -689,9 +689,9 @@ const retriever = vectorStore.asRetriever({
 
 ---
 
-## 🔬 Advanced RAG Patterns (Optional)
+## 🔬 Additional RAG Patterns
 
-Once you've mastered basic RAG, explore these advanced patterns:
+Once you've mastered basic RAG, explore these additional patterns:
 
 - **Multi-Query RAG**: Generate multiple search queries for better retrieval
 - **Contextual Compression**: Compress retrieved docs to include only relevant parts

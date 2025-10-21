@@ -157,7 +157,7 @@ import "dotenv/config";
 // 7. Test with complex multi-step queries requiring 3+ tool calls
 ```
 
-**Advanced Features** (Optional):
+**Additional Features** (Optional):
 - Add detailed console output showing each tool call
 - Display a summary of all tools used after the agent completes
 - Track and display total execution time

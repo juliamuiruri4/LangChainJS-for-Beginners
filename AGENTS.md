@@ -412,7 +412,7 @@ This is an educational repository optimized for learning:
 - All examples are tested automatically to ensure they work
 - **Pedagogical approach**: Hands-on examples before heavy theory
 - Terms and concepts defined before extensive use
-- Advanced/future content clearly marked as optional
+- Additional/future content clearly marked as optional
 - Deep dive sections available for those wanting more depth
 
 ### Agent-First Teaching Philosophy
@@ -432,7 +432,7 @@ Unlike traditional LangChain tutorials that teach document search first, this co
 
 **Key Differentiator**: Students learn to build RAG systems where agents intelligently decide when retrieval is necessary vs answering directly from general knowledge.
 
-### MCP RAG Server (Advanced Example)
+### MCP RAG Server (Extended Example)
 
 The course includes a capstone example that combines all learned concepts:
 
@@ -465,7 +465,7 @@ npx tsx 07-agentic-rag-systems/samples/mcp-rag-server/mcp-rag-agent.ts
 - Examples in `code/` directory demonstrate concepts
 - Solutions in `solution/` directory show complete implementations
 - Consult `GLOSSARY.md` for definitions of all course terms
-- Advanced samples in chapter `samples/` folders show real-world patterns
+- Extended samples in chapter `samples/` folders show real-world patterns
 
 ### Provider Flexibility
 

@@ -175,7 +175,7 @@ Provide your evaluation:`,
   console.log("   - Consider potential biases in evaluation");
   console.log("   - Use multiple judges for critical applications");
 
-  console.log("\n🔬 Advanced Patterns:\n");
+  console.log("\n🔬 Extended Patterns:\n");
   console.log("   1. Multi-judge ensemble (use 3+ evaluators, take average)");
   console.log("   2. Comparative evaluation (judge which of 2 answers is better)");
   console.log("   3. Reference-based evaluation (compare against golden answer)");

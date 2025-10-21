@@ -1,6 +1,6 @@
-# Agent Samples - Advanced Manual Patterns
+# Agent Samples - Manual Pattern Examples
 
-This folder contains advanced examples showing how to build agents manually without using `createAgent()`. These are educational resources for understanding how agents work under the hood.
+This folder contains in-depth examples showing how to build agents manually without using `createAgent()`. These are educational resources for understanding how agents work under the hood.
 
 ## When to Use These Examples
 
@@ -104,7 +104,7 @@ console.log(lastMessage.content);
 - ✅ V1 recommended approach
 - ✅ Less boilerplate
 - ✅ Production-ready error handling
-- ✅ Supports middleware for advanced patterns
+- ✅ Supports middleware for extended patterns
 - ✅ Consistent with LangChain.js ecosystem
 
 **Cons**:
