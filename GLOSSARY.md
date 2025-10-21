@@ -85,12 +85,12 @@ The number of characters that overlap between adjacent chunks when splitting doc
 
 ### Context Window
 
-The maximum number of tokens an LLM can process in a single request, including both input (prompt + conversation history) and output (response). Models have varying context limits ranging from 4K to 200K+ tokens.
+The maximum number of tokens an LLM can process in a single request, including both input (prompt + conversation history) and output (response). Models have varying context limits ranging from 4K to 1M+ tokens.
 
 **Examples**:
-- GPT-5: 128K tokens
-- GPT-5-mini: 128K tokens
-- Claude Sonnet: 200K tokens
+- GPT-4o: 128K tokens
+- GPT-4o-mini: 128K tokens
+- Claude Sonnet 4/4.5: 200K tokens (1M with beta flag)
 
 **Why it matters**: When conversation history exceeds the context window, older messages must be removed or summarized. This affects how much context the AI can remember.
 
@@ -210,7 +210,7 @@ LangChain's syntax for building chains using the pipe operator (`|`). LCEL allow
 
 ### LLM (Large Language Model)
 
-An AI model trained on massive amounts of text data that can understand and generate human-like text. Examples include GPT-5, GPT-4, Claude Sonnet, and many others.
+An AI model trained on massive amounts of text data that can understand and generate human-like text. Examples include GPT-5, GPT-5-mini, Claude Sonnet 4/4.5, and many others.
 
 **See**: [Chapter 1: Introduction](./01-introduction/README.md)
 
@@ -228,7 +228,7 @@ A parameter that limits the length of the AI's response by capping the maximum n
 
 ### MCP (Model Context Protocol)
 
-An emerging open standard that lets AI applications connect to external tools and data sources through a universal interface. Think of it as "USB-C for AI" - one protocol that works with many services.
+An open standard that lets AI applications connect to external tools and data sources through a universal interface. Introduced by Anthropic in November 2024 and officially adopted by OpenAI (March 2025) and Google DeepMind (April 2025). Think of it as "USB-C for AI" - one protocol that works with many services.
 
 **See**: [Chapter 5: Model Context Protocol](./05-agents-mcp/README.md#-model-context-protocol-mcp)
 
