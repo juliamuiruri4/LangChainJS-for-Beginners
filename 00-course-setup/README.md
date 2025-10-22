@@ -20,25 +20,9 @@ Welcome! Before we dive into building AI applications with LangChain.js, let's g
 
 ## 📖 The Workshop Analogy
 
-**Imagine you're about to start building a custom piece of furniture.**
+**Just like setting up a workshop before building furniture, you need to prepare your development environment before building AI applications.**
 
-Before you start cutting wood or assembling pieces, you need to:
-- 🔧 **Set up your workbench** (Install Node.js)
-- 🔑 **Get access to the hardware store** (GitHub token for AI models)
-- 📦 **Gather your materials** (Install dependencies)
-- 📋 **Organize your blueprints** (Configure environment variables)
-- 🛠️ **Prepare your tools** (Set up your code editor)
-
-**Would you start building without these?** Of course not!
-
-The same applies to AI development. This setup chapter ensures you have:
-
-- ✅ A solid foundation to build on
-- ✅ Access to the AI models you need
-- ✅ All tools properly configured
-- ✅ A smooth development experience
-
-**Let's get your workshop ready!** In just 15 minutes, you'll be equipped to build powerful AI applications.
+You'll install Node.js, get access to AI models, and configure your tools. This ensures you have a solid foundation and smooth development experience. Let's get your workshop ready—it takes just 15 minutes!
 
 ## Setup Options
 
@@ -84,12 +68,7 @@ node --version  # Displays LTS version
 npm --version # Displays npm version
 ```
 
-**Why LTS?**
-
-- ✅ **Stable**: Production-ready and well-tested
-- ✅ **Supported**: Receives security updates and bug fixes
-- ✅ **Reliable**: Recommended for all applications
-- ✅ **Compatible**: Works with all LangChain.js packages
+**Why LTS?** Stable, production-ready, and receives security updates.
 
 ---
 
@@ -118,29 +97,18 @@ This will install all required packages:
 
 #### Why install tsx globally?
 
-**tsx** is a TypeScript execution engine that lets you run `.ts` files directly without compiling them first.
+**tsx** lets you run `.ts` files directly without compiling first.
 
-**Without tsx**:
+**Comparison**:
 ```bash
-# You'd need to compile first, then run
-tsc myfile.ts        # Compile TypeScript → JavaScript
-node myfile.js       # Run the JavaScript file
-```
+# Without tsx: compile then run
+tsc myfile.ts && node myfile.js
 
-**With tsx** (what we'll use):
-```bash
-# Run TypeScript files directly - no compilation step needed!
+# With tsx: run directly
 tsx myfile.ts
 ```
 
-**Benefits**:
-
-- ✅ **Faster development** - No compile step needed
-- ✅ **Simpler workflow** - One command instead of two
-- ✅ **Global installation** - Available everywhere on your system
-- ✅ **Perfect for learning** - Focus on code, not build processes
-
-Throughout this course, you'll run examples using `tsx filename.ts` - quick and easy!
+**Benefits**: Faster development, simpler workflow, no build step needed. Throughout this course, you'll run examples using `tsx filename.ts`.
 
 ---
 
@@ -162,7 +130,7 @@ GitHub Models provides free access to powerful AI models—you just need a Perso
 #### Why GitHub Models?
 
 - ✅ **Free**: No credit card required
-- ✅ **Powerful**: Access to GPT-5, GPT-5-mini, and other models
+- ✅ **Powerful**: Access to GPT-4o, GPT-4o-mini, and other models
 - ✅ **Easy**: Use your existing GitHub account
 - ✅ **Learning**: Perfect for this course!
 
@@ -202,91 +170,9 @@ AI_MODEL=gpt-5-mini
 
 **Replace `ghp_your_github_token_here` with your actual GitHub token!**
 
-### Alternative: Azure AI Foundry (Optional)
+**Alternative: Azure AI Foundry**
 
-If you have an Azure subscription, you can use Azure AI Foundry for production-grade AI applications with enterprise features.
-
-#### Step-by-Step Setup:
-
-You can follow the steps below to deploy models in Azure AI Foundry or visit the [Deploy an Azure OpenAI model quickstart](https://learn.microsoft.com/azure/ai-foundry/quickstarts/get-started-code?tabs=azure-ai-foundry) which will also walk you through the process.
-
-**1. Create an Azure AI Foundry Project**
-
-1. Visit the [Azure AI Foundry portal](https://ai.azure.com/)
-2. Sign in with your Azure account
-3. Click **+ New project**
-4. Fill in the project details:
-   - **Project name**: `langchain-course` (or your preferred name)
-   - **Subscription**: Select your Azure subscription
-   - **Resource group**: Create new or select existing
-   - **Region**: Choose a region close to you (e.g., East US, West Europe)
-5. Click **Create** (the portal will automatically set up the necessary resources)
-
-**2. Deploy Required Models**
-
-You'll need to deploy two models for this course:
-
-**Deploy gpt-5-mini & gpt-5 (Chat Model):**
-
-1. In your project, go to **Models + endpoints** in the left navigation
-2. Click **+ Deploy model** → **Deploy base model**
-3. Search for and select **gpt-5-mini**
-4. Click **Confirm**
-5. Configure deployment:
-   - **Deployment name**: `gpt-5-mini` (keep this name for consistency)
-   - **Model version**: Select the latest available
-   - **Deployment type**: Global Standard
-   - Click **Deploy**
-6. Wait for deployment to complete
-7. Follow the same process and deploy `gpt-5` as well
-
-**Deploy Text Embedding Model:**
-
-1. Click **+ Deploy model** → **Deploy base model** again
-2. Search for and select **text-embedding-3-small**
-3. Click **Confirm**
-4. Configure deployment:
-   - **Deployment name**: `text-embedding-3-small` (keep this name)
-   - **Model version**: Select the latest available
-   - **Deployment type**: Global Standard
-   - Click **Deploy**
-5. Wait for deployment to complete
-
-**3. Get Your Configuration Values**
-
-After deploying your models, you need two pieces of information:
-
-1. **API Key**:
-   - In your project, go to **Overview** in the left navigation
-   - Find **Endpoints and keys**
-   - Locate your **API Key**
-
-2. **Endpoint URL**:
-   - Locate the **Azure OpenAI** → **Azure OpenAI endpoint** value (looks like: `https://your-resource.openai.azure.com`)
-
-**4. Add the API Key and Endpoint to Your `.env` File:**
-
-Ensure that you add `/openai/v1` to the end of your endpoint URL.
-
-```bash
-# Azure AI Foundry Configuration
-AI_API_KEY=your_azure_api_key_here
-AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
-```
-
-**Important Notes:**
-
-- ✅ **Deployment names must match**: The course uses `gpt-5-mini` and `text-embedding-3-small` as deployment names
-- ✅ **Keep your API key secure**: Never commit `.env` to version control
-- ✅ **Cost management**: Azure AI Foundry is a paid service. Set up cost alerts in the Azure portal
-- ✅ **Production ready**: Azure AI Foundry provides enterprise features like Responsible AI, monitoring, logging, and SLA guarantees
-
-**Additional Resources:**
-- [Azure AI Foundry Quickstart](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=typescript)
-- [Azure OpenAI Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
-- [Model Deployment Guide](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/deploy-models)
-
-
+If you have an Azure subscription, you can use Azure AI Foundry for production-grade AI applications. See the [Azure Setup Appendix](./APPENDIX.md#azure-ai-foundry-setup) for detailed instructions on deploying models and configuring your environment.
 
 ### Step 5: Test Your Setup
 
@@ -326,43 +212,7 @@ While you can use any text editor, we recommend **Visual Studio Code** for the b
 
 1. Visit [code.visualstudio.com](https://code.visualstudio.com/)
 2. Download for your OS
-3. Install
-
----
-
-## 🐛 Troubleshooting
-
-### Issue: "Cannot find module '@langchain/openai'"
-
-**Solution**: Run `npm install` in the project directory
-
-### Issue: "AI_API_KEY not found" or "AI_ENDPOINT not found"
-
-**Solutions**:
-1. Make sure `.env` file exists in the project root
-2. Check that `.env` contains all required variables:
-   - `AI_API_KEY=your_key`
-   - `AI_ENDPOINT=your_endpoint_url`
-   - `AI_MODEL=gpt-5-mini`
-3. No quotes needed around the values
-4. No spaces before or after the `=`
-
-### Issue: "401 Unauthorized" or "Invalid token"
-
-**Solutions**:
-1. Create a new GitHub Personal Access Token
-2. Make sure you copied the entire token
-3. The token should start with `ghp_` or `github_pat_`
-4. Check for extra spaces in the `.env` file
-
-### Issue: Rate limit errors
-
-**Solution**: GitHub Models have rate limits. If you hit them:
-- Wait a few minutes
-- The limits reset quickly
-- You can use Azure AI Foundry instead if you went through the optional setup above
-
----
+3. Install and launch VS Code
 
 ## ✅ Setup Checklist
 
