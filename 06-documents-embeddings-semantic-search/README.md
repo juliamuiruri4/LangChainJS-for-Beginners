@@ -40,37 +40,9 @@ When you run the actual files, you'll see more detailed output than shown in the
 
 ## 📖 The Smart Library System Analogy
 
-**Imagine you're building a modern, intelligent library system.**
+**Imagine a library system that must handle a 2,000-page encyclopedia.** You can't hand readers the entire book. Instead, you break it into manageable chapters with overlap to preserve context, label each with metadata, and give each section a numerical "meaning tag." When someone asks "How do plants create energy?", the system converts the question to numbers, finds sections with similar tags, and returns the photosynthesis section, even though they used different words.
 
-### Part 1: Organizing the Library (Document Processing)
-
-When someone donates a massive encyclopedia to your library, you can't:
-- ❌ Hand readers the entire 2,000-page book
-- ❌ Give them random pages
-- ❌ Show them just individual words
-
-Instead, you need to:
-
-- Find the right sections (loading)
-- Break it into manageable chapters (chunking)
-- Label each piece with metadata (organization)
-- Keep some overlap between sections so context isn't lost
-
-### Part 2: The Smart Search System (Embeddings & Semantic Search)
-
-Now imagine each book section gets a special "number tag" that represents its meaning:
-- Section about "photosynthesis": `[plants: 0.9, biology: 0.8, energy: 0.7]`
-- Section about "solar panels": `[plants: 0.1, technology: 0.9, energy: 0.8]`
-- Section about "pasta recipes": `[plants: 0.2, food: 0.9, energy: 0.3]`
-
-When someone asks "How do plants create energy?", the system:
-1. Converts their question into numbers: `[plants: 0.9, biology: 0.7, energy: 0.8]`
-2. Finds sections with similar numbers
-3. Returns the photosynthesis section (perfect match!)
-
-**This is exactly how document processing and semantic search work together!**
-
-LLMs have context limits which means they can only process so much text at once. Document processing prepares your content, and semantic search helps you find exactly what's needed based on *meaning*, not just keyword matching.
+**This is document processing + semantic search.** LLMs have context limits, so you process documents into chunks and use semantic search to find what's needed based on *meaning*, not just keywords.
 
 ---
 
@@ -78,18 +50,9 @@ LLMs have context limits which means they can only process so much text at once.
 
 ### Why Document Loaders?
 
-LLMs need text input, but your data comes in many formats ([Document Loader](../GLOSSARY.md#document-loader)):
-- Text files (.txt, .md)
-- PDFs
-- Websites
-- JSON/CSV files
-- And many more...
+LLMs need text input, but data comes in many formats: text files, PDFs, websites, JSON/CSV, and more. **[Document loaders](../GLOSSARY.md#document-loader) handle the complexity of reading different formats.**
 
-**Document loaders handle the complexity of reading different formats.**
-
-> **📦 Import Path Note**: LangChain.js document loader imports have evolved over time. This course uses the current recommended import paths from `@langchain/classic` (e.g., `@langchain/classic/document_loaders/fs/text`, `@langchain/classic/vectorstores/memory`). If you see older tutorials using different paths (e.g., `@langchain/community` or bare `langchain/` imports), the `@langchain/classic` imports shown here are the modern, correct approach.
-
-**You're building an AI that needs to answer questions about your company's documentation.** Your docs are stored as text files, PDFs, and markdown—hundreds of files totaling thousands of pages. You can't send all that to an AI at once (context limits!), so you need to load the files, split them into manageable chunks with overlap to preserve context, and track which file each chunk came from.
+> **📦 Import Path Note**: This course uses `@langchain/classic` imports (e.g., `@langchain/classic/document_loaders/fs/text`). If you see older tutorials using different paths, `@langchain/classic` is the current recommended approach.
 
 ### Example 1: Loading Text Files
 
@@ -236,12 +199,12 @@ When you run this example with `tsx 06-documents-embeddings-semantic-search/code
 Split into 5 chunks
 
 Chunk 1:
-[First 500 characters of the article...]
-Length: 497 characters
+[First ~300 characters of the article...]
+Length: 297 characters
 
 Chunk 2:
-[Next 500 characters with 50 character overlap...]
-Length: 503 characters
+[Next ~300 characters with 50 character overlap...]
+Length: 303 characters
 
 Chunk 3:
 [...]
@@ -261,39 +224,12 @@ Chunk 3:
 
 ### Practical Chunk Size Guidelines
 
-Choosing the right chunk size depends on your content type and use case. Here are recommended starting points:
+**Starting Point**: Use **500 characters** with **100 character overlap** (20%) for most use cases.
 
-| Content Type | Chunk Size | Overlap | Reasoning |
-|--------------|-----------|---------|-----------|
-| **Technical Documentation** | 500-800 chars | 100 chars | Preserves code examples and explanations together |
-| **Blog Articles** | 800-1200 chars | 150 chars | Captures full paragraphs with context |
-| **Chat/Support Messages** | 200-400 chars | 50 chars | Short, focused content per message |
-| **Legal Documents** | 600-1000 chars | 150 chars | Preserves context for clauses and references |
-| **General Text** | 500 chars | 100 chars | Good balance for most use cases |
-| **Product Descriptions** | 300-500 chars | 75 chars | Focused on single product features |
-
-**Starting Point**: Use **500 characters** with **100 character overlap** (20%) and adjust based on your results.
-
-**Adjusting for Your Use Case**:
-- **Too few results?** → Increase chunk size (more context per chunk)
-- **Results too generic?** → Decrease chunk size (more focused chunks)
-- **Missing context at boundaries?** → Increase overlap
-- **Too much redundancy?** → Decrease overlap
-
-**Example**:
-```typescript
-// For technical documentation
-const docSplitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 700,
-  chunkOverlap: 100,
-});
-
-// For chat messages
-const chatSplitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 300,
-  chunkOverlap: 50,
-});
-```
+**Adjust based on results**:
+- Too few results → Increase chunk size
+- Results too generic → Decrease chunk size
+- Missing context at boundaries → Increase overlap
 
 **Splitter Types ([Text Splitter](../GLOSSARY.md#text-splitter))**:
 
@@ -312,25 +248,13 @@ const chatSplitter = new RecursiveCharacterTextSplitter({
 
 ## 🔄 Chunk Overlap
 
-**Why overlap chunks ([chunk overlap](../GLOSSARY.md#chunk-overlap))?**
+**Why overlap chunks ([chunk overlap](../GLOSSARY.md#chunk-overlap))?** Without overlap, "the mitochondria is the | powerhouse of the cell" splits mid-sentence, losing context. With overlap, both chunks include "is the powerhouse," preserving meaning.
 
-Without overlap:
-```
-Chunk 1: "...the mitochondria is the"
-Chunk 2: "powerhouse of the cell..."
-```
-❌ Context is lost!
-
-With overlap:
-```
-Chunk 1: "...the mitochondria is the powerhouse"
-Chunk 2: "mitochondria is the powerhouse of the cell..."
-```
-✅ Context preserved!
+**Recommended overlap**: Start with 20% of chunk size (e.g., 100 chars for 500-char chunks). Production systems commonly use 10-50% depending on content type—test what works for your application.
 
 ### Example 3: Comparing Overlap
 
-This example compares document chunks with and without overlap to show you how overlap preserves context between adjacent chunks.
+This example compares chunks with and without overlap to demonstrate how overlap preserves context.
 
 **Code**: [`code/03-overlap.ts`](./code/03-overlap.ts)
 **Run**: `tsx 06-documents-embeddings-semantic-search/code/03-overlap.ts`
@@ -526,25 +450,11 @@ Finds: "Preparing Italian noodles", "Making spaghetti", etc.
 
 ### What Are Embeddings?
 
-**[Embeddings](../GLOSSARY.md#embedding) are numerical representations of text** that convert words, sentences, or documents into arrays of numbers (vectors) that capture semantic meaning.
+**[Embeddings](../GLOSSARY.md#embedding) are numerical representations of text.** Text goes in ("LangChain is a framework"), an AI model processes it, and a vector comes out (`[0.23, -0.41, 0.87, ..., 0.15]` with 1536 numbers). Similar meanings produce similar vectors, allowing computers to understand and compare text mathematically.
 
-**Quick Overview**:
-1. **Text goes in**: "LangChain is a framework"
-2. **AI model processes it** (analyzes patterns, context, relationships)
-3. **Vector comes out**: `[0.23, -0.41, 0.87, ..., 0.15]` (1536 numbers!)
-4. **Similar text = similar vectors** (nearby in vector space)
-
-**Key Insight**: Similar meanings produce similar vectors, allowing computers to understand and compare text mathematically.
-
-**Simple Analogy**: If we could visualize embeddings in simple space:
-- "dog" and "cat" would be close together (both animals, pets)
-- "pizza" would be far away (different concept)
-
-Real embeddings use 1536+ dimensions, each capturing different aspects of meaning.
+**Example**: "dog" and "cat" vectors would be close together (both animals and pets), while "pizza" would be far away (different concept).
 
 > **💡 Want to understand how embeddings work in depth?** See the [Deep Dive on Embeddings](#-deep-dive-embeddings) section at the end of this chapter.
-
-Let's see embeddings in action with hands-on examples!
 
 ---
 
@@ -765,23 +675,11 @@ Score: 0.623 - Dogs are loyal companions that enjoy playing fetch.
 
 ### How It Works
 
-**What's happening**:
-1. **similaritySearchWithScore()**: Instead of just returning documents, this returns tuples of `[document, score]`
-2. **Scores indicate relevance**: Higher score = more similar to the query
-3. **Query**: "pets that need less attention"
-4. **Results ranked by relevance**:
-   - Fish (0.812): Very low maintenance
-   - Cats (0.794): Independent, less attention needed
-   - Birds (0.701): Moderate attention
-   - Dogs (0.623): High attention needed
+**similaritySearchWithScore()** returns `[document, score]` tuples where higher scores = more similar to the query.
 
-**Score interpretation**:
-- 1.0 = Identical
-- 0.8-0.9 = Very similar
-- 0.6-0.8 = Somewhat similar
-- <0.6 = Different topics
+**Score interpretation**: 1.0 = identical, 0.8-0.9 = very similar, 0.6-0.8 = somewhat similar, <0.6 = different topics
 
-**Use scores to**: Set similarity thresholds (e.g., only return results with score > 0.7), implement confidence-based filtering, or rank results for users
+**Use scores to**: Set thresholds (e.g., only results with score > 0.7), filter by confidence, or rank results
 
 ---
 
@@ -830,24 +728,11 @@ Each with 1536 dimensions
 
 ### How It Works
 
-**What's happening**:
-1. **Create array of texts**: 5 different AI-related sentences
-2. **Batch embed**: `embedDocuments(texts)` embeds all at once
-3. **Result**: Array of 5 embeddings, each with 1536 dimensions
-4. **Performance**: Much faster than calling `embedQuery()` 5 times individually
+**What's happening**: `embedDocuments(texts)` embeds multiple texts at once—5-10x faster than individual `embedQuery()` calls.
 
-**Performance comparison**:
-- **Individual calls**: ~200ms × 5 = 1000ms
-- **Batch call**: ~120ms total
-- **Savings**: 8x faster!
+**Performance**: Individual calls (~200ms × 5 = 1000ms) vs. batch call (~120ms total) = 8x faster
 
-**Benefits**:
-- 5-10x faster than individual calls
-- Lower API costs (fewer round trips)
-- More efficient resource usage
-- Better for processing large document collections
-
-**When to use**: Always prefer batch processing when you have multiple texts to embed at once (e.g., loading a document collection, processing user queries in bulk)
+**When to use**: Prefer batch processing for multiple texts (document collections, bulk queries)
 
 ---
 
