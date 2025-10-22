@@ -55,51 +55,15 @@ Chat models don't actually "remember" previous messages. Instead, you send the e
 
 ### Message Types in LangChain
 
-LangChain provides three core message types for building conversations. Each type serves a specific purpose:
+LangChain provides three core message types for building conversations:
 
-#### 1. SystemMessage - Setting the AI's Behavior
+| Type | Purpose | Example |
+|------|---------|---------|
+| **SystemMessage** | Set AI behavior and personality | `new SystemMessage("You are a helpful coding tutor")` |
+| **HumanMessage** | User input and questions | `new HumanMessage("What is TypeScript?")` |
+| **AIMessage** | AI responses with metadata | Returned by `model.invoke()` with `content`, `usage_metadata`, `id` |
 
-Establishes initial instructions that shape how the model responds throughout the conversation.
-
-```typescript
-const systemMsg = new SystemMessage("You are a helpful coding tutor who gives clear, concise explanations.");
-```
-
-**Use for**: Setting tone, defining roles, establishing response guidelines
-
----
-
-#### 2. HumanMessage - User Input
-
-Represents messages from the user. This is your input to the AI.
-
-```typescript
-const userMsg = new HumanMessage("What is TypeScript?");
-```
-
-**Use for**: User questions, requests, conversation input
-
----
-
-#### 3. AIMessage - Model Responses
-
-Represents the AI's responses. Contains the response text plus useful metadata.
-
-```typescript
-const response = await model.invoke(messages);
-// response is an AIMessage with these key fields:
-// - content: The actual text response
-// - usage_metadata: Token usage information (see Example 6)
-// - id: Unique message identifier
-```
-
-**Use for**: Storing AI responses in conversation history
-
----
-
-**In this chapter**, you'll work with **SystemMessage**, **HumanMessage**, and **AIMessage** to build multi-turn conversations.
-
-> **💡 Looking ahead:** In [Chapter 3: Prompts, Messages, and Structured Outputs](../03-prompts-messages-outputs/README.md), you'll learn when to use messages vs templates, how to build dynamic message arrays, and additional message construction patterns that prepare you for building agents in Chapter 7.
+> **💡 Looking ahead:** In [Chapter 3](../03-prompts-messages-outputs/README.md), you'll learn when to use messages vs templates and additional construction patterns for building agents.
 
 ---
 
@@ -414,19 +378,9 @@ Notice how temperature 0 is straightforward, temperature 1 is more interesting, 
 
 **What's happening**:
 1. We use the same prompt with three different temperature settings (0, 1, 2)
-2. Temperature 0 produces the most predictable, "safe" response
+2. Temperature 0 produces the most predictable response
 3. Temperature 1 (default) balances consistency with creativity
 4. Temperature 2 produces more unusual and creative variations
-
-**Temperature Scale Explained**:
-- **0.0**: Almost no randomness - model picks the most likely tokens every time
-  - Same input → nearly identical output
-  - Best for: Code generation, factual Q&A, structured data extraction
-- **1.0**: Balanced - some randomness but still coherent
-  - Good for: General conversation, explanations, most use cases
-- **2.0**: High randomness - model explores less likely options
-  - More creative and unpredictable
-  - Best for: Creative writing, brainstorming, generating unique ideas
 
 **Pro tip**: Run the same prompt multiple times at temperature 2 and you'll get very different results each time!
 
@@ -609,8 +563,9 @@ to read and maintain.
 
 ### Cost Optimization Strategies
 
-- **Use the right model for the task**
-- **Limit response length**
+Two key strategies to reduce costs:
+
+**1. Limit response length with maxTokens**
 ```typescript
 const model = new ChatOpenAI({
   model: process.env.AI_MODEL,
@@ -620,45 +575,14 @@ const model = new ChatOpenAI({
 });
 ```
 
-- **Trim conversation history**
+**2. Trim conversation history**
 ```typescript
-// Keep only the last 10 messages
+// Keep only recent messages to reduce input tokens
 const recentMessages = messages.slice(-10);
 const response = await model.invoke(recentMessages);
 ```
 
-- **Cache responses for common queries**
-```typescript
-const cache = new Map();
-
-async function getCachedResponse(prompt: string) {
-  if (cache.has(prompt)) {
-    return cache.get(prompt); // Free!
-  }
-
-  const response = await model.invoke(prompt);
-  cache.set(prompt, response);
-  return response;
-}
-```
-
-- **Batch process when possible**
-```typescript
-// Process multiple items in one call instead of separate calls
-const prompt = `Summarize each of these articles:
-1. ${article1}
-2. ${article2}
-3. ${article3}`;
-
-// One API call vs. three separate calls
-```
-
-### Why Costs Matter
-
-- **Models have limits**: Most models have [context window](../GLOSSARY.md#context-window) limits (4K-128K tokens)
-- **Speed impact**: More tokens = longer processing time
-- **Budget planning**: Understand costs before going to production
-- **Efficiency**: Optimize prompts to reduce unnecessary tokens
+**Why it matters**: Models have [context window](../GLOSSARY.md#context-window) limits (4K-200K+ tokens), more tokens = higher costs and slower responses.
 
 ---
 
