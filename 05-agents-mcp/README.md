@@ -21,34 +21,9 @@ By the end of this chapter, you'll be able to:
 
 ## 📖 The Manager with Specialists Analogy
 
-**Imagine you're a project manager with a team of specialists:**
+**Imagine you're a project manager with specialists (Data Analyst, Researcher, Accountant).** When asked *"What's our revenue growth this quarter?"*, you don't do everything yourself. You reason about what's needed, delegate to the right specialist, review their work, and iterate until you have the answer.
 
-- 📊 Data Analyst - can query databases
-- 🔍 Researcher - can search the web
-- 🧮 Accountant - can do calculations
-- ✉️ Assistant - can send emails
-
-When someone asks: *"What's our revenue growth this quarter compared to last year?"*
-
-You (the manager) don't do everything yourself. You:
-1. **Reason**: "I need data from the database and calculations"
-2. **Act**: Ask the Data Analyst for revenue data
-3. **Observe**: Review the data received
-4. **Reason**: "Now I need to calculate the percentage change"
-5. **Act**: Ask the Accountant to do the math
-6. **Observe**: Get the calculated result
-7. **Reason**: "Now I have the answer"
-8. **Respond**: Give the final answer
-
-**AI Agents work the same way!**
-
-They:
-- **Think** about what needs to be done (Reasoning)
-- **Choose** the right tool (Decision Making)
-- **Use** the tool (Acting)
-- **Evaluate** the result (Observation)
-- **Repeat** until they have the answer
-- **Respond** to the user
+**AI Agents work the same way:** They reason about the problem, choose the right tool, use it, evaluate the result, and repeat until solved. This is the **ReAct pattern** (Reasoning + Acting).
 
 ---
 
@@ -211,19 +186,6 @@ When you run `tsx 05-agents-mcp/code/01-create-agent-basic.ts`:
 4. **Observes**: Gets result "1000"
 5. **Responds**: Formats natural language response
 
-**What createAgent() handles for you**:
-- ✅ **Tool binding**: Automatically connects tools to the model so it knows which tools are available and how to use them
-- ✅ **ReAct loop**: Implements Thought → Action → Observation → Repeat
-- ✅ **Message history**: Manages conversation state internally (keeps track of all messages, tool calls, and results so the agent has context)
-- ✅ **Iteration limits**: Prevents infinite loops
-- ✅ **Error handling**: Graceful failures and retries
-
-**Why use createAgent()**:
-- Production-ready out of the box
-- Less boilerplate code
-- Consistent behavior across agents
-- Built-in best practices
-
 ---
 
 **You've built a single-tool agent, but real-world assistants need multiple capabilities.** How do you build an agent that can do math, check weather, and search information—automatically choosing the right tool for each query without manual routing code? Give the agent multiple tools and let it decide.
@@ -315,41 +277,8 @@ to create sophisticated AI applications.
 **Tool Selection Logic**:
 - The agent uses tool **names** and **descriptions** to match queries to tools
 - More specific descriptions → Better tool selection
-- The LLM (GPT-5-mini) decides which tool fits best based on semantic meaning
-
-### How Tool Selection Actually Works
-
-When you give an agent multiple tools, the LLM follows this process:
-
-1. **Reads all tool metadata**: Reviews each tool's **name** and **description**
-2. **Analyzes the user query**: Understands what the user is asking for
-3. **Semantic matching**: Compares the query meaning with tool descriptions
-4. **Selects best match**: Chooses the tool whose description best aligns with the query intent
-
-**Example**:
-```
-User Query: "What is 50 * 25?"
-
-Tool Options the LLM sees:
-- calculator: "Perform mathematical calculations like addition, multiplication..."
-- getWeather: "Get current weather information for a city"
-- search: "Search the web for information"
-
-LLM reasoning: "The query asks for a multiplication. The calculator tool mentions 'mathematical calculations' and 'multiplication'. This is the best match."
-
-Selected Tool: calculator
-```
-
-**Why clear descriptions matter**:
-```typescript
-// ❌ Vague - LLM might not select correctly
-description: "Does math stuff"
-
-// ✅ Specific - LLM knows exactly when to use this
-description: "Perform mathematical calculations like addition, multiplication, division, and percentages. Use this when you need to compute numerical results."
-```
-
-**Key insight**: You can give your agent dozens of tools, and it will intelligently pick the right one for each task. No manual routing code needed!
+- The LLM (gpt-5-mini) decides which tool fits best based on semantic meaning
+- You can give your agent multiple tools, and it will intelligently pick the right one for each task
 
 ---
 
@@ -687,127 +616,37 @@ Writing custom integrations for each service means dealing with different APIs, 
 
 ## 🌐 Model Context Protocol (MCP)
 
-### The USB-C for AI Applications
+**Model Context Protocol (MCP)** is an open standard that lets AI applications connect to external tools and data sources through a universal interface—like USB-C for AI applications.
 
-**Imagine this scenario**: You build an AI assistant. It needs to:
-- Check your Calendar
-- Query your company's database
-- Send Teams messages
-- Read from Notion
+**The Problem**: Building an AI assistant that needs to access Calendar, databases, Teams, and Notion means writing custom integrations for each service with different APIs, auth methods, and data formats.
 
-**The old way**: Write custom integrations for each service. Different APIs, different auth, different data formats. Multiply this by 50+ services your company uses = chaos.
+**The MCP Solution**: Services expose their capabilities through a standard protocol. Your agent connects once and gets access to everything.
 
-**The MCP way**: Services expose their capabilities through a standard protocol, like how every device uses USB-C. Your AI agent connects once, gets access to everything.
+### Architecture
 
-### What is MCP?
-
-**Model Context Protocol (MCP)** is an open standard that lets AI applications connect to external tools and data sources through a universal interface.
-
-Think of it as **"USB-C for AI"**:
-- **Before USB-C**: Different cables for everything (iPhone cable, Android cable, laptop charger...)
-- **After USB-C**: One cable, works everywhere
-- **Before MCP**: Custom code for every tool integration
-- **After MCP**: One protocol, works with any tool
-
-### Real-World Examples
-
-**For Developers**:
 ```
-Your AI Agent → MCP → [GitHub API, Jira, Figma, PostgreSQL, ...]
+Your AI Agent → MCP Client → [📅 Calendar Server, 📧 Email Server, 🗄️ Database Server]
 ```
 
-**For Users**:
-- "Check my calendar and find a 30-minute slot this week" → AI connects to Exchange Calendar via MCP
-- "Summarize our latest product feedback" → AI connects to your database via MCP
-- "Create a Jira ticket for this bug" → AI connects to Jira via MCP
+Each **MCP Server** is a program that exposes tools through the protocol. Your agent connects and can use all available tools.
+
+### Transport Types
+
+MCP supports three connection methods:
+
+| Transport | Use Case | Example |
+|-----------|----------|---------|
+| **stdio** | Local development, subprocess communication | `{ transport: "stdio", command: "node", args: ["/path/to/server.js"] }` |
+| **SSE** | Real-time streaming from remote servers | `{ transport: "sse", url: "http://localhost:8000/mcp" }` |
+| **HTTP** | Production APIs, cloud services | `{ transport: "http", url: "https://api.mycompany.com/mcp" }` |
 
 ### Why MCP Matters
 
 | Without MCP | With MCP |
 |-------------|----------|
-| Write custom integration for each service | Connect once using MCP standard |
-| Maintain separate authentication for each | Unified authentication approach |
-| Different data formats everywhere | Standardized tool interface |
-| Weeks to add new services | Hours to add new services |
-
----
-
-## 🔌 How MCP Works
-
-### Architecture
-
-```
-┌──────────────┐
-│   Your AI    │ "Find my next meeting"
-│   Agent      │
-└──────┬───────┘
-       │
-       │ Uses MCP Protocol
-       ▼
-┌──────────────┐
-│ MCP Client   │ Connects to MCP servers
-└──────┬───────┘
-       │
-       ├─────► 📅 Calendar Server (provides: getEvents, createEvent)
-       │
-       ├─────► 📧 Email Server (provides: sendEmail, searchEmails)
-       │
-       └─────► 🗄️  Database Server (provides: queryDb, getSchema)
-```
-
-### MCP Servers = Tool Providers
-
-An **MCP Server** is a program that exposes tools through the MCP protocol:
-
-```typescript
-// Example: A simple MCP server exposes a calculator
-{
-  "tools": [
-    {
-      "name": "calculate",
-      "description": "Perform math calculations",
-      "parameters": { "expression": "string" }
-    }
-  ]
-}
-```
-
-Your agent connects to this server and can now use the calculator tool!
-
-### Transport Types
-
-MCP supports three ways to connect to servers:
-
-1. **stdio** (Standard Input/Output) - For local subprocess communication
-   ```typescript
-   // Server runs as a local process
-   {
-     transport: "stdio",
-     command: "node",
-     args: ["/path/to/server.js"]
-   }
-   ```
-   **Use when**: Running servers on your machine (development, local tools). Ideal for simple setups.
-
-2. **SSE** (Server-Sent Events) - For HTTP servers with real-time streaming
-   ```typescript
-   // Server runs on a URL with SSE support
-   {
-     transport: "sse",
-     url: "http://localhost:8000/mcp"
-   }
-   ```
-   **Use when**: Need real-time streaming updates from remote servers. Optimized for streaming communication.
-
-3. **Streamable HTTP** - For independent server processes
-   ```typescript
-   // Server runs on a URL with HTTP support
-   {
-     transport: "http",
-     url: "https://api.mycompany.com/mcp"
-   }
-   ```
-   **Use when**: Connecting to production APIs, cloud services, or shared servers that support remote connections.
+| Custom integration per service | One standard protocol |
+| Separate auth for each | Unified approach |
+| Weeks to add services | Hours to add services |
 
 ---
 
@@ -874,47 +713,10 @@ const response = await modelWithTools.invoke(
 
 ### Building Custom MCP Servers
 
-Want to create your own MCP server? Use the `@modelcontextprotocol/sdk`:
-
-```typescript
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { ListToolsRequestSchema, CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
-
-// Create MCP server
-const server = new Server({ name: "my-calculator", version: "1.0.0" });
-
-// Define available tools
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: [
-    {
-      name: "calculate",
-      description: "Perform mathematical calculations",
-      inputSchema: {
-        type: "object",
-        properties: {
-          expression: { type: "string", description: "Math expression to evaluate" }
-        },
-        required: ["expression"]
-      }
-    }
-  ]
-}));
-
-// Handle tool execution
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  if (request.params.name === "calculate") {
-    const { expression } = request.params.arguments;
-    const result = eval(expression); // In production, sanitize input!
-    return { content: [{ type: "text", text: String(result) }] };
-  }
-  throw new Error(`Unknown tool: ${request.params.name}`);
-});
-```
-
-**Key Components**:
-- `ListToolsRequestSchema` - Defines what tools your server provides
-- `CallToolRequestSchema` - Handles tool execution requests
-- Standard input/output schemas ensure compatibility with all MCP clients
+Want to create your own MCP server? Use the `@modelcontextprotocol/sdk` to define tools and handle execution. For detailed guidance, see:
+- [MCP for Beginners](https://github.com/microsoft/mcp-for-beginners) - Complete course on building MCP servers
+- [MCP SDK Documentation](https://modelcontextprotocol.io/docs) - Official SDK reference
+- [`samples/`](./samples/) folder - Example MCP server implementations
 
 ### Benefits for Your AI Applications
 
