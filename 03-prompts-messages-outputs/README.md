@@ -25,38 +25,14 @@ By the end of this chapter, you'll be able to:
 
 ## 🎯 Decision Framework: Messages vs Templates
 
-**This is the most important section of this chapter!** Before diving into the details, understand when to use each approach:
+**Choose the right approach for your use case**:
 
-### ✅ Use MESSAGE ARRAYS when:
-- **Building agents** (Chapter 7)
-- Working with **dynamic workflows** where messages change based on context
-- Handling **multi-step reasoning** and tool calls
-- Integrating **MCP tools** (Model Context Protocol)
-- Need **full control** over message flow and conversation state
-- Building **conversational** applications that adapt to user input
+| Approach | Use For | Chapter |
+|----------|---------|---------|
+| **Message Arrays** | Agents, dynamic workflows, multi-step reasoning, tool integration | [Chapter 5](../05-agents-mcp/README.md) |
+| **Templates** | RAG systems, reusable prompts, variable substitution, document processing | [Chapter 6](../06-documents-embeddings-semantic-search/README.md) |
 
-**Example use cases**: Customer support agents, task automation agents, research assistants with tools
-
-**Agents are covered in**: [Chapter 7: Agents & MCP](../07-agents-mcp/README.md)
-
-### ✅ Use TEMPLATES when:
-- Building **RAG systems** with `createStuffDocumentsChain()`
-- Need **reusable prompt patterns** across your application
-- Want **variable substitution** in prompts
-- Creating **chains** for document processing
-- Ensuring **consistent prompts** across different calls
-- Working with **static or semi-static** prompts
-
-**Example use cases**: Document Q&A, content generation, translation systems, data extraction
-
-**RAG systems are covered in**: [Chapter 6: RAG Systems](../06-rag/README.md)
-
-### 📚 Modern LangChain.js Pattern
-
-The modern approach is **"agent-first"** but there may be cases where you still need templates:
-- **Agents (message-based)**: Use message arrays for dynamic workflows
-- **RAG (template-based)**: Use templates for document processing and retrieval
-- **Use the right tool (message or template) for the right job** - learn the options and when to use each one
+**Modern pattern**: Agent-first (messages) for dynamic workflows, templates for RAG/document processing.
 
 ---
 
@@ -66,17 +42,7 @@ Message arrays are the foundation of agent systems in LangChain.js. When you wor
 
 ### 📖 The Conversation Analogy
 
-**Think about a real conversation with context:**
-
-```
-System: "You are a helpful coding assistant."
-You: "What is a variable?"
-AI: "A variable is a container for storing data..."
-You: "Can you show me an example?"
-AI: "Sure! Here's an example: let name = 'John';"
-```
-
-**Each line is a message** with a role (system, human, AI). Message arrays preserve this conversational structure, which is exactly what agents need for multi-step reasoning and tool use.
+**Message arrays preserve conversational structure.** Each line in a conversation has a role (system, human, AI). This structure is exactly what agents need for multi-step reasoning and tool use.
 
 ---
 
@@ -315,73 +281,13 @@ Templates allow you to create reusable, maintainable prompts with variables. The
 
 ### 📖 The Mail Merge Analogy
 
-**Imagine you need to send 100 personalized emails.**
-
-You could write each one from scratch:
-```
-Dear John,
-Your order #12345 is ready for pickup...
-
-Dear Sarah,
-Your order #12346 is ready for pickup...
-```
-
-Or you could use **mail merge** with a template:
-```
-Dear {name},
-Your order #{orderId} is ready for pickup...
-```
-
-**Prompt templates work exactly the same way!**
-
-Instead of writing similar prompts over and over, you:
-- Create a template once with placeholders
-- Fill in the specifics each time you use it
-- Ensure consistency across your application
-- Make testing and updates easier
+**Prompt templates work like mail merge.** Instead of writing similar prompts repeatedly, create a template once with placeholders (`{name}`, `{orderId}`), then fill in specifics each time. This ensures consistency and makes updates easier.
 
 ---
 
 ### 🤔 Why Use Prompt Templates?
 
-#### The Problem Without Templates
-
-```typescript
-// Hardcoded prompts everywhere - hard to maintain!
-await model.invoke("Translate this English text to French: Hello");
-await model.invoke("Translate this English text to Spanish: Hello");
-await model.invoke("Translate this English text to German: Hello");
-```
-
-**Issues**:
-- Code duplication
-- Hard to update prompts
-- Difficult to test
-- Inconsistent formatting
-
-#### The Solution With Templates
-
-```typescript
-// Create once, reuse everywhere!
-const template = ChatPromptTemplate.fromMessages([
-  ["system", "You are a translator from {input_language} to {output_language}."],
-  ["human", "{text}"],
-]);
-```
-
-**Benefits**:
-- ✅ **Consistency**: Same prompt structure everywhere
-- ✅ **Maintainability**: Update once, changes everywhere
-- ✅ **Testability**: Easy to test with different inputs
-- ✅ **Version control**: Track prompt changes over time
-- ✅ **Separation of concerns**: Logic separate from prompts
-- ✅ **Required for RAG**: RAG systems expect templates
-
----
-
-**You're building a translation service that needs to handle hundreds of translation requests daily.** You could write a new prompt for each language pair ("Translate to French", "Translate to Spanish", etc.), but that's repetitive and hard to maintain. What if you want to change the translation instructions? You'd have to update hundreds of places.
-
-**That's where `ChatPromptTemplate` comes in.** Create one template with `{variables}`, then reuse it with different values each time—just like mail merge for prompts.
+Templates provide consistency, maintainability, and are used with RAG systems. Create once with `{variables}`, reuse everywhere instead of hardcoding similar prompts.
 
 ### Example 3: Basic Templates
 
@@ -781,62 +687,23 @@ So far, we've been getting text responses from AI models. But what if you need *
 
 ### What is Zod?
 
-Before we dive into structured outputs, let's understand the tool we'll be using: **[Zod](../GLOSSARY.md#zod-schema)**.
-
-**[Zod](https://zod.dev/) is a TypeScript-first schema validation library** that lets you define the structure and rules for your data. Think of it as a blueprint that describes exactly what shape your data should have.
-
-**Why use Zod?**
-- ✅ **Type Safety**: Automatically generates TypeScript types from your schema
-- ✅ **Runtime Validation**: Checks data is valid when your code runs (not just at compile time)
-- ✅ **Clear Descriptions**: You can add `.describe()` to help the AI understand each field
-- ✅ **Easy to Use**: Simple, readable syntax for defining data structures
+**[Zod](https://zod.dev/) is a TypeScript-first schema validation library** that defines data structure and rules.
 
 **Quick example**:
 ```typescript
-import * as z from "zod";
-
-// Define a schema
 const PersonSchema = z.object({
   name: z.string().describe("Person's full name"),
   age: z.number().describe("Age in years"),
-  email: z.string().email().describe("Email address"),
 });
-
-// TypeScript automatically knows the type!
-// type Person = { name: string; age: number; email: string; }
 ```
 
-With LangChain, Zod schemas tell the AI **exactly what format to return data in** - ensuring you always get structured, validated data instead of free text that you have to parse.
+With LangChain.js, Zod schemas tell the AI exactly what format to return - ensuring structured, validated data instead of free text.
 
 ---
 
-### The Form Analogy
-
-**Think about asking someone for their contact information:**
-
-❌ **Without structure**:
-```
-"Tell me about yourself"
-Response: "Well, I'm John, I live somewhere in Seattle,
-my email is... let me think... john@something.com"
-```
-
-✅ **With structure** (a form):
-```
-Name: [____]
-Email: [____]
-Phone: [____]
-City: [____]
-```
-
-**Structured outputs work the same way!** Instead of parsing free text, you get data in the exact format you need.
-
 ### Why Use Structured Outputs?
 
-- **Type Safety**: TypeScript types match AI output
-- **Validation**: Ensure data meets requirements
-- **Parsing**: No need to parse free text
-- **Consistency**: Always get the same format
+Structured outputs provide type safety, validation, and consistency - no need to parse free text responses.
 - **Integration**: Easy to use with databases, APIs, etc.
 - **Essential for RAG**: Extract structured data from documents
 
