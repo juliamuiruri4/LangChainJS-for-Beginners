@@ -19,23 +19,9 @@ By the end of this chapter, you'll be able to:
 
 ## 📖 Introduction: The Hardware Store Analogy
 
-**Imagine you're building a house.** You could manufacture your own bricks, create cement from scratch, and forge your own tools—or you could use a hardware store that provides quality materials and proven tools.
+**LangChain.js is like a hardware store for AI development.** Instead of manufacturing your own bricks and tools from scratch, you get pre-built components (chat models, prompts, tools), quality abstractions that work with any LLM provider, and proven patterns for common AI applications.
 
-**LangChain.js is the hardware store for AI development.**
-
-Just like a hardware store provides:
-- 🔨 **Pre-made tools** (hammers, saws, drills)
-- 🧱 **Quality materials** (lumber, nails, paint)
-- 📋 **Blueprints** (how-to guides)
-- 🔄 **Interchangeable parts** (standard sizes that work together)
-
-LangChain.js provides:
-- 🔨 **Pre-built components** (chat models, prompts, tools)
-- 🧱 **Quality abstractions** (works with any LLM provider)
-- 📋 **Patterns** (common AI application designs)
-- 🔄 **Composability** (components that work together seamlessly)
-
-**The result?** You can focus on building your application, not reinventing the wheel.
+**The result?** Focus on building your application, not reinventing the wheel.
 
 ---
 
@@ -66,45 +52,13 @@ With LangChain.js, you get:
 
 ## 🏗️ Core Concepts Overview
 
-LangChain.js is built around 5 main concepts that work together to create powerful AI applications. You'll learn each concept hands-on throughout this course. Here's a quick overview:
+LangChain.js is built around 5 core concepts you'll learn throughout this course:
 
-### 1. Models
-
-**[Models](../GLOSSARY.md#model)** are the AI "brains" that process your inputs and generate outputs. They're the foundation of every AI application. LangChain.js provides a consistent interface to work with different AI providers (OpenAI, Anthropic, Azure, etc.) using the same code.
-
-You'll start using models in this chapter and use them throughout the course.
-
-### 2. Prompts
-
-**[Prompts](../GLOSSARY.md#prompt)** are how you communicate with AI models. LangChain.js helps you create reusable prompt templates instead of hardcoding strings, making your prompts testable, maintainable, and secure.
-
-**Simple example**: `"Translate {text} from {source_lang} to {target_lang}"` - Define once, reuse with different values.
-
-You'll learn prompt engineering and templates in [Chapter 3](../03-prompts-messages-outputs/README.md).
-
-### 3. Tools
-
-**[Tools](../GLOSSARY.md#tool)** extend what AI models can do by giving them access to external functions and APIs. Instead of just generating text, models can call functions to fetch data, perform calculations, or interact with other systems.
-
-**Example**: A weather tool that lets the AI check current conditions, or a calculator tool for mathematical operations.
-
-You'll build and use tools in [Chapter 5](../05-function-calling-tools/README.md).
-
-### 4. Agents
-
-**[Agents](../GLOSSARY.md#agent)** are AI systems that can reason, decide which actions to take, and iterate until they solve a task. They autonomously choose which tools to use and when, making dynamic decisions to accomplish goals.
-
-**Key capability**: Agents think (reasoning), choose tools (action), see results (observation), and repeat until they solve the task.
-
-You'll build agents from scratch in [Chapter 7](../07-agents-mcp/README.md).
-
-### 5. Memory
-
-**[Memory](../GLOSSARY.md#memory)** enables AI applications to remember context across multiple interactions. Without memory, the AI forgets everything after each response.
-
-You maintain conversation history and send it with each new message, allowing the AI to reference previous parts of the conversation.
-
-You'll implement memory in [Chapter 2](../02-chat-models/README.md) when building multi-turn conversations.
+- **[Models](../GLOSSARY.md#model)**: AI "brains" that process inputs and generate outputs. Learn in this chapter.
+- **[Prompts](../GLOSSARY.md#prompt)**: How you communicate with AI models using reusable templates. See [Chapter 3](../03-prompts-messages-outputs/README.md).
+- **[Tools](../GLOSSARY.md#tool)**: Extend AI capabilities with external functions and APIs. Build in [Chapter 4](../04-function-calling-tools/README.md).
+- **[Agents](../GLOSSARY.md#agent)**: AI systems that reason and decide which tools to use autonomously. Create in [Chapter 5](../05-agents-mcp/README.md).
+- **[Memory](../GLOSSARY.md#memory)**: Remember context across interactions. Implement in [Chapter 2](../02-chat-models/README.md).
 
 ---
 
@@ -184,32 +138,15 @@ When you run this example with `tsx 01-introduction/code/01-hello-world.ts`, you
 
 **Understanding ChatOpenAI Configuration**:
 
-The `ChatOpenAI` constructor takes a configuration object with three key properties:
+The `ChatOpenAI` constructor takes three key properties: `model` (which AI model), `configuration.baseURL` (API endpoint), and `apiKey` (authentication).
 
-- **`model`**: Which AI model to use (e.g., `"gpt-5-mini"`, `"gpt-5"`)
-- **`configuration.baseURL`**: The API endpoint URL for your provider
-- **`apiKey`**: Your API key for authentication
-
-We read these values from environment variables (`AI_MODEL`, `AI_ENDPOINT`, `AI_API_KEY`) defined in your `.env` file. This approach:
-
-- Keeps sensitive credentials out of your code
-- Allows you to switch between providers (GitHub Models ↔ Azure AI Foundry) by just updating `.env`
-- Works seamlessly with both GitHub Models and Azure AI Foundry endpoints
-- Makes it easy to use different configurations for development vs production
+We read these from environment variables (`AI_MODEL`, `AI_ENDPOINT`, `AI_API_KEY`) defined in your `.env` file. This keeps credentials out of code and lets you switch providers by updating `.env`.
 
 ---
 
 ## 💬 Understanding Messages
 
-LLMs work best with structured conversations. LangChain.js provides message types for this.
-
-**Imagine you're building a customer support chatbot.** You need the AI to be helpful and professional, but when you just send "Help me with my password", the AI might respond in any tone—casual, technical, or even overly formal. How do you control the AI's personality and behavior?
-
-**That's where message types come in.** Instead of sending plain text, you send structured messages that separate:
-- **System instructions**: `SystemMessage` (set the AI's personality: "You are a helpful support agent")
-- **User input**: `HumanMessage` (the actual question: "Help me with my password")
-
-This gives you precise control over how the AI responds.
+LLMs work best with structured conversations. LangChain.js provides message types that separate system instructions (`SystemMessage`) from user input (`HumanMessage`), giving you precise control over the AI's personality and behavior.
 
 ### Example 2: Message Types
 
@@ -367,53 +304,11 @@ Response: Recursion is when a function calls itself to solve a problem by breaki
 
 ---
 
-## 🔄 Switching to Azure AI Foundry (Optional)
+## 🔄 Switching to Azure AI Foundry
 
-**Want to use Azure AI Foundry instead of GitHub Models?** Great news - all the code you just wrote will work with zero changes!
+**Want to use Azure AI Foundry instead of GitHub Models?** All the code you just wrote will work with zero changes!
 
-### Why Switch to Azure AI Foundry?
-
-- **Production-ready**: Enterprise-grade infrastructure and SLAs
-- **Higher limits**: More requests per minute than free tiers
-- **Additional features**: Private endpoints, content filtering, monitoring
-- **Azure integration**: Works seamlessly with other Azure services
-
-### How to Switch
-
-Simply update your `.env` file with three values:
-
-```bash
-# OLD: GitHub Models (Free)
-AI_API_KEY=ghp_your_github_token
-AI_ENDPOINT=https://models.inference.ai.azure.com
-AI_MODEL=gpt-5-mini
-
-# NEW: Azure AI Foundry (Production)
-AI_API_KEY=your_azure_openai_api_key
-AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
-AI_MODEL=gpt-5-mini
-```
-
-**That's it!** All examples in this chapter (and the entire course) now use Azure AI Foundry.
-
-### Getting Your Azure AI Foundry Endpoint and API Key
-
-Follow the [Deploy an Azure OpenAI model](https://learn.microsoft.com/en-us/azure/ai-foundry/quickstarts/get-started-code?tabs=azure-ai-foundry) tutorial to:
-
-1. **Create** an Azure AI Foundry project at [ai.azure.com](https://ai.azure.com)
-2. **Deploy** a model (e.g., gpt-5-mini)
-3. **Copy** your endpoint and API key from the project
-
-**Your endpoint** looks like: `https://YOUR-RESOURCE-NAME.openai.azure.com`
-
-> [!IMPORTANT]
-> Ensure that you append `/openai/v1` to your endpoint URL. For example:
-> - ❌ Wrong: `https://YOUR-RESOURCE-NAME.openai.azure.com`
-> - ✅ Correct: `https://YOUR-RESOURCE-NAME.openai.azure.com/openai/v1`
->
-> Without this suffix, your requests will fail.
-
-**Model name** matches your deployment name (e.g., `gpt-5-mini`, `gpt-5`)
+Simply update your `.env` file with your Azure endpoint and API key. For detailed setup instructions, see the [Azure AI Foundry Setup](../00-course-setup/APPENDIX.md#azure-ai-foundry-setup).
 
 
 ---
