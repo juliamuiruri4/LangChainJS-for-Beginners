@@ -716,7 +716,7 @@ const response = await modelWithTools.invoke(
 Want to create your own MCP server? Use the `@modelcontextprotocol/sdk` to define tools and handle execution. For detailed guidance, see:
 - [MCP for Beginners](https://github.com/microsoft/mcp-for-beginners) - Complete course on building MCP servers
 - [MCP SDK Documentation](https://modelcontextprotocol.io/docs) - Official SDK reference
-- [`samples/`](./samples/) folder - Example MCP server implementations
+- [`samples/`](./samples/basic-mcp-server.ts) folder - Example MCP server implementations
 
 ### Benefits for Your AI Applications
 
