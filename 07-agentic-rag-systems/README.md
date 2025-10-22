@@ -29,30 +29,13 @@ By the end of this chapter, you'll be able to:
 
 ## 📖 The Smart Student Analogy
 
-**Imagine three types of students taking an exam:**
+**Imagine three exam approaches:**
 
-**Closed-Book Exam (Standard LLM)**:
-- ❌ Student relies only on memorized knowledge
-- ❌ Can't look up specific facts
-- ❌ May give wrong answers confidently
-- ❌ Knowledge cutoff (stops learning at training time)
+- **Closed-Book (Standard LLM)**: Relies only on memorized knowledge, may give wrong answers confidently
+- **Open-Book with No Strategy (Traditional RAG)**: References textbook for EVERY question, even "What is 2+2?"—accurate but wasteful
+- **Smart Open-Book (Agentic RAG)**: Decides when to look things up vs answering from knowledge. Answers "What is 2+2?" directly, but searches documents for "What was our Q3 revenue?"
 
-**Open-Book Exam with No Strategy (Traditional RAG)**:
-- ✅ Student can reference textbook during exam
-- ❌ Looks up the textbook for EVERY question, even "What is 2+2?"
-- ❌ Wastes time searching when they already know the answer
-- ✅ More accurate, can cite sources
-- ❌ Slower and more expensive due to unnecessary searches
-
-**Smart Open-Book Exam (Agentic RAG)**:
-- ✅ Student can reference textbook during exam
-- ✅ **Decides** when to look things up vs answering from knowledge
-- ✅ "What is 2+2?" → Answers directly (no search needed)
-- ✅ "What was our company's Q3 revenue?" → Searches documents
-- ✅ Fast for simple questions, thorough for complex ones
-- ✅ More accurate, can cite sources when needed
-
-**This is the power of Agentic RAG!** The agent makes intelligent decisions about when retrieval is necessary.
+With agentic RAG, the agent makes intelligent decisions about when retrieval is necessary.
 
 ---
 
@@ -76,28 +59,13 @@ The agent uses reasoning to determine whether retrieval is necessary.
 
 ### Example: The Difference in Action
 
-**Question 1**: "What is 2 + 2?"
+**"What is 2 + 2?"**
+- Traditional RAG: Searches vector store, retrieves irrelevant docs, answers "4" (wasted search)
+- Agentic RAG: Answers immediately "4" (no search needed)
 
-**Traditional RAG**:
-1. Searches vector store for "2 + 2"
-2. Retrieves irrelevant documents
-3. Answers: "4" (wasted a search)
-
-**Agentic RAG**:
-1. Agent thinks: "This is basic math, I don't need to search"
-2. Answers immediately: "4" (no unnecessary search)
-
-**Question 2**: "What was our company's revenue in Q3 2024?"
-
-**Traditional RAG**:
-1. Searches vector store
-2. Retrieves relevant financial documents
-3. Answers: "$1.2M" (good use of search)
-
-**Agentic RAG**:
-1. Agent thinks: "I need specific company data, I should search"
-2. Uses retrieval tool to find financial documents
-3. Answers: "$1.2M based on Q3 financial report" (same good result)
+**"What was our company's revenue in Q3 2024?"**
+- Traditional RAG: Searches vector store, retrieves financial docs, answers "$1.2M"
+- Agentic RAG: Searches documents, answers "$1.2M based on Q3 financial report"
 
 ### Benefits of Agentic RAG
 
@@ -154,38 +122,17 @@ Agent Analyzes Question
 3. **Vector Store**: Contains your document embeddings
 4. **Intelligent Decision**: Agent decides search vs direct answer
 
-### Why Agentic RAG?
-
-Agentic RAG solves two fundamental problems:
-
-1. **How do you give an LLM access to information it wasn't trained on?**
-   - Answer: Provide a retrieval tool that searches your documents
-
-2. **How do you avoid unnecessary searches when the LLM already knows the answer?**
-   - Answer: Let the agent decide when retrieval is needed
-
 ### When to Use RAG vs Prompt Engineering
 
-**Quick Decision Tree**:
+**Decision tree:**
+1. Does it fit in a prompt (< 8K tokens)? → **Prompt Engineering**
+2. Large knowledge base that doesn't fit? → **RAG**
+3. Updates frequently? → **RAG**
+4. Need source citations? → **RAG**
 
-1. **Does it fit in a prompt?** → Use Prompt Engineering
-2. **Large knowledge base that doesn't fit?** → Use RAG
-3. **Updates frequently?** → Use RAG
-4. **Need source citations?** → Use RAG
+**Prompt Engineering**: Small data, static content (e.g., FAQ bot with 20 questions). Simple, fast, no infrastructure.
 
-#### Prompt Engineering
-- **Use when**: Small data (< 8K tokens), static content
-- **Example**: FAQ bot with 20 questions
-- **Benefits**: Simple, fast, no additional infrastructure
-- **Limitations**: Can't handle large datasets, no search capability
-
-#### RAG (Retrieval Augmented Generation)
-- **Use when**: Large knowledge base, frequent updates, need citations
-- **Example**: Customer support with 10,000 product manuals
-- **Benefits**: Scalable, up-to-date, cost-effective, provides source attribution
-- **Limitations**: Requires vector store setup, adds latency, retrieval quality matters
-
-**For most use cases involving document collections, RAG is the right choice because it scales beyond prompt limits and provides accurate, cited information.**
+**RAG**: Large knowledge base, frequent updates, need citations (e.g., customer support with 10,000 manuals). Scalable, up-to-date, provides source attribution.
 
 ---
 
@@ -423,29 +370,9 @@ Retrieved documents:
 
 ### How It Works
 
-This example demonstrates the **decision framework** and shows how each approach is implemented:
+**Scenario 1 (Prompt Engineering)**: Small dataset (< 8K tokens) fits in prompt. Simple, fast, no search needed.
 
-1. **Step 1: Data Size Check**
-   - Scenario 1: < 8K tokens → Prompt Engineering (simple string in prompt)
-   - Scenario 2: > 8K tokens → Agentic RAG (agent + retrieval tool)
-
-2. **Step 2: Goal Check**
-   - Scenario 1 & 2: Add information → RAG or Prompt Engineering
-   - Both scenarios add information, but Scenario 2 needs search capability
-
-3. **Step 3: Update Frequency**
-   - Scenario 1: Rarely → Prompt Engineering works (just update the string)
-   - Scenario 2: Frequently → Agentic RAG (update vector store)
-
-4. **Step 4: Intelligent Retrieval**
-   - Scenario 2: Agent decides when to search documents vs answer directly
-   - Provides source attribution when using retrieved information
-
-**Key Insights**:
-- **Prompt Engineering** (Scenario 1): Simple, fast, works for small datasets
-- **Agentic RAG** (Scenario 2): Intelligent, scalable, works with millions of documents
-- **Agent makes decisions**: Only searches when needed, answers directly when possible
-- **Source attribution**: Know which documents were used for answers
+**Scenario 2 (Agentic RAG)**: Large dataset (> 8K tokens) requires vector store. Agent decides when to search vs answer directly, provides source attribution.
 
 ---
 
@@ -618,42 +545,24 @@ When you run this example with `tsx 07-agentic-rag-systems/code/02-agentic-rag.t
 
 ### How It Works
 
-**The Agentic RAG Flow**:
+**Flow**: Create documents → Embed in vector store → Wrap in retrieval tool → Give to agent → Agent decides when to search vs answer directly
 
-1. **Create knowledge base**: Documents about company information
-2. **Embed documents**: Convert to vectors and store in MemoryVectorStore
-3. **Create retrieval tool**: Wrap vector search in a tool that the agent can use
-4. **Create agent**: Use `createAgent()` with the retrieval tool
-5. **Agent decides**: For each question, the agent decides whether to search or answer directly
-   - "What is 2 + 2?" → Agent answers from general knowledge (no search)
-   - "Where is our main office?" → Agent uses retrieval tool (searches documents)
-
-**Key Pattern - Creating a Retrieval Tool**:
-
+**Key Pattern**:
 ```typescript
 const retrievalTool = tool(
   async (input) => {
-    // 1. Search vector store
     const results = await vectorStore.similaritySearch(input.query, 2);
-
-    // 2. Format results
     return results.map(doc => `[${doc.metadata.source}]: ${doc.pageContent}`).join("\n\n");
   },
   {
     name: "searchCompanyDocs",
-    description: "Search company documents...",  // This tells the agent when to use it
-    schema: z.object({
-      query: z.string()
-    })
+    description: "Search company documents...",  // Agent uses this to decide when to call
+    schema: z.object({ query: z.string() })
   }
 );
 ```
 
-**Why this works**:
-- ✅ **Agent makes decisions**: Chooses when retrieval is needed based on the question
-- ✅ **Efficient**: Only searches when necessary (saves cost and latency)
-- ✅ **Flexible**: Handles both general knowledge and custom document questions
-- ✅ **Source attribution**: Includes document sources when retrieving information
+**Why this works**: Agent decides when retrieval is needed, only searches when necessary, handles both general knowledge and custom questions, provides source attribution
 
 ---
 
