@@ -5,7 +5,6 @@
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "What's the difference between SystemMessage and HumanMessage?"
  * - "How would I add an AIMessage to continue this conversation?"
- * - "Can I change the SystemMessage personality to be more formal instead of simple?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

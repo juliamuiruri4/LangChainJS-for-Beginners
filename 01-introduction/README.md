@@ -114,7 +114,6 @@ main().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What does the invoke() method return and how do I access different properties?"
 > - "How does the configuration baseURL work with different AI providers?"
-> - "What happens if the environment variables are not set?"
 
 ### Expected Output
 
@@ -185,7 +184,6 @@ main().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What's the difference between SystemMessage and HumanMessage?"
 > - "How would I add an AIMessage to continue this conversation?"
-> - "Can I change the SystemMessage personality to be more formal instead of simple?"
 
 ### Expected Output
 
@@ -264,7 +262,6 @@ compareModels().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "Why do we create a new ChatOpenAI instance inside the loop?"
 > - "How can I add another model to this comparison?"
-> - "What other metrics besides time could I measure for each model?"
 
 ### Expected Output
 

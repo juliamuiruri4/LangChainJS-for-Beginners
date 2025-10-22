@@ -16,7 +16,6 @@
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does MultiServerMCPClient differ from manually creating tools?"
- * - "What happens if the MCP server is unavailable?"
  * - "Can I connect to multiple MCP servers simultaneously?"
  */
 

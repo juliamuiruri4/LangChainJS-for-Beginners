@@ -17,7 +17,6 @@
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "Why does traditional RAG search for every query?"
  * - "What are the cost implications of always searching?"
- * - "How does this compare to the agentic approach?"
  */
 
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";

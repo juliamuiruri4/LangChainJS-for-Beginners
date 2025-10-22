@@ -154,7 +154,6 @@ main().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "Why do we need to push AIMessage to the messages array after each response?"
 > - "How would I implement a loop to keep the conversation going with user input?"
-> - "What happens if I don't include the SystemMessage at the beginning?"
 
 ### Expected Output
 
@@ -237,7 +236,6 @@ main().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does the 'for await...of' loop work with the stream?"
 > - "Can I collect all chunks into a single string while streaming?"
-> - "Why does process.stdout.write not add newlines between chunks?"
 
 ### Expected Output
 
@@ -351,8 +349,7 @@ compareTemperatures().catch(console.error);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What temperature value should I use for a customer service chatbot?"
-> - "How do I add the temperature and maxTokens parameters to the ChatOpenAI constructor?"
-> - "Why might a response be cut off when using maxTokens?"
+> - "How do I add the maxTokens parameter to limit response length?"
 
 ### Expected Output
 
@@ -442,8 +439,7 @@ main().catch(console.error);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does withRetry() implement exponential backoff?"
-> - "What's the difference between withRetry() and manual retry logic?"
-> - "Can I customize the retry delay with withRetry()?"
+> - "Can I customize the retry delay and max attempts with withRetry()?"
 
 ### How It Works
 
@@ -517,7 +513,6 @@ trackTokenUsage().catch(console.error);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How can I track token usage across multiple API calls in a conversation?"
-> - "What's the difference between promptTokens and completionTokens?"
 > - "How would I calculate the cost based on token usage?"
 
 ### Expected Output
@@ -705,7 +700,6 @@ const model = new ChatOpenAI({
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What are the advantages of initChatModel over using ChatOpenAI directly?"
 > - "How would I switch from OpenAI to Anthropic using initChatModel?"
-> - "Why does ChatOpenAI work better with GitHub Models than initChatModel?"
 
 ### Comparison
 

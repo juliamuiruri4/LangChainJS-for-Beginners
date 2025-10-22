@@ -307,7 +307,6 @@ main().catch(console.error);
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "What are the cost implications of using RAG vs prompt engineering?"
 > - "How does agent decision-making improve efficiency in agentic RAG?"
 > - "What factors should I consider when choosing between RAG and prompt engineering?"
 
@@ -516,7 +515,6 @@ for (const question of questions) {
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does the agent decide when to use the retrieval tool vs answering directly?"
-> - "Can I customize the number of documents retrieved with similaritySearch?"
 > - "How would I add metadata filtering to the retrieval tool?"
 
 ### Expected Output

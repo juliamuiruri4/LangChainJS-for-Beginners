@@ -5,7 +5,6 @@
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How does template.pipe(model) create a chain that can be invoked?"
  * - "What happens if I forget to provide one of the template variables?"
- * - "How can I inspect the final prompt before sending it to the model?"
  */
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";

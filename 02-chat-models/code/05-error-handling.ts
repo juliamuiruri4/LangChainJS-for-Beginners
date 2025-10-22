@@ -3,9 +3,8 @@
  * Run: npx tsx 02-chat-models/code/05-error-handling.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "What does withRetry() do and when should I use it?"
- * - "How can I handle different error types like 429 vs 401?"
- * - "What's the difference between withRetry() and manual retry loops?"
+ * - "How does withRetry() implement exponential backoff?"
+ * - "Can I customize the retry delay and max attempts with withRetry()?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

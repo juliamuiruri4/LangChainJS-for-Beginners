@@ -5,7 +5,6 @@
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "When should I use messages vs templates in LangChain.js?"
  * - "How do agents use messages differently from RAG systems?"
- * - "Can I convert between message arrays and templates?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

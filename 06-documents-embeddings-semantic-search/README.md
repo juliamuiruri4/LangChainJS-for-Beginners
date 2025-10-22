@@ -95,7 +95,6 @@ console.log("Metadata:", docs[0].metadata);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How can I load PDF files instead of text files using LangChain?"
-> - "What other properties are available in the metadata object besides 'source'?"
 > - "How would I load multiple text files from a directory at once?"
 
 ### Expected Output
@@ -187,7 +186,6 @@ docs.forEach((doc, i) => {
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "What's the difference between RecursiveCharacterTextSplitter and CharacterTextSplitter?"
 > - "How do I determine the optimal chunk size for my documents?"
 > - "Can I split on specific delimiters like headings or paragraphs?"
 
@@ -288,7 +286,6 @@ chunks2.forEach((doc, i) => console.log(`${i}: ${doc.pageContent}`));
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What percentage overlap is recommended for different chunk sizes?"
-> - "How does overlap affect memory usage when storing documents?"
 > - "Can too much overlap cause duplicate information in search results?"
 
 ### Expected Output
@@ -377,7 +374,6 @@ splitDocs.forEach((doc, i) => {
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How can I filter search results by metadata values like category or date?"
-> - "What metadata fields are automatically added by document loaders?"
 > - "Can I add custom metadata after documents are loaded?"
 
 ### Expected Output
@@ -506,7 +502,6 @@ console.log("Similarity (LangChain vs pizza):", cosineSimilarity(embedding, diff
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What is the cosineSimilarity function doing mathematically?"
-> - "How does the embedding.length of 1536 dimensions capture text meaning?"
 > - "Can I use different embedding models and how do they compare?"
 
 ### Expected Output
@@ -595,7 +590,6 @@ results.forEach((doc, i) => {
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What's the difference between MemoryVectorStore and persistent stores like Pinecone?"
-> - "How does similaritySearch work internally with vector embeddings?"
 > - "Can I save and load a MemoryVectorStore to avoid recomputing embeddings?"
 
 ### Expected Output
@@ -659,7 +653,6 @@ resultsWithScores.forEach(([doc, score]) => {
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What similarity score threshold should I use to filter out irrelevant results?"
 > - "How does similaritySearchWithScore differ from the regular similaritySearch method?"
-> - "Can I get scores in different formats like percentages instead of 0-1 range?"
 
 ### Expected Output
 
@@ -714,7 +707,6 @@ console.log(`Each with ${batchEmbeddings[0].length} dimensions`);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What's the maximum batch size I can use with embedDocuments?"
 > - "How do I handle rate limiting when embedding large document collections?"
-> - "Can I parallelize batch embedding across multiple API keys?"
 
 ### Expected Output
 

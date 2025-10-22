@@ -4,9 +4,8 @@
  * Run: npx tsx 05-function-calling-tools/code/04-multiple-tools.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "How does the LLM decide which tool to use for a given query?"
- * - "Can the LLM call multiple tools in a single response?"
- * - "What makes a good tool description for helping the LLM choose correctly?"
+ * - "How does the LLM decide which tool to use for each query?"
+ * - "Can I prioritize certain tools over others by adjusting their descriptions?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

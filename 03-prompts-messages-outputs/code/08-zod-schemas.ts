@@ -4,7 +4,6 @@
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How do I add validation constraints like min/max to Zod schema fields?"
- * - "Can I use Zod enums to restrict values to specific options?"
  * - "How would I handle arrays of nested objects in a schema?"
  */
 

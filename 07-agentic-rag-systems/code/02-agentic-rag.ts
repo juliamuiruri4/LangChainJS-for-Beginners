@@ -8,9 +8,8 @@
  * agentic RAG gives your AI autonomy to determine whether retrieval is necessary.
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "How does agentic RAG differ from traditional RAG?"
- * - "Why does the agent answer some questions without searching?"
- * - "How can I customize when the agent decides to search?"
+ * - "How does the agent decide when to use the retrieval tool vs answering directly?"
+ * - "How would I add metadata filtering to the retrieval tool?"
  */
 
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";

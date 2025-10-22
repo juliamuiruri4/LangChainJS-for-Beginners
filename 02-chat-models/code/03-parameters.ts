@@ -4,8 +4,7 @@
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "What temperature value should I use for a customer service chatbot?"
- * - "How do I add the temperature and maxTokens parameters to the ChatOpenAI constructor?"
- * - "Why might a response be cut off when using maxTokens?"
+ * - "How do I add the maxTokens parameter to limit response length?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

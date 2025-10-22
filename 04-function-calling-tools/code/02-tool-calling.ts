@@ -4,9 +4,8 @@
  * Run: npx tsx 05-function-calling-tools/code/02-tool-calling.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "What does bindTools() do and how does it change the model's behavior?"
- * - "Why does the LLM generate tool_calls instead of executing them directly?"
- * - "How do I extract and use the tool call arguments from the response?"
+ * - "What's in the response.tool_calls array and how does it differ from response.content?"
+ * - "Why does the LLM return structured tool calls instead of executing the function?"
  */
 
 import { ChatOpenAI } from "@langchain/openai";

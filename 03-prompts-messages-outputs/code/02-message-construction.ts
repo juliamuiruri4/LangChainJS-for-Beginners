@@ -3,7 +3,6 @@
  * Run: npx tsx 03-prompts-messages-outputs/code/01-message-construction.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "What are all the message types available in LangChain.js?"
  * - "How do I build a multi-turn conversation with message arrays?"
  * - "Can I serialize and deserialize message arrays for storage?"
  */

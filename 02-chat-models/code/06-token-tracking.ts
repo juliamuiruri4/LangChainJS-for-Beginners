@@ -4,7 +4,6 @@
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How can I track token usage across multiple API calls in a conversation?"
- * - "What's the difference between promptTokens and completionTokens?"
  * - "How would I calculate the cost based on token usage?"
  */
 

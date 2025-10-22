@@ -152,8 +152,7 @@ console.log(`Agent: ${lastMessage.content}`);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "What does createAgent() do under the hood?"
-> - "When should I use createAgent() vs a manual ReAct loop?"
-> - "How does createAgent() handle iteration limits?"
+> - "How does createAgent() handle iteration limits and prevent infinite loops?"
 
 ### Expected Output
 
@@ -230,7 +229,6 @@ for (const query of queries) {
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does the agent decide which tool to use?"
-> - "What happens if multiple tools could work for a query?"
 > - "Can I prioritize certain tools over others?"
 
 ### Expected Output
@@ -344,7 +342,6 @@ const agent = createAgent({
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "What other use cases exist for middleware in agents?"
 > - "How would I add request logging middleware?"
 > - "Can middleware modify tool arguments before execution?"
 
@@ -525,7 +522,6 @@ try {
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does MultiServerMCPClient differ from manually creating tools?"
-> - "What happens if the MCP server is unavailable?"
 > - "Can I connect to multiple MCP servers simultaneously?"
 
 ### How It Works

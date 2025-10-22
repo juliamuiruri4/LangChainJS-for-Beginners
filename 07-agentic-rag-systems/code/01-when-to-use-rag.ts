@@ -8,9 +8,8 @@
  * Run: npx tsx 07-agentic-rag-systems/code/01-when-to-use-rag.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "When should I use prompt engineering vs RAG?"
- * - "How do I calculate if my data fits in a prompt (context window)?"
- * - "What are the benefits of agentic RAG over traditional RAG?"
+ * - "How does agent decision-making improve efficiency in agentic RAG?"
+ * - "What factors should I consider when choosing between RAG and prompt engineering?"
  */
 
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";

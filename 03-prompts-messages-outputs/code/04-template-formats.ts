@@ -5,7 +5,6 @@
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "When should I use ChatPromptTemplate vs PromptTemplate?"
  * - "How does stringTemplate.format() differ from using pipe and invoke?"
- * - "Can I convert a PromptTemplate to work with ChatPromptTemplate?"
  */
 
 import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";

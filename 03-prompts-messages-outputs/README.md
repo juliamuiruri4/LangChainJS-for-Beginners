@@ -100,7 +100,6 @@ main().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "When should I use messages vs templates in LangChain.js?"
 > - "How do agents use messages differently from RAG systems?"
-> - "Can I convert between message arrays and templates?"
 
 ### Expected Output
 
@@ -192,7 +191,6 @@ main().catch(console.error);
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "What are all the message types available in LangChain.js?"
 > - "How do I build a multi-turn conversation with message arrays?"
 > - "Can I serialize and deserialize message arrays for storage?"
 
@@ -340,7 +338,6 @@ main().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does template.pipe(model) create a chain that can be invoked?"
 > - "What happens if I forget to provide one of the template variables?"
-> - "How can I inspect the final prompt before sending it to the model?"
 
 ### Expected Output
 
@@ -432,7 +429,6 @@ main().catch(console.error);
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "When should I use ChatPromptTemplate vs PromptTemplate?"
 > - "How does stringTemplate.format() differ from using pipe and invoke?"
-> - "Can I convert a PromptTemplate to work with ChatPromptTemplate?"
 
 ### Expected Output
 
@@ -541,7 +537,6 @@ main().catch(console.error);
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
-> - "How does FewShotChatMessagePromptTemplate use the examples array?"
 > - "How many examples should I provide for effective few-shot prompting?"
 > - "Can I dynamically select which examples to include based on the input?"
 
@@ -642,7 +637,6 @@ main().catch(console.error);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does template.partial() work and when would I use it?"
-> - "Can I combine multiple partial templates together?"
 > - "What's the benefit of composing prompts vs using one large template?"
 
 ### Expected Output
@@ -764,7 +758,6 @@ main().catch(console.error);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How does withStructuredOutput() ensure the response matches the schema?"
-> - "What happens if the AI can't extract all the required fields?"
 > - "Can I make some Zod schema fields optional instead of required?"
 
 ### Expected Output
@@ -883,7 +876,6 @@ main().catch(console.error);
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
 > - "How do I add validation constraints like min/max to Zod schema fields?"
-> - "Can I use Zod enums to restrict values to specific options?"
 > - "How would I handle arrays of nested objects in a schema?"
 
 ### Expected Output

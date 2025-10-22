@@ -5,7 +5,6 @@
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "Why do we need to send tool results back to the LLM in step 3?"
- * - "What is ToolMessage and how does it differ from AIMessage?"
  * - "How would I handle errors that occur during tool execution?"
  */
 

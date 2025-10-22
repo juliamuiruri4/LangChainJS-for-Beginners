@@ -3,9 +3,8 @@
  * Run: npx tsx 06-documents-embeddings-semantic-search/code/02-splitting.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "Why does RecursiveCharacterTextSplitter split 'recursively'?"
- * - "How do I determine the right chunkSize for my use case?"
- * - "What happens if chunkSize is smaller than a single sentence?"
+ * - "How do I determine the optimal chunk size for my documents?"
+ * - "Can I split on specific delimiters like headings or paragraphs?"
  */
 
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";

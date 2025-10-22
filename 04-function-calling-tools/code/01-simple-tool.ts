@@ -4,9 +4,8 @@
  * Run: npx tsx 04-function-calling-tools/code/01-simple-tool.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "Why do we use Zod schemas to define tool parameters?"
- * - "How does the tool() function create a callable tool from my code?"
- * - "Why is mathjs safer than using eval() or Function() constructors?"
+ * - "Why do we need to sanitize the input expression before evaluating it?"
+ * - "How does the Zod schema help with type safety in this calculator tool?"
  */
 
 import { tool } from "langchain";

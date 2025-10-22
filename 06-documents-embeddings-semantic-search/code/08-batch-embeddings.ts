@@ -3,9 +3,8 @@
  * Run: npx tsx 06-documents-embeddings-semantic-search/code/08-batch-embeddings.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
- * - "Why is batch processing significantly faster than individual embeddings?"
- * - "Is there a limit to how many texts I can process in a single batch?"
- * - "How does batching reduce API costs compared to individual calls?"
+ * - "What's the maximum batch size I can use with embedDocuments?"
+ * - "How do I handle rate limiting when embedding large document collections?"
  */
 
 import { OpenAIEmbeddings } from "@langchain/openai";
