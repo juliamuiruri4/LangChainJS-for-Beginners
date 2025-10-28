@@ -66,8 +66,13 @@ LangChain.js is built around 5 core concepts you'll learn throughout this course
 
 As you progress through the course, you'll see how these concepts combine:
 
-```
-User Input → [Memory] → [Prompts] → [Tools/Agents] → [Models] → Response
+```mermaid
+flowchart LR
+    A[User Input] --> B[Memory]
+    B --> C[Prompts]
+    C --> D[Tools/Agents]
+    D --> E[Models]
+    E --> F[Response]
 ```
 
 **Don't worry about understanding everything now!** You'll learn each concept hands-on, building progressively more sophisticated applications. Let's start with your first AI call.

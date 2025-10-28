@@ -44,16 +44,21 @@ With agentic RAG, the agent makes intelligent decisions about when retrieval is 
 ### The Key Difference
 
 **Traditional RAG**:
-```
-User Question → ALWAYS Search → Retrieve Docs → Generate Answer
+```mermaid
+flowchart LR
+    A[User Question] --> B[ALWAYS Search]
+    B --> C[Retrieve Docs]
+    C --> D[Generate Answer]
 ```
 Every question triggers a search, even if the agent already knows the answer.
 
 **Agentic RAG**:
-```
-User Question → Agent Decides → Search if needed → Generate Answer
-                     ↓
-              Answer directly if possible
+```mermaid
+flowchart TD
+    A[User Question] --> B[Agent Decides]
+    B -->|Search needed| C[Retrieve Docs]
+    C --> D[Generate Answer]
+    B -->|Answer directly if possible| D
 ```
 The agent uses reasoning to determine whether retrieval is necessary.
 
@@ -97,23 +102,17 @@ The agent uses reasoning to determine whether retrieval is necessary.
 
 ## 🏗️ Agentic RAG Architecture
 
-```
-User Question
-    ↓
-Agent Analyzes Question
-    ↓
-    ├─→ [Needs Search?] YES → Use Retrieval Tool
-    │                            ↓
-    │                        Convert Query to Embedding
-    │                            ↓
-    │                        Search Vector Store
-    │                            ↓
-    │                        Retrieved Documents → Agent
-    │                            ↓
-    │                        Agent Generates Answer (with citations)
-    │
-    └─→ [Needs Search?] NO  → Agent Answers Directly
-                                (using general knowledge)
+```mermaid
+flowchart TD
+    A[User Question] --> B[Agent Analyzes Question]
+    B --> C{Needs Search?}
+    C -->|YES| D[Use Retrieval Tool]
+    D --> E[Convert Query to Embedding]
+    E --> F[Search Vector Store]
+    F --> G[Retrieved Documents]
+    G --> H[Agent]
+    H --> I[Agent Generates Answer<br/>with citations]
+    C -->|NO| J[Agent Answers Directly<br/>using general knowledge]
 ```
 
 **Key Components**:
@@ -543,7 +542,14 @@ When you run this example with `tsx 07-agentic-rag-systems/code/02-agentic-rag.t
 
 ### How It Works
 
-**Flow**: Create documents → Embed in vector store → Wrap in retrieval tool → Give to agent → Agent decides when to search vs answer directly
+**Flow**:
+```mermaid
+flowchart LR
+    A[Create documents] --> B[Embed in vector store]
+    B --> C[Wrap in retrieval tool]
+    C --> D[Give to agent]
+    D --> E[Agent decides when to search<br/>vs answer directly]
+```
 
 **Key Pattern**:
 ```typescript
@@ -625,15 +631,10 @@ This capstone example combines **everything you've learned** from the course:
 
 Instead of embedding RAG logic in each agent, you'll expose your knowledge base as an **MCP server** that multiple agents can access:
 
-```
-┌─────────────┐
-│  Agent 1    │──┐
-└─────────────┘  │
-                 │    ┌──────────────────┐
-┌─────────────┐  ├───▶│  MCP RAG Server  │
-│  Agent 2    │──┘    │  (Shared Vector  │
-└─────────────┘       │   Store)         │
-                      └──────────────────┘
+```mermaid
+flowchart LR
+    A[Agent 1] --> C[MCP RAG Server<br/>Shared Vector Store]
+    B[Agent 2] --> C
 ```
 
 ### Key Benefits

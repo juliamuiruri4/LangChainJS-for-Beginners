@@ -391,20 +391,14 @@ a different approach to answer your question about error handling.
 ### How It Works
 
 **Middleware Flow**:
-```
-User Query
-    ↓
-[Middleware: Dynamic Model Selection] → Chooses right model
-    ↓
-Agent Decision (which tool?)
-    ↓
-[Middleware: Error Handler] → Wraps tool execution
-    ↓
-Tool Execution → May fail here
-    ↓
-[Middleware: Error Handler] → Catches errors, returns fallback
-    ↓
-Agent Response
+```mermaid
+flowchart TD
+    A[User Query] --> B[Middleware: Dynamic Model Selection]
+    B -->|Chooses right model| C[Agent Decision: which tool?]
+    C --> D[Middleware: Error Handler]
+    D -->|Wraps tool execution| E[Tool Execution]
+    E -->|May fail here| F[Middleware: Error Handler]
+    F -->|Catches errors, returns fallback| G[Agent Response]
 ```
 
 **Two Middleware Types**:
@@ -620,8 +614,12 @@ Writing custom integrations for each service means dealing with different APIs, 
 
 ### Architecture
 
-```
-Your AI Agent → MCP Client → [📅 Calendar Server, 📧 Email Server, 🗄️ Database Server]
+```mermaid
+flowchart LR
+    A[Your AI Agent] --> B[MCP Client]
+    B --> C[📅 Calendar Server]
+    B --> D[📧 Email Server]
+    B --> E[🗄️ Database Server]
 ```
 
 Each **MCP Server** is a program that exposes tools through the protocol. Your agent connects and can use all available tools.
