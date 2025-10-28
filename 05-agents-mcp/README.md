@@ -553,7 +553,7 @@ To run this example with Context7, you have two options:
    # Run Context7 server on port 3000
    npx -y @upstash/context7-mcp --transport http --port 3000
    ```
-   Then use `http://localhost:3000` as your MCP URL
+   Then use `http://localhost:3000/mcp` as your MCP URL
 
 **Configuration**:
 
@@ -563,7 +563,7 @@ Add to your `.env` file:
 MCP_SERVER_URL=https://mcp.context7.com/mcp
 
 # Or use local endpoint
-# MCP_SERVER_URL=http://localhost:3000
+# MCP_SERVER_URL=http://localhost:3000/mcp
 
 # Optional: Add API key for higher rate limits
 CONTEXT7_API_KEY=your_api_key_here
@@ -632,9 +632,9 @@ MCP supports three connection methods:
 
 | Transport | Use Case | Example |
 |-----------|----------|---------|
+| **HTTP** | Production APIs, cloud services, remote servers | `{ transport: "http", url: "https://api.mycompany.com/mcp" }` |
 | **stdio** | Local development, subprocess communication | `{ transport: "stdio", command: "node", args: ["/path/to/server.js"] }` |
-| **SSE** | Real-time streaming from remote servers | `{ transport: "sse", url: "http://localhost:8000/mcp" }` |
-| **HTTP** | Production APIs, cloud services | `{ transport: "http", url: "https://api.mycompany.com/mcp" }` |
+| **SSE** (legacy) | Legacy localhost streaming (use HTTP for remote) | `{ transport: "sse", url: "http://localhost:8000/sse" }` |
 
 ### Why MCP Matters
 
@@ -670,22 +670,27 @@ import { ChatOpenAI } from "@langchain/openai";
 
 // 1. Connect to MCP servers
 const client = new MultiServerMCPClient({
-  // Math server running locally
+  // Remote server via HTTP (recommended for production)
+  weather: {
+    transport: "http",
+    url: "https://api.weather.com/mcp"
+  },
+  // Local server via stdio
   math: {
     transport: "stdio",
     command: "node",
     args: ["/path/to/math_server.js"]
   },
-  // Weather server running remotely
-  weather: {
+  // Legacy: SSE for localhost only
+  legacy: {
     transport: "sse",
-    url: "http://localhost:8000/mcp"
+    url: "http://localhost:8000/sse"
   }
 });
 
 // 2. Get all available tools from all servers
 const tools = await client.getTools();
-// Returns tools from both math and weather servers
+// Returns tools from all connected servers
 
 // 3. Use tools with your agent
 const model = new ChatOpenAI({

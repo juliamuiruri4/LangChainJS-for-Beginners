@@ -29,8 +29,8 @@ async function main() {
   console.log("=".repeat(80) + "\n");
 
   // Context7 MCP Server - provides documentation for libraries
-  // Public endpoint: https://mcp.context7.com/mcp
-  // Local: http://localhost:3000 (if running Context7 locally)
+  // Remote (HTTP): https://mcp.context7.com/mcp (recommended)
+  // Local (HTTP): http://localhost:3000/mcp (if running Context7 locally)
   const MCP_SERVER_URL = process.env.MCP_SERVER_URL || "https://mcp.context7.com/mcp";
 
   console.log(`📡 Connecting to MCP server at: ${MCP_SERVER_URL}\n`);
