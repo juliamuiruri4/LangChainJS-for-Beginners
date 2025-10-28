@@ -1,5 +1,5 @@
 /**
- * Message Construction Patterns (Agent-First Approach)
+ * Message Construction Patterns
  * Run: npx tsx 03-prompts-messages-outputs/code/01-message-construction.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):

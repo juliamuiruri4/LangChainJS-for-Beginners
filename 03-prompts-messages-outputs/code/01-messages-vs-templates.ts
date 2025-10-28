@@ -23,9 +23,9 @@ async function main() {
   });
 
   // ==========================================
-  // APPROACH 1: Messages (Agent-First)
+  // APPROACH 1: Messages
   // ==========================================
-  console.log("\n🤖 APPROACH 1: Message Arrays (Used by Agents)\n");
+  console.log("\n🤖 APPROACH 1: Message Arrays\n");
 
   const messages = [
     new SystemMessage("You are a helpful translator."),
@@ -48,10 +48,10 @@ async function main() {
   console.log("   • Ideal for agents with middleware");
 
   // ==========================================
-  // APPROACH 2: Templates (RAG-First)
+  // APPROACH 2: Templates (classic approach)
   // ==========================================
   console.log("\n" + "=".repeat(80));
-  console.log("\n📋 APPROACH 2: Templates (Used by RAG Systems)\n");
+  console.log("\n📋 APPROACH 2: Templates\n");
 
   const template = ChatPromptTemplate.fromMessages([
     ["system", "You are a helpful translator."],
@@ -99,9 +99,9 @@ async function main() {
   console.log("   • Consistent prompts across application");
 
   console.log("📚 Modern LangChain.js Pattern:");
-  console.log("   • Agent-first: Use messages + middleware");
-  console.log("   • RAG systems: Use templates for document processing");
-  console.log("   • Both are important - learn when to use each!");
+  console.log("   • Messages: Dynamic workflows + middleware");
+  console.log("   • Templates: Reusable prompts for consistency");
+  console.log("   • Both are valuable - learn when to use each!");
   console.log("\n" + "=".repeat(80));
 }
 

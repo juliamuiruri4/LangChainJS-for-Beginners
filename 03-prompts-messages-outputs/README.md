@@ -1,6 +1,6 @@
 # Chapter 3: Prompts, Messages, and Structured Outputs
 
-In this chapter, you'll learn the three essential techniques for working with LLMs in LangChain.js: **messages** (used by agents), **prompt templates** (used by RAG systems), and **structured outputs** (used everywhere). Understanding these techniques is key, because modern LangChain.js applications choose different approaches depending on the use case. Agents work with message arrays for dynamic tool-calling workflows, RAG systems use templates for consistent document processing, and structured outputs ensure type-safe data extraction.
+In this chapter, you'll learn the three essential techniques for working with LLMs in LangChain.js: **messages**, **prompt templates**, and **structured outputs**. Understanding these techniques is key, because modern LangChain.js applications choose different approaches depending on the use case. Messages provide dynamic construction for flexible workflows like agents, templates provide reusable prompts with variable substitution, and structured outputs ensure type-safe data extraction.
 
 This chapter prepares you for both **Chapter 6 (RAG Systems)** and **Chapter 7 (Agents & MCP)**.
 
@@ -29,14 +29,14 @@ By the end of this chapter, you'll be able to:
 
 | Approach | Use For | Chapter |
 |----------|---------|---------|
-| **Message Arrays** | Agents, dynamic workflows, multi-step reasoning, tool integration | [Chapter 5](../05-agents-mcp/README.md) |
-| **Templates** | RAG systems, reusable prompts, variable substitution, document processing | [Chapter 6](../06-documents-embeddings-semantic-search/README.md) |
+| **Messages** | Agents, dynamic workflows, multi-step reasoning, tool integration | [Chapter 5](../05-agents-mcp/README.md) |
+| **Templates (classic approach)** | Reusable prompts, variable substitution, consistency, RAG systems, few-shot learning | [Chapter 6](../06-documents-embeddings-semantic-search/README.md) |
 
-**Modern pattern**: Agent-first (messages) for dynamic workflows, templates for RAG/document processing.
+**Both approaches are valuable**: Messages for dynamic workflows, templates for reusability and consistency.
 
 ---
 
-## PART 1: Message-Based Prompting (Agent-First)
+## PART 1: Message-Based Prompting
 
 Message arrays are the foundation of agent systems in LangChain.js. When you work with agents, you'll use message arrays as input and output.
 
@@ -66,8 +66,8 @@ async function main() {
     apiKey: process.env.AI_API_KEY,
   });
 
-  // APPROACH 1: Messages (Agent-First)
-  console.log("APPROACH 1: Message Arrays (Used by Agents)\n");
+  // APPROACH 1: Messages
+  console.log("APPROACH 1: Message Arrays\n");
 
   const messages = [
     new SystemMessage("You are a helpful translator."),
@@ -77,8 +77,8 @@ async function main() {
   const messageResponse = await model.invoke(messages);
   console.log("Response:", messageResponse.content);
 
-  // APPROACH 2: Templates (RAG-First)
-  console.log("\nAPPROACH 2: Templates (Used by RAG Systems)\n");
+  // APPROACH 2: Templates (classic approach)
+  console.log("\nAPPROACH 2: Templates\n");
 
   const template = ChatPromptTemplate.fromMessages([
     ["system", "You are a helpful translator."],
@@ -117,7 +117,7 @@ When you run this example with `tsx 03-prompts-messages-outputs/code/01-messages
 - Created with `ChatPromptTemplate.fromMessages()`
 - Uses variables like `{text}` and `{language}`
 - Piped to model: `template.pipe(model)`
-- Required for RAG systems
+- Valuable for reusability and consistency (including RAG systems)
 
 > **💡 Tip**: The actual code file [`01-messages-vs-templates.ts`](./code/01-messages-vs-templates.ts) includes comprehensive explanations of when to use each approach and how they integrate with different LangChain systems. Run the file to see the complete decision framework!
 
@@ -273,9 +273,9 @@ const response = await model.invoke(new HumanMessage("Hello!"));
 
 ---
 
-## PART 2: Template-Based Prompting (RAG-First)
+## PART 2: Template-Based Prompting
 
-Templates allow you to create reusable, maintainable prompts with variables. They're essential for RAG systems where you need consistent prompt structures for document processing.
+Templates allow you to create reusable, maintainable prompts with variables. This approach is valuable for many use cases including RAG systems, consistent formatting, and any scenario where you need prompt reusability.
 
 ### 📖 The Mail Merge Analogy
 
@@ -457,7 +457,7 @@ You're quirky and you're quick...
    - Supports system messages to set AI personality
    - Best for chat models and conversations
    - Pipes directly to the model
-   - **Required for RAG systems**
+   - **Works with RAG systems and many other use cases**
 
 2. **PromptTemplate** (for simple text):
    - Uses plain string templates
@@ -568,7 +568,7 @@ angry → 😠
 - More reliable than just instructions alone
 - Great for structured outputs and consistent formatting
 - Reduces need for fine-tuning for many tasks
-- **Essential for RAG systems** to guide response formatting
+- **Valuable for many use cases** including RAG systems for response formatting
 
 > **💡 Tip**: The actual code file [`05-few-shot.ts`](./code/05-few-shot.ts) includes an additional code comment generator example demonstrating few-shot learning with different patterns. Run the file to see all variations!
 
@@ -699,7 +699,7 @@ With LangChain.js, Zod schemas tell the AI exactly what format to return - ensur
 
 Structured outputs provide type safety, validation, and consistency - no need to parse free text responses.
 - **Integration**: Easy to use with databases, APIs, etc.
-- **Essential for RAG**: Extract structured data from documents
+- **Valuable for many scenarios**: Data extraction, RAG systems, API responses, form filling
 
 ---
 
@@ -998,14 +998,14 @@ graph TB
 
 ## 🎓 Key Takeaways
 
-### Messages (Agent-First)
+### Messages
 - **Direct message construction** - Build conversations programmatically
 - **SystemMessage, HumanMessage, AIMessage** - Core message types
 - **Multi-turn conversations** - Maintain conversation state
 - **Used by agents** - Foundation for agent systems
 - **Prepares you for Chapter 7** - Agents & MCP
 
-### Templates (RAG-First)
+### Templates
 - **Templates reduce code duplication** - Write once, use everywhere
 - **Variables with `{name}` syntax** - Create dynamic prompts
 - **ChatPromptTemplate for chat models** - Works with message arrays
@@ -1014,7 +1014,7 @@ graph TB
 - **Composition** - Combine templates for complex prompts
 - **Structured outputs with Zod** - Get typed data, not just text
 - **Type safety** - Validate AI responses match your schema
-- **Required for RAG** - Used by RAG systems
+- **Valuable for many use cases** - Reusability, consistency, RAG systems
 - **Prepares you for Chapter 6** - RAG Systems
 
 ### The Big Picture
