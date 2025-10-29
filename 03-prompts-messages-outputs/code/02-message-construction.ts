@@ -1,6 +1,6 @@
 /**
  * Message Construction Patterns
- * Run: npx tsx 03-prompts-messages-outputs/code/01-message-construction.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/02-message-construction.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "How do I build a multi-turn conversation with message arrays?"

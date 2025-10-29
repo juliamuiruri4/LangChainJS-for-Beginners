@@ -178,6 +178,7 @@ async function main() {
     [
       { question: "happy", answer: "😊" },
       { question: "sad", answer: "😢" },
+      { question: "excited", answer: "🎉" },
     ],
     "surprised",
   );
@@ -199,11 +200,11 @@ main().catch(console.error);
 When you run this example with `tsx 03-prompts-messages-outputs/code/02-message-construction.ts`, you'll see:
 
 ```
-Messages constructed: 5
+Messages constructed: 8
 AI Response: 😮
 ```
 
-The function built a 5-message array: 1 system message + 2 examples (4 messages) + 1 new question.
+The function built an 8-message array: 1 system message + 3 examples (6 messages) + 1 new question.
 
 ### How It Works
 
@@ -216,7 +217,7 @@ The function built a 5-message array: 1 system message + 2 examples (4 messages)
 **Pattern 2: Few-Shot Learning with Messages**
 - Instead of using templates, we teach the AI by showing example conversations
 - Each example becomes a HumanMessage → AIMessage pair in the array
-- The AI learns the pattern from these examples (happy → 😊, sad → 😢)
+- The AI learns the pattern from these examples (happy → 😊, sad → 😢, excited → 🎉)
 - When we ask about "surprised", the AI follows the learned pattern → 😮
 
 **Why This Matters for Agents**:

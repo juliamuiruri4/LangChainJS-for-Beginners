@@ -1,6 +1,6 @@
 /**
  * Multiple Template Formats
- * Run: npx tsx 03-prompts-messages-outputs/code/02-template-formats.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/04-template-formats.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "When should I use ChatPromptTemplate vs PromptTemplate?"

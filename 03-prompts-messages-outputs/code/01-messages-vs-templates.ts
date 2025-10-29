@@ -1,6 +1,6 @@
 /**
  * Messages vs Templates - Understanding the Two Paradigms
- * Run: npx tsx 03-prompts-messages-outputs/code/00-messages-vs-templates.ts
+ * Run: npx tsx 03-prompts-messages-outputs/code/01-messages-vs-templates.ts
  *
  * 🤖 Try asking GitHub Copilot Chat (https://github.com/features/copilot):
  * - "When should I use messages vs templates in LangChain.js?"
