@@ -173,14 +173,17 @@ async function main() {
     apiKey: process.env.AI_API_KEY
   });
 
-  // Using structured messages
+  // Using structured messages for better control
   const messages = [
     new SystemMessage("You are a helpful AI assistant who explains things simply."),
     new HumanMessage("Explain quantum computing to a 10-year-old."),
   ];
 
   const response = await model.invoke(messages);
-  console.log("🤖 AI Response:", response.content);
+
+  console.log("🤖 AI Response:\n");
+  console.log(response.content);
+  console.log("\n✅ Notice how the SystemMessage influenced the response style!");
 }
 
 main().catch(console.error);
@@ -247,18 +250,26 @@ async function compareModels() {
     console.log(`\n📊 Testing: ${modelName}`);
     console.log("─".repeat(50));
 
-    // Create a model instance with the specific model name
+    // Override the model for this test
     const model = new ChatOpenAI({
       model: modelName,
       configuration: { baseURL: process.env.AI_ENDPOINT },
-      apiKey: process.env.AI_API_KEY
+      apiKey: process.env.AI_API_KEY,
     });
 
+    const startTime = Date.now();
     const response = await model.invoke(prompt);
+    const duration = Date.now() - startTime;
+
     console.log(`Response: ${response.content}`);
+    console.log(`⏱️  Time: ${duration}ms`);
   }
 
   console.log("\n✅ Comparison complete!");
+  console.log("\n💡 Key Observations:");
+  console.log("   - gpt-5 is more capable and detailed");
+  console.log("   - gpt-5-mini is faster and uses fewer resources");
+  console.log("   - Choose based on your needs: speed vs. capability");
 }
 
 compareModels().catch(console.error);

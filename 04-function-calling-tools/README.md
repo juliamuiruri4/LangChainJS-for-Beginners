@@ -118,15 +118,16 @@ Let's see how to create a tool using the `tool()` function with a Zod `schema` f
 ```typescript
 import { tool } from "langchain";
 import * as z from "zod";
+import { evaluate } from "mathjs";
 import "dotenv/config";
 
 // Define calculator tool
 const calculatorTool = tool(
   async (input) => {
-    // Implement the actual function
-    const sanitized = input.expression.replace(/[^0-9+\-*/().\s]/g, "");
+    // Use mathjs to safely evaluate mathematical expressions
+    // mathjs is safer than Function() or eval() as it restricts execution to math operations
     try {
-      const result = Function(`"use strict"; return (${sanitized})`)();
+      const result = evaluate(input.expression);
       return `The result is: ${result}`;
     } catch (error) {
       return `Error evaluating expression: ${error instanceof Error ? error.message : String(error)}`;
@@ -166,11 +167,10 @@ Schema: ZodObject {
 
 **What's happening**:
 1. **Define the tool implementation**: The async function that performs the calculation
-2. **Sanitize input**: Remove potentially dangerous characters
-3. **Execute calculation**: Use the mathjs library's `evaluate()` function to safely compute mathematical expressions
-4. **Return result**: String describing the result
+2. **Execute calculation**: Use the mathjs library's `evaluate()` function to safely compute mathematical expressions
+3. **Return result**: String describing the result
 
-> **Security Note**: The code examples use the `mathjs` library instead of JavaScript's `Function()` constructor. The mathjs `evaluate()` function is specifically designed for mathematical expressions and provides better security by preventing arbitrary code execution.
+> **Security Note**: The code examples use the `mathjs` library's `evaluate()` function instead of JavaScript's `Function()` constructor or `eval()`. The mathjs `evaluate()` function is specifically designed for mathematical expressions and provides better security by restricting execution to math operations only, preventing arbitrary code execution.
 
 **Key Components**:
 - **Implementation function**: What the tool actually does (`async (input) => {...}`)
@@ -199,14 +199,13 @@ Let's see how to use `.bindTools()` to make tools available and observe how the 
 import { ChatOpenAI } from "@langchain/openai";
 import { tool } from "langchain";
 import * as z from "zod";
+import { evaluate } from "mathjs";
 import "dotenv/config";
 
 const calculatorTool = tool(
   async (input) => {
-    // Sanitize input - only allow safe characters (numbers, operators, parentheses)
-    const sanitized = input.expression.replace(/[^0-9+\-*/().\s]/g, "");
-    // Use Function constructor (safer than eval) with strict mode
-    const result = Function(`"use strict"; return (${sanitized})`)();
+    // Use mathjs for safe mathematical evaluation
+    const result = evaluate(input.expression);
     return `${result}`;
   },
   {
@@ -387,7 +386,11 @@ Let's see how to bind multiple tools using `.bindTools([tool1, tool2, tool3])` a
 
 ```typescript
 const calculatorTool = tool(
-  async (input) => String(eval(input.expression)),
+  async (input) => {
+    // Use mathjs for safe mathematical evaluation
+    const result = evaluate(input.expression);
+    return String(result);
+  },
   {
     name: "calculator",
     description: "Perform mathematical calculations",
@@ -397,12 +400,11 @@ const calculatorTool = tool(
 
 const searchTool = tool(
   async (input) => {
-    // Simulated search
-    const results = {
+    const results: Record<string, string> = {
       "capital of France": "Paris",
       "population of Tokyo": "14 million",
     };
-    return results[input.query] || "No results found";
+    return results[input.query.toLowerCase()] || "No results found";
   },
   {
     name: "search",
@@ -415,7 +417,7 @@ const weatherTool = tool(
   async (input) => `Weather in ${input.city}: 72°F, sunny`,
   {
     name: "getWeather",
-    description: "Get current weather",
+    description: "Get current weather for a city",
     schema: z.object({ city: z.string() }),
   }
 );
