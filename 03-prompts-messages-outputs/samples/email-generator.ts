@@ -1,5 +1,7 @@
 /**
  * Challenge 1 Solution: Email Response Generator
+ * 
+ * Run: npx tsx 03-prompts-messages-outputs/samples/email-generator.ts
  */
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";

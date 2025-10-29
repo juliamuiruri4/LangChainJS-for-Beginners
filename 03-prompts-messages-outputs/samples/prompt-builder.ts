@@ -2,7 +2,7 @@
  * Chapter 3 Assignment Solution: Challenge 4
  * Dynamic Prompt Builder
  *
- * Run: npx tsx 03-prompts-messages-outputs/solution/prompt-builder.ts
+ * Run: npx tsx 03-prompts-messages-outputs/samples/prompt-builder.ts
  */
 
 import { ChatPromptTemplate } from "@langchain/core/prompts";
