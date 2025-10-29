@@ -546,9 +546,9 @@ main().catch(console.error);
 When you run this example with `tsx 03-prompts-messages-outputs/code/05-few-shot.ts`, you'll see:
 
 ```
-surprised → �
+surprised → 😮
 confused → 😕
-tired → �
+tired → 🥱
 proud → 🥇
 ```
 
