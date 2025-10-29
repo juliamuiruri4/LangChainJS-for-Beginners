@@ -546,8 +546,10 @@ main().catch(console.error);
 When you run this example with `tsx 03-prompts-messages-outputs/code/05-few-shot.ts`, you'll see:
 
 ```
-surprised → 😮
-angry → 😠
+surprised → �
+confused → 😕
+tired → �
+proud → 🥇
 ```
 
 ### How It Works
@@ -555,7 +557,7 @@ angry → 😠
 **What's happening**:
 1. **We provide examples** showing the pattern: "happy" → 😊, "sad" → 😢, "excited" → 🎉
 2. **The AI learns the pattern** by seeing these input-output pairs
-3. **We ask for new emotions** like "surprised" and "angry"
+3. **We ask for new emotions** like "surprised", "confused", "tired", and "proud"
 4. **The AI follows the learned pattern** and provides appropriate emojis
 
 **Few-Shot Components**:
@@ -1050,7 +1052,7 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [02-chat-models](../02-chat-models/README.md)
-- **Next**: [04-function-calling-tools](../04-function-calling-tools/README.md) - Function Calling & Tools
+- **Next**: [04-function-calling-tools](../04-function-calling-tools/README.md)
 - **Home**: [Course Home](../README.md)
 
 ---
