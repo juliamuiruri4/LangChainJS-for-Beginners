@@ -285,7 +285,7 @@ You'll notice the text appears progressively, word by word, rather than all at o
 
 ## 🎛️ Model Parameters
 
-You can control how the AI responds by adjusting parameters.
+You can control how the AI responds by adjusting parameters. These can vary by provider/model so always check the documentation.
 
 ### Key Parameters
 
@@ -297,8 +297,15 @@ You can control how the AI responds by adjusting parameters.
   - Use for: Code generation, factual answers
 - **1.0 = Balanced** (default): Mix of consistency and variety
   - Use for: General conversation
-- **2.0 = Creative**: More random and creative
+- **2.0 = Creative**: Some models support up to 2.0 for more random and creative responses but is generally less predictable
   - Use for: Creative writing, brainstorming
+
+> **⚠️ Provider and Model Differences**:
+> - **GitHub Models (OpenAI)**: Supports 0.0 to 2.0 for most models
+> - **Azure AI Foundry**: Generally limits temperature to 0.0-1.0 depending upon the model
+> - **Some models** (like gpt-5-mini): May only support the default temperature value (1) and reject other values
+>
+> The temperature demo code includes error handling to gracefully skip unsupported values, so you can run it with any model without crashes.
 
 #### Max Tokens
 
@@ -323,28 +330,44 @@ Let's see how to control creativity by adjusting the `temperature` parameter in 
 import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
-async function compareTemperatures() {
-  const prompt = "Write a creative opening line for a sci-fi story.";
-
+async function temperatureComparison() {
+  const prompt = "Write a creative opening line for a sci-fi story about time travel.";
   const temperatures = [0, 1, 2];
 
   for (const temp of temperatures) {
-    console.log(`\n🌡️ Temperature: ${temp}`);
-    console.log("─".repeat(60));
+    console.log(`\nTemperature: ${temp}`);
+    console.log("-".repeat(80));
 
     const model = new ChatOpenAI({
       model: process.env.AI_MODEL,
       configuration: { baseURL: process.env.AI_ENDPOINT },
       apiKey: process.env.AI_API_KEY,
-      temperature: temp
+      temperature: temp,
     });
 
-    const response = await model.invoke(prompt);
-    console.log(response.content);
+    try {
+      for (let i = 1; i <= 2; i++) {
+        const response = await model.invoke(prompt);
+        console.log(`  Try ${i}: ${response.content}`);
+      }
+    } catch (error: any) {
+      // Some models may not support certain temperature values
+      if (error.code === "unsupported_value" && error.param === "temperature") {
+        console.log(`  ⚠️  This model doesn't support temperature=${temp}. Skipping...`);
+        console.log(`  💡 Error: ${error.message}`);
+      } else {
+        throw error;
+      }
+    }
   }
+
+  console.log("\n💡 General Temperature Guidelines:");
+  console.log("   - Lower values (0-0.3): More deterministic, consistent responses");
+  console.log("   - Medium values (0.7-1.0): Balanced creativity and consistency");
+  console.log("   - Higher values (1.5-2.0): More creative and varied responses");
 }
 
-compareTemperatures().catch(console.error);
+temperatureComparison().catch(console.error);
 ```
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Want to explore this code further? Open this file in your editor and ask Copilot:
@@ -353,7 +376,9 @@ compareTemperatures().catch(console.error);
 
 ### Expected Output
 
-When you run this example with `tsx 02-chat-models/code/03-parameters.ts`, you'll see how temperature affects creativity:
+When you run this example with `tsx 02-chat-models/code/03-parameters.ts`, the output depends on your model:
+
+**With a model that supports all temperature values (like gpt-4o):**
 
 ```
 🌡️ Temperature: 0
@@ -369,15 +394,44 @@ When you run this example with `tsx 02-chat-models/code/03-parameters.ts`, you'l
 "Zyx-9 flickered into existence at precisely the wrong moment—right between the temporal rift and Dr. Kwan's morning coffee."
 ```
 
-Notice how temperature 0 is straightforward, temperature 1 is more interesting, and temperature 2 is quite creative and unexpected!
+**With a model that only supports default temperature (like gpt-5-mini):**
+
+```
+Temperature: 0
+────────────────────────────────────────────────────────────
+  ⚠️  This model doesn't support temperature=0. Skipping...
+  💡 Error: 400 Unsupported value: 'temperature' does not support 0 with this model. Only the default (1) value is supported.
+
+Temperature: 1
+────────────────────────────────────────────────────────────
+  Try 1: On the morning the calendar unstitched itself, I reached into yesterday and came out with a photograph of tomorrow.
+  Try 2: The first time I traveled back, I found my future self waiting with tired eyes and a list of instructions on how not to become him.
+
+Temperature: 2
+────────────────────────────────────────────────────────────
+  ⚠️  This model doesn't support temperature=2. Skipping...
+  💡 Error: 400 Unsupported value: 'temperature' does not support 2 with this model. Only the default (1) value is supported.
+
+💡 General Temperature Guidelines:
+   - Lower values (0-0.3): More deterministic, consistent responses
+   - Medium values (0.7-1.0): Balanced creativity and consistency
+   - Higher values (1.5-2.0): More creative and varied responses
+
+⚠️  Note: Model support varies - some models only support specific values
+   For example, gpt-5-mini only supports temperature=1 (default)
+```
+
+> **⚠️ Model-Specific Behavior**: The error handling allows the script to run successfully regardless of which temperature values your model supports. This demonstrates how real-world AI applications need to handle parameter constraints gracefully.
 
 ### How It Works
 
 **What's happening**:
 1. We use the same prompt with three different temperature settings (0, 1, 2)
-2. Temperature 0 produces the most predictable response
-3. Temperature 1 (default) balances consistency with creativity
-4. Temperature 2 produces more unusual and creative variations
+2. The code wraps each model call in a try-catch to handle unsupported temperature values
+3. If a model doesn't support a specific temperature, it displays a warning and continues to the next value
+4. Temperature 0 produces the most predictable response (when supported)
+5. Temperature 1 (default) balances consistency with creativity
+6. Temperature 2 produces more unusual and creative variations
 
 **Pro tip**: Run the same prompt multiple times at temperature 2 and you'll get very different results each time!
 

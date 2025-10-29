@@ -11,7 +11,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import "dotenv/config";
 
 async function temperatureComparison() {
-  console.log("🌡️  Temperature Comparison\n");
+  console.log(`🌡️  Temperature Comparison for ${process.env.AI_MODEL}\n`);
   console.log("=".repeat(80));
 
   const prompt = "Write a creative opening line for a sci-fi story about time travel.";
@@ -27,17 +27,38 @@ async function temperatureComparison() {
       model: process.env.AI_MODEL,
       configuration: { baseURL: process.env.AI_ENDPOINT },
       apiKey: process.env.AI_API_KEY,
+      temperature: temp,
     });
-    for (let i = 1; i <= tries; i++) {
-      const response = await model.invoke(prompt);
-      console.log(`  Try ${i}: ${response.content}`);
+
+    try {
+      for (let i = 1; i <= tries; i++) {
+        const response = await model.invoke(prompt);
+        console.log(`  Try ${i}: ${response.content}`);
+      }
+    } catch (error: any) {
+      // Some models (like gpt-5-mini) may not support certain temperature values
+      if (error.code === "unsupported_value" && error.param === "temperature") {
+        console.log(
+          `  ⚠️  This model doesn't support temperature=${temp}. Skipping...`
+        );
+        console.log(`  💡 Error: ${error.message}`);
+      } else {
+        // Re-throw unexpected errors
+        throw error;
+      }
     }
   }
 
-  console.log("\n💡 Observations:");
-  console.log("   - Temperature 0: Same response every time (deterministic)");
-  console.log("   - Temperature 1: Some variation (balanced)");
-  console.log("   - Temperature 2: Lots of variation (creative)");
+  console.log("\n💡 General Temperature Guidelines:");
+  console.log("   - Lower values (0-0.3): More deterministic, consistent responses");
+  console.log("   - Medium values (0.7-1.0): Balanced creativity and consistency");
+  console.log("   - Higher values (1.5-2.0): More creative and varied responses");
+  console.log(
+    "\n⚠️  Note: Model support varies - some models only support specific values"
+  );
+  console.log(
+    "   For example, gpt-5-mini only supports temperature=1 (default)"
+  );
 }
 
 async function maxTokensExample() {
@@ -57,11 +78,23 @@ async function maxTokensExample() {
       model: process.env.AI_MODEL,
       configuration: { baseURL: process.env.AI_ENDPOINT },
       apiKey: process.env.AI_API_KEY,
+      maxTokens: maxTokens,
     });
 
-    const response = await model.invoke(prompt);
-    console.log(response.content);
-    console.log(`\n(Character count: ${response.content.toString().length})`);
+    try {
+      const response = await model.invoke(prompt);
+      console.log(response.content);
+      console.log(`\n(Character count: ${response.content.toString().length})`);
+    } catch (error: any) {
+      if (error.code === "unsupported_value") {
+        console.log(
+          `  ⚠️  This model doesn't support maxTokens=${maxTokens}. Skipping...`
+        );
+        console.log(`  💡 Error: ${error.message}`);
+      } else {
+        throw error;
+      }
+    }
   }
 
   console.log("\n💡 Observations:");
@@ -77,9 +110,10 @@ async function main() {
   await maxTokensExample();
 
   console.log("\n\n✅ Summary:");
-  console.log("   - Use temperature=0 for consistent, factual responses");
-  console.log("   - Use temperature=1-2 for creative, varied responses");
-  console.log("   - Use maxTokens to control response length and costs");
+  console.log("   - Lower temperatures: Consistent, factual responses");
+  console.log("   - Higher temperatures: Creative, varied responses");
+  console.log("   - maxTokens: Control response length and costs");
+  console.log("   - Always check your model's supported parameter ranges");
 }
 
 main().catch(console.error);

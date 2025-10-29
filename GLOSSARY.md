@@ -400,11 +400,11 @@ A message type that sets the AI's behavior, personality, and instructions. Syste
 
 ### Temperature
 
-A parameter that controls the randomness and creativity of AI responses. Values range from 0.0 to 2.0.
+A parameter that controls the randomness and creativity of AI responses. Values range from 0.0 to 2.0 but can vary by provider/model.
 
 **Scale**:
 - **0.0 = Deterministic**: Same input → same output (best for code, factual answers)
-- **1.0 = Balanced**: Default, good for general conversation
+- **1.0 = Balanced**: Default, can be good for general conversation
 - **2.0 = Creative**: More random and creative (best for brainstorming, creative writing) but can lead to off-topic or nonsensical responses
 
 **See**: [Chapter 2: Model Parameters](./02-chat-models/README.md#%EF%B8%8F%EF%B8%8F-model-parameters)
