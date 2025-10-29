@@ -149,7 +149,7 @@ async function main() {
     apiKey: process.env.AI_API_KEY,
   });
 
-  // PATTERN 1: Dynamic Message Construction
+  // PATTERN 3: Dynamic Message Construction
   // Build message arrays programmatically based on runtime data
   function createConversation(
     role: string,
@@ -171,7 +171,7 @@ async function main() {
     return messages;
   }
 
-  // PATTERN 2: Few-Shot Learning with Messages
+  // Few-Shot Learning with Messages
   // Teach the AI by showing examples in the message history
   const emojiMessages = createConversation(
     "emoji translator",
@@ -208,13 +208,13 @@ The function built an 8-message array: 1 system message + 3 examples (6 messages
 
 ### How It Works
 
-**Pattern 1: Dynamic Message Construction**
+**Pattern 3: Dynamic Message Construction**
 - The `createConversation()` function builds message arrays programmatically
 - You pass in parameters (`role`, `examples`, `newQuestion`) and it constructs the messages
 - Returns a `BaseMessage[]` array that can include any message type
 - This pattern is essential for agents that need to construct prompts based on runtime data
 
-**Pattern 2: Few-Shot Learning with Messages**
+**Few-Shot Learning with Messages**
 - Instead of using templates, we teach the AI by showing example conversations
 - Each example becomes a HumanMessage → AIMessage pair in the array
 - The AI learns the pattern from these examples (happy → 😊, sad → 😢, excited → 🎉)
@@ -1038,8 +1038,8 @@ The assignment includes:
 
 ## 📚 Additional Resources
 
-- [Prompt Templates Documentation](https://js.langchain.com/docs/modules/prompts/)
-- [Few-Shot Prompting Guide](https://js.langchain.com/docs/modules/prompts/few_shot/)
+- [Prompt Templates Documentation](https://js.langchain.com/docs/concepts/prompt_templates)
+- [Few-Shot Prompting Guide](https://js.langchain.com/docs/concepts/few_shot_prompting/)
 - [Messages Documentation](https://js.langchain.com/docs/concepts/messages)
 - [Zod Documentation](https://zod.dev/)
 
@@ -1050,8 +1050,7 @@ The assignment includes:
 ## 🗺️ Navigation
 
 - **Previous**: [02-chat-models](../02-chat-models/README.md)
-- **Next (Templates)**: [06-rag](../06-rag/README.md) - RAG Systems (uses templates)
-- **Next (Messages)**: [07-agents-mcp](../07-agents-mcp/README.md) - Agents & MCP (uses messages)
+- **Next**: [04-function-calling-tools](../04-function-calling-tools/README.md) - Function Calling & Tools
 - **Home**: [Course Home](../README.md)
 
 ---
