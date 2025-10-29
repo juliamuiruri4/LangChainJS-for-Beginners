@@ -58,7 +58,7 @@ async function main() {
 
   // Create two models: basic (cheaper) and capable (more powerful)
   const basicModel = new ChatOpenAI({
-    model: process.env.AI_MODEL, // e.g., gpt-4o-mini
+    model: process.env.AI_MODEL, // e.g., gpt-5-mini
     configuration: { baseURL: process.env.AI_ENDPOINT },
     apiKey: process.env.AI_API_KEY,
   });

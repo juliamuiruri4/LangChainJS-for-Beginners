@@ -24,14 +24,14 @@ You can follow the steps below to deploy models in Azure AI Foundry or visit the
 
 You'll need to deploy two models for this course:
 
-**Deploy gpt-4o-mini & gpt-4o (Chat Model):**
+**Deploy gpt-5-mini & gpt-4o (Chat Model):**
 
 1. In your project, go to **Models + endpoints** in the left navigation
 2. Click **+ Deploy model** → **Deploy base model**
-3. Search for and select **gpt-4o-mini**
+3. Search for and select **gpt-5-mini**
 4. Click **Confirm**
 5. Configure deployment:
-   - **Deployment name**: `gpt-4o-mini` (keep this name for consistency)
+   - **Deployment name**: `gpt-5-mini` (keep this name for consistency)
    - **Model version**: Select the latest available
    - **Deployment type**: Global Standard
    - Click **Deploy**
@@ -70,7 +70,7 @@ Ensure that you add `/openai/v1` to the end of your endpoint URL.
 # Azure AI Foundry Configuration
 AI_API_KEY=your_azure_api_key_here
 AI_ENDPOINT=https://your-resource.openai.azure.com/openai/v1
-AI_MODEL=gpt-4o-mini
+AI_MODEL=gpt-5-mini
 ```
 
 **Replace `your_azure_api_key_here` with your actual Azure API key and update the endpoint URL!**
